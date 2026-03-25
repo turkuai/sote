@@ -1,0 +1,56 @@
+# Laravel files
+/vendor
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Laravel specific
+/bootstrap/cache/
+/storage/
+/public/hot
+/public/storage
+.phpunit.result.cache
+
+# Environment files
+.env
+.env.backup
+.env.*.php
+!.env.example
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# macOS
+.AppleDouble
+.AppleDB
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# NPM logs
+logs/
+*.log
+
+# Development/Debug
+-.vscode-server
+local.json
+
+# Testing
+.phpunit.cache
+.phpunit.result.cache
+
+# Laravel Sail
+.sail/
+
+# Homestead
+Homestead.json
+Homestead.yaml
