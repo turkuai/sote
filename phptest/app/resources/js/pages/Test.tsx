@@ -27,13 +27,13 @@ export default function Test() {
             <div style={{ maxWidth: '800px', margin: '0 auto' }}>
                 {/* Header */}
                 <div style={{ backgroundColor: '#ffffff', padding: '2rem', borderRadius: '8px', marginBottom: '2rem', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                    <h1 style={{ color: '#2c3e50', marginBottom: '0.5rem' }}>🚀 React + Laravel Demo</h1>
+                    <h1 style={{ color: '#2c3e50', marginBottom: '0.5rem' }}>React + Laravel Demo</h1>
                     <p style={{ color: '#7f8c8d', marginBottom: '0' }}>Interactive component with state management</p>
                 </div>
 
                 {/* Counter Section */}
                 <div style={{ backgroundColor: '#ffffff', padding: '2rem', borderRadius: '8px', marginBottom: '2rem', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                    <h2 style={{ color: '#2c3e50', marginBottom: '1.5rem', fontSize: '1.5rem' }}>📊 Counter</h2>
+                    <h2 style={{ color: '#2c3e50', marginBottom: '1.5rem', fontSize: '1.5rem' }}>Counter</h2>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
                         <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#3498db', minWidth: '100px', textAlign: 'center' }}>
                             {count}
@@ -52,7 +52,7 @@ export default function Test() {
                                     fontWeight: 'bold'
                                 }}
                             >
-                                ➖ Decrease
+                                Decrease
                             </button>
                             <button
                                 onClick={incrementCount}
@@ -67,7 +67,7 @@ export default function Test() {
                                     fontWeight: 'bold'
                                 }}
                             >
-                                ➕ Increase
+                                Increase
                             </button>
                             <button
                                 onClick={resetCount}
@@ -82,7 +82,7 @@ export default function Test() {
                                     fontWeight: 'bold'
                                 }}
                             >
-                                🔄 Reset
+                                Reset
                             </button>
                         </div>
                     </div>
@@ -90,7 +90,7 @@ export default function Test() {
 
                 {/* Name Input Section */}
                 <div style={{ backgroundColor: '#ffffff', padding: '2rem', borderRadius: '8px', marginBottom: '2rem', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                    <h2 style={{ color: '#2c3e50', marginBottom: '1.5rem', fontSize: '1.5rem' }}>👤 Welcome Message</h2>
+                    <h2 style={{ color: '#2c3e50', marginBottom: '1.5rem', fontSize: '1.5rem' }}>Welcome Message</h2>
                     <input
                         type="text"
                         value={name}
@@ -108,14 +108,14 @@ export default function Test() {
                     />
                     {name && (
                         <div style={{ padding: '1rem', backgroundColor: '#e8f8f5', border: '1px solid #2ecc71', borderRadius: '4px', color: '#27ae60' }}>
-                            ✨ Welcome, {name}!
+                            Welcome, {name}!
                         </div>
                     )}
                 </div>
 
                 {/* Todo List Section */}
                 <div style={{ backgroundColor: '#ffffff', padding: '2rem', borderRadius: '8px', marginBottom: '2rem', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                    <h2 style={{ color: '#2c3e50', marginBottom: '1.5rem', fontSize: '1.5rem' }}>✅ Todo List</h2>
+                    <h2 style={{ color: '#2c3e50', marginBottom: '1.5rem', fontSize: '1.5rem' }}>Todo List</h2>
                     <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
                         <input
                             type="text"
@@ -190,7 +190,7 @@ export default function Test() {
 
                 {/* Tech Stack Info */}
                 <div style={{ backgroundColor: '#ffffff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                    <h2 style={{ color: '#2c3e50', marginBottom: '1rem', fontSize: '1.5rem' }}>🛠️ Tech Stack</h2>
+                    <h2 style={{ color: '#2c3e50', marginBottom: '1rem', fontSize: '1.5rem' }}>Tech Stack</h2>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                         <div style={{ padding: '1rem', backgroundColor: '#ebf5fb', borderRadius: '4px' }}>
                             <strong style={{ color: '#2874a6' }}>Backend:</strong>
