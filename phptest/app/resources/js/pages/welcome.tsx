@@ -102,6 +102,7 @@ export default function Welcome() {
                                         Deploy now
                                     </a>
                                 </li>
+
                             </ul>
                         </div>
                         <div className="relative -mb-px aspect-[335/376] w-full shrink-0 overflow-hidden rounded-t-lg bg-[#fff2f2] lg:mb-0 lg:-ml-px lg:aspect-auto lg:w-[438px] lg:rounded-t-none lg:rounded-r-lg dark:bg-[#1D0002]">
@@ -199,7 +200,7 @@ export default function Welcome() {
                                     />
                                 </g>
                                 <g
-                                    style={{ mixBlendMode: 'plus-darker' }}
+                                    //style={{ mixBlendMode: 'plus-darker' }} It gives an error ill check later
                                     className="translate-y-0 opacity-100 transition-all delay-300 duration-750 starting:translate-y-4 starting:opacity-0"
                                 >
                                     <path
