@@ -1,8 +1,16 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Test() {
     const [count, setCount] = useState(0);
+    const [apiData, setApiData] = useState(null);
+
+    // Fetch data from Laravel API
+    useEffect(() => {
+        fetch('/api/test')
+            .then(res => res.json())
+            .then(json => setApiData(json));
+    }, []);
     const [name, setName] = useState('');
     const [todos, setTodos] = useState<string[]>([]);
     const [todoInput, setTodoInput] = useState('');
@@ -29,6 +37,14 @@ export default function Test() {
                 <div style={{ backgroundColor: '#ffffff', padding: '2rem', borderRadius: '8px', marginBottom: '2rem', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
                     <h1 style={{ color: '#2c3e50', marginBottom: '0.5rem' }}>React + Laravel Demo</h1>
                     <p style={{ color: '#7f8c8d', marginBottom: '0' }}>Interactive component with state management</p>
+                </div>
+
+                {/* API Data Section */}
+                <div style={{ backgroundColor: '#ffffff', padding: '2rem', borderRadius: '8px', marginBottom: '2rem', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+                    <h2 style={{ color: '#2c3e50', marginBottom: '1rem', fontSize: '1.5rem' }}>Data from Laravel API</h2>
+                    <pre style={{ backgroundColor: '#f8f9fa', padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
+                        {JSON.stringify(apiData, null, 2)}
+                    </pre>
                 </div>
 
                 {/* Counter Section */}
