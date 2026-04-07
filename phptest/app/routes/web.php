@@ -1,9 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use App\Models\User;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\Api\LoginController;
 use App\Libraries\ApiResponse;
 
 Route::get('/test-api', function () {
@@ -17,6 +20,21 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
+// Public API Routes
+Route::prefix('api')->group(function () {
+    Route::post('/login', [LoginController::class, 'login']);
+    
+    // Current authenticated user (returns 401 if not authenticated)
+    Route::get('/user', function () {
+        if (Auth::check()) {
+            /** @var User $user */
+            $user = Auth::user();
+            return response()->json($user);
+        }
+        return response()->json(['error' => 'Unauthenticated'], 401);
+    });
+});
+
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
@@ -26,8 +44,10 @@ Route::middleware(['auth'])->group(function () {
         return Inertia::render('Test');
     })->name('Test');
 
-    // API Routes
+    // Protected API Routes
     Route::prefix('api')->group(function () {
+        Route::post('/logout', [LoginController::class, 'logout']);
+        
         // Users API
         Route::get('/users', [UserController::class, 'index']);
         Route::post('/users', [UserController::class, 'store']);
@@ -49,6 +69,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/permissions', [\App\Http\Controllers\PermissionExampleController::class, 'getPermissions']);
         Route::get('/users/{id}/permissions', [\App\Http\Controllers\PermissionExampleController::class, 'getUserPermissions']);
     });
+});
+
+// Fallback route for SPA - catch all unmatched routes and redirect to home
+Route::fallback(function () {
+    return redirect('/');
 });
 
 require __DIR__.'/settings.php';

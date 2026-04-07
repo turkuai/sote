@@ -26,9 +26,10 @@ class DatabaseSeeder extends Seeder
             'first_name' => 'Admin',
             'last_name' => 'User',
             'email' => 'admin@example.com',
-            'password' => Hash::make('password123'),
+            'password' => Hash::make('admin123'),
             'role' => Role::getPermissions('admin'),
             'role_type' => 'admin',
+            'email_verified_at' => now(),
         ]);
 
         // Create manager (moderator) - can manage nurses, create groups, approve actions
@@ -40,6 +41,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password123'),
             'role' => Role::getPermissions('manager'),
             'role_type' => 'manager',
+            'email_verified_at' => now(),
         ]);
 
         // Create nurse (regular user) - read-only access
@@ -51,6 +53,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password123'),
             'role' => Role::getPermissions('nurse'),
             'role_type' => 'nurse',
+            'email_verified_at' => now(),
         ]);
 
         // Assign users to groups
