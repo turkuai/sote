@@ -12,3 +12,4 @@ export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: Breadcrum
         </header>
     );
 }
+

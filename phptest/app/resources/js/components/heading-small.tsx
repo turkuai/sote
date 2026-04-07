@@ -6,3 +6,4 @@ export default function HeadingSmall({ title, description }: { title: string; de
         </header>
     );
 }
+

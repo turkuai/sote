@@ -8,3 +8,4 @@ export default function InputError({ message, className = '', ...props }: HTMLAt
         </p>
     ) : null;
 }
+

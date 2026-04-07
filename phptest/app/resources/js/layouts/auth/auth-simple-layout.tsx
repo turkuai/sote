@@ -32,3 +32,4 @@ export default function AuthSimpleLayout({ children, title, description }: AuthL
         </div>
     );
 }
+

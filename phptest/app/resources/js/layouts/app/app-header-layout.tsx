@@ -16,3 +16,4 @@ export default function AppHeaderLayout({ children, breadcrumbs }: AppHeaderLayo
         </AppShell>
     );
 }
+

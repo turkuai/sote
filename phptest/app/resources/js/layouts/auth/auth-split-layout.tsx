@@ -43,3 +43,4 @@ export default function AuthSplitLayout({ children, title, description }: AuthLa
         </div>
     );
 }
+

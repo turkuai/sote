@@ -38,3 +38,4 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
         </>
     );
 }
+

@@ -10,3 +10,4 @@ export function useInitials() {
 
     return getInitials;
 }
+

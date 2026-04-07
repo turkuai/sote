@@ -96,3 +96,4 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
         </AuthLayout>
     );
 }
+

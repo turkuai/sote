@@ -15,3 +15,4 @@ export default function AppSidebarLayout({ children, breadcrumbs = [] }: { child
         </AppShell>
     );
 }
+

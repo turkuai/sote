@@ -16,3 +16,4 @@ export function AppContent({ variant = 'header', children, ...props }: AppConten
         </main>
     );
 }
+

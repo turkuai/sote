@@ -8,3 +8,4 @@ export default function Heading({ title, description }: { title: string; descrip
         </>
     );
 }
+
