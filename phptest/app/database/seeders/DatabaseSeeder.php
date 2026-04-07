@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\Group;
+use App\Libraries\Role;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +15,48 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Create some groups
+        $adminGroup = Group::create(['name' => 'Administrators']);
+        $userGroup = Group::create(['name' => 'Users']);
+        $moderatorGroup = Group::create(['name' => 'Moderators']);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Create admin user with full permissions
+        $admin = User::create([
+            'name' => 'Admin User',
+            'first_name' => 'Admin',
+            'last_name' => 'User',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('password123'),
+            'role' => Role::getPermissions('admin'),
+            'role_type' => 'admin',
         ]);
+
+        // Create manager (moderator) - can manage nurses, create groups, approve actions
+        $manager = User::create([
+            'name' => 'Jane Smith',
+            'first_name' => 'Jane',
+            'last_name' => 'Smith',
+            'email' => 'jane@example.com',
+            'password' => Hash::make('password123'),
+            'role' => Role::getPermissions('manager'),
+            'role_type' => 'manager',
+        ]);
+
+        // Create nurse (regular user) - read-only access
+        $nurse = User::create([
+            'name' => 'Bob Johnson',
+            'first_name' => 'Bob',
+            'last_name' => 'Johnson',
+            'email' => 'bob@example.com',
+            'password' => Hash::make('password123'),
+            'role' => Role::getPermissions('nurse'),
+            'role_type' => 'nurse',
+        ]);
+
+        // Assign users to groups
+        $admin->groups()->attach([$adminGroup->id, $userGroup->id]);
+        $manager->groups()->attach([$userGroup->id, $moderatorGroup->id]);
+        $nurse->groups()->attach([$userGroup->id]);
     }
 }
+

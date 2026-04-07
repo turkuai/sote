@@ -19,8 +19,12 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
+        'role',
+        'role_type',
     ];
 
     /**
@@ -44,5 +48,29 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get all groups this user belongs to
+     */
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'user_groups');
+    }
+
+    /**
+     * Get the formatted role name
+     */
+    public function getRoleNameAttribute()
+    {
+        return ucfirst($this->role_type ?? 'nurse');
+    }
+
+    /**
+     * Check if user has a specific role
+     */
+    public function isRole($roleType)
+    {
+        return $this->role_type === $roleType;
     }
 }
