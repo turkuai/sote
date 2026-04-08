@@ -1,6 +1,18 @@
 import { useNotification } from './NotificationContext';
 import { getApiBase } from '../config';
 
+// Helper to get CSRF token from cookie
+function getCsrfToken() {
+  const name = 'XSRF-TOKEN';
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    const token = parts.pop().split(';').shift();
+    return decodeURIComponent(token);
+  }
+  return '';
+}
+
 /**
  * Hook for deleting data from server
  * @param {string} path - API endpoint path
@@ -19,18 +31,18 @@ export function useServerDelete(path, fetchData, setError) {
 
     try {
       let deleteUrl = `${path.split('?')[0]}/${row.id}`;
-      // Ensure /api/ prefix if not present; avoid accidental double slashes
-      if (!deleteUrl.startsWith('/api/')) {
-        // Remove leading slash if present to avoid double slashes
-        const cleanPath = deleteUrl.startsWith('/') ? deleteUrl.slice(1) : deleteUrl;
-        deleteUrl = `/api/${cleanPath}`;
+      // Ensure leading slash (getApiBase already includes /api)
+      if (!deleteUrl.startsWith('/')) {
+        deleteUrl = '/' + deleteUrl;
       }
 
+      const csrfToken = getCsrfToken();
       const res = await fetch(getApiBase() + deleteUrl, {
         method: 'DELETE',
-        credentials: 'include', // Include httpOnly cookies
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
+          ...(csrfToken && { 'X-CSRF-TOKEN': csrfToken }),
         },
       });
 

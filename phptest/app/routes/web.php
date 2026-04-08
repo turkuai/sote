@@ -52,7 +52,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/users', [UserController::class, 'index']);
         Route::post('/users', [UserController::class, 'store']);
         Route::get('/users/{id}', [UserController::class, 'show']);
-        Route::put('/users/{id}', [UserController::class, 'update']);
+        Route::patch('/users/{id}', [UserController::class, 'update']);
         Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
         // Roles API
@@ -62,7 +62,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/groups', [GroupController::class, 'index']);
         Route::post('/groups', [GroupController::class, 'store']);
         Route::get('/groups/{id}', [GroupController::class, 'show']);
-        Route::put('/groups/{id}', [GroupController::class, 'update']);
+        Route::patch('/groups/{id}', [GroupController::class, 'update']);
         Route::delete('/groups/{id}', [GroupController::class, 'destroy']);
 
         // Permission Examples

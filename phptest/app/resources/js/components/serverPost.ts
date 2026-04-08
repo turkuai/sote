@@ -1,6 +1,18 @@
 import { useNotification } from './NotificationContext';
 import { getApiBase } from '../config';
 
+// Helper to get CSRF token from cookie
+function getCsrfToken() {
+  const name = 'XSRF-TOKEN';
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    const token = parts.pop().split(';').shift();
+    return decodeURIComponent(token);
+  }
+  return '';
+}
+
 /**
  * Hook for adding new data to server
  * @param {string} path - API endpoint path
@@ -17,10 +29,9 @@ export function useServerPost(path, fetchData, setIsAdding, transformAddPayload)
 
     try {
       let addUrl = path.split('?')[0];
-      // Ensure /api/ prefix if not present
-      if (!addUrl.startsWith('/api/')) {
-        const cleanPath = addUrl.startsWith('/') ? addUrl.slice(1) : addUrl;
-        addUrl = `/api/${cleanPath}`;
+      // Ensure leading slash (getApiBase already includes /api)
+      if (!addUrl.startsWith('/')) {
+        addUrl = '/' + addUrl;
       }
 
       // Prepare payload - exclude technical fields
@@ -33,11 +44,13 @@ export function useServerPost(path, fetchData, setIsAdding, transformAddPayload)
         payload = transformAddPayload(payload, { path });
       }
 
+      const csrfToken = getCsrfToken();
       const res = await fetch(getApiBase() + addUrl, {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
+          ...(csrfToken && { 'X-CSRF-TOKEN': csrfToken }),
         },
         body: JSON.stringify(payload),
       });

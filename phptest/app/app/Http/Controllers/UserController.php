@@ -7,6 +7,8 @@ use App\Libraries\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -42,7 +44,7 @@ class UserController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
+            'password' => 'sometimes|string|min:6',
             'role_type' => 'required|in:nurse,manager,admin',
         ]);
 
@@ -50,7 +52,15 @@ class UserController extends Controller
             return ApiResponse::validationError($validator->errors());
         }
 
-        $data = $request->validated();
+        $data = $validator->validated();
+        
+        // Generate password if not provided
+        if (!isset($data['password']) || empty(trim($data['password']))) {
+            $data['password'] = Str::random(12);
+        }
+        
+        // Hash password using Hash facade
+        $data['password'] = Hash::make($data['password']);
         
         // Set the binary role value based on role_type
         $data['name'] = $data['first_name'] . ' ' . $data['last_name'];
@@ -84,7 +94,15 @@ class UserController extends Controller
             return ApiResponse::validationError($validator->errors());
         }
 
-        $data = $request->validated();
+        $data = $validator->validated();
+        
+        // Hash password if provided
+        if (isset($data['password']) && !empty(trim($data['password']))) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            // Remove password from update if not provided
+            unset($data['password']);
+        }
         
         // If role_type is being updated, also update the binary role value
         if (isset($data['role_type'])) {
@@ -99,6 +117,9 @@ class UserController extends Controller
         }
 
         $user->update($data);
+        
+        // Refresh the user instance to get updated values
+        $user->refresh();
 
         return ApiResponse::success($user, 'User updated successfully');
     }

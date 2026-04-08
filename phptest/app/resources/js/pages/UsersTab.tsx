@@ -73,7 +73,7 @@ export default function UsersTab({
                     `${row.first_name || ''} ${row.last_name || ''}`.trim(),
                 },
                 'email',
-                'role',
+                'role_type',
               ]}
               path="users"
               allowEditing={true}
@@ -87,30 +87,30 @@ export default function UsersTab({
                 const confirmPassword = (payload.confirmPassword || '').trim();
                 const isAdmin = currentUser?.role === 'admin';
 
-                // If both empty, don't change password; allow other fields to update.
+                // Clone payload and remove password fields first
+                const { password: _p, confirmPassword: _cp, ...restPayload } = payload;
+
+                // If both password fields empty, just return other fields
                 if (!password && !confirmPassword) {
-                  const {
-                    password: _p,
-                    confirmPassword: _cp,
-                    ...restPayload
-                  } = payload;
                   return restPayload;
                 }
 
+                // If only one password field filled, error
                 if (!password || !confirmPassword) {
                   throw new Error('To change the password, fill both password fields.');
                 }
 
+                // If passwords don't match, error
                 if (password !== confirmPassword) {
                   throw new Error('Passwords do not match');
                 }
 
-                // Admins can change passwords without knowing current password.
+                // Admins can change passwords
                 if (isAdmin) {
-                  const { confirmPassword: _cp, ...restPayload } = payload;
                   return { ...restPayload, password };
                 }
-                // Non-admins don't edit users here, but keep fallback strict.
+
+                // Non-admins don't edit users here
                 throw new Error('You are not allowed to change this password.');
               }}
               transformAddPayload={(payload) => {
@@ -119,10 +119,6 @@ export default function UsersTab({
                 const last = (payload.last_name || '').trim();
                 const password = (payload.password || '').trim();
                 const confirmPassword = (payload.confirmPassword || '').trim();
-                const baseUser =
-                  email && email.includes('@')
-                    ? email.split('@')[0]
-                    : `${first}.${last}`.toLowerCase().replace(/\s+/g, '');
 
                 if (password || confirmPassword) {
                   if (!password || !confirmPassword) {
@@ -134,15 +130,13 @@ export default function UsersTab({
                 }
 
                 const payloadOut: any = {
-                  username: baseUser,
                   first_name: first,
                   last_name: last,
                   email,
-                  role: payload.role || 'student',
-                  phone_number: null,
+                  role_type: payload.role_type || 'nurse',
                 };
 
-                // Only send password when admin actually set one; otherwise backend will generate it
+                // Only send password when admin actually set one
                 if (password) {
                   payloadOut.password = password;
                 }
@@ -202,7 +196,7 @@ export default function UsersTab({
                 `${row.first_name || ''} ${row.last_name || ''}`.trim(),
             },
             'email',
-            'role',
+            'role_type',
           ]}
           path="users"
           allowEditing={true}
@@ -216,25 +210,26 @@ export default function UsersTab({
             const confirmPassword = (payload.confirmPassword || '').trim();
             const isAdmin = currentUser?.role === 'admin';
 
+            // Clone payload and remove password fields
+            const { password: _p, confirmPassword: _cp, ...restPayload } = payload;
+
+            // If both empty, return other fields
             if (!password && !confirmPassword) {
-              const {
-                password: _p,
-                confirmPassword: _cp,
-                ...restPayload
-              } = payload;
               return restPayload;
             }
 
+            // If only one filled, error
             if (!password || !confirmPassword) {
               throw new Error('To change the password, fill both password fields.');
             }
 
+            // If passwords don't match, error
             if (password !== confirmPassword) {
               throw new Error('Passwords do not match');
             }
 
+            // Admins can change passwords
             if (isAdmin) {
-              const { confirmPassword: _cp, ...restPayload } = payload;
               return { ...restPayload, password };
             }
             throw new Error('You are not allowed to change this password.');
@@ -245,10 +240,6 @@ export default function UsersTab({
             const last = (payload.last_name || '').trim();
             const password = (payload.password || '').trim();
             const confirmPassword = (payload.confirmPassword || '').trim();
-            const baseUser =
-              email && email.includes('@')
-                ? email.split('@')[0]
-                : `${first}.${last}`.toLowerCase().replace(/\s+/g, '');
 
             if (password || confirmPassword) {
               if (!password || !confirmPassword) {
@@ -260,12 +251,10 @@ export default function UsersTab({
             }
 
             const payloadOut: any = {
-              username: baseUser,
               first_name: first,
               last_name: last,
               email,
-              role: payload.role || 'student',
-              phone_number: null,
+              role_type: payload.role_type || 'nurse',
             };
 
             if (password) {
@@ -323,12 +312,12 @@ function UsersForm({ data, setData }) {
           <label className="form-label">Role</label>
           <select
             className="form-select"
-            value={getValue('role') || 'student'}
-            onChange={handleChange('role')}
+            value={getValue('role_type') || 'nurse'}
+            onChange={handleChange('role_type')}
           >
-            <option value="admin">Admin</option>
-            <option value="teacher">Teacher</option>
-            <option value="student">Student</option>
+            <option value="nurse">Nurse (Read-only)</option>
+            <option value="manager">Manager (CRUD)</option>
+            <option value="admin">Admin (Full Access)</option>
           </select>
         </div>
         {!isEditing && (

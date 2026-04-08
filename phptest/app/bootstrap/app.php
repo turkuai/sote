@@ -18,10 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
         ]);
         
-        // Exclude CSRF for API login routes
+        // Exclude CSRF for all API routes (stateless API)
         $middleware->validateCsrfTokens(except: [
-            'api/login',
-            'api/logout',
+            'api/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -9,6 +9,18 @@ import { useServerDelete } from './serverDelete';
 import { useNotification } from './NotificationContext';
 import { getApiBase } from '../config';
 
+// Helper to get CSRF token from cookie
+function getCsrfToken() {
+  const name = 'XSRF-TOKEN';
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    const token = parts.pop().split(';').shift();
+    return decodeURIComponent(token);
+  }
+  return '';
+}
+
 // Helper function to convert column names to display names
 const formatColumnName = (columnName) => {
   if (typeof columnName !== 'string') return '';
@@ -90,9 +102,9 @@ export default function ServerGrid({
 
     try {
       let updateUrl = `${path.split('?')[0]}/${editingRow.id}`;
-      if (!updateUrl.startsWith('/api/')) {
-        const cleanPath = updateUrl.startsWith('/') ? updateUrl.slice(1) : updateUrl;
-        updateUrl = `/api/${cleanPath}`;
+      // Ensure leading slash (getApiBase already includes /api)
+      if (!updateUrl.startsWith('/')) {
+        updateUrl = '/' + updateUrl;
       }
 
       // Clone formData and drop non-updatable fields; backend will decide what to use
@@ -114,11 +126,13 @@ export default function ServerGrid({
           ? transformEditPayload(payload)
           : payload;
 
+      const csrfToken = getCsrfToken();
       const res = await fetch(getApiBase() + updateUrl, {
         method: 'PATCH',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
+          ...(csrfToken && { 'X-CSRF-TOKEN': csrfToken }),
         },
         body: JSON.stringify(finalPayload),
       });
