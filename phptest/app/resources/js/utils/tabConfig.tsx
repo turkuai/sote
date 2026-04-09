@@ -1,15 +1,17 @@
 import React from 'react';
-import { Settings, Users } from 'lucide-react';
+import { Settings, Users, Folder } from 'lucide-react';
 
 // Tab icon map - maps tab names to their corresponding icon components
 const TAB_ICON_MAP = {
   users: Users,
+  groups: Folder,
   settings: Settings,
 };
 
 // Tab label map - base labels for tabs
 const TAB_LABEL_MAP = {
   users: 'Users',
+  groups: 'Groups',
   settings: 'Settings',
 };
 
@@ -27,8 +29,9 @@ export const TabConfig = {
   getTabs(currentUser, isMobile) {
     const tabs = [];
 
-    if (currentUser?.role === 'admin') {
+    if (currentUser?.role === 'admin' || currentUser?.role === 'manager') {
       tabs.push('users');
+      tabs.push('groups');
     }
 
     tabs.push('settings');

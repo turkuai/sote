@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Settings, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { getAssetUrl } from '../config';
 import './Admin.css';
 
@@ -8,11 +9,21 @@ import './Admin.css';
  * @param {Object} currentUser - Current authenticated user object
  * @param {Function} onLogout - Handler for logout button click
  * @param {Function} onSettingsClick - Handler for settings menu click
+ * @param {string} currentPage - Current page (dashboard or patients)
+ * @param {Function} onNavigateDashboard - Handler for dashboard navigation
  * @param {boolean} isMobile - Whether the current view is mobile
  */
-const Header = ({ currentUser, onLogout, onSettingsClick, isMobile = false }) => {
+const Header = ({ 
+  currentUser, 
+  onLogout, 
+  onSettingsClick, 
+  currentPage = 'dashboard',
+  onNavigateDashboard,
+  isMobile = false 
+}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -37,6 +48,18 @@ const Header = ({ currentUser, onLogout, onSettingsClick, isMobile = false }) =>
     onLogout();
   };
 
+  const handlePatientsClick = () => {
+    navigate('/patients', { replace: true });
+  };
+
+  const handleDashboardClick = () => {
+    if (onNavigateDashboard) {
+      onNavigateDashboard();
+    } else {
+      navigate('/home', { replace: true });
+    }
+  };
+
   return (
     <div className="admin-header">
       <h1 className="admin-logo">
@@ -50,6 +73,22 @@ const Header = ({ currentUser, onLogout, onSettingsClick, isMobile = false }) =>
         )}
       </h1>
 
+      {/* Navigation buttons - centered */}
+      <div className="header-nav-buttons">
+        <button 
+          className={`nav-button ${currentPage === 'dashboard' ? 'active' : ''}`}
+          onClick={handleDashboardClick}
+        >
+          <strong>Dashboard</strong>
+        </button>
+        <button 
+          className={`nav-button ${currentPage === 'patients' ? 'active' : ''}`}
+          onClick={handlePatientsClick}
+        >
+          <strong>Patients</strong>
+        </button>
+      </div>
+
       <div className="admin-header-actions">
         {!isMobile && (
           <div className="user-dropdown-container" ref={dropdownRef}>
@@ -58,7 +97,7 @@ const Header = ({ currentUser, onLogout, onSettingsClick, isMobile = false }) =>
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               <span className="user-info-text">
-                Welcome, <strong>{currentUser?.username}</strong>
+                Welcome, <strong>{currentUser?.name}</strong>
               </span>
               <ChevronDown size={16} className={`dropdown-icon ${isDropdownOpen ? 'open' : ''}`} />
             </button>

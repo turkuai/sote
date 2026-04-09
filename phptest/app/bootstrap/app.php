@@ -18,6 +18,11 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
         ]);
         
+        // Register custom middleware aliases
+        $middleware->alias([
+            'checkRole' => \App\Http\Middleware\CheckRole::class,
+        ]);
+        
         // Exclude CSRF for all API routes (stateless API)
         $middleware->validateCsrfTokens(except: [
             'api/*',

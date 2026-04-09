@@ -41,6 +41,7 @@ export default function ServerGrid({
   formComponent : FormComponent,
   transformAddPayload,
   transformEditPayload,
+  onAddUsers,           // Callback for custom action (e.g., Add Users button)
   ...rest               // anything else you want to pass to Grid
 
 }) {
@@ -110,13 +111,20 @@ export default function ServerGrid({
       // Clone formData and drop non-updatable fields; backend will decide what to use
       const payload = { ...formData };
 
-      // Special-case combined "name" field (e.g. Users grid)
-      if (typeof payload.name === 'string' && payload.name.trim()) {
+      // Special-case combined "name" field ONLY for Users grid
+      // Users grid shows first_name + last_name as combined "name" field
+      if (
+        path.includes('users') &&
+        typeof payload.name === 'string' && 
+        payload.name.trim() && 
+        !payload.first_name && 
+        !payload.last_name
+      ) {
         const parts = payload.name.trim().split(/\s+/);
         payload.first_name = parts[0];
         payload.last_name = parts.slice(1).join(' ') || '';
+        delete payload.name; // Only delete name if we processed it into first/last
       }
-      delete payload.name;
       delete payload.id;
       delete payload.created_at;
       delete payload.updated_at;
@@ -225,6 +233,7 @@ export default function ServerGrid({
         pageSize={pageSize}
         onEditRow={handleEditRequest}
         onDeleteRow={handleDeleteRequest}
+        onAddUsers={onAddUsers}
         {...rest}
       />
 

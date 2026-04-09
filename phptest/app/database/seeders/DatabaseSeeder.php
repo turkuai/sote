@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\Group;
 use App\Libraries\Role;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,11 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create some groups
-        $adminGroup = Group::create(['name' => 'Administrators']);
-        $userGroup = Group::create(['name' => 'Users']);
-        $moderatorGroup = Group::create(['name' => 'Moderators']);
-
         // Create admin user with full permissions
         $admin = User::create([
             'name' => 'Admin User',
@@ -55,11 +49,6 @@ class DatabaseSeeder extends Seeder
             'role_type' => 'nurse',
             'email_verified_at' => now(),
         ]);
-
-        // Assign users to groups
-        $admin->groups()->attach([$adminGroup->id, $userGroup->id]);
-        $manager->groups()->attach([$userGroup->id, $moderatorGroup->id]);
-        $nurse->groups()->attach([$userGroup->id]);
     }
 }
 

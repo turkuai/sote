@@ -9,12 +9,11 @@
   background-color: white;
   border-bottom: 1px solid #e5e7eb;
   padding: 1rem;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  flex-wrap: wrap;
   gap: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .admin-header h1 {
@@ -49,8 +48,38 @@
   align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
-  flex: 1 1 auto;
   justify-content: flex-end;
+  grid-column: 3;
+}
+
+/* Header Navigation Buttons */
+.header-nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  justify-content: center;
+  grid-column: 2;
+}
+
+.nav-button {
+  background-color: transparent;
+  border: none;
+  font-size: 1.125rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s;
+  font-weight: 600;
+  border-bottom: 3px solid transparent;
+}
+
+.nav-button:hover {
+  color: #1f2937;
+}
+
+.nav-button.active {
+  color: #1f2937;
+  border-bottom-color: #3b82f6;
 }
 
 /* User Info */
@@ -803,15 +832,25 @@
 @media (min-width: 640px) {
   .admin-header {
     padding: 1rem 1.5rem;
-  }
-
-  .admin-tabs {
-    margin: 1rem 1.5rem 0 1.5rem;
+    grid-template-columns: 1fr auto 1fr;
   }
 
   .admin-header h1 {
     font-size: 1.5rem;
+    grid-column: 1;
     flex: 0 1 auto;
+  }
+
+  .header-nav-buttons {
+    grid-column: 2;
+  }
+
+  .admin-header-actions {
+    grid-column: 3;
+  }
+
+  .admin-tabs {
+    margin: 1rem 1.5rem 0 1.5rem;
   }
 
   .admin-content {
@@ -877,9 +916,29 @@
     padding-bottom: 0;
   }
 
+  .admin-header {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-header h1 {
+    grid-column: 1;
+  }
+
+  .header-nav-buttons {
+    grid-column: 1;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .nav-button {
+    font-size: 0.875rem;
+  }
+
   .admin-header-actions {
+    grid-column: 1;
     width: 100%;
     justify-content: space-between;
+    margin-top: 0.5rem;
   }
 
   .user-info {

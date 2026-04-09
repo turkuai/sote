@@ -76,10 +76,10 @@ export default function UsersTab({
                 'role_type',
               ]}
               path="users"
-              allowEditing={true}
-              allowDelete={true}
+              allowEditing={currentUser?.role === 'admin'}
+              allowDelete={currentUser?.role === 'admin'}
               pageSize={10}
-              showAddButton={true}
+              showAddButton={currentUser?.role === 'admin'}
               query={query}
               formComponent={UsersForm}
               transformEditPayload={(payload) => {
@@ -181,7 +181,7 @@ export default function UsersTab({
           </span>
           <input
             type="text"
-            placeholder="Search ..."
+            placeholder="Search users..."
             value={inputValue}
             onChange={handleSearchChange}
           />
@@ -199,10 +199,10 @@ export default function UsersTab({
             'role_type',
           ]}
           path="users"
-          allowEditing={true}
-          allowDelete={true}
+          allowEditing={currentUser?.role === 'admin'}
+          allowDelete={currentUser?.role === 'admin'}
           pageSize={10}
-          showAddButton={true}
+          showAddButton={currentUser?.role === 'admin'}
           query={query}
           formComponent={UsersForm}
           transformEditPayload={(payload) => {

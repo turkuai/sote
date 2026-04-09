@@ -15,10 +15,28 @@ class UserController extends Controller
     /**
      * Get all users with their groups
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('groups')->get();
-        return ApiResponse::success($users, 'Users retrieved successfully');
+        try {
+            $query = User::with('groups');
+            
+            // Search by name, email, or first_name
+            if ($request->has('search') && $request->search) {
+                $search = strtolower($request->search);
+                $query->where(function ($q) use ($search) {
+                    $q->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"])
+                      ->orWhereRaw('LOWER(first_name) LIKE ?', ["%{$search}%"])
+                      ->orWhereRaw('LOWER(last_name) LIKE ?', ["%{$search}%"])
+                      ->orWhereRaw('LOWER(email) LIKE ?', ["%{$search}%"]);
+                });
+            }
+            
+            $users = $query->get();
+            return ApiResponse::success($users, 'Users retrieved successfully');
+        } catch (\Exception $e) {
+            \Log::error('UserController@index error: ' . $e->getMessage(), ['exception' => $e]);
+            return ApiResponse::error('Failed to retrieve users: ' . $e->getMessage(), 500);
+        }
     }
 
     /**

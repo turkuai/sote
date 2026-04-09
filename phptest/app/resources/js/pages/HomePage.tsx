@@ -11,6 +11,7 @@ import { usePasswordForm } from '../hooks/usePasswordForm';
 import { useUserManagement } from '../hooks/useUserManagement';
 import { useResponsive } from '../hooks/useResponsive';
 import UsersTab from './UsersTab';
+import GroupsTab from './GroupsTab';
 import { TabConfig } from '../utils/tabConfig';
 
 export default function HomePage() {
@@ -18,6 +19,7 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   const [userQuery, setUserQuery] = useState('');
+  const [groupQuery, setGroupQuery] = useState('');
 
   // Password form hook
   const {
@@ -36,7 +38,7 @@ export default function HomePage() {
 
   // Set default tab based on role
   const [activeTab, setActiveTab] = useState(() => {
-    return currentUser?.role === "admin" ? "users" : "settings";
+    return (currentUser?.role === "admin" || currentUser?.role === "manager") ? "users" : "settings";
   });
 
   useEffect(() => {
@@ -50,6 +52,10 @@ export default function HomePage() {
     navigate('/login', { replace: true });
   };
 
+  const handleNavigateDashboard = () => {
+    navigate('/home', { replace: true });
+  };
+
   // Tab configuration - using utility module
   const tabs = TabConfig.getTabs(currentUser, isMobile);
 
@@ -61,18 +67,28 @@ export default function HomePage() {
         currentUser={currentUser}
         onLogout={handleLogout}
         onSettingsClick={() => setActiveTab('settings')}
+        currentPage="dashboard"
+        onNavigateDashboard={handleNavigateDashboard}
         isMobile={isMobile}
       />
 
       {/* Mobile Content */}
       {isMobile && (
         <>
-          {currentUser?.role === 'admin' && activeTab === 'users' && (
+          {(currentUser?.role === 'admin' || currentUser?.role === 'manager') && activeTab === 'users' && (
             <UsersTab
               currentUser={currentUser}
               query={userQuery}
               onQueryChange={setUserQuery}
               onDeleteUser={handleDeleteUser}
+            />
+          )}
+
+          {(currentUser?.role === 'admin' || currentUser?.role === 'manager') && activeTab === 'groups' && (
+            <GroupsTab
+              currentUser={currentUser}
+              query={groupQuery}
+              onQueryChange={setGroupQuery}
             />
           )}
 
@@ -100,13 +116,23 @@ export default function HomePage() {
       {/* Desktop Content Area */}
       <div className="admin-content hide-on-mobile">
         <div className="admin-content-card">
-          {currentUser?.role === 'admin' && (
+          {(currentUser?.role === 'admin' || currentUser?.role === 'manager') && (
             <div style={{ display: activeTab === 'users' ? 'block' : 'none' }}>
               <UsersTab
                 currentUser={currentUser}
                 query={userQuery}
                 onQueryChange={setUserQuery}
                 onDeleteUser={handleDeleteUser}
+              />
+            </div>
+          )}
+
+          {(currentUser?.role === 'admin' || currentUser?.role === 'manager') && (
+            <div style={{ display: activeTab === 'groups' ? 'block' : 'none' }}>
+              <GroupsTab
+                currentUser={currentUser}
+                query={groupQuery}
+                onQueryChange={setGroupQuery}
               />
             </div>
           )}

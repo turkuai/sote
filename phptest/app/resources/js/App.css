@@ -103,6 +103,21 @@ button:hover {
   background-color: #ce1717;
 }
 
+/* Override button styles for nav buttons */
+button.nav-button {
+  padding: 0.75rem 1rem;
+  background-color: transparent;
+  color: #6b7280;
+  font-weight: 600;
+  font-size: 1.125rem;
+  border-radius: 0;
+}
+
+button.nav-button:hover {
+  background-color: transparent;
+  color: #1f2937;
+}
+
 /* ServerGrid "Add" button */
 .server-grid-add-button {
   padding: 0.5rem;

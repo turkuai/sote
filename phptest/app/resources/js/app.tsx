@@ -7,6 +7,7 @@ import { NotificationProvider } from './components/NotificationContext';
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
+import PatientsPage from "./pages/PatientsPage";
 import VerifyEmail from "./pages/VerifyEmail";
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
 
       <Route element={<ProtectedRoute />}>
         <Route path="/home" element={<HomePage />} />
+        <Route path="/patients" element={<PatientsPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
