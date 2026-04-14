@@ -9,14 +9,30 @@
 
 ## Setup
 
-### 1. tai-grid library
+### 1. Submodule Setup
+
+If you are using a submodule, make sure to initialize and update it before proceeding:
+
 ```bash
+# Initialize and update submodules
+git submodule init
+git submodule update
+
+# If you need to make changes to the submodule and push them
+git add .
+git commit -m "Submodule update"
+git push origin main
+```
+
+### 2. tai-grid library
+```bash
+
 cd phptest/tai-grid
 npm install
 npm run build
 ```
 
-### 2. Backend (Laravel)
+### 3. Backend (Laravel)
 ```bash
 cd phptest/app
 composer install
@@ -25,7 +41,7 @@ php artisan key:generate
 php artisan migrate --seed
 ```
 
-### 3. Frontend
+### 4. Frontend
 ```bash
 cd phptest/app
 npm install
@@ -52,4 +68,4 @@ Open in browser: http://localhost:8000
 | admin@example.com | admin123 | Admin |
 | jane@example.com | password123 | Manager |
 | bob@example.com | password123 | Nurse |
- 
+
