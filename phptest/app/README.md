@@ -28,14 +28,37 @@ php artisan key:generate
 
 ### **3. Setup Database**
 
+**First, create the database:**
+
 ```bash
-# Run migrations and seed test data
+# Option A: Using MySQL command line
+mysql -u root -p
+> CREATE DATABASE sote;
+> EXIT;
+
+# Option B: Using phpMyAdmin (XAMPP)
+# 1. Go to http://localhost/phpmyadmin
+# 2. Click "New"
+# 3. Database name: sote
+# 4. Click "Create"
+```
+
+**Then, verify `.env` has correct database name:**
+```
+DB_DATABASE=sote
+DB_USERNAME=root
+DB_PASSWORD=          (your MySQL password)
+```
+
+**Finally, run migrations and seed test data:**
+```bash
 php artisan migrate:fresh --seed
 
 # This creates:
 # - Database tables (users, groups, user_groups, migrations, sessions)
 # - 3 test users: Admin, Jane (Manager), Bob (Nurse)
 # - 3 test groups: Administrators, Users, Moderators
+# - Group assignments for users
 ```
 
 ### **4. Start the Servers**
