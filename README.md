@@ -27,6 +27,7 @@ npm run build
 
 ### 3. Backend (Laravel)
 ```bash
+cd sote
 composer install
 cp .env.example .env
 php artisan key:generate
