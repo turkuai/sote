@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch(`${getApiBase()}/user`, {
+        const response = await fetch('/api/user', {
           method: 'GET',
           credentials: 'include', // Include cookies
           headers: {
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password, rememberMe = false) => {
     try {
       // Attempt login
-      const response = await fetch(`${getApiBase()}/login`, {
+      const response = await fetch('/api/login', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       // Fetch user data after successful login
-      const userResponse = await fetch(`${getApiBase()}/user`, {
+      const userResponse = await fetch('/api/user', {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -112,7 +112,7 @@ export const AuthProvider = ({ children }) => {
   // Logout function
   const logout = async () => {
     try {
-      await fetch(`${getApiBase()}/logout`, {
+      await fetch('/api/logout', {
         method: 'POST',
         credentials: 'include',
         headers: {

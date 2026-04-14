@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import ServerGrid from '../components/ServerGrid';
+import { ServerGrid } from 'tai-grid';
+import 'tai-grid/style.css';
 import MobileSearchToggle from '../components/MobileSearchToggle';
 import GroupUsersModal from '../components/GroupUsersModal';
 import { useNotification } from '../components/NotificationContext';
+import { getApiBase } from '../config';
 import './Admin.css';
 
 const SEARCH_DEBOUNCE_MS = 300;
@@ -27,6 +29,7 @@ export default function GroupsTab({
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [showGroupUsersModal, setShowGroupUsersModal] = useState(false);
   const debounceRef = useRef(null);
+  const { showNotification } = useNotification();
 
   // Sync input from parent query
   useEffect(() => {
@@ -68,13 +71,7 @@ export default function GroupsTab({
           <div style={{ height: '500px', width: '100%' }}>
             <ServerGrid
               key={refreshKey}
-              columns={[
-                'name',
-                {
-                  field: 'user_count',
-                  displayName: 'Members',
-                },
-              ]}
+              columns={['name', 'user_count']}
               path="groups"
               allowEditing={currentUser?.role === 'admin'}
               allowDelete={currentUser?.role === 'admin'}
@@ -83,8 +80,10 @@ export default function GroupsTab({
               query={query}
               formComponent={GroupsForm}
               onAddUsers={handleAddUsersClick}
+              getApiBase={getApiBase}
+              showNot={showNotification}
               transformEditPayload={(payload) => {
-                const name = (payload.name || '').trim();
+                const name = String(payload.name || '').trim();
 
                 if (!name) {
                   throw new Error('Group name cannot be empty');
@@ -95,7 +94,7 @@ export default function GroupsTab({
                 };
               }}
               transformAddPayload={(payload) => {
-                const name = (payload.name || '').trim();
+                const name = String(payload.name || '').trim();
 
                 if (!name) {
                   throw new Error('Group name cannot be empty');
@@ -150,13 +149,7 @@ export default function GroupsTab({
         </div>
         <ServerGrid
           key={refreshKey}
-          columns={[
-            'name',
-            {
-              field: 'user_count',
-              displayName: 'Members',
-            },
-          ]}
+          columns={['name', 'user_count']}
           path="groups"
           allowEditing={currentUser?.role === 'admin'}
           allowDelete={currentUser?.role === 'admin'}
@@ -165,8 +158,10 @@ export default function GroupsTab({
           query={query}
           formComponent={GroupsForm}
           onAddUsers={handleAddUsersClick}
+          getApiBase={getApiBase}
+          showNot={showNotification}
           transformEditPayload={(payload) => {
-            const name = (payload.name || '').trim();
+            const name = String(payload.name || '').trim();
 
             if (!name) {
               throw new Error('Group name cannot be empty');
@@ -177,7 +172,7 @@ export default function GroupsTab({
             };
           }}
           transformAddPayload={(payload) => {
-            const name = (payload.name || '').trim();
+            const name = String(payload.name || '').trim();
 
             if (!name) {
               throw new Error('Group name cannot be empty');

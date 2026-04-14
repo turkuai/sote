@@ -1,5 +1,5 @@
 let base = '/';
-let apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
+let apiBase = import.meta.env.VITE_API_BASE_URL || '';
 
 export function setBaseUrls(app, api) {
   base = app || api || '/';

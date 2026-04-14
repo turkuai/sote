@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import ServerGrid from '../components/ServerGrid';
+import { ServerGrid } from 'tai-grid';
+import 'tai-grid/style.css';
 import MobileSearchToggle from '../components/MobileSearchToggle';
 import { useNotification } from '../components/NotificationContext';
+import { getApiBase } from '../config';
 import './Admin.css';
 
 const SEARCH_DEBOUNCE_MS = 300;
@@ -52,6 +54,11 @@ export default function UsersTab({
     };
   }, []);
 
+  // Custom renderer para combinar first_name y last_name
+  const NameRenderer = ({ data }) => (
+    <span>{`${data?.first_name || ''} ${data?.last_name || ''}`.trim()}</span>
+  );
+
   return (
     <>
       {/* Mobile view - same ServerGrid and add popup as desktop (all fields: first_name, last_name, email, role) */}
@@ -65,16 +72,10 @@ export default function UsersTab({
           <div style={{ height: '500px', width: '100%' }}>
             <ServerGrid
               key={refreshKey}
-              columns={[
-                {
-                  field: 'name',
-                  displayName: 'Name',
-                  valueGetter: (row) =>
-                    `${row.first_name || ''} ${row.last_name || ''}`.trim(),
-                },
-                'email',
-                'role_type',
-              ]}
+              columns={['first_name', 'last_name', 'email', 'role_type']}
+              columnRenderers={{
+                first_name: NameRenderer,
+              }}
               path="users"
               allowEditing={currentUser?.role === 'admin'}
               allowDelete={currentUser?.role === 'admin'}
@@ -82,9 +83,11 @@ export default function UsersTab({
               showAddButton={currentUser?.role === 'admin'}
               query={query}
               formComponent={UsersForm}
+              getApiBase={getApiBase}
+              showNot={showNotification}
               transformEditPayload={(payload) => {
-                const password = (payload.password || '').trim();
-                const confirmPassword = (payload.confirmPassword || '').trim();
+                const password = String(payload.password || '').trim();
+                const confirmPassword = String(payload.confirmPassword || '').trim();
                 const isAdmin = currentUser?.role === 'admin';
 
                 // Clone payload and remove password fields first
@@ -114,11 +117,11 @@ export default function UsersTab({
                 throw new Error('You are not allowed to change this password.');
               }}
               transformAddPayload={(payload) => {
-                const email = (payload.email || '').trim();
-                const first = (payload.first_name || '').trim();
-                const last = (payload.last_name || '').trim();
-                const password = (payload.password || '').trim();
-                const confirmPassword = (payload.confirmPassword || '').trim();
+                const email = String(payload.email || '').trim();
+                const first = String(payload.first_name || '').trim();
+                const last = String(payload.last_name || '').trim();
+                const password = String(payload.password || '').trim();
+                const confirmPassword = String(payload.confirmPassword || '').trim();
 
                 if (password || confirmPassword) {
                   if (!password || !confirmPassword) {
@@ -188,16 +191,10 @@ export default function UsersTab({
         </div>
         <ServerGrid
           key={refreshKey}
-          columns={[
-            {
-              field: 'name',
-              displayName: 'Name',
-              valueGetter: (row) =>
-                `${row.first_name || ''} ${row.last_name || ''}`.trim(),
-            },
-            'email',
-            'role_type',
-          ]}
+          columns={['first_name', 'last_name', 'email', 'role_type']}
+          columnRenderers={{
+            first_name: NameRenderer,
+          }}
           path="users"
           allowEditing={currentUser?.role === 'admin'}
           allowDelete={currentUser?.role === 'admin'}
@@ -205,9 +202,11 @@ export default function UsersTab({
           showAddButton={currentUser?.role === 'admin'}
           query={query}
           formComponent={UsersForm}
+          getApiBase={getApiBase}
+          showNot={showNotification}
           transformEditPayload={(payload) => {
-            const password = (payload.password || '').trim();
-            const confirmPassword = (payload.confirmPassword || '').trim();
+            const password = String(payload.password || '').trim();
+            const confirmPassword = String(payload.confirmPassword || '').trim();
             const isAdmin = currentUser?.role === 'admin';
 
             // Clone payload and remove password fields
@@ -235,11 +234,11 @@ export default function UsersTab({
             throw new Error('You are not allowed to change this password.');
           }}
           transformAddPayload={(payload) => {
-            const email = (payload.email || '').trim();
-            const first = (payload.first_name || '').trim();
-            const last = (payload.last_name || '').trim();
-            const password = (payload.password || '').trim();
-            const confirmPassword = (payload.confirmPassword || '').trim();
+            const email = String(payload.email || '').trim();
+            const first = String(payload.first_name || '').trim();
+            const last = String(payload.last_name || '').trim();
+            const password = String(payload.password || '').trim();
+            const confirmPassword = String(payload.confirmPassword || '').trim();
 
             if (password || confirmPassword) {
               if (!password || !confirmPassword) {
