@@ -1,4 +1,4 @@
-[submodule "phptest/submodules/grid"]
-	path = phptest/submodules/grid
+[submodule "grid"]
+	path = grid
 	url = https://github.com/turkuai/grid.git
 	branch = local-grid-library

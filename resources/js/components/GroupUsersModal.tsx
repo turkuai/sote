@@ -16,7 +16,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
   useEffect(() => {
     const fetchGroupUsers = async () => {
       try {
-        const response = await fetch(`${getApiBase()}/groups/${groupId}`, {
+        const response = await fetch(`/api/groups/${groupId}`, {
           credentials: 'include',
         });
         if (response.ok) {
@@ -47,7 +47,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
       setFetchError(null);
       try {
         console.log('=== Fetching ALL Users ===');
-        const url = `${getApiBase()}/users`;
+        const url = `/api/users`;
         console.log('Fetching from:', url);
         
         const response = await fetch(url, {
@@ -121,7 +121,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
     try {
       // Add each user to the group via pivot table
       for (const userId of selectedUsersToAdd) {
-        await fetch(`${getApiBase()}/groups/${groupId}/users/${userId}`, {
+        await fetch(`/api/groups/${groupId}/users/${userId}`, {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
@@ -129,7 +129,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
       }
 
       // Refresh the group users
-      const response = await fetch(`${getApiBase()}/groups/${groupId}`, {
+      const response = await fetch(`/api/groups/${groupId}`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -147,7 +147,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
 
   const handleRemoveUser = async (userId) => {
     try {
-      const response = await fetch(`${getApiBase()}/groups/${groupId}/users/${userId}`, {
+      const response = await fetch(`/api/groups/${groupId}/users/${userId}`, {
         method: 'DELETE',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },

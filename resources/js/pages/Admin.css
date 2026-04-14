@@ -21,8 +21,8 @@
   font-weight: bold;
   margin: 0;
   color: #1f2937;
-  flex: 1 1 100%;
-  min-width: 200px;
+  grid-column: 1;
+  justify-self: start;
 }
 
 .admin-logo {
@@ -50,6 +50,7 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   grid-column: 3;
+  justify-self: end;
 }
 
 /* Header Navigation Buttons */
@@ -59,6 +60,7 @@
   gap: 1.5rem;
   justify-content: center;
   grid-column: 2;
+  justify-self: center;
 }
 
 .nav-button {
