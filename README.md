@@ -2,10 +2,23 @@
 
 ## Requirements
 
-- PHP >= 8.2
+- PHP = 8.2
 - Composer
 - Node.js >= 18
-- SQLite (included in PHP by default)
+- phpMyAdmin 
+
+## Before Running
+
+Verify PHP version matches (PHP 8.2):
+```bash
+php -v                                    # Check your PHP version
+/Applications/XAMPP/xamppfiles/bin/php -v # If using XAMPP
+```
+
+If using XAMPP, run the server with XAMPP's PHP:
+```bash
+/Applications/XAMPP/xamppfiles/bin/php artisan serve
+```
 
 ## Setup
 
@@ -27,7 +40,7 @@ npm run build
 
 ### 3. Backend (Laravel)
 ```bash
-cd sote
+cd ..
 composer install
 cp .env.example .env
 php artisan key:generate
