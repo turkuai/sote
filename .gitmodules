@@ -1,0 +1,4 @@
+[submodule "grid"]
+	path = grid
+	url = https://github.com/turkuai/grid.git
+	branch = local-grid-library
