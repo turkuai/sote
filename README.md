@@ -22,35 +22,21 @@ If using XAMPP, run the server with XAMPP's PHP:
 
 ## Setup
 
-### 1. Submodule Setup
-
-If you are using a submodule, make sure to initialize and update it before proceeding:
+Run the init script to set up everything in one step:
 
 ```bash
-# Initialize and update submodules
-git submodule init
-git submodule update
-```
-### 2. tai-grid library
-```bash
-cd grid
-npm install
-npm run build
+bash init.sh
+# or
+npm run init
 ```
 
-### 3. Backend (Laravel)
-```bash
-cd ..
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate --seed
-```
-
-### 4. Frontend
-```bash
-npm install
-```
+This will automatically:
+1. Initialize and update git submodules
+2. Build the tai-grid library
+3. Install PHP dependencies (composer install)
+4. Copy `.env.example` to `.env` and generate the app key (only on first run)
+5. Run database migrations and seeders
+6. Install frontend dependencies
 
 ## Running the app
 
