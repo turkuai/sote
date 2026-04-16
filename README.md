@@ -15,12 +15,9 @@ php -v                                    # Check your PHP version
 /Applications/XAMPP/xamppfiles/bin/php -v # If using XAMPP
 ```
 
-If using XAMPP, run the server with XAMPP's PHP:
-```bash
-/Applications/XAMPP/xamppfiles/bin/php artisan serve
-```
-
 ## Setup
+
+Make sure **Apache** and **MySQL** are running in XAMPP before proceeding, so the database can be created correctly.
 
 Run the init script to set up everything in one step:
 
@@ -45,6 +42,9 @@ From the root directory, in two terminals:
 ```bash
 # Terminal 1 - Laravel server
 php artisan serve
+
+# If using XAMPP, run the server with XAMPP's PHP:
+/Applications/XAMPP/xamppfiles/bin/php artisan serve
 
 # Terminal 2 - frontend build
 npm run dev
