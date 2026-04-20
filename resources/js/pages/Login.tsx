@@ -123,14 +123,6 @@ export default function Login() {
                     </button>
                 </form>
 
-                <div className="login-demo-credentials">
-                    <p className="login-demo-title">
-                        Use credentials from your database
-                    </p>
-                    <p className="login-demo-text">
-                        Login with any username/password from the users table                    
-                        </p>
-                </div>
             </div>
         </div>
     );
