@@ -128,6 +128,69 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Register function
+  const register = async (firstName, lastName, email, password, passwordConfirmation) => {
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          first_name: firstName, 
+          last_name: lastName, 
+          email, 
+          password, 
+          password_confirmation: passwordConfirmation 
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return {
+          success: false,
+          error: data.message || 'Registration failed',
+          errors: data.errors || {},
+        };
+      }
+
+      // Fetch user data after successful registration
+      const userResponse = await fetch('/api/user', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+        },
+      });
+
+      if (userResponse.ok) {
+        const userData = await userResponse.json();
+        const isUserWaiting = !userData.role_type;
+        setCurrentUser({
+          id: userData.id,
+          username: userData.username || userData.email,
+          name: userData.name,
+          role: userData.role_type || 'user',
+          email: userData.email,
+        });
+        setIsAuthenticated(true);
+        setIsWaiting(isUserWaiting);
+        setEmailVerified(userData.email_verified_at ? true : false);
+      }
+
+      return { success: true };
+    } catch (error) {
+      console.error('Registration error:', error);
+      return {
+        success: false,
+        error: 'Connection error. Please try again.',
+      };
+    }
+  };
+
   // Resend verification email
   const resendVerification = async () => {
     try {
@@ -151,6 +214,7 @@ export const AuthProvider = ({ children }) => {
         currentUser,
         emailVerified,
         login,
+        register,
         logout,
         loading,
         resendVerification,
