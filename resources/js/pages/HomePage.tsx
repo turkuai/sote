@@ -93,6 +93,14 @@ export default function HomePage() {
             />
           )}
 
+          {currentUser?.role_type === 'nurse' && activeTab === 'groups' && (
+            <GroupsTab
+              currentUser={currentUser}
+              query={groupQuery}
+              onQueryChange={setGroupQuery}
+            />
+          )}
+
           {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && activeTab === 'waiting-list' && (
             <WaitingListTab currentUser={currentUser} />
           )}
@@ -133,6 +141,16 @@ export default function HomePage() {
           )}
 
           {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
+            <div style={{ display: activeTab === 'groups' ? 'block' : 'none' }}>
+              <GroupsTab
+                currentUser={currentUser}
+                query={groupQuery}
+                onQueryChange={setGroupQuery}
+              />
+            </div>
+          )}
+
+          {currentUser?.role_type === 'nurse' && (
             <div style={{ display: activeTab === 'groups' ? 'block' : 'none' }}>
               <GroupsTab
                 currentUser={currentUser}

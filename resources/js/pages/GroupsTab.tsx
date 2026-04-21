@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { ServerGrid } from 'tai-grid';
+import GroupRegistrationForm from '../components/GroupRegistrationForm';
 
 function AccessKeyCell({ value }: { value: unknown }) {
   const [visible, setVisible] = useState(false);
@@ -48,8 +49,19 @@ export default function GroupsTab({
   const [inputValue, setInputValue] = useState(query || '');
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [showGroupUsersModal, setShowGroupUsersModal] = useState(false);
+  const [showEnrollModal, setShowEnrollModal] = useState(false);
+  const [myGroupCount, setMyGroupCount] = useState<number | null>(null);
   const debounceRef = useRef(null);
   const { showNotification } = useNotification();
+
+  // Fetch count of nurse's groups to show empty state
+  useEffect(() => {
+    if (currentUser?.role_type !== 'nurse') return;
+    fetch(`${getApiBase()}/api/groups/my`, { credentials: 'include' })
+      .then(r => r.json())
+      .then(data => setMyGroupCount(Array.isArray(data?.data) ? data.data.length : (Array.isArray(data) ? data.length : 0)))
+      .catch(() => setMyGroupCount(0));
+  }, [currentUser, refreshKey]);
 
   // Sync input from parent query
   useEffect(() => {
@@ -80,15 +92,197 @@ export default function GroupsTab({
 
   return (
     <>
-      {/* Mobile view */}
-      <div className="mobile-tab-content hide-on-desktop">
-        <div className="mobile-content-section">
-          <h2>Groups</h2>
-          <MobileSearchToggle
-            value={inputValue}
-            onChange={handleSearchChange}
-          />
-          <div style={{ height: '500px', width: '100%' }}>
+      {/* Nurse view: only their own groups + enroll modal */}
+      {currentUser?.role_type === 'nurse' && (
+        <>
+          {/* Mobile nurse view */}
+          <div className="mobile-tab-content hide-on-desktop">
+            <div className="mobile-content-section">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                <h2 style={{ margin: 0 }}>My Groups</h2>
+                <button
+                  className="add-btn"
+                  onClick={() => setShowEnrollModal(true)}
+                >
+                  Auto-enroll
+                </button>
+              </div>
+              {myGroupCount === 0 && (
+                <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '2rem 0' }}>
+                  You don't belong to any group, yet...
+                </p>
+              )}
+              {myGroupCount !== 0 && (
+                <div style={{ height: '400px', width: '100%' }}>
+                  <ServerGrid
+                    key={refreshKey}
+                    columns={['name']}
+                    path="groups/my"
+                    allowEditing={false}
+                    allowDelete={false}
+                    pageSize={10}
+                    showAddButton={false}
+                    getApiBase={getApiBase}
+                    showNot={showNotification}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Desktop nurse view */}
+          <div className="hide-on-mobile">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+              <h2 style={{ margin: 0 }}>My Groups</h2>
+              <button
+                className="add-btn"
+                onClick={() => setShowEnrollModal(true)}
+              >
+                Auto-enroll
+              </button>
+            </div>
+            {myGroupCount === 0 && (
+              <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '3rem 0' }}>
+                You don't belong to any group, yet...
+              </p>
+            )}
+            {myGroupCount !== 0 && (
+              <ServerGrid
+                key={refreshKey}
+                columns={['name']}
+                path="groups/my"
+                allowEditing={false}
+                allowDelete={false}
+                pageSize={10}
+                showAddButton={false}
+                getApiBase={getApiBase}
+                showNot={showNotification}
+              />
+            )}
+          </div>
+
+          {/* Auto-enroll modal */}
+          {showEnrollModal && (
+            <div
+              style={{
+                position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
+              }}
+              onClick={() => setShowEnrollModal(false)}
+            >
+              <div
+                style={{
+                  background: '#fff', borderRadius: '0.75rem', padding: '1.5rem',
+                  width: '100%', maxWidth: '420px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+                }}
+                onClick={e => e.stopPropagation()}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                  <h3 style={{ margin: 0 }}>Join a Group</h3>
+                  <button
+                    type="button"
+                    onClick={() => setShowEnrollModal(false)}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.25rem', color: '#6b7280', lineHeight: 1 }}
+                    title="Close"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <GroupRegistrationForm
+                  onSuccess={() => {
+                    setShowEnrollModal(false);
+                    setRefreshKey(prev => prev + 1);
+                  }}
+                />
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Admin/Manager view: all groups */}
+      {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
+        <>
+          {/* Mobile view */}
+          <div className="mobile-tab-content hide-on-desktop">
+            <div className="mobile-content-section">
+              <h2>Groups</h2>
+              <MobileSearchToggle
+                value={inputValue}
+                onChange={handleSearchChange}
+              />
+              <div style={{ height: '500px', width: '100%' }}>
+                <ServerGrid
+                  key={refreshKey}
+                  columns={['name', 'access_key', 'user_count']}
+                  columnRenderers={{ access_key: AccessKeyCell }}
+                  path="groups"
+                  allowEditing={currentUser?.role_type === 'admin'}
+                  allowDelete={currentUser?.role_type === 'admin'}
+                  pageSize={10}
+                  showAddButton={currentUser?.role_type === 'admin'}
+                  query={query}
+                  formComponent={GroupsForm}
+                  onAddUsers={handleAddUsersClick}
+                  getApiBase={getApiBase}
+                  showNot={showNotification}
+                  transformEditPayload={(payload) => {
+                    const name = String(payload.name || '').trim();
+                    if (!name) throw new Error('Group name cannot be empty');
+                    const access_key = String(payload.access_key || '').trim();
+                    if (!access_key) throw new Error('Access key cannot be empty');
+                    return { name, access_key };
+                  }}
+                  transformAddPayload={(payload) => {
+                    const name = String(payload.name || '').trim();
+                    if (!name) throw new Error('Group name cannot be empty');
+                    const access_key = String(payload.access_key || '').trim();
+                    if (!access_key) throw new Error('Access key cannot be empty');
+                    return { name, access_key };
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop view */}
+          <div className="hide-on-mobile">
+            <h2>Groups Management</h2>
+
+            <div className="user-search">
+              <span className="search-icon">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="11"
+                    cy="11"
+                    r="6"
+                    stroke="#6b7280"
+                    strokeWidth="2"
+                  />
+                  <line
+                    x1="15"
+                    y1="15"
+                    x2="20"
+                    y2="20"
+                    stroke="#6b7280"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </span>
+              <input
+                type="text"
+                placeholder="Search groups..."
+                value={inputValue}
+                onChange={handleSearchChange}
+              />
+            </div>
             <ServerGrid
               key={refreshKey}
               columns={['name', 'access_key', 'user_count']}
@@ -119,77 +313,8 @@ export default function GroupsTab({
               }}
             />
           </div>
-        </div>
-      </div>
-
-      {/* Desktop view */}
-      <div className="hide-on-mobile">
-        <h2>Groups Management</h2>
-
-        <div className="user-search">
-          <span className="search-icon">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle
-                cx="11"
-                cy="11"
-                r="6"
-                stroke="#6b7280"
-                strokeWidth="2"
-              />
-              <line
-                x1="15"
-                y1="15"
-                x2="20"
-                y2="20"
-                stroke="#6b7280"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </span>
-          <input
-            type="text"
-            placeholder="Search groups..."
-            value={inputValue}
-            onChange={handleSearchChange}
-          />
-        </div>
-        <ServerGrid
-          key={refreshKey}
-          columns={['name', 'access_key', 'user_count']}
-          columnRenderers={{ access_key: AccessKeyCell }}
-          path="groups"
-          allowEditing={currentUser?.role_type === 'admin'}
-          allowDelete={currentUser?.role_type === 'admin'}
-          pageSize={10}
-          showAddButton={currentUser?.role_type === 'admin'}
-          query={query}
-          formComponent={GroupsForm}
-          onAddUsers={handleAddUsersClick}
-          getApiBase={getApiBase}
-          showNot={showNotification}
-          transformEditPayload={(payload) => {
-            const name = String(payload.name || '').trim();
-            if (!name) throw new Error('Group name cannot be empty');
-            const access_key = String(payload.access_key || '').trim();
-            if (!access_key) throw new Error('Access key cannot be empty');
-            return { name, access_key };
-          }}
-          transformAddPayload={(payload) => {
-            const name = String(payload.name || '').trim();
-            if (!name) throw new Error('Group name cannot be empty');
-            const access_key = String(payload.access_key || '').trim();
-            if (!access_key) throw new Error('Access key cannot be empty');
-            return { name, access_key };
-          }}
-        />
-      </div>
+        </>
+      )}
 
       {showGroupUsersModal && selectedGroup && (
         <GroupUsersModal
