@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\UserController;
+use IllGet-ChildItem C:\xampp\mysql\data\*.err | Get-Contentollers\UserController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Api\LoginController;
 use App\Libraries\ApiResponse;
@@ -33,7 +31,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users', [UserController::class, 'index'])->middleware('checkRole:manager,admin');
     Route::post('/users', [UserController::class, 'store'])->middleware('checkRole:admin');
     Route::get('/users/{id}', [UserController::class, 'show'])->middleware('checkRole:manager,admin');
-    Route::patch('/users/{id}', [UserController::class, 'update'])->middleware('checkRole:admin');
+    Route::patch('/users/{id}', [UserController::class, 'update'])->middleware('checkRole:admin,manager');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->middleware('checkRole:admin');
 
     // Roles API

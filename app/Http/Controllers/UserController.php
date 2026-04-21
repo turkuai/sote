@@ -20,6 +20,16 @@ class UserController extends Controller
         try {
             $query = User::with('groups');
             
+            // Filter by role_type if provided
+            if ($request->has('role_type') && $request->input('role_type') !== '') {
+                $roleType = $request->input('role_type');
+                if ($roleType === 'null') {
+                    $query->whereNull('role_type');
+                } else {
+                    $query->where('role_type', $roleType);
+                }
+            }
+            
             // Search by name, email, or first_name
             if ($request->has('search') && $request->search) {
                 $search = strtolower($request->search);

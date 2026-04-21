@@ -37,7 +37,7 @@ Route::prefix('api')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->middleware('checkRole:manager,admin');
         Route::post('/users', [UserController::class, 'store'])->middleware('checkRole:admin');
         Route::get('/users/{id}', [UserController::class, 'show'])->middleware('checkRole:manager,admin');
-        Route::patch('/users/{id}', [UserController::class, 'update'])->middleware('checkRole:admin');
+        Route::patch('/users/{id}', [UserController::class, 'update'])->middleware('checkRole:admin,manager');
         Route::delete('/users/{id}', [UserController::class, 'destroy'])->middleware('checkRole:admin');
 
         // Roles API

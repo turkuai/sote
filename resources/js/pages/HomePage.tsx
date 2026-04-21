@@ -12,6 +12,7 @@ import { useUserManagement } from '../hooks/useUserManagement';
 import { useResponsive } from '../hooks/useResponsive';
 import UsersTab from './UsersTab';
 import GroupsTab from './GroupsTab';
+import WaitingListTab from './WaitingListTab';
 import { TabConfig } from '../utils/tabConfig';
 
 export default function HomePage() {
@@ -92,6 +93,10 @@ export default function HomePage() {
             />
           )}
 
+          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && activeTab === 'waiting-list' && (
+            <WaitingListTab currentUser={currentUser} />
+          )}
+
           {activeTab === 'settings' && (
             <div className="mobile-tab-content">
               <div className="mobile-content-section">
@@ -134,6 +139,12 @@ export default function HomePage() {
                 query={groupQuery}
                 onQueryChange={setGroupQuery}
               />
+            </div>
+          )}
+
+          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
+            <div style={{ display: activeTab === 'waiting-list' ? 'block' : 'none' }}>
+              <WaitingListTab currentUser={currentUser} />
             </div>
           )}
 
