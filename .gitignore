@@ -19,7 +19,7 @@
 /.vite
 /storage/*.key
 /storage/pail
-/storage/logs
+/storage/logs/*.log
 /vendor
 auth.json
 Homestead.json

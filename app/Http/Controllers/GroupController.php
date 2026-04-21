@@ -29,6 +29,7 @@ class GroupController extends Controller
             return [
                 'id' => $group->id,
                 'name' => $group->name,
+                'access_key' => $group->access_key,
                 'user_count' => $group->users_count,
                 'created_at' => $group->created_at,
                 'updated_at' => $group->updated_at,
@@ -59,6 +60,7 @@ class GroupController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:groups,name',
+            'access_key' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -83,6 +85,7 @@ class GroupController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|string|max:255|unique:groups,name,' . $id,
+            'access_key' => 'sometimes|required|string|max:255',
         ]);
 
         if ($validator->fails()) {
