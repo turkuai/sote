@@ -38,7 +38,7 @@ export default function HomePage() {
 
   // Set default tab based on role
   const [activeTab, setActiveTab] = useState(() => {
-    return (currentUser?.role === "admin" || currentUser?.role === "manager") ? "users" : "settings";
+    return (currentUser?.role_type === "admin" || currentUser?.role_type === "manager") ? "users" : "settings";
   });
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export default function HomePage() {
       {/* Mobile Content */}
       {isMobile && (
         <>
-          {(currentUser?.role === 'admin' || currentUser?.role === 'manager') && activeTab === 'users' && (
+          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && activeTab === 'users' && (
             <UsersTab
               currentUser={currentUser}
               query={userQuery}
@@ -84,7 +84,7 @@ export default function HomePage() {
             />
           )}
 
-          {(currentUser?.role === 'admin' || currentUser?.role === 'manager') && activeTab === 'groups' && (
+          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && activeTab === 'groups' && (
             <GroupsTab
               currentUser={currentUser}
               query={groupQuery}
@@ -116,7 +116,7 @@ export default function HomePage() {
       {/* Desktop Content Area */}
       <div className="admin-content hide-on-mobile">
         <div className="admin-content-card">
-          {(currentUser?.role === 'admin' || currentUser?.role === 'manager') && (
+          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
             <div style={{ display: activeTab === 'users' ? 'block' : 'none' }}>
               <UsersTab
                 currentUser={currentUser}
@@ -127,7 +127,7 @@ export default function HomePage() {
             </div>
           )}
 
-          {(currentUser?.role === 'admin' || currentUser?.role === 'manager') && (
+          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
             <div style={{ display: activeTab === 'groups' ? 'block' : 'none' }}>
               <GroupsTab
                 currentUser={currentUser}

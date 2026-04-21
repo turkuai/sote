@@ -29,7 +29,7 @@ export const TabConfig = {
   getTabs(currentUser, isMobile) {
     const tabs = [];
 
-    if (currentUser?.role === 'admin' || currentUser?.role === 'manager') {
+    if (currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') {
       tabs.push('users');
       tabs.push('groups');
     }

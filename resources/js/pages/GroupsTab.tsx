@@ -73,10 +73,10 @@ export default function GroupsTab({
               key={refreshKey}
               columns={['name', 'user_count']}
               path="groups"
-              allowEditing={currentUser?.role === 'admin'}
-              allowDelete={currentUser?.role === 'admin'}
+              allowEditing={currentUser?.role_type === 'admin'}
+              allowDelete={currentUser?.role_type === 'admin'}
               pageSize={10}
-              showAddButton={currentUser?.role === 'admin'}
+              showAddButton={currentUser?.role_type === 'admin'}
               query={query}
               formComponent={GroupsForm}
               onAddUsers={handleAddUsersClick}
@@ -151,10 +151,10 @@ export default function GroupsTab({
           key={refreshKey}
           columns={['name', 'user_count']}
           path="groups"
-          allowEditing={currentUser?.role === 'admin'}
-          allowDelete={currentUser?.role === 'admin'}
+          allowEditing={currentUser?.role_type === 'admin'}
+          allowDelete={currentUser?.role_type === 'admin'}
           pageSize={10}
-          showAddButton={currentUser?.role === 'admin'}
+          showAddButton={currentUser?.role_type === 'admin'}
           query={query}
           formComponent={GroupsForm}
           onAddUsers={handleAddUsersClick}
