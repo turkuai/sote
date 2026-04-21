@@ -6,7 +6,7 @@ import '../App.css';
 import './Login.css';
 
 export default function Login() {
-    const { login, isAuthenticated } = useAuth();
+    const { login, isAuthenticated, currentUser } = useAuth();
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -16,9 +16,9 @@ export default function Login() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            navigate("/home", { replace: true });
+            navigate(currentUser?.role_type ? "/home" : "/waiting-approval", { replace: true });
         }
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated, currentUser?.role_type, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
