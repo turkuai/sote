@@ -19,7 +19,7 @@ php -v                                    # Check your PHP version
 
 Make sure **Apache** and **MySQL** are running in XAMPP before proceeding, so the database can be created correctly.
 
-Run the init script to set up everything in one step:
+Run the init script to set up everything in one step (must be run in **Git Bash**):
 
 ```bash
 bash init.sh
@@ -37,17 +37,10 @@ This will automatically:
 
 ## Running the app
 
-From the root directory, in two terminals:
+Run the following command in a terminal:
 
 ```bash
-# Terminal 1 - Laravel server
-php artisan serve
-
-# If using XAMPP, run the server with XAMPP's PHP:
-/Applications/XAMPP/xamppfiles/bin/php artisan serve
-
-# Terminal 2 - frontend build
-npm run dev
+composer run dev
 ```
 
 Open in browser: http://localhost:8000
