@@ -17,6 +17,8 @@
 /public/build
 /public/hot
 /public/storage
+/client
+/.vite
 /storage/*.key
 /storage/pail
 /storage/logs/*.log

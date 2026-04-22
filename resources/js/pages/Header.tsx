@@ -68,7 +68,7 @@ const Header = ({
           alt="TAI logo"
           className="admin-logo-image"
         />
-        {currentUser?.role === 'student' && (
+        {currentUser?.role_type === 'student' && (
           <span className="admin-logo-subtitle">My Dashboard</span>
         )}
       </h1>

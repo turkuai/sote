@@ -6,11 +6,13 @@ use Inertia\Inertia;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\RegisterController;
 
 // API Routes - must be BEFORE fallback to avoid Inertia catching them
 Route::prefix('api')->group(function () {
     // Public endpoints
     Route::post('/login', [LoginController::class, 'login']);
+    Route::post('/register', [RegisterController::class, 'register']);
     
     // Current authenticated user
     Route::get('/user', function () {
@@ -35,7 +37,7 @@ Route::prefix('api')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->middleware('checkRole:manager,admin');
         Route::post('/users', [UserController::class, 'store'])->middleware('checkRole:admin');
         Route::get('/users/{id}', [UserController::class, 'show'])->middleware('checkRole:manager,admin');
-        Route::patch('/users/{id}', [UserController::class, 'update'])->middleware('checkRole:admin');
+        Route::patch('/users/{id}', [UserController::class, 'update'])->middleware('checkRole:admin,manager');
         Route::delete('/users/{id}', [UserController::class, 'destroy'])->middleware('checkRole:admin');
 
         // Roles API

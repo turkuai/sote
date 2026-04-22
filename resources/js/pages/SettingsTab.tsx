@@ -97,7 +97,7 @@ const SettingsTab = ({
           </div>
           <div className="settings-field">
             <span className="settings-label">Role</span>
-            <span className="settings-value">{currentUser?.role || '-'}</span>
+            <span className="settings-value">{currentUser?.role_type || '-'}</span>
           </div>
         </div>
 
@@ -204,7 +204,7 @@ const SettingsTab = ({
                 <label>Role</label>
                 <input 
                   type="text" 
-                  value={currentUser?.role || 'Administrator'} 
+                  value={currentUser?.role_type || 'Administrator'} 
                   readOnly
                   className="settings-input"
                 />

@@ -12,6 +12,7 @@ import { useUserManagement } from '../hooks/useUserManagement';
 import { useResponsive } from '../hooks/useResponsive';
 import UsersTab from './UsersTab';
 import GroupsTab from './GroupsTab';
+import WaitingListTab from './WaitingListTab';
 import { TabConfig } from '../utils/tabConfig';
 
 export default function HomePage() {
@@ -37,17 +38,10 @@ export default function HomePage() {
   // Responsive hook
   const { isMobile } = useResponsive();
 
-  const defaultTab = (currentUser?.role === "admin" || currentUser?.role === "manager") ? "users" : "settings";
-
-  // Set active tab from URL or default
-  const [activeTab, setActiveTab] = useState(() => urlTab || defaultTab);
-
-  // Sync activeTab with URL when URL changes
-  useEffect(() => {
-    if (urlTab && urlTab !== activeTab) {
-      setActiveTab(urlTab);
-    }
-  }, [urlTab]);
+  // Set default tab based on role
+  const [activeTab, setActiveTab] = useState(() => {
+    return (currentUser?.role_type === "admin" || currentUser?.role_type === "manager") ? "users" : "settings";
+  });
 
   useEffect(() => {
     if (activeTab !== 'settings' && passwordStatus) {
@@ -88,7 +82,7 @@ export default function HomePage() {
       {/* Mobile Content */}
       {isMobile && (
         <>
-          {(currentUser?.role === 'admin' || currentUser?.role === 'manager') && activeTab === 'users' && (
+          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && activeTab === 'users' && (
             <UsersTab
               currentUser={currentUser}
               query={userQuery}
@@ -97,12 +91,16 @@ export default function HomePage() {
             />
           )}
 
-          {(currentUser?.role === 'admin' || currentUser?.role === 'manager') && activeTab === 'groups' && (
+          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && activeTab === 'groups' && (
             <GroupsTab
               currentUser={currentUser}
               query={groupQuery}
               onQueryChange={setGroupQuery}
             />
+          )}
+
+          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && activeTab === 'waiting-list' && (
+            <WaitingListTab currentUser={currentUser} />
           )}
 
           {activeTab === 'settings' && (
@@ -129,7 +127,7 @@ export default function HomePage() {
       {/* Desktop Content Area */}
       <div className="admin-content hide-on-mobile">
         <div className="admin-content-card">
-          {(currentUser?.role === 'admin' || currentUser?.role === 'manager') && (
+          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
             <div style={{ display: activeTab === 'users' ? 'block' : 'none' }}>
               <UsersTab
                 currentUser={currentUser}
@@ -140,13 +138,19 @@ export default function HomePage() {
             </div>
           )}
 
-          {(currentUser?.role === 'admin' || currentUser?.role === 'manager') && (
+          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
             <div style={{ display: activeTab === 'groups' ? 'block' : 'none' }}>
               <GroupsTab
                 currentUser={currentUser}
                 query={groupQuery}
                 onQueryChange={setGroupQuery}
               />
+            </div>
+          )}
+
+          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
+            <div style={{ display: activeTab === 'waiting-list' ? 'block' : 'none' }}>
+              <WaitingListTab currentUser={currentUser} />
             </div>
           )}
 
