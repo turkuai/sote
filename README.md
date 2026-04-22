@@ -11,15 +11,25 @@
 
 Verify PHP version matches (PHP 8.2):
 ```bash
-php -v                                    # Check your PHP version
-/Applications/XAMPP/xamppfiles/bin/php -v # If using XAMPP
+php -v                                    # Check your PHP version (if PHP is in PATH)
 ```
 
+If PHP is not in PATH, use XAMPP's PHP directly:
+```bash
+# macOS
+/Applications/XAMPP/xamppfiles/bin/php -v
+
+# Linux
+/opt/lampp/bin/php -v
+
+# Windows
+C:\xampp\php\php.exe -v
+```
 ## Setup
 
-Make sure **Apache** and **MySQL** are running in XAMPP before proceeding, so the database can be created correctly.
+** Before running the setup, make sure MySQL and Apache are running via XAMPP Control Panel.**
 
-Run the init script to set up everything in one step (must be run in **Git Bash**):
+Run the init script to set up everything in one step (must be run in **Git Bash** on Windows):
 
 ```bash
 bash init.sh
