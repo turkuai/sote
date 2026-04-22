@@ -44,6 +44,8 @@ Route::prefix('api')->group(function () {
         Route::get('/roles', [UserController::class, 'getRoles']);
 
         // Groups API
+        Route::get('/groups/my', [GroupController::class, 'myGroups']);
+        Route::post('/groups/join', [GroupController::class, 'join']);
         Route::get('/groups', [GroupController::class, 'index'])->middleware('checkRole:manager,admin');
         Route::post('/groups', [GroupController::class, 'store'])->middleware('checkRole:admin');
         Route::get('/groups/{id}', [GroupController::class, 'show'])->middleware('checkRole:manager,admin');

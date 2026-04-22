@@ -37,6 +37,10 @@ export const TabConfig = {
       tabs.push('waiting-list');
     }
 
+    if (currentUser?.role_type === 'nurse') {
+      tabs.push('groups');
+    }
+
     tabs.push('settings');
 
     return tabs;
