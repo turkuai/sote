@@ -15,53 +15,32 @@ php -v                                    # Check your PHP version
 /Applications/XAMPP/xamppfiles/bin/php -v # If using XAMPP
 ```
 
-If using XAMPP, run the server with XAMPP's PHP:
-```bash
-/Applications/XAMPP/xamppfiles/bin/php artisan serve
-```
-
 ## Setup
 
-### 1. Submodule Setup
+Make sure **Apache** and **MySQL** are running in XAMPP before proceeding, so the database can be created correctly.
 
-If you are using a submodule, make sure to initialize and update it before proceeding:
+Run the init script to set up everything in one step (must be run in **Git Bash**):
 
 ```bash
-# Initialize and update submodules
-git submodule init
-git submodule update
-```
-### 2. tai-grid library
-```bash
-cd grid
-npm install
-npm run build
+bash init.sh
+# or
+npm run init
 ```
 
-### 3. Backend (Laravel)
-```bash
-cd ..
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate --seed
-```
-
-### 4. Frontend
-```bash
-npm install
-```
+This will automatically:
+1. Initialize and update git submodules
+2. Build the tai-grid library
+3. Install PHP dependencies (composer install)
+4. Copy `.env.example` to `.env` and generate the app key (only on first run)
+5. Run database migrations and seeders
+6. Install frontend dependencies
 
 ## Running the app
 
-From the root directory, in two terminals:
+Run the following command in a terminal:
 
 ```bash
-# Terminal 1 - Laravel server
-php artisan serve
-
-# Terminal 2 - frontend build
-npm run dev
+composer run dev
 ```
 
 Open in browser: http://localhost:8000
