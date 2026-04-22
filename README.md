@@ -27,7 +27,7 @@ C:\xampp\php\php.exe -v
 ```
 ## Setup
 
-**⚠️ Before running the setup, make sure MySQL and Apache are running via XAMPP Control Panel.**
+** Before running the setup, make sure MySQL and Apache are running via XAMPP Control Panel.**
 
 Run the init script to set up everything in one step (must be run in **Git Bash** on Windows):
 
@@ -47,14 +47,10 @@ This will automatically:
 
 ## Running the app
 
-From the root directory, in two terminals:
+Run the following command in a terminal:
 
 ```bash
-# Terminal 1 - Laravel server
-php artisan serve
-
-# Terminal 2 - frontend build
-npm run dev
+composer run dev
 ```
 
 Open in browser: http://localhost:8000
