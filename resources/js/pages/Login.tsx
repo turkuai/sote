@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
 import { getAssetUrl } from "../config";
 import { useState, useEffect } from "react";
@@ -6,7 +6,7 @@ import '../App.css';
 import './Login.css';
 
 export default function Login() {
-    const { login, isAuthenticated } = useAuth();
+    const { login, isAuthenticated, currentUser } = useAuth();
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -16,9 +16,9 @@ export default function Login() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            navigate("/home", { replace: true });
+            navigate(currentUser?.role_type ? "/home" : "/waiting-approval", { replace: true });
         }
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated, currentUser?.role_type, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -123,13 +123,13 @@ export default function Login() {
                     </button>
                 </form>
 
-                <div className="login-demo-credentials">
-                    <p className="login-demo-title">
-                        Use credentials from your database
+                <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
+                    <p style={{ color: "#6b7280", fontSize: "0.875rem" }}>
+                        Don't have an account?{" "}
+                        <Link to="/register" style={{ color: "#3b82f6", textDecoration: "none", fontWeight: "500" }}>
+                            Sign up
+                        </Link>
                     </p>
-                    <p className="login-demo-text">
-                        Login with any username/password from the users table                    
-                        </p>
                 </div>
             </div>
         </div>

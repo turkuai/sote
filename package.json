@@ -2,6 +2,7 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "init": "bash init.sh",
         "build": "vite build",
         "build:ssr": "vite build && vite build --ssr",
         "dev": "vite",

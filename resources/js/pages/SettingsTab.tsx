@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ServerGrid } from 'tai-grid';
+import 'tai-grid/style.css';
 import './Admin.css';
 import { getApiBase } from '../config';
+import { useNotification } from '../components/NotificationContext';
 
 /**
  * SettingsTab component - User settings including user details, password change, and logout
@@ -18,6 +21,15 @@ const SettingsTab = ({
   });
 
   const [passwordStatus, setPasswordStatus] = useState(null);
+  const { showNotification } = useNotification();
+  const [myGroups, setMyGroups] = useState([]);
+
+  useEffect(() => {
+    fetch(`${getApiBase()}/api/groups/my`, { credentials: 'include' })
+      .then(r => r.json())
+      .then(data => setMyGroups(Array.isArray(data?.data) ? data.data : (Array.isArray(data) ? data : [])))
+      .catch(() => setMyGroups([]));
+  }, [currentUser]);
 
   const handlePasswordInputChange = (field, value) => {
     setPasswordForm(prev => ({ ...prev, [field]: value }));
@@ -97,7 +109,7 @@ const SettingsTab = ({
           </div>
           <div className="settings-field">
             <span className="settings-label">Role</span>
-            <span className="settings-value">{currentUser?.role || '-'}</span>
+            <span className="settings-value">{currentUser?.role_type || '-'}</span>
           </div>
         </div>
 
@@ -153,6 +165,19 @@ const SettingsTab = ({
             Logout
           </button>
         </div>
+
+        <div className="admin-settings-section">
+          <h3>My Groups</h3>
+          {myGroups.length === 0 ? (
+            <p style={{ color: '#6b7280', fontStyle: 'italic' }}>You are not registered in any group.</p>
+          ) : (
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {myGroups.map((g: any) => (
+                <li key={g.id} style={{ padding: '0.4rem 0', borderBottom: '1px solid #f3f4f6', color: '#111827' }}>{g.name}</li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     );
   }
@@ -171,6 +196,12 @@ const SettingsTab = ({
             onClick={() => setActiveTab('profile')}
           >
             Profile
+          </button>
+          <button
+            className={`settings-nav-item ${activeTab === 'groups' ? 'active' : ''}`}
+            onClick={() => setActiveTab('groups')}
+          >
+            Groups
           </button>
         </div>
 
@@ -204,7 +235,7 @@ const SettingsTab = ({
                 <label>Role</label>
                 <input 
                   type="text" 
-                  value={currentUser?.role || 'Administrator'} 
+                  value={currentUser?.role_type || 'Administrator'} 
                   readOnly
                   className="settings-input"
                 />
@@ -268,6 +299,29 @@ const SettingsTab = ({
                   Logout
                 </button>
               </div>
+            </div>
+          )}
+
+          {activeTab === 'groups' && (
+            <div className="settings-profile">
+              <h3>Groups</h3>
+              <p className="settings-description">Groups you are currently registered in.</p>
+              {myGroups.length === 0 ? (
+                <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '2rem 0' }}>
+                  You are not registered in any group.
+                </p>
+              ) : (
+                <ServerGrid
+                  columns={['name']}
+                  path="groups/my"
+                  allowEditing={false}
+                  allowDelete={false}
+                  pageSize={20}
+                  showAddButton={false}
+                  getApiBase={getApiBase}
+                  showNot={showNotification}
+                />
+              )}
             </div>
           )}
         </div>

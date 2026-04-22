@@ -1,0 +1,138 @@
+/* Register page container */
+.register-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f4f6;
+    padding: 1rem;
+}
+
+/* Register card */
+.register-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    width: 100%;
+    max-width: 500px;
+}
+
+/* Header section */
+.register-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.register-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.register-logo-image {
+    max-width: 180px;
+    height: auto;
+    display: block;
+}
+
+.register-subtitle {
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+/* Form groups */
+.register-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.register-form-group {
+    margin-bottom: 1rem;
+}
+
+.register-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.register-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    transition: border-color 0.2s;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.register-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.register-input:disabled {
+    background-color: #f3f4f6;
+    cursor: not-allowed;
+}
+
+/* Field errors */
+.register-field-error {
+    display: block;
+    font-size: 0.75rem;
+    color: #ef4444;
+    margin-top: 0.25rem;
+}
+
+/* Error message */
+.register-error {
+    background-color: #fee2e2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+/* Submit button */
+.register-submit-btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 0.5rem;
+}
+
+.register-submit-btn:hover:not(:disabled) {
+    background-color: #2563eb;
+}
+
+.register-submit-btn:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .register-card {
+        padding: 1.5rem;
+    }
+
+    .register-form-row {
+        grid-template-columns: 1fr;
+    }
+}

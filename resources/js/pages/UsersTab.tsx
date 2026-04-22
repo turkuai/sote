@@ -59,6 +59,11 @@ export default function UsersTab({
     <span>{`${data?.first_name || ''} ${data?.last_name || ''}`.trim()}</span>
   );
 
+  // Custom renderer para role_type - mostrar "Waiting list" si es null
+  const RoleTypeRenderer = ({ data }) => (
+    <span>{data?.role_type || 'Waiting list'}</span>
+  );
+
   return (
     <>
       {/* Mobile view - same ServerGrid and add popup as desktop (all fields: first_name, last_name, email, role) */}
@@ -72,15 +77,15 @@ export default function UsersTab({
           <div style={{ height: '500px', width: '100%' }}>
             <ServerGrid
               key={refreshKey}
-              columns={['first_name', 'last_name', 'email', 'role_type']}
+              columns={['name', 'email', 'role_type']}
               columnRenderers={{
-                first_name: NameRenderer,
+                name: NameRenderer,
               }}
               path="users"
-              allowEditing={currentUser?.role === 'admin'}
-              allowDelete={currentUser?.role === 'admin'}
+              allowEditing={currentUser?.role_type === 'admin'}
+              allowDelete={currentUser?.role_type === 'admin'}
               pageSize={10}
-              showAddButton={currentUser?.role === 'admin'}
+              showAddButton={currentUser?.role_type === 'admin'}
               query={query}
               formComponent={UsersForm}
               getApiBase={getApiBase}
@@ -88,7 +93,7 @@ export default function UsersTab({
               transformEditPayload={(payload) => {
                 const password = String(payload.password || '').trim();
                 const confirmPassword = String(payload.confirmPassword || '').trim();
-                const isAdmin = currentUser?.role === 'admin';
+                const isAdmin = currentUser?.role_type === 'admin';
 
                 // Clone payload and remove password fields first
                 const { password: _p, confirmPassword: _cp, ...restPayload } = payload;
@@ -191,15 +196,15 @@ export default function UsersTab({
         </div>
         <ServerGrid
           key={refreshKey}
-          columns={['first_name', 'last_name', 'email', 'role_type']}
+          columns={['name', 'email', 'role_type']}
           columnRenderers={{
-            first_name: NameRenderer,
+            name: NameRenderer,
           }}
           path="users"
-          allowEditing={currentUser?.role === 'admin'}
-          allowDelete={currentUser?.role === 'admin'}
+          allowEditing={currentUser?.role_type === 'admin'}
+          allowDelete={currentUser?.role_type === 'admin'}
           pageSize={10}
-          showAddButton={currentUser?.role === 'admin'}
+          showAddButton={currentUser?.role_type === 'admin'}
           query={query}
           formComponent={UsersForm}
           getApiBase={getApiBase}
@@ -207,7 +212,7 @@ export default function UsersTab({
           transformEditPayload={(payload) => {
             const password = String(payload.password || '').trim();
             const confirmPassword = String(payload.confirmPassword || '').trim();
-            const isAdmin = currentUser?.role === 'admin';
+            const isAdmin = currentUser?.role_type === 'admin';
 
             // Clone payload and remove password fields
             const { password: _p, confirmPassword: _cp, ...restPayload } = payload;
