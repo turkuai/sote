@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../components/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './Admin.css';
 
 import SettingsTab from './SettingsTab';
@@ -18,6 +18,7 @@ import { TabConfig } from '../utils/tabConfig';
 export default function HomePage() {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
+  const { tab: urlTab } = useParams<{ tab: string }>();
 
   const [userQuery, setUserQuery] = useState('');
   const [groupQuery, setGroupQuery] = useState('');
@@ -54,7 +55,12 @@ export default function HomePage() {
   };
 
   const handleNavigateDashboard = () => {
-    navigate('/home', { replace: true });
+    navigate(`/home/${defaultTab}`, { replace: true });
+  };
+
+  const handleTabClick = (tab: string) => {
+    setActiveTab(tab);
+    navigate(`/home/${tab}`);
   };
 
   // Tab configuration - using utility module
@@ -67,7 +73,7 @@ export default function HomePage() {
       <Header
         currentUser={currentUser}
         onLogout={handleLogout}
-        onSettingsClick={() => setActiveTab('settings')}
+        onSettingsClick={() => handleTabClick('settings')}
         currentPage="dashboard"
         onNavigateDashboard={handleNavigateDashboard}
         isMobile={isMobile}
@@ -120,7 +126,7 @@ export default function HomePage() {
         <HomeTabs
           tabs={tabs}
           activeTab={activeTab}
-          onTabClick={setActiveTab}
+          onTabClick={handleTabClick}
           getTabLabel={TabConfig.getTabLabel}
           renderTabIcon={TabConfig.renderTabIcon}
         />
@@ -177,7 +183,7 @@ export default function HomePage() {
         <MobileNav
           tabs={tabs}
           activeTab={activeTab}
-          onTabClick={setActiveTab}
+          onTabClick={handleTabClick}
           currentUser={currentUser}
         />
       )}
