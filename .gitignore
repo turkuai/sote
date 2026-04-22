@@ -19,7 +19,7 @@
 /public/storage
 /storage/*.key
 /storage/pail
-/storage/logs/*.log
+/storage/logs/*
 /vendor
 auth.json
 Homestead.json
