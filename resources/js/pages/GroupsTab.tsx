@@ -1,5 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { ServerGrid } from 'tai-grid';
+
+function AccessKeyCell({ value }: { value: unknown }) {
+  const [visible, setVisible] = useState(false);
+  const key = value != null ? String(value) : '';
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+      <span>{visible ? key : '••••••••'}</span>
+      <button
+        type="button"
+        onClick={() => setVisible((v) => !v)}
+        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', display: 'flex', alignItems: 'center', padding: 0 }}
+        title={visible ? 'Hide key' : 'Show key'}
+      >
+        {visible ? <EyeOff size={14} /> : <Eye size={14} />}
+      </button>
+    </span>
+  );
+}
+
 import 'tai-grid/style.css';
 import MobileSearchToggle from '../components/MobileSearchToggle';
 import GroupUsersModal from '../components/GroupUsersModal';
@@ -71,7 +91,8 @@ export default function GroupsTab({
           <div style={{ height: '500px', width: '100%' }}>
             <ServerGrid
               key={refreshKey}
-              columns={['name', 'user_count']}
+              columns={['name', 'access_key', 'user_count']}
+              columnRenderers={{ access_key: AccessKeyCell }}
               path="groups"
               allowEditing={currentUser?.role_type === 'admin'}
               allowDelete={currentUser?.role_type === 'admin'}
@@ -84,25 +105,17 @@ export default function GroupsTab({
               showNot={showNotification}
               transformEditPayload={(payload) => {
                 const name = String(payload.name || '').trim();
-
-                if (!name) {
-                  throw new Error('Group name cannot be empty');
-                }
-
-                return {
-                  name,
-                };
+                if (!name) throw new Error('Group name cannot be empty');
+                const access_key = String(payload.access_key || '').trim();
+                if (!access_key) throw new Error('Access key cannot be empty');
+                return { name, access_key };
               }}
               transformAddPayload={(payload) => {
                 const name = String(payload.name || '').trim();
-
-                if (!name) {
-                  throw new Error('Group name cannot be empty');
-                }
-
-                return {
-                  name,
-                };
+                if (!name) throw new Error('Group name cannot be empty');
+                const access_key = String(payload.access_key || '').trim();
+                if (!access_key) throw new Error('Access key cannot be empty');
+                return { name, access_key };
               }}
             />
           </div>
@@ -149,7 +162,8 @@ export default function GroupsTab({
         </div>
         <ServerGrid
           key={refreshKey}
-          columns={['name', 'user_count']}
+          columns={['name', 'access_key', 'user_count']}
+          columnRenderers={{ access_key: AccessKeyCell }}
           path="groups"
           allowEditing={currentUser?.role_type === 'admin'}
           allowDelete={currentUser?.role_type === 'admin'}
@@ -162,25 +176,17 @@ export default function GroupsTab({
           showNot={showNotification}
           transformEditPayload={(payload) => {
             const name = String(payload.name || '').trim();
-
-            if (!name) {
-              throw new Error('Group name cannot be empty');
-            }
-
-            return {
-              name,
-            };
+            if (!name) throw new Error('Group name cannot be empty');
+            const access_key = String(payload.access_key || '').trim();
+            if (!access_key) throw new Error('Access key cannot be empty');
+            return { name, access_key };
           }}
           transformAddPayload={(payload) => {
             const name = String(payload.name || '').trim();
-
-            if (!name) {
-              throw new Error('Group name cannot be empty');
-            }
-
-            return {
-              name,
-            };
+            if (!name) throw new Error('Group name cannot be empty');
+            const access_key = String(payload.access_key || '').trim();
+            if (!access_key) throw new Error('Access key cannot be empty');
+            return { name, access_key };
           }}
         />
       </div>
@@ -205,7 +211,7 @@ export default function GroupsTab({
 }
 
 function GroupsForm({ data, setData }) {
-  const isEditing = !!(data && data.id);
+  const [showKey, setShowKey] = useState(false);
   const getValue = (field) => (data && data[field]) || '';
   const handleChange = (field) => (e) =>
     setData((prev) => ({ ...prev, [field]: e.target.value }));
@@ -222,6 +228,36 @@ function GroupsForm({ data, setData }) {
             onChange={handleChange('name')}
             placeholder="e.g., Sector 1, Emergency Room, etc."
           />
+        </div>
+        <div>
+          <label className="form-label">Access Key *</label>
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <input
+              type={showKey ? 'text' : 'password'}
+              className="form-input"
+              value={getValue('access_key')}
+              onChange={handleChange('access_key')}
+              placeholder="Access key"
+              style={{ paddingRight: '2.5rem' }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowKey((v) => !v)}
+              style={{
+                position: 'absolute',
+                right: '0.5rem',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: '#6b7280',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              title={showKey ? 'Hide key' : 'Show key'}
+            >
+              {showKey ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
         </div>
       </div>
     </div>
