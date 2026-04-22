@@ -12,6 +12,8 @@
 /.zed
 /bootstrap/ssr
 /node_modules
+/client/node_modules
+/.vite
 /public/build
 /public/hot
 /public/storage
