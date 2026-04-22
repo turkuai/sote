@@ -77,10 +77,9 @@ export default function UsersTab({
           <div style={{ height: '500px', width: '100%' }}>
             <ServerGrid
               key={refreshKey}
-              columns={['first_name', 'last_name', 'email', 'role_type']}
+              columns={['name', 'email', 'role_type']}
               columnRenderers={{
-                first_name: NameRenderer,
-                role_type: RoleTypeRenderer,
+                name: NameRenderer,
               }}
               path="users"
               allowEditing={currentUser?.role_type === 'admin'}
@@ -197,10 +196,9 @@ export default function UsersTab({
         </div>
         <ServerGrid
           key={refreshKey}
-          columns={['first_name', 'last_name', 'email', 'role_type']}
+          columns={['name', 'email', 'role_type']}
           columnRenderers={{
-            first_name: NameRenderer,
-            role_type: RoleTypeRenderer,
+            name: NameRenderer,
           }}
           path="users"
           allowEditing={currentUser?.role_type === 'admin'}
