@@ -123,6 +123,14 @@ export default function Login() {
                     </button>
                 </form>
 
+                <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
+                    <p style={{ color: "#6b7280", fontSize: "0.875rem" }}>
+                        Don't have an account?{" "}
+                        <Link to="/register" style={{ color: "#3b82f6", textDecoration: "none", fontWeight: "500" }}>
+                            Sign up
+                        </Link>
+                    </p>
+                </div>
             </div>
         </div>
     );
