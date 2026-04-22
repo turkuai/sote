@@ -41,6 +41,7 @@ function App() {
 
       <Route element={<ProtectedRoute />}>
         <Route path="/home" element={<HomePage />} />
+        <Route path="/home/:tab" element={<HomePage />} />
         <Route path="/patients" element={<PatientsPage />} />
       </Route>
 
