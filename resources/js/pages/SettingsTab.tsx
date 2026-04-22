@@ -4,6 +4,7 @@ import 'tai-grid/style.css';
 import './Admin.css';
 import { getApiBase } from '../config';
 import { useNotification } from '../components/NotificationContext';
+import GroupRegistrationForm from '../components/GroupRegistrationForm';
 
 /**
  * SettingsTab component - User settings including user details, password change, and logout
@@ -23,13 +24,15 @@ const SettingsTab = ({
   const [passwordStatus, setPasswordStatus] = useState(null);
   const { showNotification } = useNotification();
   const [myGroups, setMyGroups] = useState([]);
+  const [showEnrollModal, setShowEnrollModal] = useState(false);
+  const [groupsRefresh, setGroupsRefresh] = useState(0);
 
   useEffect(() => {
     fetch(`${getApiBase()}/api/groups/my`, { credentials: 'include' })
       .then(r => r.json())
       .then(data => setMyGroups(Array.isArray(data?.data) ? data.data : (Array.isArray(data) ? data : [])))
       .catch(() => setMyGroups([]));
-  }, [currentUser]);
+  }, [currentUser, groupsRefresh]);
 
   const handlePasswordInputChange = (field, value) => {
     setPasswordForm(prev => ({ ...prev, [field]: value }));
@@ -306,12 +309,20 @@ const SettingsTab = ({
             <div className="settings-profile">
               <h3>Groups</h3>
               <p className="settings-description">Groups you are currently registered in.</p>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+                <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
+                  Auto-enroll
+                </button>
+              </div>
+
               {myGroups.length === 0 ? (
                 <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '2rem 0' }}>
                   You are not registered in any group.
                 </p>
               ) : (
                 <ServerGrid
+                  key={groupsRefresh}
                   columns={['name']}
                   path="groups/my"
                   allowEditing={false}
@@ -321,6 +332,42 @@ const SettingsTab = ({
                   getApiBase={getApiBase}
                   showNot={showNotification}
                 />
+              )}
+
+              {showEnrollModal && (
+                <div
+                  style={{
+                    position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
+                  }}
+                  onClick={() => setShowEnrollModal(false)}
+                >
+                  <div
+                    style={{
+                      background: '#fff', borderRadius: '0.75rem', padding: '1.5rem',
+                      width: '100%', maxWidth: '420px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+                    }}
+                    onClick={e => e.stopPropagation()}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                      <h3 style={{ margin: 0 }}>Join a Group</h3>
+                      <button
+                        type="button"
+                        onClick={() => setShowEnrollModal(false)}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.25rem', color: '#6b7280', lineHeight: 1 }}
+                        title="Close"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                    <GroupRegistrationForm
+                      onSuccess={() => {
+                        setShowEnrollModal(false);
+                        setGroupsRefresh(prev => prev + 1);
+                      }}
+                    />
+                  </div>
+                </div>
               )}
             </div>
           )}
