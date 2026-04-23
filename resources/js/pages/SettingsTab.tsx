@@ -310,11 +310,13 @@ const SettingsTab = ({
               <h3>Groups</h3>
               <p className="settings-description">Groups you are currently registered in.</p>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-                <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
-                  Auto-enroll
-                </button>
-              </div>
+              {currentUser?.role_type === 'nurse' && (
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+                  <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
+                    Auto-enroll
+                  </button>
+                </div>
+              )}
 
               {myGroups.length === 0 ? (
                 <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '2rem 0' }}>
@@ -334,7 +336,7 @@ const SettingsTab = ({
                 />
               )}
 
-              {showEnrollModal && (
+              {currentUser?.role_type === 'nurse' && showEnrollModal && (
                 <div
                   style={{
                     position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)',
