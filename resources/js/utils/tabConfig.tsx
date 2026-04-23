@@ -1,20 +1,21 @@
+import { Clock, Folder, Settings, Users } from 'lucide-react';
 import React from 'react';
-import { Settings, Users, Folder, Clock } from 'lucide-react';
 
 // Tab icon map - maps tab names to their corresponding icon components
 const TAB_ICON_MAP = {
-  users: Users,
-  groups: Folder,
-  'waiting-list': Clock,
-  settings: Settings,
+    users: Users,
+    groups: Folder,
+    'waiting-list': Clock,
+    settings: Settings,
 };
 
 // Tab label map - base labels for tabs
-const TAB_LABEL_MAP = {
-  users: 'Users',
-  groups: 'Groups',
-  'waiting-list': 'Waiting List',
-  settings: 'Settings',
+
+const TAB_LABEL_KEY_MAP = {
+    users: 'tabs.users',
+    groups: 'tabs.groups',
+    'waiting-list': 'tabs.waitingList',
+    settings: 'tabs.settings',
 };
 
 /**
@@ -22,58 +23,58 @@ const TAB_LABEL_MAP = {
  * Provides reusable functions for tab management, labels, and icons
  */
 export const TabConfig = {
-  /**
-   * Get available tabs based on user role and mobile state
-   * @param {Object} currentUser - Current authenticated user object
-   * @param {boolean} isMobile - Whether the view is mobile
-   * @returns {Array<string>} - Array of tab identifiers
-   */
-  getTabs(currentUser, isMobile) {
-    const tabs = [];
+    /**
+     * Get available tabs based on user role and mobile state
+     * @param {Object} currentUser - Current authenticated user object
+     * @param {boolean} isMobile - Whether the view is mobile
+     * @returns {Array<string>} - Array of tab identifiers
+     */
+    getTabs(currentUser, isMobile) {
+        const tabs = [];
 
-    if (currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') {
-      tabs.push('users');
-      tabs.push('groups');
-      tabs.push('waiting-list');
-    }
+        if (currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') {
+            tabs.push('users');
+            tabs.push('groups');
+            tabs.push('waiting-list');
+        }
 
-    if (currentUser?.role_type === 'nurse') {
-      tabs.push('groups');
-    }
+        if (currentUser?.role_type === 'nurse') {
+            tabs.push('groups');
+        }
 
-    tabs.push('settings');
+        tabs.push('settings');
 
-    return tabs;
-  },
+        return tabs;
+    },
 
-  /**
-   * Get label for a tab
-   * @param {string} tab - Tab identifier
-   * @param {boolean} forMobile - Whether the label is for mobile view
-   * @returns {string} - Tab label
-   */
-  getTabLabel(tab, forMobile = false) {
-    return TAB_LABEL_MAP[tab] || tab;
-  },
+    /**
+     * Get label for a tab
+     * @param {string} tab - Tab identifier
+     * @param {boolean} forMobile - Whether the label is for mobile view
+     * @returns {string} - Tab label
+     */
+    getTabLabel(tab, t) {
+        const key = TAB_LABEL_KEY_MAP[tab];
+        return key ? t(key) : tab;
+    },
 
-  /**
-   * Render icon component for a tab
-   * @param {string} tab - Tab identifier
-   * @returns {React.ReactElement|null} - Icon component or null
-   */
-  renderTabIcon(tab) {
-    const IconComponent = TAB_ICON_MAP[tab];
-    if (!IconComponent) return null;
-    return React.createElement(IconComponent, { size: 18 });
-  },
+    /**
+     * Render icon component for a tab
+     * @param {string} tab - Tab identifier
+     * @returns {React.ReactElement|null} - Icon component or null
+     */
+    renderTabIcon(tab) {
+        const IconComponent = TAB_ICON_MAP[tab];
+        if (!IconComponent) return null;
+        return React.createElement(IconComponent, { size: 18 });
+    },
 
-  /**
-   * Get icon component for a tab (without rendering)
-   * @param {string} tab - Tab identifier
-   * @returns {React.ComponentType|null} - Icon component class or null
-   */
-  getTabIcon(tab) {
-    return TAB_ICON_MAP[tab] || null;
-  },
+    /**
+     * Get icon component for a tab (without rendering)
+     * @param {string} tab - Tab identifier
+     * @returns {React.ComponentType|null} - Icon component class or null
+     */
+    getTabIcon(tab) {
+        return TAB_ICON_MAP[tab] || null;
+    },
 };
-
