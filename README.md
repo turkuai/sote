@@ -55,6 +55,16 @@ composer run dev
 
 Open in browser: http://localhost:8000
 
+## Database issues
+
+If you get constraint errors or unexpected behavior after pulling new changes, your local database may be out of date. To reset it completely:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+> ⚠️ This will **delete all existing data** and reseed the database from scratch.
+
 ## Test users
 
 | Email | Password | Role |
