@@ -120,6 +120,15 @@ const enCommon = {
             of: 'of',
         },
     },
+
+    table: {
+        name: 'Name',
+        email: 'Email',
+        roleType: 'Role Type',
+        actions: 'Actions',
+        edit: 'Edit',
+        delete: 'Delete',
+    },
 };
 
 export default enCommon;

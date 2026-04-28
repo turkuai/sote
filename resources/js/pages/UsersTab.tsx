@@ -67,7 +67,11 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
                     <div style={{ height: '500px', width: '100%' }}>
                         <ServerGrid
                             key={refreshKey}
-                            columns={['name', 'email', 'role_type']}
+                            columns={[
+                                { field: 'name', displayName: t('table.name') },
+                                { field: 'email', displayName: t('table.email') },
+                                { field: 'role_type', displayName: t('table.roleType') },
+                            ]}
                             columnRenderers={{
                                 name: NameRenderer,
                             }}
@@ -99,6 +103,13 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
                                 nextLabel: t('grid.pagination.next'),
                                 pageLabel: t('grid.pagination.page'),
                                 ofLabel: t('grid.pagination.of'),
+                                actionsHeader: t('table.actions'),
+                                edit: t('table.edit'),
+                                delete: t('table.delete'),
+                                previous: t('grid.pagination.previous'),
+                                next: t('grid.pagination.next'),
+                                page: t('grid.pagination.page'),
+                                of: t('grid.pagination.of'),
                             }}
                             transformEditPayload={(payload) => {
                                 const password = String(payload.password || '').trim();
@@ -181,7 +192,11 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
                 </div>
                 <ServerGrid
                     key={refreshKey}
-                    columns={['name', 'email', 'role_type']}
+                    columns={[
+                        { field: 'name', displayName: t('table.name') },
+                        { field: 'email', displayName: t('table.email') },
+                        { field: 'role_type', displayName: t('table.roleType') },
+                    ]}
                     columnRenderers={{
                         name: NameRenderer,
                     }}
@@ -213,6 +228,13 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
                         nextLabel: t('grid.pagination.next'),
                         pageLabel: t('grid.pagination.page'),
                         ofLabel: t('grid.pagination.of'),
+                        actionsHeader: t('table.actions'),
+                        edit: t('table.edit'),
+                        delete: t('table.delete'),
+                        previous: t('grid.pagination.previous'),
+                        next: t('grid.pagination.next'),
+                        page: t('grid.pagination.page'),
+                        of: t('grid.pagination.of'),
                     }}
                     transformEditPayload={(payload) => {
                         const password = String(payload.password || '').trim();

@@ -120,6 +120,15 @@ const fiCommon = {
             of: '/',
         },
     },
+
+    table: {
+        name: 'Nimi',
+        email: 'Sähköposti',
+        roleType: 'Roolityyppi',
+        actions: 'Toiminnot',
+        edit: 'Muokkaa',
+        delete: 'Poista',
+    },
 };
 
 export default fiCommon;
