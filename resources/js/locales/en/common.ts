@@ -5,6 +5,7 @@ const enCommon = {
         finnish: 'Finnish',
         loading: 'Loading...',
         navigation: 'Navigation',
+        close: 'Close',
     },
 
     nav: {
@@ -128,6 +129,55 @@ const enCommon = {
         actions: 'Actions',
         edit: 'Edit',
         delete: 'Delete',
+    },
+
+    groups: {
+        managementTitle: 'Groups Management',
+        searchPlaceholder: 'Search groups...',
+        myGroups: 'My Groups',
+        autoEnroll: 'Auto-enroll',
+        noGroupsYet: "You don't belong to any group, yet...",
+        joinGroup: 'Join a Group',
+        hideKey: 'Hide key',
+        showKey: 'Show key',
+        table: {
+            accessKey: 'Access Key',
+            userCount: 'User Count',
+        },
+        errors: {
+            nameRequired: 'Group name cannot be empty',
+            accessKeyRequired: 'Access key cannot be empty',
+        },
+        form: {
+            groupName: 'Group Name *',
+            groupNamePlaceholder: 'e.g., Sector 1, Emergency Room, etc.',
+            accessKey: 'Access Key *',
+            accessKeyPlaceholder: 'Access key',
+        },
+        registration: {
+            groupName: 'Group Name',
+            groupNamePlaceholder: 'Enter the group name',
+            secretKey: 'Secret Key',
+            secretKeyPlaceholder: 'Enter the group secret key',
+            invalidCredentials: 'Invalid group name or access key',
+            connectionError: 'Connection error. Please try again.',
+            registering: 'Registering...',
+            register: 'Register',
+        },
+        usersModal: {
+            users: 'Users',
+            addUsers: 'Add Users',
+            noUsersInGroup: 'No users in this group',
+            removeUser: 'Remove user from group',
+            selectUsersToAdd: 'Select users to add',
+            error: 'Error:',
+            totalUsers: 'Total users in system',
+            usersInGroup: 'Users in this group',
+            availableToAdd: 'Available to add',
+            noUsersAvailable: 'No users available to add',
+            addSelected_one: 'Add {{count}} User',
+            addSelected_other: 'Add {{count}} Users',
+        },
     },
 };
 

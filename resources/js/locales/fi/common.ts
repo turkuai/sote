@@ -5,6 +5,7 @@ const fiCommon = {
         finnish: 'Suomi',
         loading: 'Ladataan...',
         navigation: 'Navigointi',
+        close: 'Sulje',
     },
 
     nav: {
@@ -128,6 +129,55 @@ const fiCommon = {
         actions: 'Toiminnot',
         edit: 'Muokkaa',
         delete: 'Poista',
+    },
+
+    groups: {
+        managementTitle: 'Ryhmien hallinta',
+        searchPlaceholder: 'Hae ryhmiä...',
+        myGroups: 'Omat ryhmät',
+        autoEnroll: 'Liity automaattisesti',
+        noGroupsYet: 'Et kuulu vielä mihinkään ryhmään...',
+        joinGroup: 'Liity ryhmään',
+        hideKey: 'Piilota avain',
+        showKey: 'Näytä avain',
+        table: {
+            accessKey: 'Pääsyavain',
+            userCount: 'Käyttäjien määrä',
+        },
+        errors: {
+            nameRequired: 'Ryhmän nimi ei voi olla tyhjä',
+            accessKeyRequired: 'Pääsyavain ei voi olla tyhjä',
+        },
+        form: {
+            groupName: 'Ryhmän nimi *',
+            groupNamePlaceholder: 'esim. Sektori 1, Päivystys jne.',
+            accessKey: 'Pääsyavain *',
+            accessKeyPlaceholder: 'Pääsyavain',
+        },
+        registration: {
+            groupName: 'Ryhmän nimi',
+            groupNamePlaceholder: 'Anna ryhmän nimi',
+            secretKey: 'Salainen avain',
+            secretKeyPlaceholder: 'Anna ryhmän salainen avain',
+            invalidCredentials: 'Virheellinen ryhmän nimi tai pääsyavain',
+            connectionError: 'Yhteysvirhe. Yritä uudelleen.',
+            registering: 'Rekisteröidään...',
+            register: 'Rekisteröidy',
+        },
+        usersModal: {
+            users: 'Käyttäjät',
+            addUsers: 'Lisää käyttäjiä',
+            noUsersInGroup: 'Tässä ryhmässä ei ole käyttäjiä',
+            removeUser: 'Poista käyttäjä ryhmästä',
+            selectUsersToAdd: 'Valitse lisättävät käyttäjät',
+            error: 'Virhe:',
+            totalUsers: 'Käyttäjiä järjestelmässä yhteensä',
+            usersInGroup: 'Käyttäjiä tässä ryhmässä',
+            availableToAdd: 'Lisättävissä',
+            noUsersAvailable: 'Ei käyttäjiä lisättäväksi',
+            addSelected_one: 'Lisää {{count}} käyttäjä',
+            addSelected_other: 'Lisää {{count}} käyttäjää',
+        },
     },
 };
 
