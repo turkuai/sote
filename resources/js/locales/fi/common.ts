@@ -194,6 +194,60 @@ const fiCommon = {
             error: 'Virhe käyttäjän hyväksymisessä',
         },
     },
+
+    settings: {
+        header: {
+            title: 'Asetukset',
+            description: 'Hallinnoi tilisi asetuksia ja sähköpostiasetuksia.',
+        },
+        tabs: {
+            profile: 'Profiili',
+            groups: 'Ryhmät',
+        },
+        mobile: {
+            userDetails: 'Käyttäjätiedot',
+            changePassword: 'Vaihda salasana',
+            account: 'Tili',
+        },
+        profile: {
+            title: 'Profiili',
+            description: 'Näin muut näkevät sinut sivustolla.',
+        },
+        fields: {
+            name: 'Nimi',
+            username: 'Käyttäjätunnus',
+            role: 'Rooli',
+        },
+        password: {
+            current: 'Nykyinen salasana',
+            new: 'Uusi salasana',
+            confirm: 'Vahvista salasana',
+            confirmNew: 'Vahvista uusi salasana',
+            placeholders: {
+                current: 'Anna nykyinen salasana',
+                new: 'Anna uusi salasana',
+                confirm: 'Syötä uusi salasana uudelleen',
+                confirmDesktop: 'Vahvista uusi salasana',
+            },
+            success: 'Salasana vaihdettiin onnistuneesti!',
+            errors: {
+                fillAllFields: 'Täytä kaikki kentät ennen lähettämistä.',
+                passwordMismatch: 'Uusi salasana ja vahvistus eivät täsmää.',
+                passwordTooShort: 'Uuden salasanan on oltava vähintään 6 merkkiä pitkä.',
+                failed: 'Salasanan vaihtaminen epäonnistui',
+                tryAgain: 'Salasanan vaihtaminen epäonnistui. Yritä uudelleen.',
+            },
+        },
+        actions: {
+            updatePassword: 'Päivitä salasana',
+            updateProfile: 'Päivitä profiili',
+        },
+        groups: {
+            title: 'Omat ryhmät',
+            description: 'Ryhmät, joihin olet tällä hetkellä rekisteröitynyt.',
+            empty: 'Et ole rekisteröitynyt mihinkään ryhmään.',
+        },
+    },
 };
 
 export default fiCommon;

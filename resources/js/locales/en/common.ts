@@ -194,6 +194,60 @@ const enCommon = {
             error: 'Error approving user',
         },
     },
+
+    settings: {
+        header: {
+            title: 'Settings',
+            description: 'Manage your account settings and set e-mail preferences.',
+        },
+        tabs: {
+            profile: 'Profile',
+            groups: 'Groups',
+        },
+        mobile: {
+            userDetails: 'User Details',
+            changePassword: 'Change Password',
+            account: 'Account',
+        },
+        profile: {
+            title: 'Profile',
+            description: 'This is how others will see you on the site.',
+        },
+        fields: {
+            name: 'Name',
+            username: 'Username',
+            role: 'Role',
+        },
+        password: {
+            current: 'Current Password',
+            new: 'New Password',
+            confirm: 'Confirm Password',
+            confirmNew: 'Confirm new password',
+            placeholders: {
+                current: 'Enter current password',
+                new: 'Enter new password',
+                confirm: 'Re-enter new password',
+                confirmDesktop: 'Confirm new password',
+            },
+            success: 'Password changed successfully!',
+            errors: {
+                fillAllFields: 'Please fill in all fields before submitting.',
+                passwordMismatch: 'New password and confirmation do not match.',
+                passwordTooShort: 'New password must be at least 6 characters long.',
+                failed: 'Failed to change password',
+                tryAgain: 'Failed to change password. Please try again.',
+            },
+        },
+        actions: {
+            updatePassword: 'Update Password',
+            updateProfile: 'Update Profile',
+        },
+        groups: {
+            title: 'My Groups',
+            description: 'Groups you are currently registered in.',
+            empty: 'You are not registered in any group.',
+        },
+    },
 };
 
 export default enCommon;
