@@ -52,7 +52,27 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
     }, []);
 
     // Custom renderer para combinar first_name y last_name
-    const NameRenderer = ({ data }) => <span>{`${data?.first_name || ''} ${data?.last_name || ''}`.trim()}</span>;
+    const NameRenderer = ({ data }) => {
+        const isYou = data?.id === currentUser?.id;
+        return (
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+                {isYou && (
+                    <span
+                        title="This is you"
+                        style={{
+                            display: 'inline-block',
+                            width: '8px',
+                            height: '8px',
+                            borderRadius: '50%',
+                            background: '#3b82f6',
+                            flexShrink: 0,
+                        }}
+                    />
+                )}
+                {`${data?.first_name || ''} ${data?.last_name || ''}`.trim()}
+            </span>
+        );
+    };
 
     // Custom renderer para role_type - mostrar "Waiting list" si es null
     const RoleTypeRenderer = ({ data }) => <span>{data?.role_type || t('users.waitingList')}</span>;
