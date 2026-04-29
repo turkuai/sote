@@ -163,6 +163,10 @@ class UserController extends Controller
             return ApiResponse::notFound('User not found');
         }
 
+        if (auth()->id() == $id) {
+            return ApiResponse::error('Self-deletion is not allowed.', 422);
+        }
+
         $user->delete();
 
         return ApiResponse::success(null, 'User deleted successfully');

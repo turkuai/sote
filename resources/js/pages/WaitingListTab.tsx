@@ -76,9 +76,9 @@ export default function WaitingListTab({ currentUser }) {
         <ServerGrid
           ref={gridRef}
           key={`waiting-list-${refreshCounter}`}
-          columns={['first_name', 'last_name', 'email', 'action']}
+          columns={['name', 'email', 'action']}
           columnRenderers={{
-            first_name: NameRenderer,
+            name: NameRenderer,
             action: ActionRenderer,
           }}
           path="users?role_type=null"
