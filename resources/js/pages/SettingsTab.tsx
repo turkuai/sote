@@ -55,7 +55,7 @@ const SettingsTab = ({
 
     try {
       const response = await fetch(`${getApiBase()}/api/users/${currentUser?.id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
