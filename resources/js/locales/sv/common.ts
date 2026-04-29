@@ -1,0 +1,254 @@
+const svCommon = {
+    common: {
+        language: 'Språk',
+        english: 'Engelska',
+        finnish: 'Finska',
+        swedish: 'Svenska',
+        loading: 'Laddar...',
+        navigation: 'Navigering',
+        close: 'Stäng',
+    },
+
+    nav: {
+        dashboard: 'Kontrollpanel',
+        patients: 'Patienter',
+        repository: 'Repository',
+        documentation: 'Dokumentation',
+        navigationMenu: 'Navigeringsmeny',
+    },
+
+    auth: {
+        login: 'Logga in',
+        register: 'Registrera',
+        verifyEmail: 'Verifiera e-post',
+        pleaseLoginToContinue: 'Logga in för att fortsätta',
+        email: 'E-post',
+        password: 'Lösenord',
+        enterYourEmail: 'Ange din e-postadress',
+        rememberMe: 'Kom ihåg mig',
+        signIn: 'Logga in',
+        signingIn: 'Loggar in...',
+        unexpectedError: 'Ett oväntat fel inträffade',
+        useCredentialsFromDatabase: 'Använd uppgifter från databasen',
+        loginWithDatabaseUser: 'Logga in med användare från databasen',
+        noAccount: 'Har du inget konto?',
+        signUp: 'Registrera dig',
+    },
+
+    user: {
+        welcome: 'Välkommen',
+        settings: 'Inställningar',
+        logout: 'Logga ut',
+        myDashboard: 'Min kontrollpanel',
+    },
+
+    tabs: {
+        users: 'Användare',
+        groups: 'Grupper',
+        waitingList: 'Väntelista',
+        settings: 'Inställningar',
+    },
+
+    welcome: {
+        title: 'Välkommen',
+        heading: 'Låt oss börja',
+        introLine1: 'Laravel har ett mycket stort ekosystem.',
+        introLine2: 'Vi rekommenderar att börja med följande.',
+        readThe: 'Läs',
+        documentation: 'dokumentationen',
+        watchTutorials: 'Titta på videoguider på',
+        laracasts: 'Laracasts',
+        deployNow: 'Distribuera nu',
+    },
+
+    users: {
+        managementTitle: 'Användarhantering',
+        searchPlaceholder: 'Sök användare...',
+        waitingList: 'Väntelista',
+        roles: {
+            nurse: 'Sjuksköterska (endast läsning)',
+            manager: 'Manager (CRUD)',
+            admin: 'Administratör (full åtkomst)',
+        },
+        form: {
+            firstName: 'Förnamn *',
+            lastName: 'Efternamn *',
+            email: 'E-post *',
+            role: 'Roll',
+            passwordOptional: 'Lösenord (valfritt)',
+            confirmPasswordOptional: 'Bekräfta lösenord (valfritt)',
+            password: 'Lösenord',
+            confirmPassword: 'Bekräfta lösenord',
+            passwordHint: 'Lämna fälten tomma för att behålla nuvarande lösenord.',
+            newPasswordPlaceholder: 'Nytt lösenord (valfritt)',
+            confirmNewPasswordPlaceholder: 'Bekräfta nytt lösenord',
+        },
+        errors: {
+            fillBothPasswordFields: 'Fyll i båda lösenordsfälten för att ändra lösenord.',
+            passwordsDoNotMatch: 'Lösenorden matchar inte',
+            notAllowedToChangePassword: 'Du har inte rätt att ändra detta lösenord.',
+            fillBothOrLeaveEmpty: 'Fyll i båda fälten eller lämna båda tomma',
+        },
+    },
+
+    grid: {
+        loading: 'Laddar...',
+        add: 'Lägg till',
+        success: {
+            itemUpdated: 'Posten uppdaterades!',
+        },
+        errors: {
+            updateFailed: 'Uppdatering misslyckades',
+            listViewRequiresProps: 'Listvyn kräver renderItem och loadPage.',
+        },
+        dialog: {
+            edit: 'Redigera',
+            add: 'Lägg till',
+            save: 'Spara',
+            cancel: 'Avbryt',
+            close: 'Stäng',
+        },
+        confirmDelete: {
+            title: 'Bekräfta borttagning',
+            message: 'Är du säker på att du vill ta bort detta?',
+            delete: 'Ta bort',
+            deleting: 'Tar bort...',
+            cancel: 'Avbryt',
+        },
+        pagination: {
+            previous: 'Föregående',
+            next: 'Nästa',
+            page: 'Sida',
+            of: '/',
+        },
+    },
+
+    table: {
+        name: 'Namn',
+        email: 'E-post',
+        roleType: 'Rolltyp',
+        actions: 'Åtgärder',
+        edit: 'Redigera',
+        delete: 'Ta bort',
+    },
+
+    groups: {
+        managementTitle: 'Grupphantering',
+        searchPlaceholder: 'Sök grupper...',
+        myGroups: 'Mina grupper',
+        autoEnroll: 'Gå med automatiskt',
+        noGroupsYet: 'Du tillhör inga grupper ännu...',
+        joinGroup: 'Gå med i grupp',
+        hideKey: 'Dölj nyckel',
+        showKey: 'Visa nyckel',
+        table: {
+            accessKey: 'Åtkomstnyckel',
+            userCount: 'Antal användare',
+        },
+        errors: {
+            nameRequired: 'Gruppnamn får inte vara tomt',
+            accessKeyRequired: 'Åtkomstnyckel krävs',
+        },
+        form: {
+            groupName: 'Gruppnamn *',
+            groupNamePlaceholder: 't.ex. Avdelning 1',
+            accessKey: 'Åtkomstnyckel *',
+            accessKeyPlaceholder: 'Åtkomstnyckel',
+        },
+        registration: {
+            groupName: 'Gruppnamn',
+            groupNamePlaceholder: 'Ange gruppnamn',
+            secretKey: 'Hemlig nyckel',
+            secretKeyPlaceholder: 'Ange hemlig nyckel',
+            invalidCredentials: 'Fel gruppnamn eller nyckel',
+            connectionError: 'Anslutningsfel. Försök igen.',
+            registering: 'Registrerar...',
+            register: 'Registrera',
+        },
+        usersModal: {
+            users: 'Användare',
+            addUsers: 'Lägg till användare',
+            noUsersInGroup: 'Inga användare i denna grupp',
+            removeUser: 'Ta bort användare från grupp',
+            selectUsersToAdd: 'Välj användare att lägga till',
+            error: 'Fel:',
+            totalUsers: 'Totalt antal användare',
+            usersInGroup: 'Användare i grupp',
+            availableToAdd: 'Tillgängliga',
+            noUsersAvailable: 'Inga användare tillgängliga',
+            addSelected_one: 'Lägg till {{count}} användare',
+            addSelected_other: 'Lägg till {{count}} användare',
+        },
+    },
+
+    waitingList: {
+        title: 'Väntar på godkännande',
+        description: 'Användare väntar på godkännande. Klicka "Godkänn".',
+        accept: 'Godkänn',
+        table: {
+            name: 'Namn',
+            lastName: 'Efternamn',
+        },
+        notifications: {
+            approved: '{{name}} har godkänts.',
+            failed: 'Godkännande misslyckades',
+            error: 'Fel vid godkännande',
+        },
+    },
+
+    settings: {
+        header: {
+            title: 'Inställningar',
+            description: 'Hantera kontoinställningar.',
+        },
+        tabs: {
+            profile: 'Profil',
+            groups: 'Grupper',
+        },
+        mobile: {
+            userDetails: 'Användardetaljer',
+            changePassword: 'Ändra lösenord',
+            account: 'Konto',
+        },
+        profile: {
+            title: 'Profil',
+            description: 'Så här ser andra dig.',
+        },
+        fields: {
+            name: 'Namn',
+            username: 'Användarnamn',
+            role: 'Roll',
+        },
+        password: {
+            current: 'Nuvarande lösenord',
+            new: 'Nytt lösenord',
+            confirm: 'Bekräfta lösenord',
+            confirmNew: 'Bekräfta nytt lösenord',
+            placeholders: {
+                current: 'Ange nuvarande lösenord',
+                new: 'Ange nytt lösenord',
+                confirm: 'Ange igen',
+                confirmDesktop: 'Bekräfta nytt lösenord',
+            },
+            success: 'Lösenord uppdaterat!',
+            errors: {
+                fillAllFields: 'Fyll i alla fält.',
+                passwordMismatch: 'Matchar inte',
+                passwordTooShort: 'Minst 6 tecken',
+                failed: 'Misslyckades',
+                tryAgain: 'Försök igen',
+            },
+        },
+        actions: {
+            updatePassword: 'Uppdatera lösenord',
+            updateProfile: 'Uppdatera profil',
+        },
+        groups: {
+            title: 'Mina grupper',
+            description: 'Grupper du tillhör.',
+            empty: 'Du är inte med i någon grupp.',
+        },
+    },
+};
+
+export default svCommon;

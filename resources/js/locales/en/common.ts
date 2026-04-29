@@ -3,6 +3,7 @@ const enCommon = {
         language: 'Language',
         english: 'English',
         finnish: 'Finnish',
+        swedish: 'Swedish',
         loading: 'Loading...',
         navigation: 'Navigation',
         close: 'Close',

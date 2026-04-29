@@ -4,6 +4,7 @@ import { initReactI18next } from 'react-i18next';
 
 import enCommon from './locales/en/common';
 import fiCommon from './locales/fi/common';
+import svCommon from './locales/sv/common';
 
 i18n.use(LanguageDetector)
     .use(initReactI18next)
@@ -15,9 +16,11 @@ i18n.use(LanguageDetector)
             fi: {
                 translation: fiCommon,
             },
+
+            sv: { translation: svCommon },
         },
         fallbackLng: 'en',
-        supportedLngs: ['en', 'fi'],
+        supportedLngs: ['en', 'fi', 'sv'],
         lng: 'en',
         interpolation: {
             escapeValue: false,

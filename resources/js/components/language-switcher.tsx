@@ -11,7 +11,7 @@ export default function LanguageSwitcher({ className = '' }: LanguageSwitcherPro
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement | null>(null);
 
-    const currentLanguage = i18n.language.startsWith('fi') ? 'fi' : 'en';
+    const currentLanguage = i18n.language.split('-')[0];
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -24,12 +24,12 @@ export default function LanguageSwitcher({ className = '' }: LanguageSwitcherPro
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const handleLanguageChange = (language: 'en' | 'fi') => {
+    const handleLanguageChange = (language: 'en' | 'fi' | 'sv') => {
         i18n.changeLanguage(language);
         setIsOpen(false);
     };
 
-    const currentLabel = currentLanguage === 'fi' ? t('common.finnish') : t('common.english');
+    const currentLabel = currentLanguage === 'fi' ? t('common.finnish') : currentLanguage === 'sv' ? t('common.swedish') : t('common.english');
 
     return (
         <div className={className}>
@@ -54,6 +54,10 @@ export default function LanguageSwitcher({ className = '' }: LanguageSwitcherPro
                         </button>
                         <button type="button" className="dropdown-menu-item" onClick={() => handleLanguageChange('fi')}>
                             {t('common.finnish')}
+                        </button>
+
+                        <button type="button" className="dropdown-menu-item" onClick={() => handleLanguageChange('sv')}>
+                            {t('common.swedish')}
                         </button>
                     </div>
                 )}
