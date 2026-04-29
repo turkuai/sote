@@ -179,6 +179,21 @@ const fiCommon = {
             addSelected_other: 'Lisää {{count}} käyttäjää',
         },
     },
+
+    waitingList: {
+        title: 'Odottaa hyväksyntää',
+        description: 'Käyttäjät odottavat hyväksyntää. Hyväksy käyttäjä ja määritä hänet hoitajaksi painamalla "Hyväksy".',
+        accept: 'Hyväksy',
+        table: {
+            name: 'Nimi',
+            lastName: 'Sukunimi',
+        },
+        notifications: {
+            approved: '{{name}} on hyväksytty ja määritetty hoitajaksi.',
+            failed: 'Käyttäjän hyväksyminen epäonnistui',
+            error: 'Virhe käyttäjän hyväksymisessä',
+        },
+    },
 };
 
 export default fiCommon;

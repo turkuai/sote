@@ -179,6 +179,21 @@ const enCommon = {
             addSelected_other: 'Add {{count}} Users',
         },
     },
+
+    waitingList: {
+        title: 'Waiting for Approval',
+        description: 'Users pending approval. Click "Accept" to approve and assign as Nurse.',
+        accept: 'Accept',
+        table: {
+            name: 'Name',
+            lastName: 'Last Name',
+        },
+        notifications: {
+            approved: '{{name}} has been approved and assigned as Nurse.',
+            failed: 'Failed to approve user',
+            error: 'Error approving user',
+        },
+    },
 };
 
 export default enCommon;
