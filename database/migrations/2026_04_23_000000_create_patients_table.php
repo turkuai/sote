@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('surname');
-            $table->string('patientid')->unique();
             $table->text('diagnosis')->nullable();
             $table->timestamps();
         });
