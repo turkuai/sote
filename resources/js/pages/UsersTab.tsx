@@ -203,6 +203,7 @@ export default function UsersTab({
           </span>
           <input
             type="text"
+            autoComplete="off"
             placeholder="Search users..."
             value={inputValue}
             onChange={handleSearchChange}

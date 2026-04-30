@@ -102,7 +102,7 @@ const SettingsTab = ({
 
         <div className="admin-settings-section">
           <h3>Change Password</h3>
-          <form className="password-form" onSubmit={handlePasswordSubmit}>
+          <form className="password-form" onSubmit={handlePasswordSubmit} autoComplete="off">
             <label className="password-form-field">
               <span>Current password</span>
               <input
@@ -213,6 +213,7 @@ const SettingsTab = ({
               <label>Current Password</label>
               <input
                 type="password"
+                autoComplete="new-password"
                 value={passwordForm.currentPassword}
                 onChange={(e) => handlePasswordInputChange('currentPassword', e.target.value)}
                 placeholder="Enter current password"
@@ -224,6 +225,7 @@ const SettingsTab = ({
               <label>New Password</label>
               <input
                 type="password"
+                autoComplete="new-password"
                 value={passwordForm.newPassword}
                 onChange={(e) => handlePasswordInputChange('newPassword', e.target.value)}
                 placeholder="Enter new password"
@@ -235,6 +237,7 @@ const SettingsTab = ({
               <label>Confirm Password</label>
               <input
                 type="password"
+                autoComplete="new-password"
                 value={passwordForm.confirmPassword}
                 onChange={(e) => handlePasswordInputChange('confirmPassword', e.target.value)}
                 placeholder="Confirm new password"
