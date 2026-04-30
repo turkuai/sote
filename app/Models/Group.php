@@ -12,6 +12,7 @@ class Group extends Model
     protected $fillable = [
         'name',
         'access_key',
+        'owner_id',
     ];
 
     /**

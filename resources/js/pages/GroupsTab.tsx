@@ -3,6 +3,42 @@ import { Eye, EyeOff } from 'lucide-react';
 import { ServerGrid } from 'tai-grid';
 import GroupRegistrationForm from '../components/GroupRegistrationForm';
 
+function GroupNameCell({ value, data }: { value: unknown; data: Record<string, unknown> }) {
+  const isOwner = data?.is_owner === true;
+  const isMember = data?.is_member === true;
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+      {isOwner && (
+        <span title="You own this group" style={{ display: 'inline-flex' }}>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="#eab308"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M2 20h20v2H2v-2zm2-2l2-10 5 4 3-7 3 7 5-4 2 10H4z" />
+          </svg>
+        </span>
+      )}
+      {!isOwner && isMember && (
+        <span
+          title="You belong to this group"
+          style={{
+            display: 'inline-block',
+            width: '8px',
+            height: '8px',
+            borderRadius: '50%',
+            background: '#22c55e',
+            flexShrink: 0,
+          }}
+        />
+      )}
+      {value != null ? String(value) : ''}
+    </span>
+  );
+}
+
 function AccessKeyCell({ value }: { value: unknown }) {
   const [visible, setVisible] = useState(false);
   const key = value != null ? String(value) : '';
@@ -182,7 +218,7 @@ export default function GroupsTab({
                 <ServerGrid
                   key={refreshKey}
                   columns={['name', 'access_key', 'user_count']}
-                  columnRenderers={{ access_key: AccessKeyCell }}
+                  columnRenderers={{ name: GroupNameCell, access_key: AccessKeyCell }}
                   path="groups"
                   allowEditing={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
                   allowDelete={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
@@ -262,7 +298,7 @@ export default function GroupsTab({
             <ServerGrid
               key={refreshKey}
               columns={['name', 'access_key', 'user_count']}
-              columnRenderers={{ access_key: AccessKeyCell }}
+              columnRenderers={{ name: GroupNameCell, access_key: AccessKeyCell }}
               path="groups"
               allowEditing={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
               allowDelete={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
