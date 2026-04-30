@@ -29,6 +29,7 @@ class GroupController extends Controller
             return [
                 'id' => $group->id,
                 'name' => $group->name,
+                'access_key' => $group->access_key,
                 'user_count' => $group->users_count,
                 'created_at' => $group->created_at,
                 'updated_at' => $group->updated_at,
@@ -59,6 +60,7 @@ class GroupController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:groups,name',
+            'access_key' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -83,6 +85,7 @@ class GroupController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|string|max:255|unique:groups,name,' . $id,
+            'access_key' => 'sometimes|required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -160,5 +163,52 @@ class GroupController extends Controller
         $group->users()->detach($userId);
 
         return ApiResponse::success(null, 'User removed from group successfully');
+    }
+
+    /**
+     * Get groups the authenticated user belongs to
+     */
+    public function myGroups(Request $request)
+    {
+        $user = $request->user();
+        $groups = $user->groups()->get()->map(function ($group) {
+            return [
+                'id' => $group->id,
+                'name' => $group->name,
+                'created_at' => $group->created_at,
+                'updated_at' => $group->updated_at,
+            ];
+        });
+
+        return ApiResponse::success($groups, 'Groups retrieved successfully');
+    }
+
+    /**
+     * Allow an authenticated user to self-register into a group using the access key
+     */
+    public function join(Request $request)
+    {
+        $validated = $request->validate([
+            'group_name' => 'required|string',
+            'access_key' => 'required|string',
+        ]);
+
+        $group = Group::where('name', $validated['group_name'])
+                      ->whereRaw('BINARY access_key = ?', [$validated['access_key']])
+                      ->first();
+
+        if (!$group) {
+            return ApiResponse::error('Invalid group name or access key', 404);
+        }
+
+        $user = $request->user();
+
+        if ($group->users()->where('user_id', $user->id)->exists()) {
+            return ApiResponse::error('You are already in this group', 400);
+        }
+
+        $group->users()->attach($user->id);
+
+        return ApiResponse::success(null, 'Successfully joined the group');
     }
 }

@@ -44,13 +44,15 @@ Route::prefix('api')->group(function () {
         Route::get('/roles', [UserController::class, 'getRoles']);
 
         // Groups API
+        Route::get('/groups/my', [GroupController::class, 'myGroups']);
+        Route::post('/groups/join', [GroupController::class, 'join']);
         Route::get('/groups', [GroupController::class, 'index'])->middleware('checkRole:manager,admin');
-        Route::post('/groups', [GroupController::class, 'store'])->middleware('checkRole:admin');
+        Route::post('/groups', [GroupController::class, 'store'])->middleware('checkRole:admin,manager');
         Route::get('/groups/{id}', [GroupController::class, 'show'])->middleware('checkRole:manager,admin');
-        Route::patch('/groups/{id}', [GroupController::class, 'update'])->middleware('checkRole:admin');
-        Route::delete('/groups/{id}', [GroupController::class, 'destroy'])->middleware('checkRole:admin');
-        Route::post('/groups/{id}/users/{userId}', [GroupController::class, 'addUserToGroup'])->middleware('checkRole:admin');
-        Route::delete('/groups/{id}/users/{userId}', [GroupController::class, 'removeUserFromGroup'])->middleware('checkRole:admin');
+        Route::patch('/groups/{id}', [GroupController::class, 'update'])->middleware('checkRole:admin,manager');
+        Route::delete('/groups/{id}', [GroupController::class, 'destroy'])->middleware('checkRole:admin,manager');
+        Route::post('/groups/{id}/users/{userId}', [GroupController::class, 'addUserToGroup'])->middleware('checkRole:admin,manager');
+        Route::delete('/groups/{id}/users/{userId}', [GroupController::class, 'removeUserFromGroup'])->middleware('checkRole:admin,manager');
 
         // Permission Examples
         Route::get('/permissions', [\App\Http\Controllers\PermissionExampleController::class, 'getPermissions']);

@@ -4,7 +4,7 @@ import '../App.css';
 import './WaitingApproval.css';
 
 export default function WaitingApproval() {
-    const { currentUser, logout } = useAuth();
+    const { currentUser, logout, login } = useAuth();
 
     const handleLogout = async () => {
         await logout();

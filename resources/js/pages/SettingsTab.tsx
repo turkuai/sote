@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Admin.css';
 import { getApiBase } from '../config';
 
@@ -71,10 +71,9 @@ const SettingsTab = ({
     }
   };
 
-  const [activeTab, setActiveTab] = useState('profile');
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
@@ -153,6 +152,8 @@ const SettingsTab = ({
             Logout
           </button>
         </div>
+
+
       </div>
     );
   }
@@ -167,109 +168,106 @@ const SettingsTab = ({
       <div className="settings-layout">
         <div className="settings-sidebar">
           <button 
-            className={`settings-nav-item ${activeTab === 'profile' ? 'active' : ''}`}
-            onClick={() => setActiveTab('profile')}
+            className="settings-nav-item active"
           >
             Profile
           </button>
         </div>
 
         <div className="settings-content">
-          {activeTab === 'profile' && (
-            <div className="settings-profile">
-              <h3>Profile</h3>
-              <p className="settings-description">This is how others will see you on the site.</p>
+          <div className="settings-profile">
+            <h3>Profile</h3>
+            <p className="settings-description">This is how others will see you on the site.</p>
 
-              <div className="settings-form-group">
-                <label>Name</label>
-                <input 
-                  type="text" 
-                  value={currentUser?.name || 'Mohammad Admin'} 
-                  readOnly
-                  className="settings-input"
-                />
-              </div>
-
-              <div className="settings-form-group">
-                <label>Username</label>
-                <input 
-                  type="text" 
-                  value={currentUser?.username || 'admin'} 
-                  readOnly
-                  className="settings-input"
-                />
-              </div>
-
-              <div className="settings-form-group">
-                <label>Role</label>
-                <input 
-                  type="text" 
-                  value={currentUser?.role_type || 'Administrator'} 
-                  readOnly
-                  className="settings-input"
-                />
-              </div>
-
-              <div className="settings-form-group">
-                <label>Current Password</label>
-                <input
-                  type="password"
-                  value={passwordForm.currentPassword}
-                  onChange={(e) => handlePasswordInputChange('currentPassword', e.target.value)}
-                  placeholder="Enter current password"
-                  className="settings-input"
-                />
-              </div>
-
-              <div className="settings-form-group">
-                <label>New Password</label>
-                <input
-                  type="password"
-                  value={passwordForm.newPassword}
-                  onChange={(e) => handlePasswordInputChange('newPassword', e.target.value)}
-                  placeholder="Enter new password"
-                  className="settings-input"
-                />
-              </div>
-
-              <div className="settings-form-group">
-                <label>Confirm Password</label>
-                <input
-                  type="password"
-                  value={passwordForm.confirmPassword}
-                  onChange={(e) => handlePasswordInputChange('confirmPassword', e.target.value)}
-                  placeholder="Confirm new password"
-                  className="settings-input"
-                />
-              </div>
-
-              {passwordStatus && (
-                <div
-                  className={`password-status ${passwordStatus.type === 'error' ? 'error' : 'success'}`}
-                  role="alert"
-                >
-                  {passwordStatus.message}
-                </div>
-              )}
-
-              <div className="settings-actions">
-                <button 
-                  type="button" 
-                  className="settings-update-btn"
-                  onClick={handlePasswordSubmit}
-                >
-                  Update Profile
-                </button>
-                <button 
-                  type="button" 
-                  className="settings-logout-btn-new" 
-                  onClick={onLogout}
-                >
-                  Logout
-                </button>
-              </div>
+            <div className="settings-form-group">
+              <label>Name</label>
+              <input 
+                type="text" 
+                value={currentUser?.name || 'Mohammad Admin'} 
+                readOnly
+                className="settings-input"
+              />
             </div>
-          )}
+
+            <div className="settings-form-group">
+              <label>Username</label>
+              <input 
+                type="text" 
+                value={currentUser?.username || 'admin'} 
+                readOnly
+                className="settings-input"
+              />
+            </div>
+
+            <div className="settings-form-group">
+              <label>Role</label>
+              <input 
+                type="text" 
+                value={currentUser?.role_type || 'Administrator'} 
+                readOnly
+                className="settings-input"
+              />
+            </div>
+
+            <div className="settings-form-group">
+              <label>Current Password</label>
+              <input
+                type="password"
+                value={passwordForm.currentPassword}
+                onChange={(e) => handlePasswordInputChange('currentPassword', e.target.value)}
+                placeholder="Enter current password"
+                className="settings-input"
+              />
+            </div>
+
+            <div className="settings-form-group">
+              <label>New Password</label>
+              <input
+                type="password"
+                value={passwordForm.newPassword}
+                onChange={(e) => handlePasswordInputChange('newPassword', e.target.value)}
+                placeholder="Enter new password"
+                className="settings-input"
+              />
+            </div>
+
+            <div className="settings-form-group">
+              <label>Confirm Password</label>
+              <input
+                type="password"
+                value={passwordForm.confirmPassword}
+                onChange={(e) => handlePasswordInputChange('confirmPassword', e.target.value)}
+                placeholder="Confirm new password"
+                className="settings-input"
+              />
+            </div>
+
+            {passwordStatus && (
+              <div
+                className={`password-status ${passwordStatus.type === 'error' ? 'error' : 'success'}`}
+                role="alert"
+              >
+                {passwordStatus.message}
+              </div>
+            )}
+
+            <div className="settings-actions">
+              <button 
+                type="button" 
+                className="settings-update-btn"
+                onClick={handlePasswordSubmit}
+              >
+                Update Profile
+              </button>
+              <button 
+                type="button" 
+                className="settings-logout-btn-new" 
+                onClick={onLogout}
+              >
+                Logout
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
