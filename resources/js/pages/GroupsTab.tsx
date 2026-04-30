@@ -184,10 +184,10 @@ export default function GroupsTab({
                   columns={['name', 'access_key', 'user_count']}
                   columnRenderers={{ access_key: AccessKeyCell }}
                   path="groups"
-                  allowEditing={currentUser?.role_type === 'admin'}
-                  allowDelete={currentUser?.role_type === 'admin'}
+                  allowEditing={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
+                  allowDelete={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
                   pageSize={10}
-                  showAddButton={currentUser?.role_type === 'admin'}
+                  showAddButton={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
                   query={query}
                   formComponent={GroupsForm}
                   onAddUsers={handleAddUsersClick}
@@ -258,10 +258,10 @@ export default function GroupsTab({
               columns={['name', 'access_key', 'user_count']}
               columnRenderers={{ access_key: AccessKeyCell }}
               path="groups"
-              allowEditing={currentUser?.role_type === 'admin'}
-              allowDelete={currentUser?.role_type === 'admin'}
+              allowEditing={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
+              allowDelete={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
               pageSize={10}
-              showAddButton={currentUser?.role_type === 'admin'}
+              showAddButton={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
               query={query}
               formComponent={GroupsForm}
               onAddUsers={handleAddUsersClick}
