@@ -250,7 +250,8 @@ export default function GroupsTab({
                 </svg>
               </span>
               <input
-                type="text"
+                type="search"
+                autoComplete="off"
                 placeholder="Search groups..."
                 value={inputValue}
                 onChange={handleSearchChange}
@@ -367,6 +368,7 @@ function GroupsForm({ data, setData }) {
           <label className="form-label">Group Name *</label>
           <input
             type="text"
+            autoComplete="nope"
             className="form-input"
             value={getValue('name')}
             onChange={handleChange('name')}
@@ -378,6 +380,7 @@ function GroupsForm({ data, setData }) {
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <input
               type={showKey ? 'text' : 'password'}
+              autoComplete="nope"
               className="form-input"
               value={getValue('access_key')}
               onChange={handleChange('access_key')}

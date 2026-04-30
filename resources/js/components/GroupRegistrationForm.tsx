@@ -43,13 +43,15 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginTop: '1.5rem', width: '100%' }}>
+    <form onSubmit={handleSubmit} autoComplete="off" style={{ marginTop: '1.5rem', width: '100%' }}>
       <div style={{ marginBottom: '1rem' }}>
         <label style={{ display: 'block', marginBottom: '0.375rem', fontWeight: 500, fontSize: '0.875rem', color: '#374151' }}>
           Group Name
         </label>
         <input
           type="text"
+          autoComplete="nope"
+          name="grp_name_x"
           required
           value={groupName}
           onChange={(e) => setGroupName(e.target.value)}
@@ -66,6 +68,8 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
         <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
           <input
             type={showKey ? 'text' : 'password'}
+            autoComplete="new-password"
+            name="grp_key_x"
             required
             value={accessKey}
             onChange={(e) => setAccessKey(e.target.value)}
