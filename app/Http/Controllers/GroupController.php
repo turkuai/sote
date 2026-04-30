@@ -209,11 +209,6 @@ class GroupController extends Controller
 
         $group->users()->attach($user->id);
 
-        $user->update([
-            'role_type' => 'nurse',
-            'role' => \App\Libraries\Role::getPermissions('nurse'),
-        ]);
-
         return ApiResponse::success(null, 'Successfully joined the group');
     }
 }
