@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Crown, Eye, EyeOff } from 'lucide-react';
 import { ServerGrid } from 'tai-grid';
 import GroupRegistrationForm from '../components/GroupRegistrationForm';
 
@@ -10,15 +10,7 @@ function GroupNameCell({ value, data }: { value: unknown; data: Record<string, u
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
       {isOwner && (
         <span title="You own this group" style={{ display: 'inline-flex' }}>
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="#eab308"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M2 20h20v2H2v-2zm2-2l2-10 5 4 3-7 3 7 5-4 2 10H4z" />
-          </svg>
+          <Crown size={14} fill="#eab308" color="#eab308" />
         </span>
       )}
       {!isOwner && isMember && (
