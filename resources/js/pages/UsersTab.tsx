@@ -109,8 +109,8 @@ export default function UsersTab({
                 const confirmPassword = String(payload.confirmPassword || '').trim();
                 const isAdmin = currentUser?.role_type === 'admin';
 
-                // Clone payload and remove password fields first
-                const { password: _p, confirmPassword: _cp, ...restPayload } = payload;
+                // Clone payload and remove virtual/password fields
+                const { password: _p, confirmPassword: _cp, name: _n, ...restPayload } = payload;
 
                 // If both password fields empty, just return other fields
                 if (!password && !confirmPassword) {
@@ -203,6 +203,7 @@ export default function UsersTab({
           </span>
           <input
             type="text"
+            autoComplete="off"
             placeholder="Search users..."
             value={inputValue}
             onChange={handleSearchChange}
@@ -228,8 +229,8 @@ export default function UsersTab({
             const confirmPassword = String(payload.confirmPassword || '').trim();
             const isAdmin = currentUser?.role_type === 'admin';
 
-            // Clone payload and remove password fields
-            const { password: _p, confirmPassword: _cp, ...restPayload } = payload;
+            // Clone payload and remove virtual/password fields
+            const { password: _p, confirmPassword: _cp, name: _n, ...restPayload } = payload;
 
             // If both empty, return other fields
             if (!password && !confirmPassword) {

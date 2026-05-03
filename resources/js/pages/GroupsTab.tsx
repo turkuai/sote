@@ -1,7 +1,35 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Crown, Eye, EyeOff } from 'lucide-react';
 import { ServerGrid } from 'tai-grid';
 import GroupRegistrationForm from '../components/GroupRegistrationForm';
+
+function GroupNameCell({ value, data }: { value: unknown; data: Record<string, unknown> }) {
+  const isOwner = data?.is_owner === true;
+  const isMember = data?.is_member === true;
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+      {isOwner && (
+        <span title="You own this group" style={{ display: 'inline-flex' }}>
+          <Crown size={14} fill="#eab308" color="#eab308" />
+        </span>
+      )}
+      {!isOwner && isMember && (
+        <span
+          title="You belong to this group"
+          style={{
+            display: 'inline-block',
+            width: '8px',
+            height: '8px',
+            borderRadius: '50%',
+            background: '#22c55e',
+            flexShrink: 0,
+          }}
+        />
+      )}
+      {value != null ? String(value) : ''}
+    </span>
+  );
+}
 
 function AccessKeyCell({ value }: { value: unknown }) {
   const [visible, setVisible] = useState(false);
@@ -104,7 +132,7 @@ export default function GroupsTab({
                   className="add-btn"
                   onClick={() => setShowEnrollModal(true)}
                 >
-                  Auto-enroll
+                  Enroll
                 </button>
               </div>
               {myGroupCount === 0 && (
@@ -138,7 +166,7 @@ export default function GroupsTab({
                 className="add-btn"
                 onClick={() => setShowEnrollModal(true)}
               >
-                Auto-enroll
+                Enroll
               </button>
             </div>
             {myGroupCount === 0 && (
@@ -161,42 +189,6 @@ export default function GroupsTab({
             )}
           </div>
 
-          {/* Auto-enroll modal */}
-          {showEnrollModal && (
-            <div
-              style={{
-                position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
-              }}
-              onClick={() => setShowEnrollModal(false)}
-            >
-              <div
-                style={{
-                  background: '#fff', borderRadius: '0.75rem', padding: '1.5rem',
-                  width: '100%', maxWidth: '420px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
-                }}
-                onClick={e => e.stopPropagation()}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                  <h3 style={{ margin: 0 }}>Join a Group</h3>
-                  <button
-                    type="button"
-                    onClick={() => setShowEnrollModal(false)}
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.25rem', color: '#6b7280', lineHeight: 1 }}
-                    title="Close"
-                  >
-                    ✕
-                  </button>
-                </div>
-                <GroupRegistrationForm
-                  onSuccess={() => {
-                    setShowEnrollModal(false);
-                    setRefreshKey(prev => prev + 1);
-                  }}
-                />
-              </div>
-            </div>
-          )}
         </>
       )}
 
@@ -206,7 +198,10 @@ export default function GroupsTab({
           {/* Mobile view */}
           <div className="mobile-tab-content hide-on-desktop">
             <div className="mobile-content-section">
-              <h2>Groups</h2>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                <h2 style={{ margin: 0 }}>Groups</h2>
+                <button className="add-btn" onClick={() => setShowEnrollModal(true)}>Enroll</button>
+              </div>
               <MobileSearchToggle
                 value={inputValue}
                 onChange={handleSearchChange}
@@ -215,15 +210,21 @@ export default function GroupsTab({
                 <ServerGrid
                   key={refreshKey}
                   columns={['name', 'access_key', 'user_count']}
-                  columnRenderers={{ access_key: AccessKeyCell }}
+                  columnRenderers={{ name: GroupNameCell, access_key: AccessKeyCell }}
                   path="groups"
-                  allowEditing={currentUser?.role_type === 'admin'}
-                  allowDelete={currentUser?.role_type === 'admin'}
+                  allowEditing={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
+                  allowDelete={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
                   pageSize={10}
-                  showAddButton={currentUser?.role_type === 'admin'}
+                  showAddButton={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
                   query={query}
                   formComponent={GroupsForm}
-                  onAddUsers={handleAddUsersClick}
+                  rowActions={[
+                    {
+                      icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="#0891b2" /></svg>,
+                      tooltip: 'Manage Users',
+                      onClick: handleAddUsersClick,
+                    },
+                  ]}
                   getApiBase={getApiBase}
                   showNot={showNotification}
                   transformEditPayload={(payload) => {
@@ -277,24 +278,34 @@ export default function GroupsTab({
                 </svg>
               </span>
               <input
-                type="text"
+                type="search"
+                autoComplete="off"
                 placeholder="Search groups..."
                 value={inputValue}
                 onChange={handleSearchChange}
               />
             </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.5rem' }}>
+              <button className="add-btn" onClick={() => setShowEnrollModal(true)}>Enroll</button>
+            </div>
             <ServerGrid
               key={refreshKey}
               columns={['name', 'access_key', 'user_count']}
-              columnRenderers={{ access_key: AccessKeyCell }}
+              columnRenderers={{ name: GroupNameCell, access_key: AccessKeyCell }}
               path="groups"
-              allowEditing={currentUser?.role_type === 'admin'}
-              allowDelete={currentUser?.role_type === 'admin'}
+              allowEditing={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
+              allowDelete={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
               pageSize={10}
-              showAddButton={currentUser?.role_type === 'admin'}
+              showAddButton={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
               query={query}
               formComponent={GroupsForm}
-              onAddUsers={handleAddUsersClick}
+              rowActions={[
+                {
+                  icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="#0891b2" /></svg>,
+                  tooltip: 'Manage Users',
+                  onClick: handleAddUsersClick,
+                },
+              ]}
               getApiBase={getApiBase}
               showNot={showNotification}
               transformEditPayload={(payload) => {
@@ -314,6 +325,43 @@ export default function GroupsTab({
             />
           </div>
         </>
+      )}
+
+      {/* Auto-enroll modal (all roles) */}
+      {showEnrollModal && (
+        <div
+          style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
+          }}
+          onClick={() => setShowEnrollModal(false)}
+        >
+          <div
+            style={{
+              background: '#fff', borderRadius: '0.75rem', padding: '1.5rem',
+              width: '100%', maxWidth: '420px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+            }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+              <h3 style={{ margin: 0 }}>Join a Group</h3>
+              <button
+                type="button"
+                onClick={() => setShowEnrollModal(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.25rem', color: '#6b7280', lineHeight: 1 }}
+                title="Close"
+              >
+                ✕
+              </button>
+            </div>
+            <GroupRegistrationForm
+              onSuccess={() => {
+                setShowEnrollModal(false);
+                setRefreshKey(prev => prev + 1);
+              }}
+            />
+          </div>
+        </div>
       )}
 
       {showGroupUsersModal && selectedGroup && (
@@ -348,6 +396,7 @@ function GroupsForm({ data, setData }) {
           <label className="form-label">Group Name *</label>
           <input
             type="text"
+            autoComplete="nope"
             className="form-input"
             value={getValue('name')}
             onChange={handleChange('name')}
@@ -359,6 +408,7 @@ function GroupsForm({ data, setData }) {
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <input
               type={showKey ? 'text' : 'password'}
+              autoComplete="nope"
               className="form-input"
               value={getValue('access_key')}
               onChange={handleChange('access_key')}

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Libraries\ApiResponse;
 use App\Models\Group;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class GroupController extends Controller
@@ -23,14 +24,17 @@ class GroupController extends Controller
         }
         
         $groups = $query->get();
-        
+        $currentUserId = Auth::id();
+
         // Map users_count to user_count for frontend compatibility
-        $groups = $groups->map(function ($group) {
+        $groups = $groups->map(function ($group) use ($currentUserId) {
             return [
                 'id' => $group->id,
                 'name' => $group->name,
                 'access_key' => $group->access_key,
                 'user_count' => $group->users_count,
+                'is_owner' => $group->owner_id === $currentUserId,
+                'is_member' => $group->users()->where('user_id', $currentUserId)->exists(),
                 'created_at' => $group->created_at,
                 'updated_at' => $group->updated_at,
             ];
@@ -67,7 +71,11 @@ class GroupController extends Controller
             return ApiResponse::validationError($validator->errors());
         }
 
-        $group = Group::create($validator->validated());
+        $user = Auth::user();
+        $group = Group::create(array_merge($validator->validated(), ['owner_id' => $user->id]));
+
+        // Add creator as a member of the group
+        $group->users()->attach($user->id);
         
         return ApiResponse::success($group, 'Group created successfully', 201);
     }
@@ -208,11 +216,6 @@ class GroupController extends Controller
         }
 
         $group->users()->attach($user->id);
-
-        $user->update([
-            'role_type' => 'nurse',
-            'role' => \App\Libraries\Role::getPermissions('nurse'),
-        ]);
 
         return ApiResponse::success(null, 'Successfully joined the group');
     }
