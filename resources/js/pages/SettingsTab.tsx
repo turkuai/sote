@@ -102,7 +102,7 @@ const SettingsTab = ({ currentUser, onLogout }) => {
 
         <div className="admin-settings-section">
           <h3>{t('settings.mobile.changePassword')}</h3>
-          <form className="password-form" onSubmit={handlePasswordSubmit}>
+          <form className="password-form" onSubmit={handlePasswordSubmit} autoComplete="off">
             <label className="password-form-field">
               <span>{t('settings.password.current')}</span>
               <input
@@ -189,6 +189,7 @@ const SettingsTab = ({ currentUser, onLogout }) => {
               <label>{t('settings.password.current')}</label>
               <input
                 type="password"
+                autoComplete="new-password"
                 value={passwordForm.currentPassword}
                 onChange={(e) => handlePasswordInputChange('currentPassword', e.target.value)}
                 placeholder={t('settings.password.placeholders.current')}
@@ -200,6 +201,7 @@ const SettingsTab = ({ currentUser, onLogout }) => {
               <label>{t('settings.password.new')}</label>
               <input
                 type="password"
+                autoComplete="new-password"
                 value={passwordForm.newPassword}
                 onChange={(e) => handlePasswordInputChange('newPassword', e.target.value)}
                 placeholder={t('settings.password.placeholders.new')}
@@ -211,6 +213,7 @@ const SettingsTab = ({ currentUser, onLogout }) => {
               <label>{t('settings.password.confirm')}</label>
               <input
                 type="password"
+                autoComplete="new-password"
                 value={passwordForm.confirmPassword}
                 onChange={(e) => handlePasswordInputChange('confirmPassword', e.target.value)}
                 placeholder={t('settings.password.placeholders.confirmDesktop')}

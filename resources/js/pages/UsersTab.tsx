@@ -136,8 +136,8 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
                                 const confirmPassword = String(payload.confirmPassword || '').trim();
                                 const isAdmin = currentUser?.role_type === 'admin';
 
-                                // Clone payload and remove password fields first
-                                const { password: _p, confirmPassword: _cp, ...restPayload } = payload;
+                // Clone payload and remove virtual/password fields
+                const { password: _p, confirmPassword: _cp, name: _n, ...restPayload } = payload;
 
                                 // If both password fields empty, just return other fields
                                 if (!password && !confirmPassword) {
@@ -208,7 +208,8 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
                             <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
                         </svg>
                     </span>
-                    <input type="text" placeholder={t('users.searchPlaceholder')} value={inputValue} onChange={handleSearchChange} />
+                    <input type="text" autoComplete="off"
+                     placeholder={t('users.searchPlaceholder')} value={inputValue} onChange={handleSearchChange} />
                 </div>
                 <ServerGrid
                     key={refreshKey}
@@ -261,8 +262,8 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
                         const confirmPassword = String(payload.confirmPassword || '').trim();
                         const isAdmin = currentUser?.role_type === 'admin';
 
-                        // Clone payload and remove password fields
-                        const { password: _p, confirmPassword: _cp, ...restPayload } = payload;
+            // Clone payload and remove virtual/password fields
+            const { password: _p, confirmPassword: _cp, name: _n, ...restPayload } = payload;
 
                         // If both empty, return other fields
                         if (!password && !confirmPassword) {

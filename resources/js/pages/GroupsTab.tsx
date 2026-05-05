@@ -1,4 +1,4 @@
-import { Eye, EyeOff } from 'lucide-react';
+import { Crown, Eye, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ServerGrid } from 'tai-grid';
@@ -9,6 +9,34 @@ import MobileSearchToggle from '../components/MobileSearchToggle';
 import { useNotification } from '../components/NotificationContext';
 import { getApiBase } from '../config';
 import './Admin.css';
+
+function GroupNameCell({ value, data }: { value: unknown; data: Record<string, unknown> }) {
+  const isOwner = data?.is_owner === true;
+  const isMember = data?.is_member === true;
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+      {isOwner && (
+        <span title="You own this group" style={{ display: 'inline-flex' }}>
+          <Crown size={14} fill="#eab308" color="#eab308" />
+        </span>
+      )}
+      {!isOwner && isMember && (
+        <span
+          title="You belong to this group"
+          style={{
+            display: 'inline-block',
+            width: '8px',
+            height: '8px',
+            borderRadius: '50%',
+            background: '#22c55e',
+            flexShrink: 0,
+          }}
+        />
+      )}
+      {value != null ? String(value) : ''}
+    </span>
+  );
+}
 
 function AccessKeyCell({ value }: { value: unknown }) {
   const { t } = useTranslation();
@@ -202,7 +230,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                     { field: 'access_key', displayName: t('groups.table.accessKey') },
                     { field: 'user_count', displayName: t('groups.table.userCount') },
                   ]}
-                  columnRenderers={{ access_key: AccessKeyCell }}
+                  columnRenderers={{ name: GroupNameCell, access_key: AccessKeyCell }}
                   path="groups"
                   allowEditing={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
                   allowDelete={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
@@ -210,7 +238,20 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                   showAddButton={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
                   query={query}
                   formComponent={GroupsForm}
-                  onAddUsers={handleAddUsersClick}
+                  rowActions={[
+                    {
+                      icon: (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                          <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+                            fill="#0891b2"
+                          />
+                        </svg>
+                      ),
+                      tooltip: 'Manage Users',
+                      onClick: handleAddUsersClick,
+                    },
+                  ]}
                   getApiBase={getApiBase}
                   showNot={showNotification}
                   labels={gridLabels}
@@ -244,7 +285,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                   <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
                 </svg>
               </span>
-              <input type="text" placeholder={t('groups.searchPlaceholder')} value={inputValue} onChange={handleSearchChange} />
+              <input type="search" autoComplete="off" placeholder={t('groups.searchPlaceholder')} value={inputValue} onChange={handleSearchChange} />
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.5rem' }}>
               <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
@@ -258,7 +299,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                 { field: 'access_key', displayName: t('groups.table.accessKey') },
                 { field: 'user_count', displayName: t('groups.table.userCount') },
               ]}
-              columnRenderers={{ access_key: AccessKeyCell }}
+              columnRenderers={{ name: GroupNameCell, access_key: AccessKeyCell }}
               path="groups"
               allowEditing={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
               allowDelete={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
@@ -266,7 +307,17 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
               showAddButton={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
               query={query}
               formComponent={GroupsForm}
-              onAddUsers={handleAddUsersClick}
+              rowActions={[
+                {
+                  icon: (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="#0891b2" />
+                    </svg>
+                  ),
+                  tooltip: 'Manage Users',
+                  onClick: handleAddUsersClick,
+                },
+              ]}
               getApiBase={getApiBase}
               showNot={showNotification}
               labels={gridLabels}
@@ -367,6 +418,7 @@ function GroupsForm({ data, setData }) {
           <label className="form-label">{t('groups.form.groupName')}</label>
           <input
             type="text"
+            autoComplete="nope"
             className="form-input"
             value={getValue('name')}
             onChange={handleChange('name')}
@@ -378,6 +430,7 @@ function GroupsForm({ data, setData }) {
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <input
               type={showKey ? 'text' : 'password'}
+              autoComplete="nope"
               className="form-input"
               value={getValue('access_key')}
               onChange={handleChange('access_key')}
