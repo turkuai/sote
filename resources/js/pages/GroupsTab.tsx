@@ -285,9 +285,12 @@ export default function GroupsTab({
                 onChange={handleSearchChange}
               />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.5rem' }}>
-              <button className="add-btn" onClick={() => setShowEnrollModal(true)}>Enroll</button>
-            </div>
+            <div style={{ position: 'relative' }}>
+              <button
+                className="add-btn"
+                onClick={() => setShowEnrollModal(true)}
+                style={{ position: 'absolute', top: 0, right: 50, zIndex: 1 }}
+              >Enroll</button>
             <ServerGrid
               key={refreshKey}
               columns={['name', 'access_key', 'user_count']}
@@ -323,6 +326,7 @@ export default function GroupsTab({
                 return { name, access_key };
               }}
             />
+            </div>
           </div>
         </>
       )}
