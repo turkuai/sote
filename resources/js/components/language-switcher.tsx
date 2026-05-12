@@ -3,26 +3,26 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type LanguageSwitcherProps = {
-    className?: string;
+  className?: string;
 };
 
 export default function LanguageSwitcher({ className = '' }: LanguageSwitcherProps) {
-    const { i18n, t } = useTranslation();
-    const [isOpen, setIsOpen] = useState(false);
-    const containerRef = useRef<HTMLDivElement | null>(null);
+  const { i18n, t } = useTranslation();
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-    const currentLanguage = i18n.language.split('-')[0];
+  const currentLanguage = i18n.language.split('-')[0];
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-                setIsOpen(false);
-            }
-        };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
     const handleLanguageChange = (language: 'en' | 'fi' | 'sv') => {
         i18n.changeLanguage(language);
@@ -31,21 +31,21 @@ export default function LanguageSwitcher({ className = '' }: LanguageSwitcherPro
 
     const currentLabel = currentLanguage === 'fi' ? t('common.finnish') : currentLanguage === 'sv' ? t('common.swedish') : t('common.english');
 
-    return (
-        <div className={className}>
-            <div className="user-dropdown-container" ref={containerRef}>
-                <button
-                    type="button"
-                    className="user-dropdown-trigger"
-                    onClick={() => setIsOpen((prev) => !prev)}
-                    aria-haspopup="menu"
-                    aria-expanded={isOpen}
-                >
-                    <span className="user-info-text">
-                        <strong>{currentLabel}</strong>
-                    </span>
-                    <ChevronDown size={16} className={`dropdown-icon ${isOpen ? 'open' : ''}`} />
-                </button>
+  return (
+    <div className={className}>
+      <div className="user-dropdown-container" ref={containerRef}>
+        <button
+          type="button"
+          className="user-dropdown-trigger"
+          onClick={() => setIsOpen((prev) => !prev)}
+          aria-haspopup="menu"
+          aria-expanded={isOpen}
+        >
+          <span className="user-info-text">
+            <strong>{currentLabel}</strong>
+          </span>
+          <ChevronDown size={16} className={`dropdown-icon ${isOpen ? 'open' : ''}`} />
+        </button>
 
                 {isOpen && (
                     <div className="user-dropdown-menu">
