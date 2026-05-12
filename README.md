@@ -45,6 +45,28 @@ This will automatically:
 5. Run database migrations and seeders
 6. Install frontend dependencies
 
+## Code Formatting
+
+This project uses **Prettier** for code formatting. VSCode will automatically format your code on save if you have the Prettier extension installed.
+
+### Prettier Configuration
+
+The following formatting rules are enforced:
+- **Indentation**: 2 spaces
+- **Tabs**: Disabled (spaces only)
+- **Line Length**: 150 characters per line
+
+These settings are configured in `.prettierrc` and will be applied automatically when you save files.
+
+### Setup in VSCode
+
+1. Install the **Prettier** extension (ID: `esbenp.prettier-vscode`)
+2. Set it as your default formatter:
+   - Open VSCode Settings
+   - Search for "Default Formatter"
+   - Select "Prettier - Code formatter"
+3. Enable "Format On Save" if desired
+
 ## Running the app
 
 Run the following command in a terminal:

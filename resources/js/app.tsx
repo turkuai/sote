@@ -14,73 +14,70 @@ import VerifyEmail from './pages/VerifyEmail';
 import WaitingApproval from './pages/WaitingApproval';
 
 function App() {
-    const { isAuthenticated, loading, currentUser } = useAuth();
+  const { isAuthenticated, loading, currentUser } = useAuth();
 
-    if (loading) {
-        return (
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '100vh',
-                    fontSize: '18px',
-                }}
-            >
-                Loading...
-            </div>
-        );
-    }
-
+  if (loading) {
     return (
-        <Routes>
-            <Route
-                path="/"
-                element={
-                    isAuthenticated ? (
-                        !currentUser?.role_type ? (
-                            <Navigate to="/waiting-approval" replace />
-                        ) : (
-                            <Navigate to="/home" replace />
-                        )
-                    ) : (
-                        <Navigate to="/login" replace />
-                    )
-                }
-            />
-            <Route path="/login" element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} />
-            <Route path="/register" element={isAuthenticated ? <Navigate to="/home" replace /> : <Register />} />
-            <Route
-                path="/waiting-approval"
-                element={isAuthenticated && !currentUser?.role_type ? <WaitingApproval /> : <Navigate to="/" replace />}
-            />
-            <Route path="/verify-email" element={<VerifyEmail />} />
-
-            <Route element={<ProtectedRoute />}>
-                <Route path="/home" element={<HomePage />} />
-                <Route path="/home/:tab" element={<HomePage />} />
-                <Route path="/patients" element={<PatientsPage />} />
-            </Route>
-
-            <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+          fontSize: '18px',
+        }}
+      >
+        Loading...
+      </div>
     );
+  }
+
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={
+          isAuthenticated ? (
+            !currentUser?.role_type ? (
+              <Navigate to="/waiting-approval" replace />
+            ) : (
+              <Navigate to="/home" replace />
+            )
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+      <Route path="/login" element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} />
+      <Route path="/register" element={isAuthenticated ? <Navigate to="/home" replace /> : <Register />} />
+      <Route path="/waiting-approval" element={isAuthenticated && !currentUser?.role_type ? <WaitingApproval /> : <Navigate to="/" replace />} />
+      <Route path="/verify-email" element={<VerifyEmail />} />
+
+      <Route element={<ProtectedRoute />}>
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/home/:tab" element={<HomePage />} />
+        <Route path="/patients" element={<PatientsPage />} />
+      </Route>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
 }
 
 const container = document.getElementById('app');
 if (container) {
-    const root = createRoot(container);
-    root.render(
-        <React.StrictMode>
-            <BrowserRouter>
-                <AuthProvider>
-                    <NotificationProvider>
-                        <App />
-                    </NotificationProvider>
-                </AuthProvider>
-            </BrowserRouter>
-        </React.StrictMode>,
-    );
+  const root = createRoot(container);
+  root.render(
+    <React.StrictMode>
+      <BrowserRouter>
+        <AuthProvider>
+          <NotificationProvider>
+            <App />
+          </NotificationProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </React.StrictMode>,
+  );
 }
 
 export default App;
