@@ -218,7 +218,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                 <h2 style={{ margin: 0 }}>{t('tabs.groups')}</h2>
                 <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
-                  Enroll
+                  {t('groups.autoEnroll')}
                 </button>
               </div>
               <MobileSearchToggle value={inputValue} onChange={handleSearchChange} />
@@ -287,55 +287,58 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
               </span>
               <input type="search" autoComplete="off" placeholder={t('groups.searchPlaceholder')} value={inputValue} onChange={handleSearchChange} />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.5rem' }}>
-              <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
-                Enroll
+            <div style={{ position: 'relative' }}>
+              <button className="add-btn" onClick={() => setShowEnrollModal(true)} style={{ position: 'absolute', top: 0, right: 50, zIndex: 1 }}>
+                {t('groups.autoEnroll')}
               </button>
+              <ServerGrid
+                key={refreshKey}
+                columns={[
+                  { field: 'name', displayName: t('table.name') },
+                  { field: 'access_key', displayName: t('groups.table.accessKey') },
+                  { field: 'user_count', displayName: t('groups.table.userCount') },
+                ]}
+                columnRenderers={{ name: GroupNameCell, access_key: AccessKeyCell }}
+                path="groups"
+                allowEditing={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
+                allowDelete={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
+                pageSize={10}
+                showAddButton={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
+                query={query}
+                formComponent={GroupsForm}
+                rowActions={[
+                  {
+                    icon: (
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+                          fill="#0891b2"
+                        />
+                      </svg>
+                    ),
+                    tooltip: 'Manage Users',
+                    onClick: handleAddUsersClick,
+                  },
+                ]}
+                getApiBase={getApiBase}
+                showNot={showNotification}
+                labels={gridLabels}
+                transformEditPayload={(payload) => {
+                  const name = String(payload.name || '').trim();
+                  if (!name) throw new Error(t('groups.errors.nameRequired'));
+                  const access_key = String(payload.access_key || '').trim();
+                  if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
+                  return { name, access_key };
+                }}
+                transformAddPayload={(payload) => {
+                  const name = String(payload.name || '').trim();
+                  if (!name) throw new Error(t('groups.errors.nameRequired'));
+                  const access_key = String(payload.access_key || '').trim();
+                  if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
+                  return { name, access_key };
+                }}
+              />
             </div>
-            <ServerGrid
-              key={refreshKey}
-              columns={[
-                { field: 'name', displayName: t('table.name') },
-                { field: 'access_key', displayName: t('groups.table.accessKey') },
-                { field: 'user_count', displayName: t('groups.table.userCount') },
-              ]}
-              columnRenderers={{ name: GroupNameCell, access_key: AccessKeyCell }}
-              path="groups"
-              allowEditing={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
-              allowDelete={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
-              pageSize={10}
-              showAddButton={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
-              query={query}
-              formComponent={GroupsForm}
-              rowActions={[
-                {
-                  icon: (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="#0891b2" />
-                    </svg>
-                  ),
-                  tooltip: 'Manage Users',
-                  onClick: handleAddUsersClick,
-                },
-              ]}
-              getApiBase={getApiBase}
-              showNot={showNotification}
-              labels={gridLabels}
-              transformEditPayload={(payload) => {
-                const name = String(payload.name || '').trim();
-                if (!name) throw new Error(t('groups.errors.nameRequired'));
-                const access_key = String(payload.access_key || '').trim();
-                if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
-                return { name, access_key };
-              }}
-              transformAddPayload={(payload) => {
-                const name = String(payload.name || '').trim();
-                if (!name) throw new Error(t('groups.errors.nameRequired'));
-                const access_key = String(payload.access_key || '').trim();
-                if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
-                return { name, access_key };
-              }}
-            />
           </div>
         </>
       )}
