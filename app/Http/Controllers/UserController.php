@@ -110,6 +110,22 @@ class UserController extends Controller
             return ApiResponse::notFound('User not found');
         }
 
+        $currentUser = $request->user();
+        $isSelf = $currentUser->id == $id;
+        $isAdminOrManager = in_array($currentUser->role_type, ['admin', 'manager']);
+
+        // Nurses can only update themselves, and only their password
+        if (!$isAdminOrManager) {
+            if (!$isSelf) {
+                return ApiResponse::error('Forbidden', 403);
+            }
+            // Only allow password change for nurses
+            $allowed = array_intersect(array_keys($request->all()), ['password', 'current_password']);
+            if (count($allowed) !== count($request->all())) {
+                return ApiResponse::error('Forbidden', 403);
+            }
+        }
+
         $validator = Validator::make($request->all(), [
             'first_name' => 'sometimes|string|max:255',
             'last_name' => 'sometimes|string|max:255',
@@ -126,9 +142,15 @@ class UserController extends Controller
         
         // Hash password if provided
         if (isset($data['password']) && !empty(trim($data['password']))) {
+            // Require current_password verification when changing own password
+            if ($isSelf) {
+                $currentPassword = $request->input('current_password', '');
+                if (empty($currentPassword) || !Hash::check($currentPassword, $user->password)) {
+                    return ApiResponse::error('Current password is incorrect.', 422);
+                }
+            }
             $data['password'] = Hash::make($data['password']);
         } else {
-            // Remove password from update if not provided
             unset($data['password']);
         }
         
