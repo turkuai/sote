@@ -58,7 +58,7 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
       <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
         {isYou && (
           <span
-            title="This is you"
+            title={t('users.thisIsYou')}
             style={{
               display: 'inline-block',
               width: '8px',

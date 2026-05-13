@@ -11,18 +11,19 @@ import { getApiBase } from '../config';
 import './Admin.css';
 
 function GroupNameCell({ value, data }: { value: unknown; data: Record<string, unknown> }) {
+  const { t } = useTranslation();
   const isOwner = data?.is_owner === true;
   const isMember = data?.is_member === true;
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
       {isOwner && (
-        <span title="You own this group" style={{ display: 'inline-flex' }}>
+        <span title={t('groups.youOwnThisGroup')} style={{ display: 'inline-flex' }}>
           <Crown size={14} fill="#eab308" color="#eab308" />
         </span>
       )}
       {!isOwner && isMember && (
         <span
-          title="You belong to this group"
+          title={t('groups.youBelongToThisGroup')}
           style={{
             display: 'inline-block',
             width: '8px',
@@ -248,7 +249,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                           />
                         </svg>
                       ),
-                      tooltip: 'Manage Users',
+                      tooltip: t('groups.manageUsers'),
                       onClick: handleAddUsersClick,
                     },
                   ]}
@@ -316,7 +317,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         />
                       </svg>
                     ),
-                    tooltip: 'Manage Users',
+                    tooltip: t('groups.manageUsers'),
                     onClick: handleAddUsersClick,
                   },
                 ]}
@@ -369,12 +370,12 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-              <h3 style={{ margin: 0 }}>Join a Group</h3>
+              <h3 style={{ margin: 0 }}>{t('groups.joinGroup')}</h3>
               <button
                 type="button"
                 onClick={() => setShowEnrollModal(false)}
                 style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.25rem', color: '#6b7280', lineHeight: 1 }}
-                title="Close"
+                title={t('common.close')}
               >
                 ✕
               </button>

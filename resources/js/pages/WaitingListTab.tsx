@@ -99,7 +99,7 @@ export default function WaitingListTab({ currentUser }) {
           showNot={showNotification}
           labels={{
             loading: t('grid.loading'),
-            add: t('table.add'),
+            add: t('grid.add'),
             updateFailed: t('grid.errors.updateFailed'),
             itemUpdated: t('grid.success.itemUpdated'),
             listViewRequiresProps: t('grid.errors.listViewRequiresProps'),
