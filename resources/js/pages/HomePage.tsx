@@ -22,6 +22,7 @@ export default function HomePage() {
 
   const [userQuery, setUserQuery] = useState('');
   const [groupQuery, setGroupQuery] = useState('');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Password form hook
   const {
@@ -129,6 +130,8 @@ export default function HomePage() {
           onTabClick={handleTabClick}
           getTabLabel={TabConfig.getTabLabel}
           renderTabIcon={TabConfig.renderTabIcon}
+          collapsed={sidebarCollapsed}
+          onToggleCollapse={() => setSidebarCollapsed(c => !c)}
         />
 
         <div className="admin-content-area">

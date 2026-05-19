@@ -1,9 +1,20 @@
 import React from 'react';
+import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import './Admin.css';
 
-export default function HomeTabs({ tabs, activeTab, onTabClick, getTabLabel, renderTabIcon }) {
+export default function HomeTabs({ tabs, activeTab, onTabClick, getTabLabel, renderTabIcon, collapsed, onToggleCollapse }) {
   return (
-    <nav className="admin-sidebar" role="tablist">
+    <nav className={`admin-sidebar${collapsed ? ' collapsed' : ''}`} role="tablist">
+      <button
+        type="button"
+        className="sidebar-toggle"
+        onClick={onToggleCollapse}
+        title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+      >
+        {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+        {!collapsed && <span className="sidebar-label">Collapse</span>}
+      </button>
       {tabs.map((tab) => {
         const isActive = activeTab === tab;
 
@@ -15,9 +26,10 @@ export default function HomeTabs({ tabs, activeTab, onTabClick, getTabLabel, ren
             className={`admin-sidebar-item${isActive ? ' active' : ''}`}
             role="tab"
             aria-selected={isActive}
+            title={collapsed ? getTabLabel(tab) : undefined}
           >
             {renderTabIcon && renderTabIcon(tab)}
-            {getTabLabel(tab)}
+            <span className="sidebar-label">{getTabLabel(tab)}</span>
           </button>
         );
       })}
