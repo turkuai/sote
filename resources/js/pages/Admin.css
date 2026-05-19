@@ -2,6 +2,8 @@
 .admin-page {
   min-height: 100vh;
   background-color: #f3f4f6;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Header */
@@ -319,12 +321,10 @@
 
 .admin-content-card {
   background-color: white;
-  border-radius: 0 0 18px 18px;
-  padding: 1rem;
-  margin: -1px 0 0 0; /* overlap tabs border so there's no visible gap */
+  border-radius: 12px;
+  padding: 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border: 1px solid #e5e7eb;
-  border-top: none;
 }
 
 .admin-content-card h2 {
@@ -334,12 +334,114 @@
   color: #1f2937;
 }
 
+/* ============================================
+   SIDEBAR LAYOUT (Desktop)
+   ============================================ */
+
+/* Body area: sidebar + main content side by side */
+.admin-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+/* Left sidebar navigation */
+.admin-sidebar {
+  width: 220px;
+  min-width: 220px;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 0.75rem;
+  gap: 0.25rem;
+}
+
+/* Sidebar nav item */
+.admin-sidebar-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
+  color: #6b7280;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.admin-sidebar-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: transparent;
+  transition: background 0.15s ease;
+}
+
+.admin-sidebar-item:hover {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.admin-sidebar-item.active {
+  background: #fef2f2;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.admin-sidebar-item.active::before {
+  background: #dc2626;
+}
+
+/* Right content scrollable area */
+.admin-content-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  background: #f3f4f6;
+}
+
+/* Tab section header: title on left, search on right */
+.tab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  gap: 1rem;
+}
+
+.tab-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  white-space: nowrap;
+}
+
+.tab-header .user-search {
+  margin: 0;
+  min-width: 220px;
+  max-width: 300px;
+  flex-shrink: 0;
+  padding: 0.15rem 0.75rem;
+}
+
 /* Search Box */
 .user-search {
   background: #f7f8fb;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  padding: 0.5rem 0.75rem;
+  padding: 0.15rem 0.75rem;
   display: flex;
   align-items: center;
   margin: 0.5rem 0 1rem 0;
@@ -870,7 +972,7 @@
   }
   
   .user-search {
-    padding: 0.625rem 0.875rem;
+    padding: 0.15rem 0.875rem;
   }
   
   .user-search input {
@@ -1168,8 +1270,7 @@
   }
 
   .admin-content-card {
-    padding: 1rem;
-    margin: 0 0 1rem 0;
+    padding: 1.5rem;
   }
 
   .admin-content-card h2 {
@@ -1177,7 +1278,7 @@
   }
 
   .user-search {
-    padding: 0.625rem 0.875rem;
+    padding: 0.15rem 0.875rem;
   }
 
   .user-search input {
@@ -1210,8 +1311,7 @@
   }
 
   .admin-content-card {
-    padding: 1.5rem 1.5rem;
-    margin-bottom: 1rem;
+    padding: 1.5rem;
   }
 }
 

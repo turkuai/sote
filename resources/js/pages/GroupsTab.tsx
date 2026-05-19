@@ -248,9 +248,9 @@ export default function GroupsTab({
 
           {/* Desktop view */}
           <div className="hide-on-mobile">
-            <h2>Groups Management</h2>
-
-            <div className="user-search">
+            <div className="tab-header">
+              <h2>Groups Management</h2>
+              <div className="user-search">
               <span className="search-icon">
                 <svg
                   width="16"
@@ -284,6 +284,7 @@ export default function GroupsTab({
                 value={inputValue}
                 onChange={handleSearchChange}
               />
+              </div>
             </div>
             <div style={{ position: 'relative' }}>
               <button

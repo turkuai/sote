@@ -172,9 +172,9 @@ export default function UsersTab({
 
       {/* Desktop view */}
       <div className="hide-on-mobile">
-        <h2>Users Management</h2>
-
-        <div className="user-search">
+        <div className="tab-header">
+          <h2>Users Management</h2>
+          <div className="user-search">
           <span className="search-icon">
             <svg
               width="16"
@@ -208,6 +208,7 @@ export default function UsersTab({
             value={inputValue}
             onChange={handleSearchChange}
           />
+          </div>
         </div>
         <ServerGrid
           key={refreshKey}

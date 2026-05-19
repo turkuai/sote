@@ -121,8 +121,8 @@ export default function HomePage() {
         </>
       )}
 
-      {/* Tabs - Desktop */}
-      {!isMobile && (
+      {/* Desktop: Sidebar + Content */}
+      <div className="admin-body hide-on-mobile">
         <HomeTabs
           tabs={tabs}
           activeTab={activeTab}
@@ -130,11 +130,9 @@ export default function HomePage() {
           getTabLabel={TabConfig.getTabLabel}
           renderTabIcon={TabConfig.renderTabIcon}
         />
-      )}
 
-      {/* Desktop Content Area */}
-      <div className="admin-content hide-on-mobile">
-        <div className="admin-content-card">
+        <div className="admin-content-area">
+          <div className="admin-content-card">
           {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
             <div style={{ display: activeTab === 'users' ? 'block' : 'none' }}>
               <UsersTab
@@ -175,6 +173,7 @@ export default function HomePage() {
           <div style={{ display: activeTab === 'settings' ? 'block' : 'none' }}>
             <SettingsTab currentUser={currentUser} onLogout={handleLogout} />
           </div>
+        </div>
         </div>
       </div>
 
