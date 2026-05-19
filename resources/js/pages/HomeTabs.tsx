@@ -1,31 +1,39 @@
 import React from 'react';
+import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import './Admin.css';
 
-export default function HomeTabs({ tabs, activeTab, onTabClick, getTabLabel, renderTabIcon }) {
+export default function HomeTabs({ tabs, activeTab, onTabClick, getTabLabel, renderTabIcon, collapsed, onToggleCollapse }) {
   return (
-    <div className="admin-tabs" role="tablist">
-      <div className="admin-tab-list">
-        {tabs.map((tab) => {
-          const isActive = activeTab === tab;
+    <nav className={`admin-sidebar${collapsed ? ' collapsed' : ''}`} role="tablist">
+      <button
+        type="button"
+        className="sidebar-toggle"
+        onClick={onToggleCollapse}
+        title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+      >
+        {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+        {!collapsed && <span className="sidebar-label">Collapse</span>}
+      </button>
+      {tabs.map((tab) => {
+        const isActive = activeTab === tab;
 
-          return (
-            <button
-              key={tab}
-              type="button"
-              onClick={() => onTabClick(tab)}
-              className={['admin-tab-button', isActive ? 'active' : '']
-                .join(' ')
-                .trim()}
-              role="tab"
-              aria-selected={isActive}
-            >
-              {renderTabIcon && renderTabIcon(tab)}
-              {getTabLabel(tab)}
-            </button>
-          );
-        })}
-      </div>
-    </div>
+        return (
+          <button
+            key={tab}
+            type="button"
+            onClick={() => onTabClick(tab)}
+            className={`admin-sidebar-item${isActive ? ' active' : ''}`}
+            role="tab"
+            aria-selected={isActive}
+            title={collapsed ? getTabLabel(tab) : undefined}
+          >
+            {renderTabIcon && renderTabIcon(tab)}
+            <span className="sidebar-label">{getTabLabel(tab)}</span>
+          </button>
+        );
+      })}
+    </nav>
   );
 }
 

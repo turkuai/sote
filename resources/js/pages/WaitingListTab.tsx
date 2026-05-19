@@ -66,8 +66,10 @@ export default function WaitingListTab({ currentUser }) {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Waiting for Approval</h2>
+    <div>
+      <div className="tab-header">
+        <h2>Waiting for Approval</h2>
+      </div>
       <p style={{ color: '#666', marginBottom: '20px' }}>
         Users pending approval. Click "Accept" to approve and assign as Nurse.
       </p>
