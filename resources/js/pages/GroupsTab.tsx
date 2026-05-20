@@ -11,6 +11,7 @@ import { getApiBase } from '../config';
 import './Admin.css';
 
 function GroupNameCell({ value, data }: { value: unknown; data: Record<string, unknown> }) {
+  const { t } = useTranslation();
   const isOwner = data?.is_owner === true;
   const isMember = data?.is_member === true;
   return (
@@ -218,7 +219,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                 <h2 style={{ margin: 0 }}>{t('tabs.groups')}</h2>
                 <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
-                  Enroll
+                  {t('groups.autoEnroll')}
                 </button>
               </div>
               <MobileSearchToggle value={inputValue} onChange={handleSearchChange} />
@@ -276,16 +277,23 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
 
           {/* Desktop view */}
           <div className="hide-on-mobile">
-            <h2>{t('groups.managementTitle')}</h2>
-
-            <div className="user-search">
-              <span className="search-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
-                  <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </span>
-              <input type="search" autoComplete="off" placeholder={t('groups.searchPlaceholder')} value={inputValue} onChange={handleSearchChange} />
+            <div className="tab-header">
+              <h2>{t('groups.managementTitle')}</h2>
+              <div className="user-search">
+                <span className="search-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
+                    <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                </span>
+                <input
+                  type="search"
+                  autoComplete="off"
+                  placeholder={t('groups.searchPlaceholder')}
+                  value={inputValue}
+                  onChange={handleSearchChange}
+                />
+              </div>
             </div>
             <div style={{ position: 'relative' }}>
               <button className="add-btn" onClick={() => setShowEnrollModal(true)} style={{ position: 'absolute', top: 0, right: 50, zIndex: 1 }}>

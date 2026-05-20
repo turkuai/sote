@@ -71,8 +71,10 @@ export default function WaitingListTab({ currentUser }) {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>{t('waitingList.title')}</h2>
+    <div>
+      <div className="tab-header">
+        <h2>{t('waitingList.title')}</h2>
+      </div>
       <p style={{ color: '#666', marginBottom: '20px' }}>{t('waitingList.description')}</p>
 
       <div style={{ height: '500px', width: '100%' }}>
@@ -99,7 +101,7 @@ export default function WaitingListTab({ currentUser }) {
           showNot={showNotification}
           labels={{
             loading: t('grid.loading'),
-            add: t('table.add'),
+            add: t('grid.add'),
             updateFailed: t('grid.errors.updateFailed'),
             itemUpdated: t('grid.success.itemUpdated'),
             listViewRequiresProps: t('grid.errors.listViewRequiresProps'),

@@ -65,6 +65,7 @@ const enCommon = {
     managementTitle: 'Users Management',
     searchPlaceholder: 'Search users...',
     waitingList: 'Waiting list',
+    thisIsYou: 'This is you',
     roles: {
       nurse: 'Nurse (Read-only)',
       manager: 'Manager (CRUD)',
@@ -141,6 +142,9 @@ const enCommon = {
     joinGroup: 'Join a Group',
     hideKey: 'Hide key',
     showKey: 'Show key',
+    youOwnThisGroup: 'You own this group',
+    youBelongToThisGroup: 'You belong to this group',
+    manageUsers: 'Manage Users',
     table: {
       accessKey: 'Access Key',
       userCount: 'User Count',

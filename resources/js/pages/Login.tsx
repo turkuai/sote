@@ -40,7 +40,7 @@ export default function Login() {
       }
     } catch (err) {
       console.error('Login error:', err);
-      setError('An unexpected error occurred');
+      setError(t('auth.unexpectedError'));
     } finally {
       setLoading(false);
     }

@@ -64,6 +64,7 @@ const fiCommon = {
     managementTitle: 'Käyttäjien hallinta',
     searchPlaceholder: 'Hae käyttäjiä...',
     waitingList: 'Odotuslista',
+    thisIsYou: 'Tämä olet sinä',
     roles: {
       nurse: 'Hoitaja (vain luku)',
       manager: 'Manageri (CRUD)',
@@ -140,6 +141,9 @@ const fiCommon = {
     joinGroup: 'Liity ryhmään',
     hideKey: 'Piilota avain',
     showKey: 'Näytä avain',
+    youOwnThisGroup: 'Omistat tämän ryhmän',
+    youBelongToThisGroup: 'Kuulut tähän ryhmään',
+    manageUsers: 'Hallinnoi käyttäjiä',
     table: {
       accessKey: 'Pääsyavain',
       userCount: 'Käyttäjien määrä',
