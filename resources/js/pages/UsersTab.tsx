@@ -199,16 +199,17 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
 
       {/* Desktop view */}
       <div className="hide-on-mobile">
-        <h2>{t('users.managementTitle')}</h2>
-
-        <div className="user-search">
-          <span className="search-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
-              <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          </span>
-          <input type="text" autoComplete="off" placeholder={t('users.searchPlaceholder')} value={inputValue} onChange={handleSearchChange} />
+        <div className="tab-header">
+          <h2>{t('users.managementTitle')}</h2>
+          <div className="user-search">
+            <span className="search-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
+                <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </span>
+            <input type="text" autoComplete="off" placeholder={t('users.searchPlaceholder')} value={inputValue} onChange={handleSearchChange} />
+          </div>
         </div>
         <ServerGrid
           key={refreshKey}
