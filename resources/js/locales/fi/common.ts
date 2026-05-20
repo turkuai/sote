@@ -6,6 +6,7 @@ const fiCommon = {
     loading: 'Ladataan...',
     navigation: 'Navigointi',
     close: 'Sulje',
+    search: 'Hae...',
   },
 
   nav: {
@@ -251,6 +252,23 @@ const fiCommon = {
       description: 'Ryhmät, joihin olet tällä hetkellä rekisteröitynyt.',
       empty: 'Et ole rekisteröitynyt mihinkään ryhmään.',
     },
+  },
+
+  search: {
+    close: 'Sulje haku',
+    open: 'Avaa haku',
+    placeholder: 'Hae...',
+  },
+
+  deleteAccount: {
+    title: 'Poista tili',
+    description: 'Poista tilisi ja kaikki sen tiedot',
+    warning: 'Varoitus',
+    warningText: 'Ole varovainen, tätä toimintoa ei voi peruuttaa.',
+    button: 'Poista tili',
+    dialogTitle: 'Haluatko varmasti poistaa tilisi?',
+    dialogDescription: 'Kun tilisi poistetaan, kaikki sen tiedot poistetaan pysyvästi. Vahvista syöttämällä salasanasi.',
+    cancel: 'Peruuta',
   },
 };
 

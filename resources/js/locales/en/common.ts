@@ -6,6 +6,7 @@ const enCommon = {
     loading: 'Loading...',
     navigation: 'Navigation',
     close: 'Close',
+    search: 'Search...',
   },
 
   nav: {
@@ -251,6 +252,24 @@ const enCommon = {
       description: 'Groups you are currently registered in.',
       empty: 'You are not registered in any group.',
     },
+  },
+
+  search: {
+    close: 'Close search',
+    open: 'Open search',
+    placeholder: 'Search...',
+  },
+
+  deleteAccount: {
+    title: 'Delete account',
+    description: 'Delete your account and all of its resources',
+    warning: 'Warning',
+    warningText: 'Please proceed with caution, this cannot be undone.',
+    button: 'Delete account',
+    dialogTitle: 'Are you sure you want to delete your account?',
+    dialogDescription:
+      'Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm.',
+    cancel: 'Cancel',
   },
 };
 
