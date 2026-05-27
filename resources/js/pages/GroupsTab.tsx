@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Crown, Eye, EyeOff } from 'lucide-react';
-import { ServerGrid } from 'tai-grid';
+import { Crown, Eye, EyeOff, Trash2 } from 'lucide-react';
+import { ServerGrid as ServerGridBase, Grid } from 'tai-grid';
+const ServerGrid = ServerGridBase as React.ComponentType<any>;
 import GroupRegistrationForm from '../components/GroupRegistrationForm';
 
 function GroupNameCell({ value, data }: { value: unknown; data: Record<string, unknown> }) {
@@ -79,6 +80,10 @@ export default function GroupsTab({
   const [showGroupUsersModal, setShowGroupUsersModal] = useState(false);
   const [showEnrollModal, setShowEnrollModal] = useState(false);
   const [myGroupCount, setMyGroupCount] = useState<number | null>(null);
+  const [panelGroup, setPanelGroup] = useState<Record<string, unknown> | null>(null);
+  const [panelUsers, setPanelUsers] = useState<Record<string, unknown>[]>([]);
+  const [panelLoading, setPanelLoading] = useState(false);
+  const [panelSearch, setPanelSearch] = useState('');
   const debounceRef = useRef(null);
   const { showNotification } = useNotification();
 
@@ -117,6 +122,52 @@ export default function GroupsTab({
     setSelectedGroup(group);
     setShowGroupUsersModal(true);
   };
+
+  const handleGroupRowClick = (group: Record<string, unknown>) => {
+    setPanelGroup(group);
+    setPanelUsers([]);
+    setPanelSearch('');
+    setPanelLoading(true);
+    fetch(`${getApiBase()}/api/groups/${group.id}`, { credentials: 'include' })
+      .then(r => r.json())
+      .then(res => {
+        const users = res?.data?.users ?? res?.users ?? [];
+        setPanelUsers(Array.isArray(users) ? users : []);
+      })
+      .catch(() => setPanelUsers([]))
+      .finally(() => setPanelLoading(false));
+  };
+
+  const handleRemoveUserFromGroup = (user: Record<string, unknown>) => {
+    if (!panelGroup) return;
+    fetch(`${getApiBase()}/api/groups/${panelGroup.id}/users/${user.id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: { 'X-XSRF-TOKEN': decodeURIComponent(document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1] ?? '') },
+    })
+      .then(r => r.json())
+      .then(res => {
+        if (res?.success === false) {
+          showNotification(res?.message ?? 'Failed to remove user', 'error');
+        } else {
+          showNotification('User removed from group', 'success');
+          setPanelUsers(prev => prev.filter(u => u.id !== user.id));
+        }
+      })
+      .catch(() => showNotification('Failed to remove user', 'error'));
+  };
+
+  const filteredPanelUsers = panelSearch.trim()
+    ? panelUsers.filter((u) => {
+        const q = panelSearch.toLowerCase();
+        return (
+          String(u.first_name ?? '').toLowerCase().includes(q) ||
+          String(u.last_name ?? '').toLowerCase().includes(q) ||
+          String(u.email ?? '').toLowerCase().includes(q) ||
+          String(u.role_type ?? '').toLowerCase().includes(q)
+        );
+      })
+    : panelUsers;
 
   return (
     <>
@@ -160,35 +211,91 @@ export default function GroupsTab({
 
           {/* Desktop nurse view */}
           <div className="hide-on-mobile">
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-              <h2 style={{ margin: 0 }}>My Groups</h2>
-              <button
-                className="add-btn"
-                onClick={() => setShowEnrollModal(true)}
-              >
-                Enroll
-              </button>
+            <div style={{ display: 'flex', gap: 0, alignItems: 'flex-start' }}>
+              {/* Left: groups list */}
+              <div style={{ flex: '0 0 50%', minWidth: 0, paddingRight: '1.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                  <h2 style={{ margin: 0 }}>My Groups</h2>
+                  <button className="add-btn" onClick={() => setShowEnrollModal(true)}>Enroll</button>
+                </div>
+                {myGroupCount === 0 && (
+                  <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '3rem 0' }}>
+                    You don't belong to any group, yet...
+                  </p>
+                )}
+                {myGroupCount !== 0 && (
+                  <ServerGrid
+                    key={refreshKey}
+                    columns={['name']}
+                    path="groups/my"
+                    allowEditing={false}
+                    allowDelete={false}
+                    pageSize={10}
+                    showAddButton={false}
+                    getApiBase={getApiBase}
+                    showNot={showNotification}
+                    onRowClick={handleGroupRowClick}
+                  />
+                )}
+              </div>
+              {/* Divider */}
+              <div style={{ width: '1px', background: '#e5e7eb', alignSelf: 'stretch', flexShrink: 0 }} />
+              {/* Right: users panel */}
+              <div style={{ flex: '0 0 50%', minWidth: 0, paddingLeft: '1.5rem' }}>
+                {!panelGroup && (
+                  <p style={{ color: '#6b7280', fontStyle: 'italic', marginTop: '4rem', textAlign: 'center' }}>Select a group to see its members</p>
+                )}
+                {panelGroup && (
+                  <>
+                    <div className="tab-header">
+                      <h2>{String(panelGroup.name)} — Members</h2>
+                      <div className="user-search">
+                        <span className="search-icon">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
+                            <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
+                          </svg>
+                        </span>
+                        <input
+                          type="search"
+                          autoComplete="off"
+                          placeholder="Search members..."
+                          value={panelSearch}
+                          onChange={(e) => setPanelSearch(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.5rem' }}>
+                      <button className="add-btn" onClick={() => handleAddUsersClick(panelGroup)}>+ Add User</button>
+                    </div>
+                    {panelLoading && <p style={{ color: '#6b7280' }}>Loading...</p>}
+                    {!panelLoading && filteredPanelUsers.length === 0 && (
+                      <p style={{ color: '#6b7280', fontStyle: 'italic' }}>No members found.</p>
+                    )}
+                    {!panelLoading && filteredPanelUsers.length > 0 && (
+                      <Grid
+                        columns={['first_name', 'last_name', 'email', 'role_type']}
+                        data={filteredPanelUsers}
+                        allowEditing={false}
+                        allowDelete={false}
+                        pageSize={10}
+                        onEditRow={() => {}}
+                        onDeleteRow={() => {}}
+                        rowActions={[
+                          {
+                            icon: <Trash2 size={16} />,
+                            tooltip: 'Remove from group',
+                            onClick: handleRemoveUserFromGroup,
+                            className: 'danger',
+                          },
+                        ]}
+                      />
+                    )}
+                  </>
+                )}
+              </div>
             </div>
-            {myGroupCount === 0 && (
-              <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '3rem 0' }}>
-                You don't belong to any group, yet...
-              </p>
-            )}
-            {myGroupCount !== 0 && (
-              <ServerGrid
-                key={refreshKey}
-                columns={['name']}
-                path="groups/my"
-                allowEditing={false}
-                allowDelete={false}
-                pageSize={10}
-                showAddButton={false}
-                getApiBase={getApiBase}
-                showNot={showNotification}
-              />
-            )}
           </div>
-
         </>
       )}
 
@@ -248,85 +355,127 @@ export default function GroupsTab({
 
           {/* Desktop view */}
           <div className="hide-on-mobile">
-            <div className="tab-header">
-              <h2>Groups Management</h2>
-              <div className="user-search">
-              <span className="search-icon">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle
-                    cx="11"
-                    cy="11"
-                    r="6"
-                    stroke="#6b7280"
-                    strokeWidth="2"
+            <div style={{ display: 'flex', gap: 0, alignItems: 'flex-start' }}>
+              {/* Left: groups list */}
+              <div style={{ flex: '0 0 50%', minWidth: 0, paddingRight: '1.5rem' }}>
+                <div className="tab-header">
+                  <h2>Groups Management</h2>
+                  <div className="user-search">
+                    <span className="search-icon">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
+                        <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
+                      </svg>
+                    </span>
+                    <input
+                      type="search"
+                      autoComplete="off"
+                      placeholder="Search groups..."
+                      value={inputValue}
+                      onChange={handleSearchChange}
+                    />
+                  </div>
+                </div>
+                <div style={{ position: 'relative' }}>
+                  <button
+                    className="add-btn"
+                    onClick={() => setShowEnrollModal(true)}
+                    style={{ position: 'absolute', top: 0, right: 50, zIndex: 1 }}
+                  >Enroll</button>
+                  <ServerGrid
+                    key={refreshKey}
+                    columns={['name', 'access_key', 'user_count']}
+                    columnRenderers={{ name: GroupNameCell, access_key: AccessKeyCell }}
+                    path="groups"
+                    allowEditing={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
+                    allowDelete={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
+                    pageSize={10}
+                    showAddButton={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
+                    query={query}
+                    formComponent={GroupsForm}
+                    rowActions={[
+                      {
+                        icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="#0891b2" /></svg>,
+                        tooltip: 'Manage Users',
+                        onClick: handleAddUsersClick,
+                      },
+                    ]}
+                    getApiBase={getApiBase}
+                    showNot={showNotification}
+                    transformEditPayload={(payload) => {
+                      const name = String(payload.name || '').trim();
+                      if (!name) throw new Error('Group name cannot be empty');
+                      const access_key = String(payload.access_key || '').trim();
+                      if (!access_key) throw new Error('Access key cannot be empty');
+                      return { name, access_key };
+                    }}
+                    transformAddPayload={(payload) => {
+                      const name = String(payload.name || '').trim();
+                      if (!name) throw new Error('Group name cannot be empty');
+                      const access_key = String(payload.access_key || '').trim();
+                      if (!access_key) throw new Error('Access key cannot be empty');
+                      return { name, access_key };
+                    }}
+                    onRowClick={handleGroupRowClick}
                   />
-                  <line
-                    x1="15"
-                    y1="15"
-                    x2="20"
-                    y2="20"
-                    stroke="#6b7280"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </span>
-              <input
-                type="search"
-                autoComplete="off"
-                placeholder="Search groups..."
-                value={inputValue}
-                onChange={handleSearchChange}
-              />
+                </div>
               </div>
-            </div>
-            <div style={{ position: 'relative' }}>
-              <button
-                className="add-btn"
-                onClick={() => setShowEnrollModal(true)}
-                style={{ position: 'absolute', top: 0, right: 50, zIndex: 1 }}
-              >Enroll</button>
-            <ServerGrid
-              key={refreshKey}
-              columns={['name', 'access_key', 'user_count']}
-              columnRenderers={{ name: GroupNameCell, access_key: AccessKeyCell }}
-              path="groups"
-              allowEditing={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
-              allowDelete={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
-              pageSize={10}
-              showAddButton={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
-              query={query}
-              formComponent={GroupsForm}
-              rowActions={[
-                {
-                  icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="#0891b2" /></svg>,
-                  tooltip: 'Manage Users',
-                  onClick: handleAddUsersClick,
-                },
-              ]}
-              getApiBase={getApiBase}
-              showNot={showNotification}
-              transformEditPayload={(payload) => {
-                const name = String(payload.name || '').trim();
-                if (!name) throw new Error('Group name cannot be empty');
-                const access_key = String(payload.access_key || '').trim();
-                if (!access_key) throw new Error('Access key cannot be empty');
-                return { name, access_key };
-              }}
-              transformAddPayload={(payload) => {
-                const name = String(payload.name || '').trim();
-                if (!name) throw new Error('Group name cannot be empty');
-                const access_key = String(payload.access_key || '').trim();
-                if (!access_key) throw new Error('Access key cannot be empty');
-                return { name, access_key };
-              }}
-            />
+              {/* Divider */}
+              <div style={{ width: '1px', background: '#e5e7eb', alignSelf: 'stretch', flexShrink: 0 }} />
+              {/* Right: users panel */}
+              <div style={{ flex: '0 0 50%', minWidth: 0, paddingLeft: '1.5rem' }}>
+                {!panelGroup && (
+                  <p style={{ color: '#6b7280', fontStyle: 'italic', marginTop: '4rem', textAlign: 'center' }}>Select a group to see its members</p>
+                )}
+                {panelGroup && (
+                  <>
+                    <div className="tab-header">
+                      <h2>{String(panelGroup.name)} — Members</h2>
+                      <div className="user-search">
+                        <span className="search-icon">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
+                            <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
+                          </svg>
+                        </span>
+                        <input
+                          type="search"
+                          autoComplete="off"
+                          placeholder="Search members..."
+                          value={panelSearch}
+                          onChange={(e) => setPanelSearch(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.3rem' }}>
+                      <button className="add-btn" onClick={() => handleAddUsersClick(panelGroup)}>Add User</button>
+                    </div>
+                    {panelLoading && <p style={{ color: '#6b7280' }}>Loading...</p>}
+                    {!panelLoading && filteredPanelUsers.length === 0 && (
+                      <p style={{ color: '#6b7280', fontStyle: 'italic' }}>No members found.</p>
+                    )}
+                    {!panelLoading && filteredPanelUsers.length > 0 && (
+                      <Grid
+                        columns={['first_name', 'last_name', 'email', 'role_type']}
+                        data={filteredPanelUsers}
+                        allowEditing={false}
+                        allowDelete={false}
+                        pageSize={10}
+                        onEditRow={() => {}}
+                        onDeleteRow={() => {}}
+                        rowActions={[
+                          {
+                            icon: <Trash2 size={16} />,
+                            tooltip: 'Remove from group',
+                            onClick: handleRemoveUserFromGroup,
+                            className: 'danger',
+                          },
+                        ]}
+                      />
+                    )}
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </>
@@ -379,8 +528,21 @@ export default function GroupsTab({
           }}
           onUserAdded={() => {
             setShowGroupUsersModal(false);
+            const addedToGroup = selectedGroup;
             setSelectedGroup(null);
             setRefreshKey(prev => prev + 1);
+            // Re-fetch panel members if the affected group is currently open in the panel
+            if (panelGroup && addedToGroup && panelGroup.id === addedToGroup.id) {
+              setPanelLoading(true);
+              fetch(`${getApiBase()}/api/groups/${panelGroup.id}`, { credentials: 'include' })
+                .then(r => r.json())
+                .then(res => {
+                  const users = res?.data?.users ?? res?.users ?? [];
+                  setPanelUsers(Array.isArray(users) ? users : []);
+                })
+                .catch(() => {})
+                .finally(() => setPanelLoading(false));
+            }
           }}
         />
       )}
