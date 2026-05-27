@@ -74,7 +74,7 @@
 
 .register-input:focus {
     outline: none;
-    border-color: #3b82f6;
+    border-color: #dc2626;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
@@ -87,7 +87,7 @@
 .register-field-error {
     display: block;
     font-size: 0.75rem;
-    color: #ef4444;
+    color: #dc2626;
     margin-top: 0.25rem;
 }
 
@@ -106,7 +106,7 @@
 .register-submit-btn {
     width: 100%;
     padding: 0.75rem 1rem;
-    background-color: #3b82f6;
+    background-color: #dc2626;
     color: white;
     border: none;
     border-radius: 4px;
@@ -118,7 +118,7 @@
 }
 
 .register-submit-btn:hover:not(:disabled) {
-    background-color: #2563eb;
+    background-color: #dc2626;
 }
 
 .register-submit-btn:disabled {

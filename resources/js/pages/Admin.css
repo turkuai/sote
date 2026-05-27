@@ -136,7 +136,7 @@
 
 .nav-button.active {
   color: #1f2937;
-  border-bottom-color: #3b82f6;
+  border-bottom-color: #dc2626;
 }
 
 /* User Info */
@@ -1223,12 +1223,12 @@
 }
 
 .confirm-dialog__button--primary {
-  background-color: #22c55e;
+  background-color: #dc2626;
   color: #ffffff;
 }
 
 .confirm-dialog__button--primary:hover {
-  background-color: #16a34a;
+  background-color: #b91c1c;
 }
 
 .bottom-tab-button.active {

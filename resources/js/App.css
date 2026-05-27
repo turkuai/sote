@@ -82,14 +82,14 @@ input {
 }
 
 input:focus {
-  border-color: #ce1717;
+  border-color: #dc2626;
   outline: none;
 }
 
 /* Button styles */
 button {
   padding: 12px;
-  background-color: #ce1717;
+  background-color: #dc2626;
   color: white;
   font-weight: bold;
   font-size: 16px;
@@ -100,7 +100,7 @@ button {
 }
 
 button:hover {
-  background-color: #ce1717;
+  background-color: #dc2626;
 }
 
 /* Override button styles for nav buttons */
@@ -142,7 +142,7 @@ button.nav-button:hover {
 }
 
 .server-grid-add-button:hover {
-  background-color: #059669;
+  background-color: #dc2626;
 }
 
 .server-grid-add-button:active {
