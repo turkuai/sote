@@ -252,8 +252,8 @@ export default function GroupsTab({
                 )}
                 {panelGroup && (
                   <>
-                    <div className="tab-header">
-                      <h2>{String(panelGroup.name)} — Members</h2>
+                    <div className="tab-header" style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'white' }}>
+                      <h2>{String(panelGroup.name)}</h2>
                       <div className="user-search">
                         <span className="search-icon">
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -269,19 +269,20 @@ export default function GroupsTab({
                           onChange={(e) => { setPanelSearch(e.target.value); lastPanelClickedIndex.current = null; }}
                         />
                       </div>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginBottom: '1rem' }}>
-                      <button className="server-grid-add-button" title="Add User" onClick={() => handleAddUsersClick(panelGroup)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                      </button>
                       <button
-                        className={`delete-selected-btn${selectedPanelUserIds.length > 0 ? ' visible' : ''}`}
+                        className="delete-selected-btn visible"
                         onClick={handleRemoveSelectedPanelUsers}
                         type="button"
+                        disabled={selectedPanelUserIds.length === 0}
                         title="Remove selected users from group"
                       >
                         <Trash2 size={16} />
-                        Remove {selectedPanelUserIds.length}
+                        Remove{selectedPanelUserIds.length > 0 ? ` ${selectedPanelUserIds.length}` : ''}
+                      </button>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+                      <button className="server-grid-add-button" title="Add User" onClick={() => handleAddUsersClick(panelGroup)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                       </button>
                     </div>
                     {panelLoading && <p style={{ color: '#6b7280' }}>Loading...</p>}
@@ -499,8 +500,8 @@ export default function GroupsTab({
                 )}
                 {panelGroup && (
                   <>
-                    <div className="tab-header">
-                      <h2>{String(panelGroup.name)} — Members</h2>
+                    <div className="tab-header" style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'white' }}>
+                      <h2>{String(panelGroup.name)}</h2>
                       <div className="user-search">
                         <span className="search-icon">
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -516,19 +517,20 @@ export default function GroupsTab({
                           onChange={(e) => { setPanelSearch(e.target.value); lastPanelClickedIndex.current = null; }}
                         />
                       </div>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginBottom: '1rem' }}>
-                      <button className="server-grid-add-button" title="Add User" onClick={() => handleAddUsersClick(panelGroup)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                      </button>
                       <button
-                        className={`delete-selected-btn${selectedPanelUserIds.length > 0 ? ' visible' : ''}`}
+                        className="delete-selected-btn visible"
                         onClick={handleRemoveSelectedPanelUsers}
                         type="button"
+                        disabled={selectedPanelUserIds.length === 0}
                         title="Remove selected users from group"
                       >
                         <Trash2 size={16} />
-                        Remove {selectedPanelUserIds.length}
+                        Remove{selectedPanelUserIds.length > 0 ? ` ${selectedPanelUserIds.length}` : ''}
+                      </button>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+                      <button className="server-grid-add-button" title="Add User" onClick={() => handleAddUsersClick(panelGroup)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                       </button>
                     </div>
                     {panelLoading && <p style={{ color: '#6b7280' }}>Loading...</p>}
