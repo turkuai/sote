@@ -130,19 +130,20 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
     cancelLabel: t('grid.confirmDelete.cancel'),
     editTitle: t('grid.dialog.edit'),
     addTitle: t('grid.dialog.add'),
-    saveLabel: t('grid.dialog.save'),
-    closeLabel: t('grid.dialog.close'),
-    previousLabel: t('grid.pagination.previous'),
-    nextLabel: t('grid.pagination.next'),
-    pageLabel: t('grid.pagination.page'),
-    ofLabel: t('grid.pagination.of'),
-    actionsHeader: t('table.actions'),
-    edit: t('table.edit'),
-    delete: t('table.delete'),
-    previous: t('grid.pagination.previous'),
-    next: t('grid.pagination.next'),
-    page: t('grid.pagination.page'),
-    of: t('grid.pagination.of'),
+    grid: {
+      actionsHeader: t('table.actions'),
+      edit: t('table.edit'),
+      delete: t('table.delete'),
+      previous: t('grid.pagination.previous'),
+      next: t('grid.pagination.next'),
+      page: t('grid.pagination.page'),
+      of: t('grid.pagination.of'),
+    },
+    dialog: {
+      save: t('grid.dialog.save'),
+      cancel: t('grid.dialog.cancel'),
+      close: t('grid.dialog.close'),
+    },
   };
 
   return (
