@@ -83,10 +83,10 @@
 }
 
 .user-item {
-  padding: 1rem;
+  padding: 0.5rem;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -96,8 +96,8 @@
 
 .user-item > div {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  flex-direction: row;
+  gap: 0.75rem;
   flex: 1;
 }
 
