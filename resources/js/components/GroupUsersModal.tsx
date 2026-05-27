@@ -11,7 +11,9 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
   const [selectedUsersToAdd, setSelectedUsersToAdd] = useState([]);
   const [fetchError, setFetchError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedUsersToRemove, setSelectedUsersToRemove] = useState<number[]>([]);
   const lastClickedIndex = useRef<number | null>(null);
+  const lastMemberClickedIndex = useRef<number | null>(null);
 
   // Fetch group with users
   useEffect(() => {
@@ -141,23 +143,22 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
     }
   };
 
-  const handleRemoveUser = async (userId) => {
+  const handleRemoveSelectedUsers = async () => {
+    if (selectedUsersToRemove.length === 0) return;
     try {
-      const response = await fetch(`/api/groups/${groupId}/users/${userId}`, {
-        method: 'DELETE',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if (response.ok) {
-        // Remove user from local state
-        setUsers(users.filter(u => u.id !== userId));
-        if (onUserAdded) onUserAdded();
-      } else {
-        console.error('Failed to remove user:', response.status);
+      for (const userId of selectedUsersToRemove) {
+        await fetch(`/api/groups/${groupId}/users/${userId}`, {
+          method: 'DELETE',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+        });
       }
+      setUsers(prev => prev.filter(u => !selectedUsersToRemove.includes(u.id)));
+      setSelectedUsersToRemove([]);
+      lastMemberClickedIndex.current = null;
+      if (onUserAdded) onUserAdded();
     } catch (error) {
-      console.error('Error removing user:', error);
+      console.error('Error removing users:', error);
     }
   };
 
@@ -186,9 +187,18 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
             <div className="modal-add-button">
               <button 
                 className="add-user-btn"
-                onClick={() => setShowAddUsers(true)}
+                onClick={() => { setShowAddUsers(true); setSelectedUsersToRemove([]); lastMemberClickedIndex.current = null; }}
               >
                 <Plus size={20} /> Add Users
+              </button>
+              <button
+                className={`delete-selected-btn${selectedUsersToRemove.length > 0 ? ' visible' : ''}`}
+                onClick={handleRemoveSelectedUsers}
+                type="button"
+                title="Remove selected users from group"
+              >
+                <Trash2 size={18} />
+                Remove {selectedUsersToRemove.length}
               </button>
             </div>
 
@@ -197,22 +207,49 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
                 <p className="empty-message">No users in this group</p>
               ) : (
                 <ul className="users-list">
-                  {users.map(user => (
-                    <li key={user.id} className="user-item">
-                      <div style={{ flex: 1 }}>
-                        <span className="user-name">{user.first_name} {user.last_name}</span>
-                        <span className="user-email">{user.email}</span>
-                      </div>
-                      <button
-                        className="remove-user-btn"
-                        onClick={() => handleRemoveUser(user.id)}
-                        title="Remove user from group"
-                        type="button"
+                  {users.map((user, index) => {
+                    const checked = selectedUsersToRemove.includes(user.id);
+                    const handleMemberClick = (e: React.MouseEvent) => {
+                      if (e.shiftKey && lastMemberClickedIndex.current !== null) {
+                        e.preventDefault();
+                        const from = Math.min(lastMemberClickedIndex.current, index);
+                        const to = Math.max(lastMemberClickedIndex.current, index);
+                        const rangeIds = users.slice(from, to + 1).map(u => u.id);
+                        const allChecked = rangeIds.every(id => selectedUsersToRemove.includes(id));
+                        setSelectedUsersToRemove(prev =>
+                          allChecked
+                            ? prev.filter(id => !rangeIds.includes(id))
+                            : [...new Set([...prev, ...rangeIds])]
+                        );
+                      } else {
+                        lastMemberClickedIndex.current = index;
+                        setSelectedUsersToRemove(prev =>
+                          checked
+                            ? prev.filter(id => id !== user.id)
+                            : [...prev, user.id]
+                        );
+                      }
+                    };
+                    return (
+                      <li
+                        key={user.id}
+                        className={`user-item${checked ? ' selected' : ''}`}
+                        onClick={handleMemberClick}
                       >
-                        <Trash2 size={16} />
-                      </button>
-                    </li>
-                  ))}
+                        <input
+                          type="checkbox"
+                          className="user-list-checkbox"
+                          checked={checked}
+                          onChange={() => {}}
+                          tabIndex={-1}
+                        />
+                        <div style={{ flex: 1 }}>
+                          <span className="user-name">{user.first_name} {user.last_name}</span>
+                          <span className="user-email">{user.email}</span>
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </div>

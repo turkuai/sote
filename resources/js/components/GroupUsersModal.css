@@ -80,6 +80,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  user-select: none;
 }
 
 .user-item {
@@ -92,6 +93,17 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.user-item:hover {
+  background-color: #f9fafb;
+}
+
+.user-item.selected {
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
 }
 
 .user-item > div {
@@ -115,10 +127,12 @@
 .modal-add-button {
   padding: 0 1.5rem 1rem 1.5rem;
   flex-shrink: 0;
+  display: flex;
+  gap: 0.5rem;
 }
 
 .add-user-btn {
-  width: 100%;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -136,6 +150,34 @@
 
 .add-user-btn:hover {
   background-color: #2563eb;
+}
+
+.delete-selected-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1rem;
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s, background-color 0.2s;
+}
+
+.delete-selected-btn.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.delete-selected-btn:hover {
+  background-color: #991b1b;
 }
 
 .remove-user-btn {
