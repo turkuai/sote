@@ -41,6 +41,17 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // If user authenticated via Entra ID, logout from SimpleSAML as well
+        if ($request->session()->get('auth_method') === 'entra-id') {
+            try {
+                require_once('../../../saml/src/_autoload.php');
+                $as = new \SimpleSAML\Auth\Simple('sote');
+                $as->logout(url('/'));
+            } catch (\Exception $e) {
+                // SimpleSAML not available, continue with regular logout
+            }
+        }
+        
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
