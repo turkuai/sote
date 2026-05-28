@@ -22,7 +22,9 @@ export default function HomePage() {
 
   const [userQuery, setUserQuery] = useState('');
   const [groupQuery, setGroupQuery] = useState('');
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() =>
+    typeof window !== 'undefined' ? localStorage.getItem('sidebar_collapsed') === 'true' : false
+  );
 
   // Password form hook
   const {
@@ -131,7 +133,11 @@ export default function HomePage() {
           getTabLabel={TabConfig.getTabLabel}
           renderTabIcon={TabConfig.renderTabIcon}
           collapsed={sidebarCollapsed}
-          onToggleCollapse={() => setSidebarCollapsed(c => !c)}
+          onToggleCollapse={() => setSidebarCollapsed(c => {
+            const next = !c;
+            localStorage.setItem('sidebar_collapsed', String(next));
+            return next;
+          })}
         />
 
         <div className="admin-content-area">
