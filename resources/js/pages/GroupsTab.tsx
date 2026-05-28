@@ -83,6 +83,7 @@ export default function GroupsTab({
   const [panelGroup, setPanelGroup] = useState<Record<string, unknown> | null>(null);
   const [panelUsers, setPanelUsers] = useState<Record<string, unknown>[]>([]);
   const [panelLoading, setPanelLoading] = useState(false);
+  const [isPanelRemoving, setIsPanelRemoving] = useState(false);
   const [panelSearch, setPanelSearch] = useState('');
   const [selectedPanelUserIds, setSelectedPanelUserIds] = useState<number[]>([]);
   const lastPanelClickedIndex = useRef<number | null>(null);
@@ -145,6 +146,7 @@ export default function GroupsTab({
   const handleRemoveSelectedPanelUsers = async () => {
     if (!panelGroup || selectedPanelUserIds.length === 0) return;
     const toRemove = [...selectedPanelUserIds];
+    setIsPanelRemoving(true);
     try {
       for (const userId of toRemove) {
         await fetch(`${getApiBase()}/api/groups/${panelGroup.id}/users/${userId}`, {
@@ -156,9 +158,12 @@ export default function GroupsTab({
       setPanelUsers(prev => prev.filter(u => !toRemove.includes(u.id as number)));
       setSelectedPanelUserIds([]);
       lastPanelClickedIndex.current = null;
+      setRefreshKey(prev => prev + 1);
       showNotification(`${toRemove.length} user(s) removed from group`, 'success');
     } catch {
       showNotification('Failed to remove users', 'error');
+    } finally {
+      setIsPanelRemoving(false);
     }
   };
 
@@ -270,14 +275,14 @@ export default function GroupsTab({
                         />
                       </div>
                       <button
-                        className="delete-selected-btn visible"
+                        className={`delete-selected-btn visible${isPanelRemoving ? ' removing' : ''}`}
                         onClick={handleRemoveSelectedPanelUsers}
                         type="button"
-                        disabled={selectedPanelUserIds.length === 0}
+                        disabled={selectedPanelUserIds.length === 0 || isPanelRemoving}
                         title="Remove selected users from group"
                       >
                         <Trash2 size={16} />
-                        Remove{selectedPanelUserIds.length > 0 ? ` ${selectedPanelUserIds.length}` : ''}
+                        {isPanelRemoving ? `Removing…` : `Remove${selectedPanelUserIds.length > 0 ? ` ${selectedPanelUserIds.length}` : ''}`}
                       </button>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
@@ -518,14 +523,14 @@ export default function GroupsTab({
                         />
                       </div>
                       <button
-                        className="delete-selected-btn visible"
+                        className={`delete-selected-btn visible${isPanelRemoving ? ' removing' : ''}`}
                         onClick={handleRemoveSelectedPanelUsers}
                         type="button"
-                        disabled={selectedPanelUserIds.length === 0}
+                        disabled={selectedPanelUserIds.length === 0 || isPanelRemoving}
                         title="Remove selected users from group"
                       >
                         <Trash2 size={16} />
-                        Remove{selectedPanelUserIds.length > 0 ? ` ${selectedPanelUserIds.length}` : ''}
+                        {isPanelRemoving ? `Removing…` : `Remove${selectedPanelUserIds.length > 0 ? ` ${selectedPanelUserIds.length}` : ''}`}
                       </button>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
