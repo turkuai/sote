@@ -32,6 +32,8 @@ const fiCommon = {
     loginWithDatabaseUser: 'Kirjaudu käyttäjät-taulun tunnuksilla',
     noAccount: 'Eikö sinulla ole tiliä?',
     signUp: 'Rekisteröidy',
+    entraIdButton: 'Kirjaudu @edu.turku.fi -tunnuksella',
+    entraIdSubtext: 'Kirjaudu Microsoft-tilisi avulla',
   },
 
   user: {
@@ -130,6 +132,9 @@ const fiCommon = {
     actions: 'Toiminnot',
     edit: 'Muokkaa',
     delete: 'Poista',
+    firstName: 'Etunimi',
+    lastName: 'Sukunimi',
+    role: 'Rooli',
   },
 
   groups: {
@@ -179,8 +184,28 @@ const fiCommon = {
       usersInGroup: 'Käyttäjiä tässä ryhmässä',
       availableToAdd: 'Lisättävissä',
       noUsersAvailable: 'Ei käyttäjiä lisättäväksi',
+      noUsersFound: 'Käyttäjiä ei löydy',
+      searchPlaceholder: 'Hae nimellä tai sähköpostilla…',
       addSelected_one: 'Lisää {{count}} käyttäjä',
       addSelected_other: 'Lisää {{count}} käyttäjää',
+      addUsersHeading: 'Lisää käyttäjiä ryhmään',
+      removing: 'Poistetaan…',
+      removeSelected_one: 'Poista {{count}} käyttäjä',
+      removeSelected_other: 'Poista {{count}} käyttäjää',
+      addingSelected_one: 'Lisätään {{count}} käyttäjä…',
+      addingSelected_other: 'Lisätään {{count}} käyttäjää…',
+    },
+    panel: {
+      searchMembers: 'Hae jäseniä...',
+      remove: 'Poista',
+      removeSuccess: '{{count}} käyttäjää poistettu ryhmästä',
+      removeFailed: 'Käyttäjien poistaminen epäonnistui',
+      addUser: 'Lisää käyttäjä',
+      noMembersFound: 'Jäseniä ei löydy.',
+      selectAll: 'Valitse kaikki',
+      selectGroup: 'Valitse ryhmä nähdäksesi sen jäsenet',
+      removing: 'Poistetaan…',
+      removeTitle: 'Poista valitut käyttäjät ryhmästä',
     },
   },
 
