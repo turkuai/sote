@@ -8,6 +8,8 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
   const [users, setUsers] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
   const [showAddUsers, setShowAddUsers] = useState(true);
   const [selectedUsersToAdd, setSelectedUsersToAdd] = useState([]);
   const [fetchError, setFetchError] = useState(null);
@@ -114,6 +116,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
   const handleAddUsers = async () => {
     if (selectedUsersToAdd.length === 0) return;
 
+    setIsAdding(true);
     try {
       // Add each user to the group via pivot table
       for (const userId of selectedUsersToAdd) {
@@ -138,11 +141,14 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
       if (onUserAdded) onUserAdded();
     } catch (error) {
       console.error('Error adding users:', error);
+    } finally {
+      setIsAdding(false);
     }
   };
 
   const handleRemoveSelectedUsers = async () => {
     if (selectedUsersToRemove.length === 0) return;
+    setIsRemoving(true);
     try {
       for (const userId of selectedUsersToRemove) {
         await fetch(`/api/groups/${groupId}/users/${userId}`, {
@@ -157,6 +163,8 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
       if (onUserAdded) onUserAdded();
     } catch (error) {
       console.error('Error removing users:', error);
+    } finally {
+      setIsRemoving(false);
     }
   };
 
@@ -196,13 +204,14 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
                 <Plus size={20} /> {t('groups.usersModal.addUsers')}
               </button>
               <button
-                className={`delete-selected-btn${selectedUsersToRemove.length > 0 ? 'visible' : ''}`}
+                className={`delete-selected-btn${selectedUsersToRemove.length > 0 || isRemoving ? 'visible' : ''}${isRemoving ? 'removing' : ''}`}
                 onClick={handleRemoveSelectedUsers}
+                disabled={isRemoving}
                 type="button"
                 title={t('groups.usersModal.removeUser')}
               >
                 <Trash2 size={18} />
-                Remove {selectedUsersToRemove.length}
+                {isRemoving ? `Removing…` : `Remove ${selectedUsersToRemove.length}`}
               </button>
             </div>
 
@@ -247,7 +256,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
         ) : (
           <>
             <div className="modal-body">
-              <h3>Add users to group</h3>
+              <h3>{t('groups.usersModal.addUsersHeading')}</h3>
               {fetchError && (
                 <div
                   style={{
@@ -320,8 +329,10 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
               <button className="cancel-btn" onClick={onClose}>
                 {t('grid.confirmDelete.cancel')}
               </button>
-              <button className="confirm-btn" onClick={handleAddUsers} disabled={selectedUsersToAdd.length === 0}>
-                {t('groups.usersModal.addSelected', { count: selectedUsersToAdd.length })}
+              <button className="confirm-btn" onClick={handleAddUsers} disabled={selectedUsersToAdd.length === 0 || isAdding}>
+                {isAdding
+                  ? `Adding ${selectedUsersToAdd.length} User${selectedUsersToAdd.length !== 1 ? 's' : ''}…`
+                  : `Add ${selectedUsersToAdd.length} User${selectedUsersToAdd.length !== 1 ? 's' : ''}`}
               </button>
             </div>
           </>

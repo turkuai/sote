@@ -188,6 +188,12 @@ const fiCommon = {
       searchPlaceholder: 'Hae nimellä tai sähköpostilla…',
       addSelected_one: 'Lisää {{count}} käyttäjä',
       addSelected_other: 'Lisää {{count}} käyttäjää',
+      addUsersHeading: 'Lisää käyttäjiä ryhmään',
+      removing: 'Poistetaan…',
+      removeSelected_one: 'Poista {{count}} käyttäjä',
+      removeSelected_other: 'Poista {{count}} käyttäjää',
+      addingSelected_one: 'Lisätään {{count}} käyttäjä…',
+      addingSelected_other: 'Lisätään {{count}} käyttäjää…',
     },
     panel: {
       searchMembers: 'Hae jäseniä...',
@@ -197,6 +203,9 @@ const fiCommon = {
       addUser: 'Lisää käyttäjä',
       noMembersFound: 'Jäseniä ei löydy.',
       selectAll: 'Valitse kaikki',
+      selectGroup: 'Valitse ryhmä nähdäksesi sen jäsenet',
+      removing: 'Poistetaan…',
+      removeTitle: 'Poista valitut käyttäjät ryhmästä',
     },
   },
 

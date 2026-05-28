@@ -188,6 +188,12 @@ const enCommon = {
       searchPlaceholder: 'Search by name or email…',
       addSelected_one: 'Add {{count}} User',
       addSelected_other: 'Add {{count}} Users',
+      addUsersHeading: 'Add users to group',
+      removing: 'Removing…',
+      removeSelected_one: 'Remove {{count}} User',
+      removeSelected_other: 'Remove {{count}} Users',
+      addingSelected_one: 'Adding {{count}} User…',
+      addingSelected_other: 'Adding {{count}} Users…',
     },
     panel: {
       searchMembers: 'Search members...',
@@ -197,6 +203,9 @@ const enCommon = {
       addUser: 'Add User',
       noMembersFound: 'No members found.',
       selectAll: 'Select all',
+      selectGroup: 'Select a group to see its members',
+      removing: 'Removing…',
+      removeTitle: 'Remove selected users from group',
     },
   },
 
