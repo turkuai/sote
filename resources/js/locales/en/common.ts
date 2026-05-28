@@ -32,6 +32,8 @@ const enCommon = {
     loginWithDatabaseUser: 'Login with any username/password from the users table',
     noAccount: "Don't have an account?",
     signUp: 'Sign up',
+    entraIdButton: 'Login with @edu.turku.fi',
+    entraIdSubtext: 'Login using your Microsoft account',
   },
 
   user: {
@@ -130,6 +132,9 @@ const enCommon = {
     actions: 'Actions',
     edit: 'Edit',
     delete: 'Delete',
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    role: 'Role',
   },
 
   groups: {
@@ -179,8 +184,19 @@ const enCommon = {
       usersInGroup: 'Users in this group',
       availableToAdd: 'Available to add',
       noUsersAvailable: 'No users available to add',
+      noUsersFound: 'No users found',
+      searchPlaceholder: 'Search by name or email…',
       addSelected_one: 'Add {{count}} User',
       addSelected_other: 'Add {{count}} Users',
+    },
+    panel: {
+      searchMembers: 'Search members...',
+      remove: 'Remove',
+      removeSuccess: '{{count}} user(s) removed from group',
+      removeFailed: 'Failed to remove users',
+      addUser: 'Add User',
+      noMembersFound: 'No members found.',
+      selectAll: 'Select all',
     },
   },
 

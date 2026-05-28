@@ -51,7 +51,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Create 1000 additional test users
-        for ($i = 1; $i <= 500; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             User::create([
                 'name' => "Test User $i",
                 'first_name' => "Test",
