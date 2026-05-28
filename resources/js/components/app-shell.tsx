@@ -23,7 +23,7 @@ export function AppShell({ children, variant = 'header' }: AppShellProps) {
 
     return (
         <SidebarProvider defaultOpen={isOpen} open={isOpen} onOpenChange={handleSidebarChange}>
-            {children}
+            <div className="flex h-full w-full">{children}</div>
         </SidebarProvider>
     );
 }

@@ -141,7 +141,7 @@ export default function GroupsTab({
                 </p>
               )}
               {myGroupCount !== 0 && (
-                <div style={{ height: '400px', width: '100%' }}>
+                <div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'auto' }}>
                   <ServerGrid
                     key={refreshKey}
                     columns={['name']}
@@ -159,7 +159,7 @@ export default function GroupsTab({
           </div>
 
           {/* Desktop nurse view */}
-          <div className="hide-on-mobile">
+          <div className="hide-on-mobile" style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
               <h2 style={{ margin: 0 }}>My Groups</h2>
               <button
@@ -175,6 +175,7 @@ export default function GroupsTab({
               </p>
             )}
             {myGroupCount !== 0 && (
+              <div style={{ flex: 1, overflow: 'auto', minHeight: 0 }}>
               <ServerGrid
                 key={refreshKey}
                 columns={['name']}
@@ -186,6 +187,7 @@ export default function GroupsTab({
                 getApiBase={getApiBase}
                 showNot={showNotification}
               />
+              </div>
             )}
           </div>
 
@@ -206,7 +208,7 @@ export default function GroupsTab({
                 value={inputValue}
                 onChange={handleSearchChange}
               />
-              <div style={{ height: '500px', width: '100%' }}>
+              <div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'auto' }}>
                 <ServerGrid
                   key={refreshKey}
                   columns={['name', 'access_key', 'user_count']}
@@ -247,7 +249,7 @@ export default function GroupsTab({
           </div>
 
           {/* Desktop view */}
-          <div className="hide-on-mobile">
+          <div className="hide-on-mobile" style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
             <div className="tab-header">
               <h2>Groups Management</h2>
               <div className="user-search">
@@ -286,7 +288,7 @@ export default function GroupsTab({
               />
               </div>
             </div>
-            <div style={{ position: 'relative' }}>
+            <div style={{ position: 'relative', flex: 1, overflow: 'auto', minHeight: 0 }}>
               <button
                 className="add-btn"
                 onClick={() => setShowEnrollModal(true)}

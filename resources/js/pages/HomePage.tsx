@@ -173,7 +173,7 @@ export default function HomePage() {
             </div>
           )}
 
-          <div style={{ display: activeTab === 'settings' ? 'block' : 'none' }}>
+          <div style={{ display: activeTab === 'settings' ? 'flex' : 'none', flexDirection: 'column', flex: 1, minHeight: 0, overflowY: 'auto' }}>
             <SettingsTab currentUser={currentUser} onLogout={handleLogout} />
           </div>
         </div>

@@ -88,7 +88,7 @@ export default function UsersTab({
             value={inputValue}
             onChange={handleSearchChange}
           />
-          <div style={{ height: '500px', width: '100%' }}>
+          <div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'auto' }}>
             <ServerGrid
               key={refreshKey}
               columns={['name', 'email', 'role_type']}
@@ -171,7 +171,7 @@ export default function UsersTab({
       </div>
 
       {/* Desktop view */}
-      <div className="hide-on-mobile">
+      <div className="hide-on-mobile" style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
         <div className="tab-header">
           <h2>Users Management</h2>
           <div className="user-search">
@@ -210,6 +210,7 @@ export default function UsersTab({
           />
           </div>
         </div>
+        <div style={{ flex: 1, overflow: 'auto', minHeight: 0 }}>
         <ServerGrid
           key={refreshKey}
           columns={['name', 'email', 'role_type']}
@@ -284,6 +285,7 @@ export default function UsersTab({
             return payloadOut;
           }}
         />
+        </div>
       </div>
 
     </>

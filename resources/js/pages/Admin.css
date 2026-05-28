@@ -1,9 +1,10 @@
 /* Admin Page Wrapper */
 .admin-page {
-  min-height: 100vh;
+  height: 100vh;
   background-color: #f3f4f6;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 /* Header */
@@ -322,9 +323,14 @@
 .admin-content-card {
   background-color: white;
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
 }
 
 .admin-content-card h2 {
@@ -439,9 +445,12 @@
 /* Right content scrollable area */
 .admin-content-area {
   flex: 1;
-  overflow-y: auto;
+  overflow: hidden;
   padding: 1.5rem;
   background: #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 /* Tab section header: title on left, search on right */
@@ -710,9 +719,10 @@
 /* Settings Panel - Desktop Only */
 @media (min-width: 768px) {
   .settings-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
   }
 
   .settings-header {
@@ -734,14 +744,16 @@
 
   .settings-layout {
     display: flex;
-    gap: 3rem;
+    gap: 1.5rem;
     align-items: flex-start;
+    width: 100%;
   }
 
   .settings-sidebar {
-    min-width: 200px;
+    min-width: 120px;
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
   }
 
   .settings-nav-item {
@@ -770,7 +782,7 @@
 
   .settings-content {
     flex: 1;
-    max-width: 700px;
+    max-width: none;
   }
 
   .settings-profile {
