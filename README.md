@@ -84,7 +84,7 @@ If you get constraint errors or unexpected behavior after pulling new changes, y
 ```bash
 php artisan migrate:fresh --seed
 ```
-> ⚠️ The seeding will add 500 users for testing purposes. This command may take a while or you might run into performance issues. ⚠️
+> ⚠️ The seeding will add 100 users for testing purposes. This command may take a while or you might run into performance issues. ⚠️
 
 > ⚠️ This will **delete all existing data** and reseed the database from scratch.
 
