@@ -190,6 +190,15 @@
   background-color: #e5e7eb;
 }
 
+.delete-selected-btn.removing,
+.delete-selected-btn.removing:disabled,
+.delete-selected-btn.removing:hover {
+  background-color: #dc2626;
+  color: white;
+  opacity: 0.75;
+  cursor: wait;
+}
+
 .remove-user-btn {
   background: none;
   border: none;
