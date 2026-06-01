@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Crown, Eye, EyeOff, Trash2 } from 'lucide-react';
-import { ServerGrid as ServerGridBase } from 'tai-grid';
+import { ServerGrid as ServerGridBase, Grid } from 'tai-grid';
 const ServerGrid = ServerGridBase as React.ComponentType<any>;
 import GroupRegistrationForm from '../components/GroupRegistrationForm';
 
@@ -83,10 +83,7 @@ export default function GroupsTab({
   const [panelGroup, setPanelGroup] = useState<Record<string, unknown> | null>(null);
   const [panelUsers, setPanelUsers] = useState<Record<string, unknown>[]>([]);
   const [panelLoading, setPanelLoading] = useState(false);
-  const [isPanelRemoving, setIsPanelRemoving] = useState(false);
   const [panelSearch, setPanelSearch] = useState('');
-  const [selectedPanelUserIds, setSelectedPanelUserIds] = useState<number[]>([]);
-  const lastPanelClickedIndex = useRef<number | null>(null);
   const debounceRef = useRef(null);
   const { showNotification } = useNotification();
 
@@ -130,8 +127,6 @@ export default function GroupsTab({
     setPanelGroup(group);
     setPanelUsers([]);
     setPanelSearch('');
-    setSelectedPanelUserIds([]);
-    lastPanelClickedIndex.current = null;
     setPanelLoading(true);
     fetch(`${getApiBase()}/api/groups/${group.id}`, { credentials: 'include' })
       .then(r => r.json())
@@ -143,28 +138,23 @@ export default function GroupsTab({
       .finally(() => setPanelLoading(false));
   };
 
-  const handleRemoveSelectedPanelUsers = async () => {
-    if (!panelGroup || selectedPanelUserIds.length === 0) return;
-    const toRemove = [...selectedPanelUserIds];
-    setIsPanelRemoving(true);
-    try {
-      for (const userId of toRemove) {
-        await fetch(`${getApiBase()}/api/groups/${panelGroup.id}/users/${userId}`, {
-          method: 'DELETE',
-          credentials: 'include',
-          headers: { 'X-XSRF-TOKEN': decodeURIComponent(document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1] ?? '') },
-        });
-      }
-      setPanelUsers(prev => prev.filter(u => !toRemove.includes(u.id as number)));
-      setSelectedPanelUserIds([]);
-      lastPanelClickedIndex.current = null;
-      setRefreshKey(prev => prev + 1);
-      showNotification(`${toRemove.length} user(s) removed from group`, 'success');
-    } catch {
-      showNotification('Failed to remove users', 'error');
-    } finally {
-      setIsPanelRemoving(false);
-    }
+  const handleRemoveUserFromGroup = (user: Record<string, unknown>) => {
+    if (!panelGroup) return;
+    fetch(`${getApiBase()}/api/groups/${panelGroup.id}/users/${user.id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: { 'X-XSRF-TOKEN': decodeURIComponent(document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1] ?? '') },
+    })
+      .then(r => r.json())
+      .then(res => {
+        if (res?.success === false) {
+          showNotification(res?.message ?? 'Failed to remove user', 'error');
+        } else {
+          showNotification('User removed from group', 'success');
+          setPanelUsers(prev => prev.filter(u => u.id !== user.id));
+        }
+      })
+      .catch(() => showNotification('Failed to remove user', 'error'));
   };
 
   const filteredPanelUsers = panelSearch.trim()
@@ -257,8 +247,8 @@ export default function GroupsTab({
                 )}
                 {panelGroup && (
                   <>
-                    <div className="tab-header" style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'white' }}>
-                      <h2>{String(panelGroup.name)}</h2>
+                    <div className="tab-header">
+                      <h2>{String(panelGroup.name)} — Members</h2>
                       <div className="user-search">
                         <span className="search-icon">
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -271,19 +261,9 @@ export default function GroupsTab({
                           autoComplete="off"
                           placeholder="Search members..."
                           value={panelSearch}
-                          onChange={(e) => { setPanelSearch(e.target.value); lastPanelClickedIndex.current = null; }}
+                          onChange={(e) => setPanelSearch(e.target.value)}
                         />
                       </div>
-                      <button
-                        className={`delete-selected-btn visible${isPanelRemoving ? ' removing' : ''}`}
-                        onClick={handleRemoveSelectedPanelUsers}
-                        type="button"
-                        disabled={selectedPanelUserIds.length === 0 || isPanelRemoving}
-                        title="Remove selected users from group"
-                      >
-                        <Trash2 size={16} />
-                        {isPanelRemoving ? `Removing…` : `Remove${selectedPanelUserIds.length > 0 ? ` ${selectedPanelUserIds.length}` : ''}`}
-                      </button>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                       <button className="server-grid-add-button" title="Add User" onClick={() => handleAddUsersClick(panelGroup)}>
@@ -295,81 +275,23 @@ export default function GroupsTab({
                       <p style={{ color: '#6b7280', fontStyle: 'italic' }}>No members found.</p>
                     )}
                     {!panelLoading && filteredPanelUsers.length > 0 && (
-                      <div className="grid-wrapper" style={{ width: '100%', overflowX: 'auto' }}>
-                        <table className="data-grid-table">
-                          <thead>
-                            <tr>
-                              <th>First Name</th>
-                              <th>Last Name</th>
-                              <th>Email</th>
-                              <th>Role</th>
-                              <th style={{ width: '40px' }}>
-                                <input
-                                  type="checkbox"
-                                  className="user-list-checkbox"
-                                  checked={filteredPanelUsers.length > 0 && filteredPanelUsers.every(u => selectedPanelUserIds.includes(u.id as number))}
-                                  onChange={(e) => {
-                                    if (e.target.checked) {
-                                      setSelectedPanelUserIds(filteredPanelUsers.map(u => u.id as number));
-                                    } else {
-                                      setSelectedPanelUserIds([]);
-                                      lastPanelClickedIndex.current = null;
-                                    }
-                                  }}
-                                  title="Select all"
-                                />
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {filteredPanelUsers.map((user, index) => {
-                              const checked = selectedPanelUserIds.includes(user.id as number);
-                              const handleClick = (e: React.MouseEvent) => {
-                                if (e.shiftKey && lastPanelClickedIndex.current !== null) {
-                                  e.preventDefault();
-                                  const from = Math.min(lastPanelClickedIndex.current, index);
-                                  const to = Math.max(lastPanelClickedIndex.current, index);
-                                  const rangeIds = filteredPanelUsers.slice(from, to + 1).map(u => u.id as number);
-                                  const allChecked = rangeIds.every(id => selectedPanelUserIds.includes(id));
-                                  setSelectedPanelUserIds(prev =>
-                                    allChecked
-                                      ? prev.filter(id => !rangeIds.includes(id))
-                                      : [...new Set([...prev, ...rangeIds])]
-                                  );
-                                } else {
-                                  lastPanelClickedIndex.current = index;
-                                  setSelectedPanelUserIds(prev =>
-                                    checked
-                                      ? prev.filter(id => id !== (user.id as number))
-                                      : [...prev, user.id as number]
-                                  );
-                                }
-                              };
-                              return (
-                                <tr
-                                  key={String(user.id)}
-                                  onClick={handleClick}
-                                  style={{ cursor: 'pointer', backgroundColor: checked ? '#eff6ff' : undefined, userSelect: 'none' }}
-                                >
-                                  <td>{String(user.first_name ?? '')}</td>
-                                  <td>{String(user.last_name ?? '')}</td>
-                                  <td>{String(user.email ?? '')}</td>
-                                  <td>{String(user.role_type ?? '')}</td>
-                                  <td>
-                                    <input
-                                      type="checkbox"
-                                      className="user-list-checkbox"
-                                      checked={checked}
-                                      onChange={() => {}}
-                                      tabIndex={-1}
-                                    />
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                          </tbody>
-                        </table>
-                      </div>
+                      <Grid
+                        columns={['first_name', 'last_name', 'email', 'role_type']}
+                        data={filteredPanelUsers}
+                        allowEditing={false}
+                        allowDelete={false}
+                        pageSize={10}
+                        onEditRow={() => {}}
+                        onDeleteRow={() => {}}
+                        rowActions={[
+                          {
+                            icon: <Trash2 size={16} />,
+                            tooltip: 'Remove from group',
+                            onClick: handleRemoveUserFromGroup,
+                            className: 'danger',
+                          },
+                        ]}
+                      />
                     )}
                   </>
                 )}
@@ -505,8 +427,8 @@ export default function GroupsTab({
                 )}
                 {panelGroup && (
                   <>
-                    <div className="tab-header" style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'white' }}>
-                      <h2>{String(panelGroup.name)}</h2>
+                    <div className="tab-header">
+                      <h2>{String(panelGroup.name)} — Members</h2>
                       <div className="user-search">
                         <span className="search-icon">
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -519,19 +441,9 @@ export default function GroupsTab({
                           autoComplete="off"
                           placeholder="Search members..."
                           value={panelSearch}
-                          onChange={(e) => { setPanelSearch(e.target.value); lastPanelClickedIndex.current = null; }}
+                          onChange={(e) => setPanelSearch(e.target.value)}
                         />
                       </div>
-                      <button
-                        className={`delete-selected-btn visible${isPanelRemoving ? ' removing' : ''}`}
-                        onClick={handleRemoveSelectedPanelUsers}
-                        type="button"
-                        disabled={selectedPanelUserIds.length === 0 || isPanelRemoving}
-                        title="Remove selected users from group"
-                      >
-                        <Trash2 size={16} />
-                        {isPanelRemoving ? `Removing…` : `Remove${selectedPanelUserIds.length > 0 ? ` ${selectedPanelUserIds.length}` : ''}`}
-                      </button>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                       <button className="server-grid-add-button" title="Add User" onClick={() => handleAddUsersClick(panelGroup)}>
@@ -543,81 +455,23 @@ export default function GroupsTab({
                       <p style={{ color: '#6b7280', fontStyle: 'italic' }}>No members found.</p>
                     )}
                     {!panelLoading && filteredPanelUsers.length > 0 && (
-                      <div className="grid-wrapper" style={{ width: '100%', overflowX: 'auto' }}>
-                        <table className="data-grid-table">
-                          <thead>
-                            <tr>
-                              <th>First Name</th>
-                              <th>Last Name</th>
-                              <th>Email</th>
-                              <th>Role</th>
-                              <th style={{ width: '40px' }}>
-                                <input
-                                  type="checkbox"
-                                  className="user-list-checkbox"
-                                  checked={filteredPanelUsers.length > 0 && filteredPanelUsers.every(u => selectedPanelUserIds.includes(u.id as number))}
-                                  onChange={(e) => {
-                                    if (e.target.checked) {
-                                      setSelectedPanelUserIds(filteredPanelUsers.map(u => u.id as number));
-                                    } else {
-                                      setSelectedPanelUserIds([]);
-                                      lastPanelClickedIndex.current = null;
-                                    }
-                                  }}
-                                  title="Select all"
-                                />
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {filteredPanelUsers.map((user, index) => {
-                              const checked = selectedPanelUserIds.includes(user.id as number);
-                              const handleClick = (e: React.MouseEvent) => {
-                                if (e.shiftKey && lastPanelClickedIndex.current !== null) {
-                                  e.preventDefault();
-                                  const from = Math.min(lastPanelClickedIndex.current, index);
-                                  const to = Math.max(lastPanelClickedIndex.current, index);
-                                  const rangeIds = filteredPanelUsers.slice(from, to + 1).map(u => u.id as number);
-                                  const allChecked = rangeIds.every(id => selectedPanelUserIds.includes(id));
-                                  setSelectedPanelUserIds(prev =>
-                                    allChecked
-                                      ? prev.filter(id => !rangeIds.includes(id))
-                                      : [...new Set([...prev, ...rangeIds])]
-                                  );
-                                } else {
-                                  lastPanelClickedIndex.current = index;
-                                  setSelectedPanelUserIds(prev =>
-                                    checked
-                                      ? prev.filter(id => id !== (user.id as number))
-                                      : [...prev, user.id as number]
-                                  );
-                                }
-                              };
-                              return (
-                                <tr
-                                  key={String(user.id)}
-                                  onClick={handleClick}
-                                  style={{ cursor: 'pointer', backgroundColor: checked ? '#eff6ff' : undefined, userSelect: 'none' }}
-                                >
-                                  <td>{String(user.first_name ?? '')}</td>
-                                  <td>{String(user.last_name ?? '')}</td>
-                                  <td>{String(user.email ?? '')}</td>
-                                  <td>{String(user.role_type ?? '')}</td>
-                                  <td>
-                                    <input
-                                      type="checkbox"
-                                      className="user-list-checkbox"
-                                      checked={checked}
-                                      onChange={() => {}}
-                                      tabIndex={-1}
-                                    />
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                          </tbody>
-                        </table>
-                      </div>
+                      <Grid
+                        columns={['first_name', 'last_name', 'email', 'role_type']}
+                        data={filteredPanelUsers}
+                        allowEditing={false}
+                        allowDelete={false}
+                        pageSize={10}
+                        onEditRow={() => {}}
+                        onDeleteRow={() => {}}
+                        rowActions={[
+                          {
+                            icon: <Trash2 size={16} />,
+                            tooltip: 'Remove from group',
+                            onClick: handleRemoveUserFromGroup,
+                            className: 'danger',
+                          },
+                        ]}
+                      />
                     )}
                   </>
                 )}
