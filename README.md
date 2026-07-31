@@ -122,6 +122,11 @@ PUT    /api/groups/{id}        → Update group
 DELETE /api/groups/{id}        → Delete group
 ```
 
+### **Patients**
+```
+GET    /api/patients           → List all patients
+```
+
 ### **Example API Request:**
 ```bash
 curl http://localhost:8000/api/users

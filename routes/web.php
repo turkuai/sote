@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -59,6 +60,9 @@ Route::prefix('api')->group(function () {
         Route::get('/users/{id}/permissions', [\App\Http\Controllers\PermissionExampleController::class, 'getUserPermissions']);
 
         Route::post('/logout', [LoginController::class, 'logout']);
+
+        // Patients API
+        Route::get("/patients", [PatientController::class, "getAllPatients"]);
     });
 });
 
