@@ -8,6 +8,7 @@ use Exception;
 
 class PatientController extends Controller {
 
+    //Get all the patients
     public function index() {
        try {
         $patients = Patient::all();
@@ -22,5 +23,16 @@ class PatientController extends Controller {
                 500,
             );
        }
+    }
+
+    //Get specific patient via id
+    public function show($id) {
+        $patient = Patient::find($id);
+
+        if(!$patient) {
+            return ApiResponse::error("Patient not found");
+        }
+
+        return ApiResponse::success($patient, "Patients Retrieved succesfully");
     }
 }
