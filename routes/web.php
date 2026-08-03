@@ -62,7 +62,7 @@ Route::prefix('api')->group(function () {
         Route::post('/logout', [LoginController::class, 'logout']);
 
         // Patients API
-        Route::get("/patients", [PatientController::class, "getAllPatients"]);
+        Route::get("/patients", [PatientController::class, "index"]);
     });
 });
 

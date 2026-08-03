@@ -8,7 +8,7 @@ use Exception;
 
 class PatientController extends Controller {
 
-    public function getAllPatients() {
+    public function index() {
        try {
         $patients = Patient::all();
 
