@@ -76,7 +76,7 @@ export default function HomePage() {
       <Header
         currentUser={currentUser}
         onLogout={handleLogout}
-        onSettingsClick={() => handleTabClick('settings')}
+        onSettingsClick={() => {handleTabClick('settings')}}
         currentPage="dashboard"
         onNavigateDashboard={handleNavigateDashboard}
         isMobile={isMobile}

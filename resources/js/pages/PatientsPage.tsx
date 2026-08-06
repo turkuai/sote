@@ -19,8 +19,8 @@ export default function PatientsPage() {
     navigate('/home', { replace: true });
   };
 
-  const handleTabClick = (tab : string) => {
-    navigate(`/home/${tab}`);
+  const handleHomeClick = () => {
+    navigate(`/home/`);
   }
 
   return (
@@ -31,7 +31,7 @@ export default function PatientsPage() {
         currentPage="patients"
         onNavigateDashboard={handleNavigateDashboard}
         isMobile={isMobile}
-        onSettingsClick={() => handleTabClick("settings")}
+        onSettingsClick={() => handleHomeClick()}
       />
 
       <div className="admin-content" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
