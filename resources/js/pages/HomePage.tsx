@@ -47,6 +47,12 @@ export default function HomePage() {
   });
 
   useEffect(() => {
+    if(urlTab) {
+      setActiveTab(urlTab);
+    }
+  }, [urlTab]);
+
+  useEffect(() => {
     if (activeTab !== 'settings' && passwordStatus) {
       clearPasswordStatus();
     }
