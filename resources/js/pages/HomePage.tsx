@@ -18,6 +18,20 @@ import { TabConfig } from '../utils/tabConfig';
 export default function HomePage() {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
+  
+  /*
+ * Retrieves the dynamic "tab" parameter defined in the "/home/:tab" route.
+ * useParams<{ tab: string }>() tells TypeScript that the expected route
+ * parameter is named "tab" and its value is a string.
+ *
+ * The destructuring syntax { tab: urlTab } extracts the "tab" property
+ * returned by useParams() and renames the local variable to "urlTab".
+ *
+ * Example:
+ * URL: /home/settings
+ * useParams() → { tab: "settings" }
+ * urlTab → "settings"
+ */
   const { tab: urlTab } = useParams<{ tab: string }>();
 
   const [userQuery, setUserQuery] = useState('');
