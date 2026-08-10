@@ -1,4 +1,4 @@
-# sote
+# sote app
 
 ## Requirements
 
