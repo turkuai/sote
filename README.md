@@ -1,4 +1,4 @@
-# sote app test
+# sote app testing
 
 ## Requirements
 
