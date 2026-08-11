@@ -20,18 +20,18 @@ export default function HomePage() {
   const navigate = useNavigate();
   
   /*
- * Retrieves the dynamic "tab" parameter defined in the "/home/:tab" route.
- * useParams<{ tab: string }>() tells TypeScript that the expected route
- * parameter is named "tab" and its value is a string.
- *
- * The destructuring syntax { tab: urlTab } extracts the "tab" property
- * returned by useParams() and renames the local variable to "urlTab".
- *
- * Example:
- * URL: /home/settings
- * useParams() → { tab: "settings" }
- * urlTab → "settings"
- */
+    * Retrieves the dynamic "tab" parameter defined in the "/home/:tab" route.
+    * useParams<{ tab: string }>() tells TypeScript that the expected route
+    * parameter is named "tab" and its value is a string.
+    *
+    * The destructuring syntax { tab: urlTab } extracts the "tab" property
+    * returned by useParams() and renames the local variable to "urlTab".
+    *
+    * Example:
+    * URL: /home/settings
+    * useParams() → { tab: "settings" }
+    * urlTab → "settings"
+  */
   const { tab: urlTab } = useParams<{ tab: string }>();
 
   const [userQuery, setUserQuery] = useState('');
@@ -61,7 +61,7 @@ export default function HomePage() {
   });
 
   useEffect(() => {
-    if(urlTab) {
+    if (urlTab) {
       setActiveTab(urlTab);
     }
   }, [urlTab]);
@@ -96,7 +96,7 @@ export default function HomePage() {
       <Header
         currentUser={currentUser}
         onLogout={handleLogout}
-        onSettingsClick={() => {handleTabClick('settings')}}
+        onSettingsClick={() => handleTabClick('settings')}
         currentPage="dashboard"
         onNavigateDashboard={handleNavigateDashboard}
         isMobile={isMobile}
