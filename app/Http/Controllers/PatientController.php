@@ -11,8 +11,18 @@ class PatientController extends Controller
   //Get all the patients
   public function index()
   {
+    /*
+      * Match the number of items displayed per page in ServerGrid.
+      * This value must stay synchronized with ServerGrid's pageSize. Otherwise,
+      * the frontend pagination may not match the number of records returned by the backend.
+      * In the future, we should consider passing pageSize from the frontend as a query
+      * parameter. This would require modifying the tai-grid package directly.
+      * ServerGrid already sends the current page as "?page=...", which Laravel's
+      * paginate() automatically recognizes and uses to retrieve the correct page.
+    */
+    $pageSize = 10;
     try {
-      $patients = Patient::all();
+      $patients = Patient::paginate($pageSize);
 
       return ApiResponse::success(
         $patients,
