@@ -1,1 +1,16 @@
-// settings.json
+//Settings
+
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+
+  "[php]": {
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.wordWrapColumn": 150
+  }
+}
