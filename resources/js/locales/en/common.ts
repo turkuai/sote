@@ -2,8 +2,8 @@ const enCommon = {
     common: {
         language: 'Language',
         english: 'English',
-        finnish: 'Finnish',
-        swedish: 'Swedish',
+        finnish: 'Suomi',
+        swedish: 'Svenska',
         loading: 'Loading...',
         navigation: 'Navigation',
         close: 'Close',

@@ -1,8 +1,9 @@
 const fiCommon = {
   common: {
     language: 'Kieli',
-    english: 'Englanti',
+    english: 'English',
     finnish: 'Suomi',
+    Swedish: 'Svenska',
     loading: 'Ladataan...',
     navigation: 'Navigointi',
     close: 'Sulje',
