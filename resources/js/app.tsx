@@ -1,29 +1,32 @@
-import '../css/app.css';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import '../css/app.css';
 import { AuthProvider, useAuth } from './components/AuthContext';
 import { NotificationProvider } from './components/NotificationContext';
-import ProtectedRoute from "./components/ProtectedRoute";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import HomePage from "./pages/HomePage";
-import PatientsPage from "./pages/PatientsPage";
-import VerifyEmail from "./pages/VerifyEmail";
-import WaitingApproval from "./pages/WaitingApproval";
+import ProtectedRoute from './components/ProtectedRoute';
+import './i18n';
+import HomePage from './pages/HomePage';
+import Login from './pages/Login';
+import PatientsPage from './pages/PatientsPage';
+import Register from './pages/Register';
+import VerifyEmail from './pages/VerifyEmail';
+import WaitingApproval from './pages/WaitingApproval';
 
 function App() {
   const { isAuthenticated, loading, currentUser } = useAuth();
 
   if (loading) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        fontSize: '18px'
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+          fontSize: '18px',
+        }}
+      >
         Loading...
       </div>
     );
@@ -33,20 +36,21 @@ function App() {
     <Routes>
       <Route
         path="/"
-        element={isAuthenticated ? (!currentUser?.role_type ? <Navigate to="/waiting-approval" replace /> : <Navigate to="/home" replace />) : <Navigate to="/login" replace />}
+        element={
+          isAuthenticated ? (
+            !currentUser?.role_type ? (
+              <Navigate to="/waiting-approval" replace />
+            ) : (
+              <Navigate to="/home" replace />
+            )
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
       />
-      <Route
-        path="/login"
-        element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />}
-      />
-      <Route
-        path="/register"
-        element={isAuthenticated ? <Navigate to="/home" replace /> : <Register />}
-      />
-      <Route
-        path="/waiting-approval"
-        element={isAuthenticated && !currentUser?.role_type ? <WaitingApproval /> : <Navigate to="/" replace />}
-      />
+      <Route path="/login" element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} />
+      <Route path="/register" element={isAuthenticated ? <Navigate to="/home" replace /> : <Register />} />
+      <Route path="/waiting-approval" element={isAuthenticated && !currentUser?.role_type ? <WaitingApproval /> : <Navigate to="/" replace />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
 
       <Route element={<ProtectedRoute />}>
@@ -72,7 +76,7 @@ if (container) {
           </NotificationProvider>
         </AuthProvider>
       </BrowserRouter>
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 }
 
