@@ -1,0 +1,19 @@
+<<<<<<< HEAD
+=======
+//Settings
+
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+
+  "[php]": {
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.wordWrapColumn": 150
+  }
+}
+>>>>>>> e1dbeddac511b8f30ae56ee433e658f7a81e40b0
