@@ -2,8 +2,7 @@
 
 namespace App\Libraries;
 
-class ApiResponse
-{
+class ApiResponse {
     /**
      * Return a successful response
      *
@@ -12,14 +11,14 @@ class ApiResponse
      * @param int $statusCode
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function success($data = null, $message = 'Success', $statusCode = 200)
-    {
+    public static function success($data = null, $message = 'Success', $statusCode = 200) {
         return response()->json([
             'success' => true,
             'data' => $data,
             'message' => $message,
         ], $statusCode);
     }
+
 
     /**
      * Return an error response
@@ -28,8 +27,7 @@ class ApiResponse
      * @param int $statusCode
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function error($message = 'Error', $statusCode = 400)
-    {
+    public static function error($message = 'Error', $statusCode = 400) {
         return response()->json([
             'success' => false,
             'message' => $message,
@@ -42,8 +40,7 @@ class ApiResponse
      * @param mixed $errors
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function validationError($errors)
-    {
+    public static function validationError($errors) {
         return response()->json([
             'success' => false,
             'message' => 'Validation failed',
@@ -57,8 +54,7 @@ class ApiResponse
      * @param string $message
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function notFound($message = 'Resource not found')
-    {
+    public static function notFound($message = 'Resource not found') {
         return response()->json([
             'success' => false,
             'message' => $message,
@@ -72,8 +68,7 @@ class ApiResponse
      * @param string $message
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function paginated($data, $message = 'Success')
-    {
+    public static function paginated($data, $message = 'Success') {
         return response()->json([
             'success' => true,
             'data' => $data->items(),

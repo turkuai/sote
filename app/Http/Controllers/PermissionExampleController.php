@@ -6,15 +6,13 @@ use App\Libraries\ApiResponse;
 use App\Libraries\Permission;
 use App\Models\User;
 
-class PermissionExampleController extends Controller
-{
+class PermissionExampleController extends Controller {
     /**
      * Get all available permissions
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getPermissions()
-    {
+    public function getPermissions() {
         return ApiResponse::success(
             Permission::all(),
             'Available permissions retrieved successfully'
@@ -27,8 +25,7 @@ class PermissionExampleController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getUserPermissions($id)
-    {
+    public function getUserPermissions($id) {
         $user = User::find($id);
 
         if (!$user) {

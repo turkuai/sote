@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
-{
+class User extends Authenticatable {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -42,8 +41,7 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
+    protected function casts(): array {
         return [
             'email_verified_at' => 'datetime',
         ];
@@ -52,24 +50,21 @@ class User extends Authenticatable
     /**
      * Get all groups this user belongs to
      */
-    public function groups()
-    {
+    public function groups() {
         return $this->belongsToMany(Group::class, 'user_groups');
     }
 
     /**
      * Get the formatted role name
      */
-    public function getRoleNameAttribute()
-    {
+    public function getRoleNameAttribute() {
         return ucfirst($this->role_type ?? 'nurse');
     }
 
     /**
      * Check if user has a specific role
      */
-    public function isRole($roleType)
-    {
+    public function isRole($roleType) {
         return $this->role_type === $roleType;
     }
 }

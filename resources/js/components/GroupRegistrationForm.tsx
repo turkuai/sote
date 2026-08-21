@@ -1,6 +1,9 @@
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
+<<<<<<< HEAD
 import { useTranslation } from 'react-i18next';
+=======
+>>>>>>> 6419687 (Every file autoformatted)
 
 interface Props {
   onSuccess: () => void;
@@ -47,9 +50,13 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
   return (
     <form onSubmit={handleSubmit} autoComplete="off" style={{ marginTop: '1.5rem', width: '100%' }}>
       <div style={{ marginBottom: '1rem' }}>
+<<<<<<< HEAD
         <label style={{ display: 'block', marginBottom: '0.375rem', fontWeight: 500, fontSize: '0.875rem', color: '#374151' }}>
           {t('groups.registration.groupName')}
         </label>
+=======
+        <label style={{ display: 'block', marginBottom: '0.375rem', fontWeight: 500, fontSize: '0.875rem', color: '#374151' }}>Group Name</label>
+>>>>>>> 6419687 (Every file autoformatted)
         <input
           type="text"
           autoComplete="nope"
@@ -71,9 +78,13 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
+<<<<<<< HEAD
         <label style={{ display: 'block', marginBottom: '0.375rem', fontWeight: 500, fontSize: '0.875rem', color: '#374151' }}>
           {t('groups.registration.secretKey')}
         </label>
+=======
+        <label style={{ display: 'block', marginBottom: '0.375rem', fontWeight: 500, fontSize: '0.875rem', color: '#374151' }}>Secret Key</label>
+>>>>>>> 6419687 (Every file autoformatted)
         <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
           <input
             type={showKey ? 'text' : 'password'}
@@ -107,7 +118,11 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
               alignItems: 'center',
               padding: 0,
             }}
+<<<<<<< HEAD
             title={showKey ? t('groups.hideKey') : t('groups.showKey')}
+=======
+            title={showKey ? 'Hide key' : 'Show key'}
+>>>>>>> 6419687 (Every file autoformatted)
           >
             {showKey ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>

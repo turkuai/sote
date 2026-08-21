@@ -25,7 +25,7 @@ Route::middleware('guest')->group(function () {
     // Microsoft Entra ID authentication routes
     Route::get('entra-id', [EntraIdAuthController::class, 'initiateLogin'])
         ->name('entra-id.initiate');
-    
+
     Route::get('entra-id/callback', [EntraIdAuthController::class, 'handleCallback'])
         ->name('entra-id.callback');
 

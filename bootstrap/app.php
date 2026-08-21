@@ -8,8 +8,8 @@ use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        commands: __DIR__.'/../routes/console.php',
+        web: __DIR__ . '/../routes/web.php',
+        commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
@@ -17,12 +17,12 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
-        
+
         // Register custom middleware aliases
         $middleware->alias([
             'checkRole' => \App\Http\Middleware\CheckRole::class,
         ]);
-        
+
         // Exclude CSRF for all API routes (stateless API)
         $middleware->validateCsrfTokens(except: [
             'api/*',

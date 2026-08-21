@@ -1,5 +1,8 @@
 import { useRef, useState } from 'react';
+<<<<<<< HEAD
 import { useTranslation } from 'react-i18next';
+=======
+>>>>>>> 6419687 (Every file autoformatted)
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
 import { useNotification } from '../components/NotificationContext';
@@ -75,7 +78,11 @@ export default function WaitingListTab({ currentUser }) {
       <div className="tab-header">
         <h2>{t('waitingList.title')}</h2>
       </div>
+<<<<<<< HEAD
       <p style={{ color: '#666', marginBottom: '20px' }}>{t('waitingList.description')}</p>
+=======
+      <p style={{ color: '#666', marginBottom: '20px' }}>Users pending approval. Click "Accept" to approve and assign as Nurse.</p>
+>>>>>>> 6419687 (Every file autoformatted)
 
       <div style={{ height: '500px', width: '100%' }}>
         <ServerGrid

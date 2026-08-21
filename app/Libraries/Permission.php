@@ -2,8 +2,7 @@
 
 namespace App\Libraries;
 
-class Permission
-{
+class Permission {
     // Permission bits
     const CREATE = 1;     // 0001
     const READ = 2;       // 0010
@@ -21,8 +20,7 @@ class Permission
      * @param int $permission
      * @return bool
      */
-    public static function has($permissions, $permission)
-    {
+    public static function has($permissions, $permission) {
         return ($permissions & $permission) === $permission;
     }
 
@@ -33,8 +31,7 @@ class Permission
      * @param int $permission
      * @return int
      */
-    public static function grant($permissions, $permission)
-    {
+    public static function grant($permissions, $permission) {
         return $permissions | $permission;
     }
 
@@ -45,8 +42,7 @@ class Permission
      * @param int $permission
      * @return int
      */
-    public static function revoke($permissions, $permission)
-    {
+    public static function revoke($permissions, $permission) {
         return $permissions & ~$permission;
     }
 
@@ -55,8 +51,7 @@ class Permission
      *
      * @return array
      */
-    public static function all()
-    {
+    public static function all() {
         return [
             'CREATE' => self::CREATE,
             'READ' => self::READ,
@@ -75,8 +70,7 @@ class Permission
      * @param int $permissions
      * @return array
      */
-    public static function getPermissions($permissions)
-    {
+    public static function getPermissions($permissions) {
         $result = [];
 
         if (self::has($permissions, self::CREATE)) {

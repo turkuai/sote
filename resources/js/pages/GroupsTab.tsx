@@ -1,4 +1,5 @@
 import { Crown, Eye, EyeOff, Trash2 } from 'lucide-react';
+<<<<<<< HEAD
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ServerGrid as ServerGridBase } from 'tai-grid';
@@ -9,6 +10,11 @@ import MobileSearchToggle from '../components/MobileSearchToggle';
 import { useNotification } from '../components/NotificationContext';
 import { getApiBase } from '../config';
 import './Admin.css';
+=======
+import React, { useEffect, useRef, useState } from 'react';
+import { ServerGrid as ServerGridBase } from 'tai-grid';
+import GroupRegistrationForm from '../components/GroupRegistrationForm';
+>>>>>>> 6419687 (Every file autoformatted)
 const ServerGrid = ServerGridBase as React.ComponentType<any>;
 
 function GroupNameCell({ value, data }: { value: unknown; data: Record<string, unknown> }) {
@@ -59,6 +65,16 @@ function AccessKeyCell({ value }: { value: unknown }) {
   );
 }
 
+<<<<<<< HEAD
+=======
+import 'tai-grid/style.css';
+import GroupUsersModal from '../components/GroupUsersModal';
+import MobileSearchToggle from '../components/MobileSearchToggle';
+import { useNotification } from '../components/NotificationContext';
+import { getApiBase } from '../config';
+import './Admin.css';
+
+>>>>>>> 6419687 (Every file autoformatted)
 const SEARCH_DEBOUNCE_MS = 300;
 
 /**
@@ -72,7 +88,10 @@ const SEARCH_DEBOUNCE_MS = 300;
  * - onQueryChange: Callback function for search query changes
  */
 export default function GroupsTab({ currentUser, query, onQueryChange }) {
+<<<<<<< HEAD
   const { t } = useTranslation();
+=======
+>>>>>>> 6419687 (Every file autoformatted)
   const [refreshKey, setRefreshKey] = useState(0);
   const [inputValue, setInputValue] = useState(query || '');
   const [selectedGroup, setSelectedGroup] = useState(null);
@@ -187,7 +206,11 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
       setSelectedPanelUserIds([]);
       lastPanelClickedIndex.current = null;
       setRefreshKey((prev) => prev + 1);
+<<<<<<< HEAD
       showNotification(t('groups.panel.removeSuccess', { count: toRemove.length }), 'success');
+=======
+      showNotification(`${toRemove.length} user(s) removed from group`, 'success');
+>>>>>>> 6419687 (Every file autoformatted)
     } catch {
       showNotification(t('groups.panel.removeFailed'), 'error');
     } finally {
@@ -224,6 +247,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
           <div className="mobile-tab-content hide-on-desktop">
             <div className="mobile-content-section">
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+<<<<<<< HEAD
                 <h2 style={{ margin: 0 }}>{t('groups.noGroupsYet')}</h2>
                 <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
                   {t('groups.autoEnroll')}
@@ -231,6 +255,15 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
               </div>
               {myGroupCount === 0 && (
                 <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '2rem 0' }}>{t('groups.noGroupsYet')}</p>
+=======
+                <h2 style={{ margin: 0 }}>My Groups</h2>
+                <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
+                  Enroll
+                </button>
+              </div>
+              {myGroupCount === 0 && (
+                <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '2rem 0' }}>You don't belong to any group, yet...</p>
+>>>>>>> 6419687 (Every file autoformatted)
               )}
               {myGroupCount !== 0 && (
                 <div style={{ height: '400px', width: '100%' }}>
@@ -257,9 +290,15 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
               {/* Left: groups list */}
               <div style={{ flex: '0 0 50%', minWidth: 0, paddingRight: '1.5rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+<<<<<<< HEAD
                   <h2 style={{ margin: 0 }}>{t('groups.myGroups')}</h2>
                   <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
                     {t('groups.autoEnroll')}
+=======
+                  <h2 style={{ margin: 0 }}>My Groups</h2>
+                  <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
+                    Enroll
+>>>>>>> 6419687 (Every file autoformatted)
                   </button>
                 </div>
                 {myGroupCount === 0 && (
@@ -323,7 +362,11 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                       </button>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+<<<<<<< HEAD
                       <button className="server-grid-add-button" title={t('groups.panel.addUser')} onClick={() => handleAddUsersClick(panelGroup)}>
+=======
+                      <button className="server-grid-add-button" title="Add User" onClick={() => handleAddUsersClick(panelGroup)}>
+>>>>>>> 6419687 (Every file autoformatted)
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="20"
@@ -340,10 +383,15 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         </svg>
                       </button>
                     </div>
+<<<<<<< HEAD
                     {panelLoading && <p style={{ color: '#6b7280' }}>{t('grid.loading')}</p>}
                     {!panelLoading && filteredPanelUsers.length === 0 && (
                       <p style={{ color: '#6b7280', fontStyle: 'italic' }}>{t('groups.panel.noMembersFound')}</p>
                     )}
+=======
+                    {panelLoading && <p style={{ color: '#6b7280' }}>Loading...</p>}
+                    {!panelLoading && filteredPanelUsers.length === 0 && <p style={{ color: '#6b7280', fontStyle: 'italic' }}>No members found.</p>}
+>>>>>>> 6419687 (Every file autoformatted)
                     {!panelLoading && filteredPanelUsers.length > 0 && (
                       <div className="grid-wrapper" style={{ width: '100%', overflowX: 'auto' }}>
                         <table className="data-grid-table">
@@ -428,9 +476,15 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
           <div className="mobile-tab-content hide-on-desktop">
             <div className="mobile-content-section">
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+<<<<<<< HEAD
                 <h2 style={{ margin: 0 }}>{t('tabs.groups')}</h2>
                 <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
                   {t('groups.autoEnroll')}
+=======
+                <h2 style={{ margin: 0 }}>Groups</h2>
+                <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
+                  Enroll
+>>>>>>> 6419687 (Every file autoformatted)
                 </button>
               </div>
               <MobileSearchToggle value={inputValue} onChange={handleSearchChange} />
@@ -460,7 +514,11 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                           />
                         </svg>
                       ),
+<<<<<<< HEAD
                       tooltip: t('groups.manageUsers'),
+=======
+                      tooltip: 'Manage Users',
+>>>>>>> 6419687 (Every file autoformatted)
                       onClick: handleAddUsersClick,
                     },
                   ]}
@@ -500,6 +558,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
                       </svg>
                     </span>
+<<<<<<< HEAD
                     <input
                       type="search"
                       autoComplete="off"
@@ -510,6 +569,12 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                   </div>
                   <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
                     {t('groups.autoEnroll')}
+=======
+                    <input type="search" autoComplete="off" placeholder="Search groups..." value={inputValue} onChange={handleSearchChange} />
+                  </div>
+                  <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
+                    Enroll
+>>>>>>> 6419687 (Every file autoformatted)
                   </button>
                 </div>
                 <div>
@@ -538,7 +603,11 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                             />
                           </svg>
                         ),
+<<<<<<< HEAD
                         tooltip: t('groups.manageUsers'),
+=======
+                        tooltip: 'Manage Users',
+>>>>>>> 6419687 (Every file autoformatted)
                         onClick: handleAddUsersClick,
                       },
                     ]}
@@ -606,7 +675,11 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                       </button>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+<<<<<<< HEAD
                       <button className="server-grid-add-button" title={t('groups.panel.addUser')} onClick={() => handleAddUsersClick(panelGroup)}>
+=======
+                      <button className="server-grid-add-button" title="Add User" onClick={() => handleAddUsersClick(panelGroup)}>
+>>>>>>> 6419687 (Every file autoformatted)
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="20"
@@ -623,10 +696,15 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         </svg>
                       </button>
                     </div>
+<<<<<<< HEAD
                     {panelLoading && <p style={{ color: '#6b7280' }}>{t('grid.loading')}</p>}
                     {!panelLoading && filteredPanelUsers.length === 0 && (
                       <p style={{ color: '#6b7280', fontStyle: 'italic' }}>{t('groups.panel.noMembersFound')}</p>
                     )}
+=======
+                    {panelLoading && <p style={{ color: '#6b7280' }}>Loading...</p>}
+                    {!panelLoading && filteredPanelUsers.length === 0 && <p style={{ color: '#6b7280', fontStyle: 'italic' }}>No members found.</p>}
+>>>>>>> 6419687 (Every file autoformatted)
                     {!panelLoading && filteredPanelUsers.length > 0 && (
                       <div className="grid-wrapper" style={{ width: '100%', overflowX: 'auto' }}>
                         <table className="data-grid-table">

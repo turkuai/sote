@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
+<<<<<<< HEAD
 import { useTranslation } from 'react-i18next';
+=======
+>>>>>>> 6419687 (Every file autoformatted)
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
 import MobileSearchToggle from '../components/MobileSearchToggle';
@@ -75,14 +78,22 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
   };
 
   // Custom renderer para role_type - mostrar "Waiting list" si es null
+<<<<<<< HEAD
   const RoleTypeRenderer = ({ data }) => <span>{data?.role_type || t('users.waitingList')}</span>;
+=======
+  const RoleTypeRenderer = ({ data }) => <span>{data?.role_type || 'Waiting list'}</span>;
+>>>>>>> 6419687 (Every file autoformatted)
 
   return (
     <>
       {/* Mobile view - same ServerGrid and add popup as desktop (all fields: first_name, last_name, email, role) */}
       <div className="mobile-tab-content hide-on-desktop">
         <div className="mobile-content-section">
+<<<<<<< HEAD
           <h2>{t('tabs.users')}</h2>
+=======
+          <h2>Users</h2>
+>>>>>>> 6419687 (Every file autoformatted)
           <MobileSearchToggle value={inputValue} onChange={handleSearchChange} />
           <div style={{ height: '500px', width: '100%' }}>
             <ServerGrid
@@ -209,7 +220,11 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
                 <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
               </svg>
             </span>
+<<<<<<< HEAD
             <input type="text" autoComplete="off" placeholder={t('users.searchPlaceholder')} value={inputValue} onChange={handleSearchChange} />
+=======
+            <input type="text" autoComplete="off" placeholder="Search users..." value={inputValue} onChange={handleSearchChange} />
+>>>>>>> 6419687 (Every file autoformatted)
           </div>
         </div>
         <ServerGrid
@@ -333,6 +348,7 @@ function UsersForm({ data, setData }) {
     <div className="add-user-form">
       <div className="add-user-form-grid">
         <div>
+<<<<<<< HEAD
           <label className="form-label">{t('users.form.firstName')}</label>
           <input type="text" className="form-input" value={getValue('first_name')} onChange={handleChange('first_name')} />
         </div>
@@ -350,16 +366,43 @@ function UsersForm({ data, setData }) {
             <option value="nurse">{t('users.roles.nurse')}</option>
             <option value="manager">{t('users.roles.manager')}</option>
             <option value="admin">{t('users.roles.admin')}</option>
+=======
+          <label className="form-label">First name *</label>
+          <input type="text" className="form-input" value={getValue('first_name')} onChange={handleChange('first_name')} />
+        </div>
+        <div>
+          <label className="form-label">Last name *</label>
+          <input type="text" className="form-input" value={getValue('last_name')} onChange={handleChange('last_name')} />
+        </div>
+        <div>
+          <label className="form-label">Email *</label>
+          <input type="email" className="form-input" value={getValue('email')} onChange={handleChange('email')} />
+        </div>
+        <div>
+          <label className="form-label">Role</label>
+          <select className="form-select" value={getValue('role_type') || 'nurse'} onChange={handleChange('role_type')}>
+            <option value="nurse">Nurse (Read-only)</option>
+            <option value="manager">Manager (CRUD)</option>
+            <option value="admin">Admin (Full Access)</option>
+>>>>>>> 6419687 (Every file autoformatted)
           </select>
         </div>
         {!isEditing && (
           <>
             <div>
+<<<<<<< HEAD
               <label className="form-label">{t('users.form.passwordOptional')}</label>
               <input type="password" className="form-input" value={getValue('password')} onChange={handleChange('password')} />
             </div>
             <div>
               <label className="form-label">{t('users.form.confirmPasswordOptional')}</label>
+=======
+              <label className="form-label">Password (optional)</label>
+              <input type="password" className="form-input" value={getValue('password')} onChange={handleChange('password')} />
+            </div>
+            <div>
+              <label className="form-label">Confirm password (optional)</label>
+>>>>>>> 6419687 (Every file autoformatted)
               <input type="password" className="form-input" value={getValue('confirmPassword')} onChange={handleChange('confirmPassword')} />
             </div>
           </>
@@ -367,25 +410,45 @@ function UsersForm({ data, setData }) {
 
         {isEditing && (
           <>
+<<<<<<< HEAD
             <div style={{ gridColumn: '1 / -1', fontSize: '0.875rem', color: '#6b7280' }}>{t('users.form.passwordHint')}</div>
             <div>
               <label className="form-label">{t('users.form.password')}</label>
+=======
+            <div style={{ gridColumn: '1 / -1', fontSize: '0.875rem', color: '#6b7280' }}>
+              Leave <strong>Password</strong> and <strong>Confirm password</strong> empty to keep the current password.
+            </div>
+            <div>
+              <label className="form-label">Password</label>
+>>>>>>> 6419687 (Every file autoformatted)
               <input
                 type="password"
                 className="form-input"
                 value={getValue('password')}
                 onChange={handleChange('password')}
+<<<<<<< HEAD
                 placeholder={t('users.form.newPasswordPlaceholder')}
               />
             </div>
             <div>
               <label className="form-label">{t('users.form.confirmPassword')}</label>
+=======
+                placeholder="New password (optional)"
+              />
+            </div>
+            <div>
+              <label className="form-label">Confirm password</label>
+>>>>>>> 6419687 (Every file autoformatted)
               <input
                 type="password"
                 className="form-input"
                 value={getValue('confirmPassword')}
                 onChange={handleChange('confirmPassword')}
+<<<<<<< HEAD
                 placeholder={t('users.form.confirmNewPasswordPlaceholder')}
+=======
+                placeholder="Confirm new password"
+>>>>>>> 6419687 (Every file autoformatted)
               />
             </div>
           </>

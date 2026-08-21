@@ -1,6 +1,9 @@
 import { Plus, Search, Trash2, X } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
+<<<<<<< HEAD
 import { useTranslation } from 'react-i18next';
+=======
+>>>>>>> 6419687 (Every file autoformatted)
 import './GroupUsersModal.css';
 
 export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdded }) {
@@ -268,7 +271,11 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
                     fontSize: '0.9rem',
                   }}
                 >
+<<<<<<< HEAD
                   <strong>{t('groups.usersModal.error')}</strong>
+=======
+                  <strong>Error:</strong>
+>>>>>>> 6419687 (Every file autoformatted)
                   <p style={{ marginTop: '0.5rem', marginBottom: '0' }}>{fetchError}</p>
                 </div>
               )}
@@ -321,13 +328,21 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
                   })}
                 </ul>
               ) : (
+<<<<<<< HEAD
                 <p className="empty-message">{searchQuery.trim() ? t('groups.usersModal.noUsersFound') : t('groups.usersModal.noUsersAvailable')}</p>
+=======
+                <p className="empty-message">{searchQuery.trim() ? 'No users found' : 'No users available to add'}</p>
+>>>>>>> 6419687 (Every file autoformatted)
               )}
             </div>
 
             <div className="modal-footer">
               <button className="cancel-btn" onClick={onClose}>
+<<<<<<< HEAD
                 {t('grid.confirmDelete.cancel')}
+=======
+                Cancel
+>>>>>>> 6419687 (Every file autoformatted)
               </button>
               <button className="confirm-btn" onClick={handleAddUsers} disabled={selectedUsersToAdd.length === 0 || isAdding}>
                 {isAdding

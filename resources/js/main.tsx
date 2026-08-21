@@ -1,11 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+<<<<<<< HEAD
 import App from './app';
 import { AuthProvider } from './components/AuthContext';
 import { NotificationProvider } from './components/NotificationContext';
 import { getBasename, setBaseUrls } from './config';
 import './i18n';
+=======
+import App from './App';
+import { AuthProvider } from './components/AuthContext';
+import { NotificationProvider } from './components/NotificationContext';
+import { getBasename, setBaseUrls } from './config';
+>>>>>>> 6419687 (Every file autoformatted)
 import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

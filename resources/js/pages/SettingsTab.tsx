@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import 'tai-grid/style.css';
+=======
+import { useEffect, useState } from 'react';
+>>>>>>> 6419687 (Every file autoformatted)
 import { getApiBase } from '../config';
 import './Admin.css';
 
@@ -10,7 +14,10 @@ import './Admin.css';
  * @param {Function} onLogout - Handler for logout button click
  */
 const SettingsTab = ({ currentUser, onLogout }) => {
+<<<<<<< HEAD
   const { t } = useTranslation();
+=======
+>>>>>>> 6419687 (Every file autoformatted)
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: '',
     newPassword: '',
@@ -162,7 +169,11 @@ const SettingsTab = ({ currentUser, onLogout }) => {
 
       <div className="settings-layout">
         <div className="settings-sidebar">
+<<<<<<< HEAD
           <button className="settings-nav-item active">{t('settings.tabs.profile')}</button>
+=======
+          <button className="settings-nav-item active">Profile</button>
+>>>>>>> 6419687 (Every file autoformatted)
         </div>
 
         <div className="settings-content">
@@ -171,17 +182,29 @@ const SettingsTab = ({ currentUser, onLogout }) => {
             <p className="settings-description">{t('settings.profile.description')}</p>
 
             <div className="settings-form-group">
+<<<<<<< HEAD
               <label>{t('settings.fields.name')}</label>
+=======
+              <label>Name</label>
+>>>>>>> 6419687 (Every file autoformatted)
               <input type="text" value={currentUser?.name || 'Mohammad Admin'} readOnly className="settings-input" />
             </div>
 
             <div className="settings-form-group">
+<<<<<<< HEAD
               <label>{t('settings.fields.username')}</label>
+=======
+              <label>Username</label>
+>>>>>>> 6419687 (Every file autoformatted)
               <input type="text" value={currentUser?.username || 'admin'} readOnly className="settings-input" />
             </div>
 
             <div className="settings-form-group">
+<<<<<<< HEAD
               <label>{t('settings.fields.role')}</label>
+=======
+              <label>Role</label>
+>>>>>>> 6419687 (Every file autoformatted)
               <input type="text" value={currentUser?.role_type || 'Administrator'} readOnly className="settings-input" />
             </div>
 
@@ -229,10 +252,17 @@ const SettingsTab = ({ currentUser, onLogout }) => {
 
             <div className="settings-actions">
               <button type="button" className="settings-update-btn" onClick={handlePasswordSubmit}>
+<<<<<<< HEAD
                 {t('settings.actions.updateProfile')}
               </button>
               <button type="button" className="settings-logout-btn-new" onClick={onLogout}>
                 {t('user.logout')}
+=======
+                Update Profile
+              </button>
+              <button type="button" className="settings-logout-btn-new" onClick={onLogout}>
+                Logout
+>>>>>>> 6419687 (Every file autoformatted)
               </button>
             </div>
           </div>

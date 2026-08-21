@@ -1,6 +1,9 @@
 import { ChevronDown, LogOut, Settings } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+<<<<<<< HEAD
 import { useTranslation } from 'react-i18next';
+=======
+>>>>>>> 6419687 (Every file autoformatted)
 import { useNavigate } from 'react-router-dom';
 import LanguageSwitcher from '../components/language-switcher';
 import { getAssetUrl } from '../config';
@@ -60,16 +63,27 @@ const Header = ({ currentUser, onLogout, onSettingsClick, currentPage = 'dashboa
     <div className="admin-header">
       <h1 className="admin-logo">
         <img src={getAssetUrl('tai.png')} alt="TAI logo" className="admin-logo-image" />
+<<<<<<< HEAD
         {currentUser?.role_type === 'student' && <span className="admin-logo-subtitle">{t('user.myDashboard')}</span>}
+=======
+        {currentUser?.role_type === 'student' && <span className="admin-logo-subtitle">My Dashboard</span>}
+>>>>>>> 6419687 (Every file autoformatted)
       </h1>
 
       {/* Navigation buttons - centered */}
       <div className="header-nav-buttons">
         <button className={`nav-button ${currentPage === 'dashboard' ? 'active' : ''}`} onClick={handleDashboardClick}>
+<<<<<<< HEAD
           <strong>{t('nav.dashboard')}</strong>
         </button>
         <button className={`nav-button ${currentPage === 'patients' ? 'active' : ''}`} onClick={handlePatientsClick}>
           <strong>{t('nav.patients')}</strong>
+=======
+          <strong>Dashboard</strong>
+        </button>
+        <button className={`nav-button ${currentPage === 'patients' ? 'active' : ''}`} onClick={handlePatientsClick}>
+          <strong>Patients</strong>
+>>>>>>> 6419687 (Every file autoformatted)
         </button>
       </div>
 

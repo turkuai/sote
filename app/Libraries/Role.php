@@ -2,8 +2,7 @@
 
 namespace App\Libraries;
 
-class Role
-{
+class Role {
     // Role definitions
     const ROLE_NURSE = 'nurse';
     const ROLE_MANAGER = 'manager';
@@ -19,8 +18,7 @@ class Role
      *
      * @return array
      */
-    public static function all()
-    {
+    public static function all() {
         return [
             [
                 'type' => self::ROLE_NURSE,
@@ -49,8 +47,7 @@ class Role
      * @param string $roleType
      * @return int|null
      */
-    public static function getPermissions($roleType)
-    {
+    public static function getPermissions($roleType) {
         return match ($roleType) {
             self::ROLE_NURSE => self::NURSE_PERMISSIONS,
             self::ROLE_MANAGER => self::MANAGER_PERMISSIONS,
@@ -65,8 +62,7 @@ class Role
      * @param string $roleType
      * @return string|null
      */
-    public static function getName($roleType)
-    {
+    public static function getName($roleType) {
         return match ($roleType) {
             self::ROLE_NURSE => 'Nurse',
             self::ROLE_MANAGER => 'Manager',
@@ -81,8 +77,7 @@ class Role
      * @param string $roleType
      * @return bool
      */
-    public static function isValid($roleType)
-    {
+    public static function isValid($roleType) {
         return in_array($roleType, [
             self::ROLE_NURSE,
             self::ROLE_MANAGER,

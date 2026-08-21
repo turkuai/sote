@@ -10,16 +10,14 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-class UserController extends Controller
-{
+class UserController extends Controller {
     /**
      * Get all users with their groups
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         try {
             $query = User::with('groups');
-            
+
             // Filter by role_type if provided
             if ($request->has('role_type') && $request->input('role_type') !== '') {
                 $roleType = $request->input('role_type');
@@ -29,18 +27,18 @@ class UserController extends Controller
                     $query->where('role_type', $roleType);
                 }
             }
-            
+
             // Search by name, email, or first_name
             if ($request->has('search') && $request->search) {
                 $search = strtolower($request->search);
                 $query->where(function ($q) use ($search) {
                     $q->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"])
-                      ->orWhereRaw('LOWER(first_name) LIKE ?', ["%{$search}%"])
-                      ->orWhereRaw('LOWER(last_name) LIKE ?', ["%{$search}%"])
-                      ->orWhereRaw('LOWER(email) LIKE ?', ["%{$search}%"]);
+                        ->orWhereRaw('LOWER(first_name) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(last_name) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(email) LIKE ?', ["%{$search}%"]);
                 });
             }
-            
+
             $users = $query->get();
             return ApiResponse::success($users, 'Users retrieved successfully');
         } catch (\Exception $e) {
@@ -52,10 +50,9 @@ class UserController extends Controller
     /**
      * Get a specific user with their groups
      */
-    public function show($id)
-    {
+    public function show($id) {
         $user = User::with('groups')->find($id);
-        
+
         if (!$user) {
             return ApiResponse::notFound('User not found');
         }
@@ -66,8 +63,7 @@ class UserController extends Controller
     /**
      * Create a new user
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -81,31 +77,30 @@ class UserController extends Controller
         }
 
         $data = $validator->validated();
-        
+
         // Generate password if not provided
         if (!isset($data['password']) || empty(trim($data['password']))) {
             $data['password'] = Str::random(12);
         }
-        
+
         // Hash password using Hash facade
         $data['password'] = Hash::make($data['password']);
-        
+
         // Set the binary role value based on role_type
         $data['name'] = $data['first_name'] . ' ' . $data['last_name'];
         $data['role'] = Role::getPermissions($data['role_type']);
 
         $user = User::create($data);
-        
+
         return ApiResponse::success($user, 'User created successfully', 201);
     }
 
     /**
      * Update a user
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         $user = User::find($id);
-        
+
         if (!$user) {
             return ApiResponse::notFound('User not found');
         }
@@ -123,7 +118,7 @@ class UserController extends Controller
         }
 
         $data = $validator->validated();
-        
+
         // Hash password if provided
         if (isset($data['password']) && !empty(trim($data['password']))) {
             $data['password'] = Hash::make($data['password']);
@@ -131,7 +126,7 @@ class UserController extends Controller
             // Remove password from update if not provided
             unset($data['password']);
         }
-        
+
         // If role_type is being updated, also update the binary role value
         if (isset($data['role_type'])) {
             $data['role'] = Role::getPermissions($data['role_type']);
@@ -145,7 +140,7 @@ class UserController extends Controller
         }
 
         $user->update($data);
-        
+
         // Refresh the user instance to get updated values
         $user->refresh();
 
@@ -155,10 +150,9 @@ class UserController extends Controller
     /**
      * Delete a user
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         $user = User::find($id);
-        
+
         if (!$user) {
             return ApiResponse::notFound('User not found');
         }
@@ -175,8 +169,7 @@ class UserController extends Controller
     /**
      * Get all available roles
      */
-    public function getRoles()
-    {
+    public function getRoles() {
         $roles = Role::all();
         return ApiResponse::success($roles, 'Available roles retrieved successfully');
     }

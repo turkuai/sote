@@ -1,127 +1,127 @@
 /* Waiting approval page container */
 .waiting-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f3f4f6;
-    padding: 1rem;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  padding: 1rem;
 }
 
 /* Waiting card */
 .waiting-card {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 3rem 2rem;
-    width: 100%;
-    max-width: 500px;
-    text-align: center;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 3rem 2rem;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
 }
 
 /* Header section */
 .waiting-header {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 .waiting-logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .waiting-logo-image {
-    max-width: 180px;
-    height: auto;
-    display: block;
+  max-width: 180px;
+  height: auto;
+  display: block;
 }
 
 .waiting-title {
-    font-size: 1.75rem;
-    font-weight: bold;
-    color: #1f2937;
-    margin: 1rem 0 0.5rem 0;
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin: 1rem 0 0.5rem 0;
 }
 
 .waiting-subtitle {
-    color: #6b7280;
-    font-size: 0.95rem;
+  color: #6b7280;
+  font-size: 0.95rem;
 }
 
 /* Content section */
 .waiting-content {
-    margin: 2rem 0;
+  margin: 2rem 0;
 }
 
 .waiting-icon {
-    color: #f59e0b;
-    margin-bottom: 1rem;
-    display: flex;
-    justify-content: center;
+  color: #f59e0b;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
 }
 
 .waiting-icon svg {
-    animation: spin 3s linear infinite;
+  animation: spin 3s linear infinite;
 }
 
 @keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .waiting-message {
-    margin: 1.5rem 0;
+  margin: 1.5rem 0;
 }
 
 .waiting-text {
-    color: #4b5563;
-    margin: 0.75rem 0;
-    line-height: 1.6;
+  color: #4b5563;
+  margin: 0.75rem 0;
+  line-height: 1.6;
 }
 
 .waiting-user-info {
-    background-color: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    padding: 1rem;
-    margin: 1.5rem 0;
-    text-align: left;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  text-align: left;
 }
 
 .waiting-user-info p {
-    margin: 0.5rem 0;
-    font-size: 0.875rem;
-    color: #4b5563;
+  margin: 0.5rem 0;
+  font-size: 0.875rem;
+  color: #4b5563;
 }
 
 .waiting-user-info strong {
-    color: #1f2937;
+  color: #1f2937;
 }
 
 /* Logout button */
 .waiting-logout-btn {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    background-color: #6b7280;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    margin-top: 1rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 1rem;
 }
 
 .waiting-logout-btn:hover {
-    background-color: #4b5563;
+  background-color: #4b5563;
 }
 
 .waiting-logout-btn:active {
-    background-color: #374151;
+  background-color: #374151;
 }

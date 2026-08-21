@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 use App\Libraries\Role;
 use App\Libraries\ApiResponse;
 
-class CheckRole
-{
+class CheckRole {
     /**
      * Handle an incoming request.
      *
@@ -17,14 +16,13 @@ class CheckRole
      * @param  string  ...$roles
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, ...$roles)
-    {
+    public function handle(Request $request, Closure $next, ...$roles) {
         if (!auth()->check()) {
             return ApiResponse::error('Unauthenticated', 401);
         }
 
         $user = auth()->user();
-        
+
         // Get the required permission level from role names
         // If multiple roles are specified (e.g., manager,admin), we need the MINIMUM to check against
         // because if you have admin (255) you also have manager (135) permissions

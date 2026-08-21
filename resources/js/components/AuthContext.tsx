@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { getApiBase } from '../config';
 
 const AuthContext = createContext(null);
@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
           method: 'GET',
           credentials: 'include', // Include cookies
           headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
             'Content-Type': 'application/json',
           },
         });
@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }) => {
         method: 'POST',
         credentials: 'include',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password, remember: rememberMe }),
@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
         method: 'GET',
         credentials: 'include',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
       });
 
@@ -116,7 +116,7 @@ export const AuthProvider = ({ children }) => {
         method: 'POST',
         credentials: 'include',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json',
         },
       });
@@ -135,15 +135,15 @@ export const AuthProvider = ({ children }) => {
         method: 'POST',
         credentials: 'include',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-          first_name: firstName, 
-          last_name: lastName, 
-          email, 
-          password, 
-          password_confirmation: passwordConfirmation 
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          password,
+          password_confirmation: passwordConfirmation,
         }),
       });
 
@@ -162,7 +162,7 @@ export const AuthProvider = ({ children }) => {
         method: 'GET',
         credentials: 'include',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
       });
 
@@ -196,7 +196,7 @@ export const AuthProvider = ({ children }) => {
         method: 'POST',
         credentials: 'include',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json',
         },
       });
@@ -230,4 +230,3 @@ export const useAuth = () => {
   }
   return context;
 };
-

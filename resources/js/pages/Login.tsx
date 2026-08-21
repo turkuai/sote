@@ -1,16 +1,25 @@
 import { useEffect, useState } from 'react';
+<<<<<<< HEAD
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import '../App.css';
 import { useAuth } from '../components/AuthContext';
 import LanguageSwitcher from '../components/language-switcher';
+=======
+import { Link, useNavigate } from 'react-router-dom';
+import '../App.css';
+import { useAuth } from '../components/AuthContext';
+>>>>>>> 6419687 (Every file autoformatted)
 import { getAssetUrl } from '../config';
 import './Login.css';
 
 export default function Login() {
   const { login, isAuthenticated, currentUser } = useAuth();
   const navigate = useNavigate();
+<<<<<<< HEAD
   const { t } = useTranslation();
+=======
+>>>>>>> 6419687 (Every file autoformatted)
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -40,7 +49,11 @@ export default function Login() {
       }
     } catch (err) {
       console.error('Login error:', err);
+<<<<<<< HEAD
       setError(t('auth.unexpectedError'));
+=======
+      setError('An unexpected error occurred');
+>>>>>>> 6419687 (Every file autoformatted)
     } finally {
       setLoading(false);
     }
@@ -48,6 +61,7 @@ export default function Login() {
 
   return (
     <div className="page-container login-container">
+<<<<<<< HEAD
       <div
         style={{
           position: 'absolute',
@@ -58,23 +72,37 @@ export default function Login() {
       >
         <LanguageSwitcher />
       </div>
+=======
+>>>>>>> 6419687 (Every file autoformatted)
       <div className="login-card">
         <div className="login-header">
           <div className="login-logo">
             <img src={getAssetUrl('tai.png')} alt="TAI logo" className="login-logo-image" />
           </div>
+<<<<<<< HEAD
           <p className="login-subtitle">{t('auth.pleaseLoginToContinue')}</p>
+=======
+          <p className="login-subtitle">Please login to continue</p>
+>>>>>>> 6419687 (Every file autoformatted)
         </div>
 
         <form onSubmit={handleSubmit} autoComplete="on">
           <div className="login-form-group">
+<<<<<<< HEAD
             <label className="login-label">{t('auth.email')}</label>
+=======
+            <label className="login-label">Email</label>
+>>>>>>> 6419687 (Every file autoformatted)
             <input
               type="text"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+<<<<<<< HEAD
               placeholder={t('auth.enterYourEmail')}
+=======
+              placeholder="Enter your email"
+>>>>>>> 6419687 (Every file autoformatted)
               className="login-input"
               name="email"
               autoComplete="email"
@@ -83,12 +111,20 @@ export default function Login() {
           </div>
 
           <div className="login-form-group">
+<<<<<<< HEAD
             <label className="login-label">{t('auth.password')}</label>
+=======
+            <label className="login-label">Password</label>
+>>>>>>> 6419687 (Every file autoformatted)
             <input
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               type="password"
+<<<<<<< HEAD
               placeholder={t('auth.password')}
+=======
+              placeholder="Password"
+>>>>>>> 6419687 (Every file autoformatted)
               required
               className="login-input"
               name="password"
@@ -101,14 +137,22 @@ export default function Login() {
           <div className="login-form-group">
             <label className="login-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} disabled={loading} />
+<<<<<<< HEAD
               {t('auth.rememberMe')}
+=======
+              Remember me
+>>>>>>> 6419687 (Every file autoformatted)
             </label>
           </div>
 
           {error && <div className="login-error">{error}</div>}
 
           <button type="submit" className="login-submit-btn" disabled={loading}>
+<<<<<<< HEAD
             {loading ? t('auth.signingIn') : t('auth.signIn')}
+=======
+            {loading ? 'Signing in...' : 'Sign in'}
+>>>>>>> 6419687 (Every file autoformatted)
           </button>
         </form>
 
@@ -116,17 +160,30 @@ export default function Login() {
         <div style={{ marginTop: '1.5rem', borderTop: '1px solid #e5e7eb', paddingTop: '1.5rem' }}>
           <a href="/auth/entra-id" style={{ textDecoration: 'none' }}>
             <button type="button" className="login-submit-btn" style={{ backgroundColor: '#c5192d', width: '100%', cursor: 'pointer' }}>
+<<<<<<< HEAD
               {t('auth.entraIdButton')}
             </button>
           </a>
           <p style={{ color: '#9ca3af', fontSize: '0.75rem', marginTop: '0.5rem' }}>{t('auth.entraIdSubtext')}</p>
+=======
+              Login with @edu.turku.fi
+            </button>
+          </a>
+          <p style={{ color: '#9ca3af', fontSize: '0.75rem', marginTop: '0.5rem' }}>Login using your Microsoft account</p>
+>>>>>>> 6419687 (Every file autoformatted)
         </div>
 
         <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
           <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>
+<<<<<<< HEAD
             {t('auth.noAccount')}{' '}
             <Link to="/register" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: '500' }}>
               {t('auth.signUp')}
+=======
+            Don't have an account?{' '}
+            <Link to="/register" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: '500' }}>
+              Sign up
+>>>>>>> 6419687 (Every file autoformatted)
             </Link>
           </p>
         </div>
