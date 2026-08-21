@@ -49,6 +49,20 @@ class DatabaseSeeder extends Seeder
             'role_type' => 'nurse',
             'email_verified_at' => now(),
         ]);
+
+        // Create 1000 additional test users
+        for ($i = 1; $i <= 100; $i++) {
+            User::create([
+                'name' => "Test User $i",
+                'first_name' => "Test",
+                'last_name' => "User $i",
+                'email' => "testuser$i@example.com",
+                'password' => Hash::make('password123'),
+                'role' => Role::getPermissions('nurse'),
+                'role_type' => 'nurse',
+                'email_verified_at' => now(),
+            ]);
+        }
     }
 }
 

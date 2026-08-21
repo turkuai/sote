@@ -45,6 +45,28 @@ This will automatically:
 5. Run database migrations and seeders
 6. Install frontend dependencies
 
+## Code Formatting
+
+This project uses **Prettier** for code formatting. VSCode will automatically format your code on save if you have the Prettier extension installed.
+
+### Prettier Configuration
+
+The following formatting rules are enforced:
+- **Indentation**: 2 spaces
+- **Tabs**: Disabled (spaces only)
+- **Line Length**: 150 characters per line
+
+These settings are configured in `.prettierrc` and will be applied automatically when you save files.
+
+### Setup in VSCode
+
+1. Install the **Prettier** extension (ID: `esbenp.prettier-vscode`)
+2. Set it as your default formatter:
+   - Open VSCode Settings
+   - Search for "Default Formatter"
+   - Select "Prettier - Code formatter"
+3. Enable "Format On Save" if desired
+
 ## Running the app
 
 Run the following command in a terminal:
@@ -54,6 +76,17 @@ composer run dev
 ```
 
 Open in browser: http://localhost:8000
+
+## Database issues
+
+If you get constraint errors or unexpected behavior after pulling new changes, your local database may be out of date. To reset it completely:
+
+```bash
+php artisan migrate:fresh --seed
+```
+> ⚠️ The seeding will add 100 users for testing purposes. This command may take a while or you might run into performance issues. ⚠️
+
+> ⚠️ This will **delete all existing data** and reseed the database from scratch.
 
 ## Test users
 
@@ -249,17 +282,6 @@ npm run dev
 
 ---
 
-## 📖 Documentation Files
-
-Read these for more details:
-
-- **ROLE_SYSTEM_SUMMARY.md** - Complete system overview
-- **QUICK_REFERENCE.md** - Fast lookup for common tasks
-- **ROLES_IMPLEMENTATION.md** - Detailed implementation guide
-- **TESTING_CHECKLIST.md** - How to verify everything works
-- **SYSTEM_ARCHITECTURE.md** - System design and data flow
-
----
 
 ## ❓ Common Questions
 
@@ -338,25 +360,7 @@ Route::delete('/api/users/{id}', [UserController::class, 'destroy'])
 
 ---
 
-## 🚀 Next Steps
 
-1. **Explore the code** - Read the key files mentioned in structure
-2. **Test the API** - Make requests to different endpoints
-3. **Create test data** - Add more users via API or Tinker
-4. **Review documentation** - Check the markdown files for details
-5. **Review security** - Routes are unprotected in development (add auth for production)
-
----
-
-## 📞 Need Help?
-
-- Check `.md` files for detailed documentation
-- Review test data in `database/seeders/DatabaseSeeder.php`
-- Check `routes/web.php` for all available endpoints
-- View `app/Http/Controllers/` for implementation details
-- Run `php artisan tinker` to explore database
-
----
 
 ## ✅ Verification Checklist
 
@@ -370,7 +374,3 @@ Route::delete('/api/users/{id}', [UserController::class, 'destroy'])
 - [ ] Can see groups and assignments
 
 ---
-
-**Ready to go!** Start with `php artisan migrate:fresh --seed` and `php artisan serve` 🎉
-
-Questions? Check the documentation files or explore the code! 🚀
