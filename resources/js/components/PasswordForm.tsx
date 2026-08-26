@@ -5,11 +5,12 @@ export default function PasswordForm({ form, status, onInputChange, onSubmit }) 
   return (
     <div className="admin-settings-section">
       <h3>Change Password</h3>
-      <form className="password-form" onSubmit={onSubmit}>
+      <form className="password-form" onSubmit={onSubmit} autoComplete="off">
         <label className="password-form-field">
           <span>Current password</span>
           <input
             type="password"
+            autoComplete="new-password"
             value={form.currentPassword}
             onChange={(e) => onInputChange('currentPassword', e.target.value)}
             placeholder="Enter current password"
@@ -19,6 +20,7 @@ export default function PasswordForm({ form, status, onInputChange, onSubmit }) 
           <span>New password</span>
           <input
             type="password"
+            autoComplete="new-password"
             value={form.newPassword}
             onChange={(e) => onInputChange('newPassword', e.target.value)}
             placeholder="Enter new password"
@@ -28,6 +30,7 @@ export default function PasswordForm({ form, status, onInputChange, onSubmit }) 
           <span>Confirm new password</span>
           <input
             type="password"
+            autoComplete="new-password"
             value={form.confirmPassword}
             onChange={(e) => onInputChange('confirmPassword', e.target.value)}
             placeholder="Re-enter new password"

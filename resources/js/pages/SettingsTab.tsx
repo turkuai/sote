@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ServerGrid } from 'tai-grid';
-import 'tai-grid/style.css';
 import './Admin.css';
 import { getApiBase } from '../config';
-import { useNotification } from '../components/NotificationContext';
 
 /**
  * SettingsTab component - User settings including user details, password change, and logout
@@ -21,15 +18,6 @@ const SettingsTab = ({
   });
 
   const [passwordStatus, setPasswordStatus] = useState(null);
-  const { showNotification } = useNotification();
-  const [myGroups, setMyGroups] = useState([]);
-
-  useEffect(() => {
-    fetch(`${getApiBase()}/api/groups/my`, { credentials: 'include' })
-      .then(r => r.json())
-      .then(data => setMyGroups(Array.isArray(data?.data) ? data.data : (Array.isArray(data) ? data : [])))
-      .catch(() => setMyGroups([]));
-  }, [currentUser]);
 
   const handlePasswordInputChange = (field, value) => {
     setPasswordForm(prev => ({ ...prev, [field]: value }));
@@ -83,10 +71,9 @@ const SettingsTab = ({
     }
   };
 
-  const [activeTab, setActiveTab] = useState('profile');
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
@@ -115,7 +102,7 @@ const SettingsTab = ({
 
         <div className="admin-settings-section">
           <h3>Change Password</h3>
-          <form className="password-form" onSubmit={handlePasswordSubmit}>
+          <form className="password-form" onSubmit={handlePasswordSubmit} autoComplete="off">
             <label className="password-form-field">
               <span>Current password</span>
               <input
@@ -166,18 +153,7 @@ const SettingsTab = ({
           </button>
         </div>
 
-        <div className="admin-settings-section">
-          <h3>My Groups</h3>
-          {myGroups.length === 0 ? (
-            <p style={{ color: '#6b7280', fontStyle: 'italic' }}>You are not registered in any group.</p>
-          ) : (
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {myGroups.map((g: any) => (
-                <li key={g.id} style={{ padding: '0.4rem 0', borderBottom: '1px solid #f3f4f6', color: '#111827' }}>{g.name}</li>
-              ))}
-            </ul>
-          )}
-        </div>
+
       </div>
     );
   }
@@ -192,138 +168,109 @@ const SettingsTab = ({
       <div className="settings-layout">
         <div className="settings-sidebar">
           <button 
-            className={`settings-nav-item ${activeTab === 'profile' ? 'active' : ''}`}
-            onClick={() => setActiveTab('profile')}
+            className="settings-nav-item active"
           >
             Profile
-          </button>
-          <button
-            className={`settings-nav-item ${activeTab === 'groups' ? 'active' : ''}`}
-            onClick={() => setActiveTab('groups')}
-          >
-            Groups
           </button>
         </div>
 
         <div className="settings-content">
-          {activeTab === 'profile' && (
-            <div className="settings-profile">
-              <h3>Profile</h3>
-              <p className="settings-description">This is how others will see you on the site.</p>
+          <div className="settings-profile">
+            <h3>Profile</h3>
+            <p className="settings-description">This is how others will see you on the site.</p>
 
-              <div className="settings-form-group">
-                <label>Name</label>
-                <input 
-                  type="text" 
-                  value={currentUser?.name || 'Mohammad Admin'} 
-                  readOnly
-                  className="settings-input"
-                />
-              </div>
-
-              <div className="settings-form-group">
-                <label>Username</label>
-                <input 
-                  type="text" 
-                  value={currentUser?.username || 'admin'} 
-                  readOnly
-                  className="settings-input"
-                />
-              </div>
-
-              <div className="settings-form-group">
-                <label>Role</label>
-                <input 
-                  type="text" 
-                  value={currentUser?.role_type || 'Administrator'} 
-                  readOnly
-                  className="settings-input"
-                />
-              </div>
-
-              <div className="settings-form-group">
-                <label>Current Password</label>
-                <input
-                  type="password"
-                  value={passwordForm.currentPassword}
-                  onChange={(e) => handlePasswordInputChange('currentPassword', e.target.value)}
-                  placeholder="Enter current password"
-                  className="settings-input"
-                />
-              </div>
-
-              <div className="settings-form-group">
-                <label>New Password</label>
-                <input
-                  type="password"
-                  value={passwordForm.newPassword}
-                  onChange={(e) => handlePasswordInputChange('newPassword', e.target.value)}
-                  placeholder="Enter new password"
-                  className="settings-input"
-                />
-              </div>
-
-              <div className="settings-form-group">
-                <label>Confirm Password</label>
-                <input
-                  type="password"
-                  value={passwordForm.confirmPassword}
-                  onChange={(e) => handlePasswordInputChange('confirmPassword', e.target.value)}
-                  placeholder="Confirm new password"
-                  className="settings-input"
-                />
-              </div>
-
-              {passwordStatus && (
-                <div
-                  className={`password-status ${passwordStatus.type === 'error' ? 'error' : 'success'}`}
-                  role="alert"
-                >
-                  {passwordStatus.message}
-                </div>
-              )}
-
-              <div className="settings-actions">
-                <button 
-                  type="button" 
-                  className="settings-update-btn"
-                  onClick={handlePasswordSubmit}
-                >
-                  Update Profile
-                </button>
-                <button 
-                  type="button" 
-                  className="settings-logout-btn-new" 
-                  onClick={onLogout}
-                >
-                  Logout
-                </button>
-              </div>
+            <div className="settings-form-group">
+              <label>Name</label>
+              <input 
+                type="text" 
+                value={currentUser?.name || 'Mohammad Admin'} 
+                readOnly
+                className="settings-input"
+              />
             </div>
-          )}
 
-          {activeTab === 'groups' && (
-            <div className="settings-profile">
-              <h3>Groups</h3>
-              <p className="settings-description">Groups you are currently registered in.</p>
-              {myGroups.length === 0 ? (
-                <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '2rem 0' }}>
-                  You are not registered in any group.
-                </p>
-              ) : (
-                <ServerGrid
-                  columns={['name']}
-                  path="groups/my"
-                  allowEditing={false}
-                  allowDelete={false}
-                  pageSize={20}
-                  showAddButton={false}
-                  getApiBase={getApiBase}
-                  showNot={showNotification}
-                />
-              )}
+            <div className="settings-form-group">
+              <label>Username</label>
+              <input 
+                type="text" 
+                value={currentUser?.username || 'admin'} 
+                readOnly
+                className="settings-input"
+              />
             </div>
-          )}
+
+            <div className="settings-form-group">
+              <label>Role</label>
+              <input 
+                type="text" 
+                value={currentUser?.role_type || 'Administrator'} 
+                readOnly
+                className="settings-input"
+              />
+            </div>
+
+            <div className="settings-form-group">
+              <label>Current Password</label>
+              <input
+                type="password"
+                autoComplete="new-password"
+                value={passwordForm.currentPassword}
+                onChange={(e) => handlePasswordInputChange('currentPassword', e.target.value)}
+                placeholder="Enter current password"
+                className="settings-input"
+              />
+            </div>
+
+            <div className="settings-form-group">
+              <label>New Password</label>
+              <input
+                type="password"
+                autoComplete="new-password"
+                value={passwordForm.newPassword}
+                onChange={(e) => handlePasswordInputChange('newPassword', e.target.value)}
+                placeholder="Enter new password"
+                className="settings-input"
+              />
+            </div>
+
+            <div className="settings-form-group">
+              <label>Confirm Password</label>
+              <input
+                type="password"
+                autoComplete="new-password"
+                value={passwordForm.confirmPassword}
+                onChange={(e) => handlePasswordInputChange('confirmPassword', e.target.value)}
+                placeholder="Confirm new password"
+                className="settings-input"
+              />
+            </div>
+
+            {passwordStatus && (
+              <div
+                className={`password-status ${passwordStatus.type === 'error' ? 'error' : 'success'}`}
+                role="alert"
+              >
+                {passwordStatus.message}
+              </div>
+            )}
+
+            <div className="settings-actions">
+              <button 
+                type="button" 
+                className="settings-update-btn"
+                onClick={handlePasswordSubmit}
+              >
+                Update Profile
+              </button>
+              <button 
+                type="button" 
+                className="settings-logout-btn-new" 
+                onClick={onLogout}
+              >
+                Logout
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

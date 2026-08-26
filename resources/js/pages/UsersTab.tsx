@@ -55,9 +55,23 @@ export default function UsersTab({
   }, []);
 
   // Custom renderer para combinar first_name y last_name
-  const NameRenderer = ({ data }) => (
-    <span>{`${data?.first_name || ''} ${data?.last_name || ''}`.trim()}</span>
-  );
+  const NameRenderer = ({ data }) => {
+    const isYou = data?.id === currentUser?.id;
+    return (
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+        {isYou && (
+          <span
+            title="This is you"
+            style={{
+              display: 'inline-block', width: '8px', height: '8px',
+              borderRadius: '50%', background: '#3b82f6', flexShrink: 0,
+            }}
+          />
+        )}
+        {`${data?.first_name || ''} ${data?.last_name || ''}`.trim()}
+      </span>
+    );
+  };
 
   // Custom renderer para role_type - mostrar "Waiting list" si es null
   const RoleTypeRenderer = ({ data }) => (
@@ -95,8 +109,8 @@ export default function UsersTab({
                 const confirmPassword = String(payload.confirmPassword || '').trim();
                 const isAdmin = currentUser?.role_type === 'admin';
 
-                // Clone payload and remove password fields first
-                const { password: _p, confirmPassword: _cp, ...restPayload } = payload;
+                // Clone payload and remove virtual/password fields
+                const { password: _p, confirmPassword: _cp, name: _n, ...restPayload } = payload;
 
                 // If both password fields empty, just return other fields
                 if (!password && !confirmPassword) {
@@ -158,9 +172,9 @@ export default function UsersTab({
 
       {/* Desktop view */}
       <div className="hide-on-mobile">
-        <h2>Users Management</h2>
-
-        <div className="user-search">
+        <div className="tab-header">
+          <h2>Users Management</h2>
+          <div className="user-search">
           <span className="search-icon">
             <svg
               width="16"
@@ -189,10 +203,12 @@ export default function UsersTab({
           </span>
           <input
             type="text"
+            autoComplete="off"
             placeholder="Search users..."
             value={inputValue}
             onChange={handleSearchChange}
           />
+          </div>
         </div>
         <ServerGrid
           key={refreshKey}
@@ -214,8 +230,8 @@ export default function UsersTab({
             const confirmPassword = String(payload.confirmPassword || '').trim();
             const isAdmin = currentUser?.role_type === 'admin';
 
-            // Clone payload and remove password fields
-            const { password: _p, confirmPassword: _cp, ...restPayload } = payload;
+            // Clone payload and remove virtual/password fields
+            const { password: _p, confirmPassword: _cp, name: _n, ...restPayload } = payload;
 
             // If both empty, return other fields
             if (!password && !confirmPassword) {

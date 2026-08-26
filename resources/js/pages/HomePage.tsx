@@ -22,6 +22,9 @@ export default function HomePage() {
 
   const [userQuery, setUserQuery] = useState('');
   const [groupQuery, setGroupQuery] = useState('');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() =>
+    typeof window !== 'undefined' ? localStorage.getItem('sidebar_collapsed') === 'true' : false
+  );
 
   // Password form hook
   const {
@@ -121,20 +124,24 @@ export default function HomePage() {
         </>
       )}
 
-      {/* Tabs - Desktop */}
-      {!isMobile && (
+      {/* Desktop: Sidebar + Content */}
+      <div className="admin-body hide-on-mobile">
         <HomeTabs
           tabs={tabs}
           activeTab={activeTab}
           onTabClick={handleTabClick}
           getTabLabel={TabConfig.getTabLabel}
           renderTabIcon={TabConfig.renderTabIcon}
+          collapsed={sidebarCollapsed}
+          onToggleCollapse={() => setSidebarCollapsed(c => {
+            const next = !c;
+            localStorage.setItem('sidebar_collapsed', String(next));
+            return next;
+          })}
         />
-      )}
 
-      {/* Desktop Content Area */}
-      <div className="admin-content hide-on-mobile">
-        <div className="admin-content-card">
+        <div className="admin-content-area">
+          <div className="admin-content-card">
           {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
             <div style={{ display: activeTab === 'users' ? 'block' : 'none' }}>
               <UsersTab
@@ -175,6 +182,7 @@ export default function HomePage() {
           <div style={{ display: activeTab === 'settings' ? 'block' : 'none' }}>
             <SettingsTab currentUser={currentUser} onLogout={handleLogout} />
           </div>
+        </div>
         </div>
       </div>
 

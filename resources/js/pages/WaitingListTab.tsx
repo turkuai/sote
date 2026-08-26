@@ -66,8 +66,10 @@ export default function WaitingListTab({ currentUser }) {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Waiting for Approval</h2>
+    <div>
+      <div className="tab-header">
+        <h2>Waiting for Approval</h2>
+      </div>
       <p style={{ color: '#666', marginBottom: '20px' }}>
         Users pending approval. Click "Accept" to approve and assign as Nurse.
       </p>
@@ -76,9 +78,9 @@ export default function WaitingListTab({ currentUser }) {
         <ServerGrid
           ref={gridRef}
           key={`waiting-list-${refreshCounter}`}
-          columns={['first_name', 'last_name', 'email', 'action']}
+          columns={['name', 'email', 'action']}
           columnRenderers={{
-            first_name: NameRenderer,
+            name: NameRenderer,
             action: ActionRenderer,
           }}
           path="users?role_type=null"
