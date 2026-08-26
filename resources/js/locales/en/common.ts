@@ -1,13 +1,13 @@
 const enCommon = {
-    common: {
-        language: 'Language',
-        english: 'English',
-        finnish: 'Suomi',
-        swedish: 'Svenska',
-        loading: 'Loading...',
-        navigation: 'Navigation',
-        close: 'Close',
-    },
+  common: {
+    language: 'Language',
+    english: 'English',
+    finnish: 'Suomi',
+    swedish: 'Svenska',
+    loading: 'Loading...',
+    navigation: 'Navigation',
+    close: 'Close',
+  },
 
   nav: {
     dashboard: 'Dashboard',
