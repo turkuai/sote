@@ -1,9 +1,8 @@
-import React from 'react';
-import { useAuth } from '../components/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../components/AuthContext';
 import { useResponsive } from '../hooks/useResponsive';
-import Header from './Header';
 import './Admin.css';
+import Header from './Header';
 
 export default function PatientsPage() {
   const { currentUser, logout } = useAuth();

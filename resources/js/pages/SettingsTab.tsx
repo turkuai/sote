@@ -1,26 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import './Admin.css';
+import { useEffect, useState } from 'react';
 import { getApiBase } from '../config';
+import './Admin.css';
 
 /**
  * SettingsTab component - User settings including user details, password change, and logout
  * @param {Object} currentUser - Current authenticated user object
  * @param {Function} onLogout - Handler for logout button click
  */
-const SettingsTab = ({
-  currentUser,
-  onLogout
-}) => {
+const SettingsTab = ({ currentUser, onLogout }) => {
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: '',
     newPassword: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
 
   const [passwordStatus, setPasswordStatus] = useState(null);
 
   const handlePasswordInputChange = (field, value) => {
-    setPasswordForm(prev => ({ ...prev, [field]: value }));
+    setPasswordForm((prev) => ({ ...prev, [field]: value }));
   };
 
   const handlePasswordSubmit = async (event) => {
@@ -50,8 +47,8 @@ const SettingsTab = ({
         },
         body: JSON.stringify({
           password: passwordForm.newPassword,
-          current_password: passwordForm.currentPassword
-        })
+          current_password: passwordForm.currentPassword,
+        }),
       });
 
       if (!response.ok) {
@@ -63,7 +60,7 @@ const SettingsTab = ({
       setPasswordForm({
         currentPassword: '',
         newPassword: '',
-        confirmPassword: ''
+        confirmPassword: '',
       });
     } catch (error) {
       console.error('Password change error:', error);
@@ -132,10 +129,7 @@ const SettingsTab = ({
             </label>
 
             {passwordStatus && (
-              <div
-                className={`password-status ${passwordStatus.type === 'error' ? 'error' : 'success'}`}
-                role="alert"
-              >
+              <div className={`password-status ${passwordStatus.type === 'error' ? 'error' : 'success'}`} role="alert">
                 {passwordStatus.message}
               </div>
             )}
@@ -152,8 +146,6 @@ const SettingsTab = ({
             Logout
           </button>
         </div>
-
-
       </div>
     );
   }
@@ -164,14 +156,10 @@ const SettingsTab = ({
         <h2>Settings</h2>
         <p>Manage your account settings and set e-mail preferences.</p>
       </div>
-      
+
       <div className="settings-layout">
         <div className="settings-sidebar">
-          <button 
-            className="settings-nav-item active"
-          >
-            Profile
-          </button>
+          <button className="settings-nav-item active">Profile</button>
         </div>
 
         <div className="settings-content">
@@ -181,32 +169,17 @@ const SettingsTab = ({
 
             <div className="settings-form-group">
               <label>Name</label>
-              <input 
-                type="text" 
-                value={currentUser?.name || 'Mohammad Admin'} 
-                readOnly
-                className="settings-input"
-              />
+              <input type="text" value={currentUser?.name || 'Mohammad Admin'} readOnly className="settings-input" />
             </div>
 
             <div className="settings-form-group">
               <label>Username</label>
-              <input 
-                type="text" 
-                value={currentUser?.username || 'admin'} 
-                readOnly
-                className="settings-input"
-              />
+              <input type="text" value={currentUser?.username || 'admin'} readOnly className="settings-input" />
             </div>
 
             <div className="settings-form-group">
               <label>Role</label>
-              <input 
-                type="text" 
-                value={currentUser?.role_type || 'Administrator'} 
-                readOnly
-                className="settings-input"
-              />
+              <input type="text" value={currentUser?.role_type || 'Administrator'} readOnly className="settings-input" />
             </div>
 
             <div className="settings-form-group">
@@ -246,27 +219,16 @@ const SettingsTab = ({
             </div>
 
             {passwordStatus && (
-              <div
-                className={`password-status ${passwordStatus.type === 'error' ? 'error' : 'success'}`}
-                role="alert"
-              >
+              <div className={`password-status ${passwordStatus.type === 'error' ? 'error' : 'success'}`} role="alert">
                 {passwordStatus.message}
               </div>
             )}
 
             <div className="settings-actions">
-              <button 
-                type="button" 
-                className="settings-update-btn"
-                onClick={handlePasswordSubmit}
-              >
+              <button type="button" className="settings-update-btn" onClick={handlePasswordSubmit}>
                 Update Profile
               </button>
-              <button 
-                type="button" 
-                className="settings-logout-btn-new" 
-                onClick={onLogout}
-              >
+              <button type="button" className="settings-logout-btn-new" onClick={onLogout}>
                 Logout
               </button>
             </div>
@@ -278,4 +240,3 @@ const SettingsTab = ({
 };
 
 export default SettingsTab;
-

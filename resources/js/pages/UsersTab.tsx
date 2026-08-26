@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
 import MobileSearchToggle from '../components/MobileSearchToggle';
@@ -10,23 +10,18 @@ const SEARCH_DEBOUNCE_MS = 300;
 
 /**
  * UsersTab component
- * 
+ *
  * Extracted from Admin.js - handles both mobile and desktop user management views
  * Uses CSS classes for responsive visibility instead of conditional rendering
  * Search is debounced: waits 300ms after last keystroke before triggering the API.
- * 
+ *
  * Props:
  * - currentUser: Current logged in user object
  * - query: Search query string (debounced value used for API)
  * - onQueryChange: Callback function for search query changes
  * - onDeleteUser: Callback function for deleting a user
  */
-export default function UsersTab({
-  currentUser,
-  query,
-  onQueryChange,
-  onDeleteUser,
-}) {
+export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUser }) {
   const [refreshKey, setRefreshKey] = useState(0);
   const [inputValue, setInputValue] = useState(query || '');
   const debounceRef = useRef(null);
@@ -63,8 +58,12 @@ export default function UsersTab({
           <span
             title="This is you"
             style={{
-              display: 'inline-block', width: '8px', height: '8px',
-              borderRadius: '50%', background: '#3b82f6', flexShrink: 0,
+              display: 'inline-block',
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              background: '#3b82f6',
+              flexShrink: 0,
             }}
           />
         )}
@@ -74,9 +73,7 @@ export default function UsersTab({
   };
 
   // Custom renderer para role_type - mostrar "Waiting list" si es null
-  const RoleTypeRenderer = ({ data }) => (
-    <span>{data?.role_type || 'Waiting list'}</span>
-  );
+  const RoleTypeRenderer = ({ data }) => <span>{data?.role_type || 'Waiting list'}</span>;
 
   return (
     <>
@@ -84,10 +81,7 @@ export default function UsersTab({
       <div className="mobile-tab-content hide-on-desktop">
         <div className="mobile-content-section">
           <h2>Users</h2>
-          <MobileSearchToggle
-            value={inputValue}
-            onChange={handleSearchChange}
-          />
+          <MobileSearchToggle value={inputValue} onChange={handleSearchChange} />
           <div style={{ height: '500px', width: '100%' }}>
             <ServerGrid
               key={refreshKey}
@@ -175,39 +169,13 @@ export default function UsersTab({
         <div className="tab-header">
           <h2>Users Management</h2>
           <div className="user-search">
-          <span className="search-icon">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle
-                cx="11"
-                cy="11"
-                r="6"
-                stroke="#6b7280"
-                strokeWidth="2"
-              />
-              <line
-                x1="15"
-                y1="15"
-                x2="20"
-                y2="20"
-                stroke="#6b7280"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </span>
-          <input
-            type="text"
-            autoComplete="off"
-            placeholder="Search users..."
-            value={inputValue}
-            onChange={handleSearchChange}
-          />
+            <span className="search-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
+                <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </span>
+            <input type="text" autoComplete="off" placeholder="Search users..." value={inputValue} onChange={handleSearchChange} />
           </div>
         </div>
         <ServerGrid
@@ -285,56 +253,33 @@ export default function UsersTab({
           }}
         />
       </div>
-
     </>
   );
 }
 
-
-
 function UsersForm({ data, setData }) {
   const isEditing = !!(data && data.id);
   const getValue = (field) => (data && data[field]) || '';
-  const handleChange = (field) => (e) =>
-    setData((prev) => ({ ...prev, [field]: e.target.value }));
+  const handleChange = (field) => (e) => setData((prev) => ({ ...prev, [field]: e.target.value }));
 
   return (
     <div className="add-user-form">
       <div className="add-user-form-grid">
         <div>
           <label className="form-label">First name *</label>
-          <input
-            type="text"
-            className="form-input"
-            value={getValue('first_name')}
-            onChange={handleChange('first_name')}
-          />
+          <input type="text" className="form-input" value={getValue('first_name')} onChange={handleChange('first_name')} />
         </div>
         <div>
           <label className="form-label">Last name *</label>
-          <input
-            type="text"
-            className="form-input"
-            value={getValue('last_name')}
-            onChange={handleChange('last_name')}
-          />
+          <input type="text" className="form-input" value={getValue('last_name')} onChange={handleChange('last_name')} />
         </div>
         <div>
           <label className="form-label">Email *</label>
-          <input
-            type="email"
-            className="form-input"
-            value={getValue('email')}
-            onChange={handleChange('email')}
-          />
+          <input type="email" className="form-input" value={getValue('email')} onChange={handleChange('email')} />
         </div>
         <div>
           <label className="form-label">Role</label>
-          <select
-            className="form-select"
-            value={getValue('role_type') || 'nurse'}
-            onChange={handleChange('role_type')}
-          >
+          <select className="form-select" value={getValue('role_type') || 'nurse'} onChange={handleChange('role_type')}>
             <option value="nurse">Nurse (Read-only)</option>
             <option value="manager">Manager (CRUD)</option>
             <option value="admin">Admin (Full Access)</option>
@@ -344,54 +289,43 @@ function UsersForm({ data, setData }) {
           <>
             <div>
               <label className="form-label">Password (optional)</label>
+              <input type="password" className="form-input" value={getValue('password')} onChange={handleChange('password')} />
+            </div>
+            <div>
+              <label className="form-label">Confirm password (optional)</label>
+              <input type="password" className="form-input" value={getValue('confirmPassword')} onChange={handleChange('confirmPassword')} />
+            </div>
+          </>
+        )}
+
+        {isEditing && (
+          <>
+            <div style={{ gridColumn: '1 / -1', fontSize: '0.875rem', color: '#6b7280' }}>
+              Leave <strong>Password</strong> and <strong>Confirm password</strong> empty to keep the current password.
+            </div>
+            <div>
+              <label className="form-label">Password</label>
               <input
                 type="password"
                 className="form-input"
                 value={getValue('password')}
                 onChange={handleChange('password')}
+                placeholder="New password (optional)"
               />
             </div>
             <div>
-              <label className="form-label">Confirm password (optional)</label>
+              <label className="form-label">Confirm password</label>
               <input
                 type="password"
                 className="form-input"
                 value={getValue('confirmPassword')}
                 onChange={handleChange('confirmPassword')}
+                placeholder="Confirm new password"
               />
             </div>
           </>
-    )}
-
-    {isEditing && (
-      <>
-        <div style={{ gridColumn: '1 / -1', fontSize: '0.875rem', color: '#6b7280' }}>
-          Leave <strong>Password</strong> and <strong>Confirm password</strong> empty to keep the current password.
-        </div>
-        <div>
-          <label className="form-label">Password</label>
-          <input
-            type="password"
-            className="form-input"
-            value={getValue('password')}
-            onChange={handleChange('password')}
-            placeholder="New password (optional)"
-          />
-        </div>
-        <div>
-          <label className="form-label">Confirm password</label>
-          <input
-            type="password"
-            className="form-input"
-            value={getValue('confirmPassword')}
-            onChange={handleChange('confirmPassword')}
-            placeholder="Confirm new password"
-          />
-        </div>
-      </>
-    )}
+        )}
       </div>
     </div>
   );
 }
-

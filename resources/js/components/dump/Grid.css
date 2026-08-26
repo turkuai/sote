@@ -31,17 +31,17 @@
   min-height: 28px;
 }
 
-.icon-btn:hover { 
-  background: #f3f4f6; 
+.icon-btn:hover {
+  background: #f3f4f6;
 }
 
-.icon-btn.danger { 
-  border-color: #fecaca; 
-  background: #fff; 
+.icon-btn.danger {
+  border-color: #fecaca;
+  background: #fff;
 }
 
-.icon-btn.danger:hover { 
-  background: #fee2e2; 
+.icon-btn.danger:hover {
+  background: #fee2e2;
 }
 
 .btn-save {
@@ -84,7 +84,6 @@
   background: #9ca3af;
   cursor: not-allowed;
 }
-
 
 .modal-overlay {
   position: fixed;
@@ -299,28 +298,28 @@
     --ag-header-height: 40px;
     --ag-row-height: 36px;
   }
-  
+
   .ag-theme-alpine .ag-header-cell {
     padding: 4px 6px;
     font-size: 12px;
   }
-  
+
   .ag-theme-alpine .ag-cell {
     padding: 4px 6px;
     font-size: 13px;
     line-height: 1.3;
   }
-  
+
   .ag-theme-alpine .ag-paging-panel {
     font-size: 11px;
     padding: 6px 8px;
   }
-  
+
   .ag-theme-alpine .ag-paging-button {
     padding: 2px 4px;
     min-width: 28px;
   }
-  
+
   .ag-theme-alpine .ag-paging-page-summary-panel {
     display: none;
   }
@@ -331,7 +330,7 @@
   .modal {
     padding: 1.5rem;
   }
-  
+
   .modal h3 {
     font-size: 1.25rem;
   }
@@ -343,22 +342,22 @@
     padding: 1rem;
     border-radius: 12px;
   }
-  
+
   .modal h3 {
     font-size: 1.125rem;
     margin-bottom: 1rem;
   }
-  
+
   .form-row {
     margin-bottom: 0.875rem;
   }
-  
+
   .modal-actions {
     gap: 0.5rem;
     margin-top: 1.25rem;
     flex-direction: column;
   }
-  
+
   .modal-actions button {
     width: 100%;
   }

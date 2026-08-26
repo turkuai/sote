@@ -1,5 +1,5 @@
+import { Clock, Folder, Settings, Users } from 'lucide-react';
 import React from 'react';
-import { Settings, Users, Folder, Clock } from 'lucide-react';
 
 // Tab icon map - maps tab names to their corresponding icon components
 const TAB_ICON_MAP = {
@@ -76,4 +76,3 @@ export const TabConfig = {
     return TAB_ICON_MAP[tab] || null;
   },
 };
-

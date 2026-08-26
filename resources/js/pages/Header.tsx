@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { ChevronDown, Settings, LogOut } from 'lucide-react';
+import { ChevronDown, LogOut, Settings } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAssetUrl } from '../config';
 import './Admin.css';
@@ -13,14 +13,7 @@ import './Admin.css';
  * @param {Function} onNavigateDashboard - Handler for dashboard navigation
  * @param {boolean} isMobile - Whether the current view is mobile
  */
-const Header = ({ 
-  currentUser, 
-  onLogout, 
-  onSettingsClick, 
-  currentPage = 'dashboard',
-  onNavigateDashboard,
-  isMobile = false 
-}) => {
+const Header = ({ currentUser, onLogout, onSettingsClick, currentPage = 'dashboard', onNavigateDashboard, isMobile = false }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
@@ -63,28 +56,16 @@ const Header = ({
   return (
     <div className="admin-header">
       <h1 className="admin-logo">
-        <img
-          src={getAssetUrl('tai.png')}
-          alt="TAI logo"
-          className="admin-logo-image"
-        />
-        {currentUser?.role_type === 'student' && (
-          <span className="admin-logo-subtitle">My Dashboard</span>
-        )}
+        <img src={getAssetUrl('tai.png')} alt="TAI logo" className="admin-logo-image" />
+        {currentUser?.role_type === 'student' && <span className="admin-logo-subtitle">My Dashboard</span>}
       </h1>
 
       {/* Navigation buttons - centered */}
       <div className="header-nav-buttons">
-        <button 
-          className={`nav-button ${currentPage === 'dashboard' ? 'active' : ''}`}
-          onClick={handleDashboardClick}
-        >
+        <button className={`nav-button ${currentPage === 'dashboard' ? 'active' : ''}`} onClick={handleDashboardClick}>
           <strong>Dashboard</strong>
         </button>
-        <button 
-          className={`nav-button ${currentPage === 'patients' ? 'active' : ''}`}
-          onClick={handlePatientsClick}
-        >
+        <button className={`nav-button ${currentPage === 'patients' ? 'active' : ''}`} onClick={handlePatientsClick}>
           <strong>Patients</strong>
         </button>
       </div>
@@ -92,10 +73,7 @@ const Header = ({
       <div className="admin-header-actions">
         {!isMobile && (
           <div className="user-dropdown-container" ref={dropdownRef}>
-            <button
-              className="user-dropdown-trigger"
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            >
+            <button className="user-dropdown-trigger" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
               <span className="user-info-text">
                 Welcome, <strong>{currentUser?.name}</strong>
               </span>
@@ -122,5 +100,3 @@ const Header = ({
 };
 
 export default Header;
-
-

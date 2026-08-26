@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
 import { Crown, Eye, EyeOff, Trash2 } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ServerGrid as ServerGridBase } from 'tai-grid';
-const ServerGrid = ServerGridBase as React.ComponentType<any>;
 import GroupRegistrationForm from '../components/GroupRegistrationForm';
+const ServerGrid = ServerGridBase as React.ComponentType<any>;
 
 function GroupNameCell({ value, data }: { value: unknown; data: Record<string, unknown> }) {
   const isOwner = data?.is_owner === true;
@@ -51,8 +51,8 @@ function AccessKeyCell({ value }: { value: unknown }) {
 }
 
 import 'tai-grid/style.css';
-import MobileSearchToggle from '../components/MobileSearchToggle';
 import GroupUsersModal from '../components/GroupUsersModal';
+import MobileSearchToggle from '../components/MobileSearchToggle';
 import { useNotification } from '../components/NotificationContext';
 import { getApiBase } from '../config';
 import './Admin.css';
@@ -61,19 +61,15 @@ const SEARCH_DEBOUNCE_MS = 300;
 
 /**
  * GroupsTab component
- * 
+ *
  * Handles groups/sectors management
- * 
+ *
  * Props:
  * - currentUser: Current logged in user object
  * - query: Search query string (debounced value used for API)
  * - onQueryChange: Callback function for search query changes
  */
-export default function GroupsTab({
-  currentUser,
-  query,
-  onQueryChange,
-}) {
+export default function GroupsTab({ currentUser, query, onQueryChange }) {
   const [refreshKey, setRefreshKey] = useState(0);
   const [inputValue, setInputValue] = useState(query || '');
   const [selectedGroup, setSelectedGroup] = useState(null);
@@ -94,8 +90,8 @@ export default function GroupsTab({
   useEffect(() => {
     if (currentUser?.role_type !== 'nurse') return;
     fetch(`${getApiBase()}/api/groups/my`, { credentials: 'include' })
-      .then(r => r.json())
-      .then(data => setMyGroupCount(Array.isArray(data?.data) ? data.data.length : (Array.isArray(data) ? data.length : 0)))
+      .then((r) => r.json())
+      .then((data) => setMyGroupCount(Array.isArray(data?.data) ? data.data.length : Array.isArray(data) ? data.length : 0))
       .catch(() => setMyGroupCount(0));
   }, [currentUser, refreshKey]);
 
@@ -134,8 +130,8 @@ export default function GroupsTab({
     lastPanelClickedIndex.current = null;
     setPanelLoading(true);
     fetch(`${getApiBase()}/api/groups/${group.id}`, { credentials: 'include' })
-      .then(r => r.json())
-      .then(res => {
+      .then((r) => r.json())
+      .then((res) => {
         const users = res?.data?.users ?? res?.users ?? [];
         setPanelUsers(Array.isArray(users) ? users : []);
       })
@@ -155,10 +151,10 @@ export default function GroupsTab({
           headers: { 'X-XSRF-TOKEN': decodeURIComponent(document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1] ?? '') },
         });
       }
-      setPanelUsers(prev => prev.filter(u => !toRemove.includes(u.id as number)));
+      setPanelUsers((prev) => prev.filter((u) => !toRemove.includes(u.id as number)));
       setSelectedPanelUserIds([]);
       lastPanelClickedIndex.current = null;
-      setRefreshKey(prev => prev + 1);
+      setRefreshKey((prev) => prev + 1);
       showNotification(`${toRemove.length} user(s) removed from group`, 'success');
     } catch {
       showNotification('Failed to remove users', 'error');
@@ -171,10 +167,18 @@ export default function GroupsTab({
     ? panelUsers.filter((u) => {
         const q = panelSearch.toLowerCase();
         return (
-          String(u.first_name ?? '').toLowerCase().includes(q) ||
-          String(u.last_name ?? '').toLowerCase().includes(q) ||
-          String(u.email ?? '').toLowerCase().includes(q) ||
-          String(u.role_type ?? '').toLowerCase().includes(q)
+          String(u.first_name ?? '')
+            .toLowerCase()
+            .includes(q) ||
+          String(u.last_name ?? '')
+            .toLowerCase()
+            .includes(q) ||
+          String(u.email ?? '')
+            .toLowerCase()
+            .includes(q) ||
+          String(u.role_type ?? '')
+            .toLowerCase()
+            .includes(q)
         );
       })
     : panelUsers;
@@ -189,17 +193,12 @@ export default function GroupsTab({
             <div className="mobile-content-section">
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                 <h2 style={{ margin: 0 }}>My Groups</h2>
-                <button
-                  className="add-btn"
-                  onClick={() => setShowEnrollModal(true)}
-                >
+                <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
                   Enroll
                 </button>
               </div>
               {myGroupCount === 0 && (
-                <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '2rem 0' }}>
-                  You don't belong to any group, yet...
-                </p>
+                <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '2rem 0' }}>You don't belong to any group, yet...</p>
               )}
               {myGroupCount !== 0 && (
                 <div style={{ height: '400px', width: '100%' }}>
@@ -226,7 +225,9 @@ export default function GroupsTab({
               <div style={{ flex: '0 0 50%', minWidth: 0, paddingRight: '1.5rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
                   <h2 style={{ margin: 0 }}>My Groups</h2>
-                  <button className="add-btn" onClick={() => setShowEnrollModal(true)}>Enroll</button>
+                  <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
+                    Enroll
+                  </button>
                 </div>
                 {myGroupCount === 0 && (
                   <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '3rem 0' }}>
@@ -271,7 +272,10 @@ export default function GroupsTab({
                           autoComplete="off"
                           placeholder="Search members..."
                           value={panelSearch}
-                          onChange={(e) => { setPanelSearch(e.target.value); lastPanelClickedIndex.current = null; }}
+                          onChange={(e) => {
+                            setPanelSearch(e.target.value);
+                            lastPanelClickedIndex.current = null;
+                          }}
                         />
                       </div>
                       <button
@@ -287,13 +291,24 @@ export default function GroupsTab({
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                       <button className="server-grid-add-button" title="Add User" onClick={() => handleAddUsersClick(panelGroup)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <line x1="12" y1="5" x2="12" y2="19" />
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
                       </button>
                     </div>
                     {panelLoading && <p style={{ color: '#6b7280' }}>Loading...</p>}
-                    {!panelLoading && filteredPanelUsers.length === 0 && (
-                      <p style={{ color: '#6b7280', fontStyle: 'italic' }}>No members found.</p>
-                    )}
+                    {!panelLoading && filteredPanelUsers.length === 0 && <p style={{ color: '#6b7280', fontStyle: 'italic' }}>No members found.</p>}
                     {!panelLoading && filteredPanelUsers.length > 0 && (
                       <div className="grid-wrapper" style={{ width: '100%', overflowX: 'auto' }}>
                         <table className="data-grid-table">
@@ -307,10 +322,12 @@ export default function GroupsTab({
                                 <input
                                   type="checkbox"
                                   className="user-list-checkbox"
-                                  checked={filteredPanelUsers.length > 0 && filteredPanelUsers.every(u => selectedPanelUserIds.includes(u.id as number))}
+                                  checked={
+                                    filteredPanelUsers.length > 0 && filteredPanelUsers.every((u) => selectedPanelUserIds.includes(u.id as number))
+                                  }
                                   onChange={(e) => {
                                     if (e.target.checked) {
-                                      setSelectedPanelUserIds(filteredPanelUsers.map(u => u.id as number));
+                                      setSelectedPanelUserIds(filteredPanelUsers.map((u) => u.id as number));
                                     } else {
                                       setSelectedPanelUserIds([]);
                                       lastPanelClickedIndex.current = null;
@@ -329,19 +346,15 @@ export default function GroupsTab({
                                   e.preventDefault();
                                   const from = Math.min(lastPanelClickedIndex.current, index);
                                   const to = Math.max(lastPanelClickedIndex.current, index);
-                                  const rangeIds = filteredPanelUsers.slice(from, to + 1).map(u => u.id as number);
-                                  const allChecked = rangeIds.every(id => selectedPanelUserIds.includes(id));
-                                  setSelectedPanelUserIds(prev =>
-                                    allChecked
-                                      ? prev.filter(id => !rangeIds.includes(id))
-                                      : [...new Set([...prev, ...rangeIds])]
+                                  const rangeIds = filteredPanelUsers.slice(from, to + 1).map((u) => u.id as number);
+                                  const allChecked = rangeIds.every((id) => selectedPanelUserIds.includes(id));
+                                  setSelectedPanelUserIds((prev) =>
+                                    allChecked ? prev.filter((id) => !rangeIds.includes(id)) : [...new Set([...prev, ...rangeIds])],
                                   );
                                 } else {
                                   lastPanelClickedIndex.current = index;
-                                  setSelectedPanelUserIds(prev =>
-                                    checked
-                                      ? prev.filter(id => id !== (user.id as number))
-                                      : [...prev, user.id as number]
+                                  setSelectedPanelUserIds((prev) =>
+                                    checked ? prev.filter((id) => id !== (user.id as number)) : [...prev, user.id as number],
                                   );
                                 }
                               };
@@ -356,13 +369,7 @@ export default function GroupsTab({
                                   <td>{String(user.email ?? '')}</td>
                                   <td>{String(user.role_type ?? '')}</td>
                                   <td>
-                                    <input
-                                      type="checkbox"
-                                      className="user-list-checkbox"
-                                      checked={checked}
-                                      onChange={() => {}}
-                                      tabIndex={-1}
-                                    />
+                                    <input type="checkbox" className="user-list-checkbox" checked={checked} onChange={() => {}} tabIndex={-1} />
                                   </td>
                                 </tr>
                               );
@@ -387,12 +394,11 @@ export default function GroupsTab({
             <div className="mobile-content-section">
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                 <h2 style={{ margin: 0 }}>Groups</h2>
-                <button className="add-btn" onClick={() => setShowEnrollModal(true)}>Enroll</button>
+                <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
+                  Enroll
+                </button>
               </div>
-              <MobileSearchToggle
-                value={inputValue}
-                onChange={handleSearchChange}
-              />
+              <MobileSearchToggle value={inputValue} onChange={handleSearchChange} />
               <div style={{ height: '500px', width: '100%' }}>
                 <ServerGrid
                   key={refreshKey}
@@ -407,7 +413,14 @@ export default function GroupsTab({
                   formComponent={GroupsForm}
                   rowActions={[
                     {
-                      icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="#0891b2" /></svg>,
+                      icon: (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                          <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+                            fill="#0891b2"
+                          />
+                        </svg>
+                      ),
                       tooltip: 'Manage Users',
                       onClick: handleAddUsersClick,
                     },
@@ -447,15 +460,11 @@ export default function GroupsTab({
                         <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
                       </svg>
                     </span>
-                    <input
-                      type="search"
-                      autoComplete="off"
-                      placeholder="Search groups..."
-                      value={inputValue}
-                      onChange={handleSearchChange}
-                    />
+                    <input type="search" autoComplete="off" placeholder="Search groups..." value={inputValue} onChange={handleSearchChange} />
                   </div>
-                  <button className="add-btn" onClick={() => setShowEnrollModal(true)}>Enroll</button>
+                  <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
+                    Enroll
+                  </button>
                 </div>
                 <div>
                   <ServerGrid
@@ -471,7 +480,14 @@ export default function GroupsTab({
                     formComponent={GroupsForm}
                     rowActions={[
                       {
-                        icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="#0891b2" /></svg>,
+                        icon: (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                            <path
+                              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+                              fill="#0891b2"
+                            />
+                          </svg>
+                        ),
                         tooltip: 'Manage Users',
                         onClick: handleAddUsersClick,
                       },
@@ -519,7 +535,10 @@ export default function GroupsTab({
                           autoComplete="off"
                           placeholder="Search members..."
                           value={panelSearch}
-                          onChange={(e) => { setPanelSearch(e.target.value); lastPanelClickedIndex.current = null; }}
+                          onChange={(e) => {
+                            setPanelSearch(e.target.value);
+                            lastPanelClickedIndex.current = null;
+                          }}
                         />
                       </div>
                       <button
@@ -535,13 +554,24 @@ export default function GroupsTab({
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                       <button className="server-grid-add-button" title="Add User" onClick={() => handleAddUsersClick(panelGroup)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <line x1="12" y1="5" x2="12" y2="19" />
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
                       </button>
                     </div>
                     {panelLoading && <p style={{ color: '#6b7280' }}>Loading...</p>}
-                    {!panelLoading && filteredPanelUsers.length === 0 && (
-                      <p style={{ color: '#6b7280', fontStyle: 'italic' }}>No members found.</p>
-                    )}
+                    {!panelLoading && filteredPanelUsers.length === 0 && <p style={{ color: '#6b7280', fontStyle: 'italic' }}>No members found.</p>}
                     {!panelLoading && filteredPanelUsers.length > 0 && (
                       <div className="grid-wrapper" style={{ width: '100%', overflowX: 'auto' }}>
                         <table className="data-grid-table">
@@ -555,10 +585,12 @@ export default function GroupsTab({
                                 <input
                                   type="checkbox"
                                   className="user-list-checkbox"
-                                  checked={filteredPanelUsers.length > 0 && filteredPanelUsers.every(u => selectedPanelUserIds.includes(u.id as number))}
+                                  checked={
+                                    filteredPanelUsers.length > 0 && filteredPanelUsers.every((u) => selectedPanelUserIds.includes(u.id as number))
+                                  }
                                   onChange={(e) => {
                                     if (e.target.checked) {
-                                      setSelectedPanelUserIds(filteredPanelUsers.map(u => u.id as number));
+                                      setSelectedPanelUserIds(filteredPanelUsers.map((u) => u.id as number));
                                     } else {
                                       setSelectedPanelUserIds([]);
                                       lastPanelClickedIndex.current = null;
@@ -577,19 +609,15 @@ export default function GroupsTab({
                                   e.preventDefault();
                                   const from = Math.min(lastPanelClickedIndex.current, index);
                                   const to = Math.max(lastPanelClickedIndex.current, index);
-                                  const rangeIds = filteredPanelUsers.slice(from, to + 1).map(u => u.id as number);
-                                  const allChecked = rangeIds.every(id => selectedPanelUserIds.includes(id));
-                                  setSelectedPanelUserIds(prev =>
-                                    allChecked
-                                      ? prev.filter(id => !rangeIds.includes(id))
-                                      : [...new Set([...prev, ...rangeIds])]
+                                  const rangeIds = filteredPanelUsers.slice(from, to + 1).map((u) => u.id as number);
+                                  const allChecked = rangeIds.every((id) => selectedPanelUserIds.includes(id));
+                                  setSelectedPanelUserIds((prev) =>
+                                    allChecked ? prev.filter((id) => !rangeIds.includes(id)) : [...new Set([...prev, ...rangeIds])],
                                   );
                                 } else {
                                   lastPanelClickedIndex.current = index;
-                                  setSelectedPanelUserIds(prev =>
-                                    checked
-                                      ? prev.filter(id => id !== (user.id as number))
-                                      : [...prev, user.id as number]
+                                  setSelectedPanelUserIds((prev) =>
+                                    checked ? prev.filter((id) => id !== (user.id as number)) : [...prev, user.id as number],
                                   );
                                 }
                               };
@@ -604,13 +632,7 @@ export default function GroupsTab({
                                   <td>{String(user.email ?? '')}</td>
                                   <td>{String(user.role_type ?? '')}</td>
                                   <td>
-                                    <input
-                                      type="checkbox"
-                                      className="user-list-checkbox"
-                                      checked={checked}
-                                      onChange={() => {}}
-                                      tabIndex={-1}
-                                    />
+                                    <input type="checkbox" className="user-list-checkbox" checked={checked} onChange={() => {}} tabIndex={-1} />
                                   </td>
                                 </tr>
                               );
@@ -631,17 +653,26 @@ export default function GroupsTab({
       {showEnrollModal && (
         <div
           style={{
-            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.4)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
           }}
           onClick={() => setShowEnrollModal(false)}
         >
           <div
             style={{
-              background: '#fff', borderRadius: '0.75rem', padding: '1.5rem',
-              width: '100%', maxWidth: '420px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+              background: '#fff',
+              borderRadius: '0.75rem',
+              padding: '1.5rem',
+              width: '100%',
+              maxWidth: '420px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
             }}
-            onClick={e => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
               <h3 style={{ margin: 0 }}>Join a Group</h3>
@@ -657,7 +688,7 @@ export default function GroupsTab({
             <GroupRegistrationForm
               onSuccess={() => {
                 setShowEnrollModal(false);
-                setRefreshKey(prev => prev + 1);
+                setRefreshKey((prev) => prev + 1);
               }}
             />
           </div>
@@ -676,13 +707,13 @@ export default function GroupsTab({
             setShowGroupUsersModal(false);
             const addedToGroup = selectedGroup;
             setSelectedGroup(null);
-            setRefreshKey(prev => prev + 1);
+            setRefreshKey((prev) => prev + 1);
             // Re-fetch panel members if the affected group is currently open in the panel
             if (panelGroup && addedToGroup && panelGroup.id === addedToGroup.id) {
               setPanelLoading(true);
               fetch(`${getApiBase()}/api/groups/${panelGroup.id}`, { credentials: 'include' })
-                .then(r => r.json())
-                .then(res => {
+                .then((r) => r.json())
+                .then((res) => {
                   const users = res?.data?.users ?? res?.users ?? [];
                   setPanelUsers(Array.isArray(users) ? users : []);
                 })
@@ -699,8 +730,7 @@ export default function GroupsTab({
 function GroupsForm({ data, setData }) {
   const [showKey, setShowKey] = useState(false);
   const getValue = (field) => (data && data[field]) || '';
-  const handleChange = (field) => (e) =>
-    setData((prev) => ({ ...prev, [field]: e.target.value }));
+  const handleChange = (field) => (e) => setData((prev) => ({ ...prev, [field]: e.target.value }));
 
   return (
     <div className="add-user-form">

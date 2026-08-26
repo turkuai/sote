@@ -1,11 +1,5 @@
-import React, { useMemo, useState, useEffect } from 'react';
-import {
-  useReactTable,
-  getCoreRowModel,
-  getSortedRowModel,
-  getPaginationRowModel,
-  flexRender,
-} from '@tanstack/react-table';
+import { flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
+import { useEffect, useMemo, useState } from 'react';
 import './Grid.css';
 
 const formatHeader = (str) =>
@@ -17,8 +11,7 @@ const formatHeader = (str) =>
         .join(' ');
 
 const getField = (col) => (typeof col === 'object' ? col.field : col);
-const getHeader = (col) =>
-  (typeof col === 'object' && col.displayName) || formatHeader(getField(col));
+const getHeader = (col) => (typeof col === 'object' && col.displayName) || formatHeader(getField(col));
 
 export default function Grid({
   columns,
@@ -40,11 +33,7 @@ export default function Grid({
   }, [data]);
 
   const cols = useMemo(() => {
-    const list = Array.isArray(columns) && columns.length > 0
-      ? columns
-      : rows[0]
-        ? Object.keys(rows[0])
-        : [];
+    const list = Array.isArray(columns) && columns.length > 0 ? columns : rows[0] ? Object.keys(rows[0]) : [];
 
     const dataCols = list.map((col) => {
       const id = getField(col);
@@ -57,7 +46,7 @@ export default function Grid({
         cell: ({ row, getValue }) => {
           const value = colObj.valueGetter ? colObj.valueGetter(row.original) : getValue();
           const Renderer = columnRenderers[id];
-          return Renderer ? <Renderer value={value} data={row.original} /> : (value != null ? String(value) : '');
+          return Renderer ? <Renderer value={value} data={row.original} /> : value != null ? String(value) : '';
         },
       };
     });
@@ -118,11 +107,7 @@ export default function Grid({
           {table.getHeaderGroups().map((hg) => (
             <tr key={hg.id}>
               {hg.headers.map((h) => (
-                <th
-                  key={h.id}
-                  onClick={h.column.getToggleSortingHandler()}
-                  className={h.column.getCanSort() ? 'sortable' : ''}
-                >
+                <th key={h.id} onClick={h.column.getToggleSortingHandler()} className={h.column.getCanSort() ? 'sortable' : ''}>
                   {flexRender(h.column.columnDef.header, h.getContext())}
                   {h.column.getIsSorted() === 'asc' ? ' ↑' : h.column.getIsSorted() === 'desc' ? ' ↓' : ''}
                 </th>
@@ -132,11 +117,7 @@ export default function Grid({
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              onClick={() => onRowClick?.(row.original)}
-              style={{ cursor: onRowClick ? 'pointer' : 'default' }}
-            >
+            <tr key={row.id} onClick={() => onRowClick?.(row.original)} style={{ cursor: onRowClick ? 'pointer' : 'default' }}>
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
               ))}
@@ -146,23 +127,13 @@ export default function Grid({
       </table>
       {table.getPageCount() > 1 && (
         <div className="grid-pagination">
-          <button
-            type="button"
-            className="btn-page"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
+          <button type="button" className="btn-page" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
             Previous
           </button>
           <span>
             Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
           </span>
-          <button
-            type="button"
-            className="btn-page"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
+          <button type="button" className="btn-page" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
             Next
           </button>
         </div>
@@ -170,4 +141,3 @@ export default function Grid({
     </div>
   );
 }
-
