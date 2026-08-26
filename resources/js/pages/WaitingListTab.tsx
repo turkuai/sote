@@ -1,18 +1,18 @@
-import React, { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
-import { getApiBase } from '../config';
 import { useNotification } from '../components/NotificationContext';
+import { getApiBase } from '../config';
 
 export default function WaitingListTab({ currentUser }) {
+  const { t } = useTranslation();
   const { showNotification } = useNotification();
   const [refreshCounter, setRefreshCounter] = useState(0);
   const gridRef = useRef(null);
 
   // Custom renderer for name
-  const NameRenderer = ({ data }) => (
-    <span>{`${data?.first_name || ''} ${data?.last_name || ''}`.trim()}</span>
-  );
+  const NameRenderer = ({ data }) => <span>{`${data?.first_name || ''} ${data?.last_name || ''}`.trim()}</span>;
 
   // Custom renderer for action button
   const ActionRenderer = ({ data }) => (
@@ -29,7 +29,7 @@ export default function WaitingListTab({ currentUser }) {
       }}
       type="button"
     >
-      Accept
+      {t('waitingList.accept')}
     </button>
   );
 
@@ -37,12 +37,12 @@ export default function WaitingListTab({ currentUser }) {
     try {
       // Get CSRF token from meta tag
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-      
+
       const response = await fetch(`${getApiBase()}/api/users/${userId}`, {
         method: 'PATCH',
         credentials: 'include',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json',
           'X-CSRF-TOKEN': csrfToken,
         },
@@ -52,35 +52,43 @@ export default function WaitingListTab({ currentUser }) {
       });
 
       if (response.ok) {
-        showNotification(`${firstName} ${lastName} has been approved and assigned as Nurse.`, 'success');
+        showNotification(
+          t('waitingList.notifications.approved', {
+            name: `${firstName} ${lastName}`,
+          }),
+          'success',
+        );
         // Force grid to refetch by incrementing the counter
-        setRefreshCounter(prev => prev + 1);
+        setRefreshCounter((prev) => prev + 1);
       } else {
         const data = await response.json();
-        showNotification(data.message || 'Failed to approve user', 'error');
+        showNotification(data.message || t('waitingList.notifications.failed'), 'error');
       }
     } catch (error) {
       console.error('Error approving user:', error);
-      showNotification('Error approving user', 'error');
+      showNotification(t('waitingList.notifications.error'), 'error');
     }
   };
 
   return (
     <div>
       <div className="tab-header">
-        <h2>Waiting for Approval</h2>
+        <h2>{t('waitingList.title')}</h2>
       </div>
-      <p style={{ color: '#666', marginBottom: '20px' }}>
-        Users pending approval. Click "Accept" to approve and assign as Nurse.
-      </p>
+      <p style={{ color: '#666', marginBottom: '20px' }}>{t('waitingList.description')}</p>
 
       <div style={{ height: '500px', width: '100%' }}>
         <ServerGrid
           ref={gridRef}
           key={`waiting-list-${refreshCounter}`}
-          columns={['name', 'email', 'action']}
+          columns={[
+            { field: 'first_name', displayName: t('waitingList.table.name') },
+            { field: 'last_name', displayName: t('waitingList.table.lastName') },
+            { field: 'email', displayName: t('table.email') },
+            { field: 'action', displayName: t('table.actions') },
+          ]}
           columnRenderers={{
-            name: NameRenderer,
+            first_name: NameRenderer,
             action: ActionRenderer,
           }}
           path="users?role_type=null"
@@ -91,6 +99,34 @@ export default function WaitingListTab({ currentUser }) {
           showAddButton={false}
           getApiBase={getApiBase}
           showNot={showNotification}
+          labels={{
+            loading: t('grid.loading'),
+            add: t('grid.add'),
+            updateFailed: t('grid.errors.updateFailed'),
+            itemUpdated: t('grid.success.itemUpdated'),
+            listViewRequiresProps: t('grid.errors.listViewRequiresProps'),
+            confirmDeleteTitle: t('grid.confirmDelete.title'),
+            confirmDeleteMessage: t('grid.confirmDelete.message'),
+            confirmDeleteLabel: t('grid.confirmDelete.delete'),
+            deletingLabel: t('grid.confirmDelete.deleting'),
+            cancelLabel: t('grid.confirmDelete.cancel'),
+            editTitle: t('grid.dialog.edit'),
+            addTitle: t('grid.dialog.add'),
+            grid: {
+              actionsHeader: t('table.actions'),
+              edit: t('table.edit'),
+              delete: t('table.delete'),
+              previous: t('grid.pagination.previous'),
+              next: t('grid.pagination.next'),
+              page: t('grid.pagination.page'),
+              of: t('grid.pagination.of'),
+            },
+            dialog: {
+              save: t('grid.dialog.save'),
+              cancel: t('grid.dialog.cancel'),
+              close: t('grid.dialog.close'),
+            },
+          }}
         />
       </div>
     </div>

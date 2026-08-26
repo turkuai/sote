@@ -1,37 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../components/AuthContext';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '../components/AuthContext';
 import './Admin.css';
 
-import SettingsTab from './SettingsTab';
+import { useTranslation } from 'react-i18next';
+import { usePasswordForm } from '../hooks/usePasswordForm';
+import { useResponsive } from '../hooks/useResponsive';
+import { useUserManagement } from '../hooks/useUserManagement';
+import { TabConfig } from '../utils/tabConfig';
+import GroupsTab from './GroupsTab';
 import Header from './Header';
 import HomeTabs from './HomeTabs';
 import MobileNav from './MobileNav';
-import { usePasswordForm } from '../hooks/usePasswordForm';
-import { useUserManagement } from '../hooks/useUserManagement';
-import { useResponsive } from '../hooks/useResponsive';
+import SettingsTab from './SettingsTab';
 import UsersTab from './UsersTab';
-import GroupsTab from './GroupsTab';
 import WaitingListTab from './WaitingListTab';
-import { TabConfig } from '../utils/tabConfig';
 
 export default function HomePage() {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
   
+  const { t } = useTranslation();
+  
   /*
-    * Retrieves the dynamic "tab" parameter defined in the "/home/:tab" route.
-    * useParams<{ tab: string }>() tells TypeScript that the expected route
-    * parameter is named "tab" and its value is a string.
-    *
-    * The destructuring syntax { tab: urlTab } extracts the "tab" property
-    * returned by useParams() and renames the local variable to "urlTab".
-    *
-    * Example:
-    * URL: /home/settings
-    * useParams() → { tab: "settings" }
-    * urlTab → "settings"
-  */
+   * Retrieves the dynamic "tab" parameter defined in the "/home/:tab" route.
+   * useParams<{ tab: string }>() tells TypeScript that the expected route
+   * parameter is named "tab" and its value is a string.
+   *
+   * The destructuring syntax { tab: urlTab } extracts the "tab" property
+   * returned by useParams() and renames the local variable to "urlTab".
+   *
+   * Example:
+   * URL: /home/settings
+   * useParams() → { tab: "settings" }
+   * urlTab → "settings"
+   */
   const { tab: urlTab } = useParams<{ tab: string }>();
 
   const [userQuery, setUserQuery] = useState('');
@@ -44,12 +47,12 @@ export default function HomePage() {
   const {
     passwordForm,
     passwordStatus,
-    handlers: { handlePasswordInputChange, handlePasswordSubmit, clearPasswordStatus }
+    handlers: { handlePasswordInputChange, handlePasswordSubmit, clearPasswordStatus },
   } = usePasswordForm();
 
   // User management hook
   const {
-    handlers: { handleDeleteUser }
+    handlers: { handleDeleteUser },
   } = useUserManagement();
 
   // Responsive hook
@@ -57,7 +60,7 @@ export default function HomePage() {
 
   // Set default tab based on role
   const [activeTab, setActiveTab] = useState(() => {
-    return (currentUser?.role_type === "admin" || currentUser?.role_type === "manager") ? "users" : "settings";
+    return currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager' ? 'users' : 'settings';
   });
 
   useEffect(() => {
@@ -91,7 +94,6 @@ export default function HomePage() {
 
   return (
     <div className="admin-page">
-
       {/* Header */}
       <Header
         currentUser={currentUser}
@@ -106,28 +108,15 @@ export default function HomePage() {
       {isMobile && (
         <>
           {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && activeTab === 'users' && (
-            <UsersTab
-              currentUser={currentUser}
-              query={userQuery}
-              onQueryChange={setUserQuery}
-              onDeleteUser={handleDeleteUser}
-            />
+            <UsersTab currentUser={currentUser} query={userQuery} onQueryChange={setUserQuery} onDeleteUser={handleDeleteUser} />
           )}
 
           {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && activeTab === 'groups' && (
-            <GroupsTab
-              currentUser={currentUser}
-              query={groupQuery}
-              onQueryChange={setGroupQuery}
-            />
+            <GroupsTab currentUser={currentUser} query={groupQuery} onQueryChange={setGroupQuery} />
           )}
 
           {currentUser?.role_type === 'nurse' && activeTab === 'groups' && (
-            <GroupsTab
-              currentUser={currentUser}
-              query={groupQuery}
-              onQueryChange={setGroupQuery}
-            />
+            <GroupsTab currentUser={currentUser} query={groupQuery} onQueryChange={setGroupQuery} />
           )}
 
           {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && activeTab === 'waiting-list' && (
@@ -150,7 +139,7 @@ export default function HomePage() {
           tabs={tabs}
           activeTab={activeTab}
           onTabClick={handleTabClick}
-          getTabLabel={TabConfig.getTabLabel}
+          getTabLabel={(tab) => TabConfig.getTabLabel(tab, t)}
           renderTabIcon={TabConfig.renderTabIcon}
           collapsed={sidebarCollapsed}
           onToggleCollapse={() => setSidebarCollapsed(c => {
@@ -164,32 +153,19 @@ export default function HomePage() {
           <div className="admin-content-card">
           {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
             <div style={{ display: activeTab === 'users' ? 'block' : 'none' }}>
-              <UsersTab
-                currentUser={currentUser}
-                query={userQuery}
-                onQueryChange={setUserQuery}
-                onDeleteUser={handleDeleteUser}
-              />
+              <UsersTab currentUser={currentUser} query={userQuery} onQueryChange={setUserQuery} onDeleteUser={handleDeleteUser} />
             </div>
           )}
 
           {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
             <div style={{ display: activeTab === 'groups' ? 'block' : 'none' }}>
-              <GroupsTab
-                currentUser={currentUser}
-                query={groupQuery}
-                onQueryChange={setGroupQuery}
-              />
+              <GroupsTab currentUser={currentUser} query={groupQuery} onQueryChange={setGroupQuery} />
             </div>
           )}
 
           {currentUser?.role_type === 'nurse' && (
             <div style={{ display: activeTab === 'groups' ? 'block' : 'none' }}>
-              <GroupsTab
-                currentUser={currentUser}
-                query={groupQuery}
-                onQueryChange={setGroupQuery}
-              />
+              <GroupsTab currentUser={currentUser} query={groupQuery} onQueryChange={setGroupQuery} />
             </div>
           )}
 
@@ -207,17 +183,7 @@ export default function HomePage() {
       </div>
 
       {/* Mobile Bottom Tab Bar */}
-      {isMobile && (
-        <MobileNav
-          tabs={tabs}
-          activeTab={activeTab}
-          onTabClick={handleTabClick}
-          currentUser={currentUser}
-        />
-      )}
-
-    </div >
+      {isMobile && <MobileNav tabs={tabs} activeTab={activeTab} onTabClick={handleTabClick} currentUser={currentUser} />}
+    </div>
   );
 }
-
-

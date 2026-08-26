@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import App from './app';
 import { AuthProvider } from './components/AuthContext';
 import { NotificationProvider } from './components/NotificationContext';
 import { getBasename, setBaseUrls } from './config';
-import App from './App';
+import './i18n';
 import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -35,7 +36,7 @@ function getBaseFromLocation() {
 function loadEnv() {
   const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
   const inSubpath = pathname && pathname !== '/' && pathname !== '';
-  const fallback = inSubpath ? getBaseFromLocation() : (import.meta.env.VITE_BASE_URL );
+  const fallback = inSubpath ? getBaseFromLocation() : import.meta.env.VITE_BASE_URL;
   fetch('./.env')
     .then((r) => (r.ok ? r.text() : ''))
     .then((text) => {
@@ -62,7 +63,7 @@ function loadEnv() {
 }
 
 if (import.meta.env.DEV) {
-  setBaseUrls(import.meta.env.VITE_BASE_URL , '');
+  setBaseUrls(import.meta.env.VITE_BASE_URL, '');
   renderApp();
 } else {
   loadEnv();
@@ -78,7 +79,6 @@ function renderApp() {
           </NotificationProvider>
         </AuthProvider>
       </BrowserRouter>
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 }
-

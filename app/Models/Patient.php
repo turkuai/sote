@@ -4,18 +4,30 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Patient extends Model
 {
+    use HasFactory, SoftDeletes;
 
-  use HasFactory;
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'social_id',
+        'arrival_date',
+        'remarks',
+    ];
 
-  protected $fillable = [
-    "name",
-    "surname",
-    "patientid",
-    "diagnosis",
-  ];
+    protected $dates = [
+        'arrival_date',
+        'deleted_at',
+    ];
 
-  protected $table = "patients";
+    /**
+     * Get all sectors for this patient
+     */
+    public function sectors()
+    {
+        return $this->belongsToMany(Sector::class, 'patient_sectors');
+    }
 }

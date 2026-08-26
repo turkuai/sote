@@ -1,5 +1,5 @@
+import { Clock, Folder, Settings, Users } from 'lucide-react';
 import React from 'react';
-import { Settings, Users, Folder, Clock } from 'lucide-react';
 
 // Tab icon map - maps tab names to their corresponding icon components
 const TAB_ICON_MAP = {
@@ -10,11 +10,12 @@ const TAB_ICON_MAP = {
 };
 
 // Tab label map - base labels for tabs
-const TAB_LABEL_MAP = {
-  users: 'Users',
-  groups: 'Groups',
-  'waiting-list': 'Waiting List',
-  settings: 'Settings',
+
+const TAB_LABEL_KEY_MAP = {
+  users: 'tabs.users',
+  groups: 'tabs.groups',
+  'waiting-list': 'tabs.waitingList',
+  settings: 'tabs.settings',
 };
 
 /**
@@ -52,8 +53,9 @@ export const TabConfig = {
    * @param {boolean} forMobile - Whether the label is for mobile view
    * @returns {string} - Tab label
    */
-  getTabLabel(tab, forMobile = false) {
-    return TAB_LABEL_MAP[tab] || tab;
+  getTabLabel(tab, t) {
+    const key = TAB_LABEL_KEY_MAP[tab];
+    return key ? t(key) : tab;
   },
 
   /**
@@ -76,4 +78,3 @@ export const TabConfig = {
     return TAB_ICON_MAP[tab] || null;
   },
 };
-
