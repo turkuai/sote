@@ -1,8 +1,8 @@
 const svCommon = {
   common: {
     language: 'Språk',
-    english: 'Engelska',
-    finnish: 'Finska',
+    english: 'English',
+    finnish: 'Suomi',
     swedish: 'Svenska',
     loading: 'Laddar...',
     navigation: 'Navigering',
