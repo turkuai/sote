@@ -21,6 +21,7 @@ const Header = ({ currentUser, onLogout, onSettingsClick, currentPage = 'dashboa
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -57,6 +58,8 @@ const Header = ({ currentUser, onLogout, onSettingsClick, currentPage = 'dashboa
   };
 
   return (
+
+    
     <div className="admin-header">
       <h1 className="admin-logo">
         <img src={getAssetUrl('tai.png')} alt="TAI logo" className="admin-logo-image" />
