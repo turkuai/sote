@@ -5,6 +5,7 @@ import '../css/app.css';
 import { AuthProvider, useAuth } from './components/AuthContext';
 import { NotificationProvider } from './components/NotificationContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import './i18n';
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
 import PatientsPage from './pages/PatientsPage';

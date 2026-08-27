@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import App from './App';
+import App from './app';
 import { AuthProvider } from './components/AuthContext';
 import { NotificationProvider } from './components/NotificationContext';
 import { getBasename, setBaseUrls } from './config';
+import './i18n';
 import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import '../App.css';
 import { useAuth } from '../components/AuthContext';
+import LanguageSwitcher from '../components/language-switcher';
 import { getAssetUrl } from '../config';
 import './Login.css';
 
 export default function Login() {
   const { login, isAuthenticated, currentUser } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -37,7 +40,7 @@ export default function Login() {
       }
     } catch (err) {
       console.error('Login error:', err);
-      setError('An unexpected error occurred');
+      setError(t('auth.unexpectedError'));
     } finally {
       setLoading(false);
     }
@@ -45,23 +48,33 @@ export default function Login() {
 
   return (
     <div className="page-container login-container">
+      <div
+        style={{
+          position: 'absolute',
+          top: '24px',
+          right: '24px',
+          zIndex: 10,
+        }}
+      >
+        <LanguageSwitcher />
+      </div>
       <div className="login-card">
         <div className="login-header">
           <div className="login-logo">
             <img src={getAssetUrl('tai.png')} alt="TAI logo" className="login-logo-image" />
           </div>
-          <p className="login-subtitle">Please login to continue</p>
+          <p className="login-subtitle">{t('auth.pleaseLoginToContinue')}</p>
         </div>
 
         <form onSubmit={handleSubmit} autoComplete="on">
           <div className="login-form-group">
-            <label className="login-label">Email</label>
+            <label className="login-label">{t('auth.email')}</label>
             <input
               type="text"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
+              placeholder={t('auth.enterYourEmail')}
               className="login-input"
               name="email"
               autoComplete="email"
@@ -70,12 +83,12 @@ export default function Login() {
           </div>
 
           <div className="login-form-group">
-            <label className="login-label">Password</label>
+            <label className="login-label">{t('auth.password')}</label>
             <input
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               type="password"
-              placeholder="Password"
+              placeholder={t('auth.password')}
               required
               className="login-input"
               name="password"
@@ -88,14 +101,14 @@ export default function Login() {
           <div className="login-form-group">
             <label className="login-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} disabled={loading} />
-              Remember me
+              {t('auth.rememberMe')}
             </label>
           </div>
 
           {error && <div className="login-error">{error}</div>}
 
           <button type="submit" className="login-submit-btn" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign in'}
+            {loading ? t('auth.signingIn') : t('auth.signIn')}
           </button>
         </form>
 
@@ -103,17 +116,17 @@ export default function Login() {
         <div style={{ marginTop: '1.5rem', borderTop: '1px solid #e5e7eb', paddingTop: '1.5rem' }}>
           <a href="/auth/entra-id" style={{ textDecoration: 'none' }}>
             <button type="button" className="login-submit-btn" style={{ backgroundColor: '#c5192d', width: '100%', cursor: 'pointer' }}>
-              Login with @edu.turku.fi
+              {t('auth.entraIdButton')}
             </button>
           </a>
-          <p style={{ color: '#9ca3af', fontSize: '0.75rem', marginTop: '0.5rem' }}>Login using your Microsoft account</p>
+          <p style={{ color: '#9ca3af', fontSize: '0.75rem', marginTop: '0.5rem' }}>{t('auth.entraIdSubtext')}</p>
         </div>
 
         <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
           <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>
-            Don't have an account?{' '}
+            {t('auth.noAccount')}{' '}
             <Link to="/register" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: '500' }}>
-              Sign up
+              {t('auth.signUp')}
             </Link>
           </p>
         </div>

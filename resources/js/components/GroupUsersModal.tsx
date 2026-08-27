@@ -1,8 +1,10 @@
 import { Plus, Search, Trash2, X } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import './GroupUsersModal.css';
 
 export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdded }) {
+  const { t } = useTranslation();
   const [users, setUsers] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -170,7 +172,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
     return (
       <div className="modal-overlay" onClick={onClose}>
         <div className="modal-content group-users-modal" onClick={(e) => e.stopPropagation()}>
-          <div>Loading...</div>
+          <div>{t('grid.loading')}</div>
         </div>
       </div>
     );
@@ -180,7 +182,9 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content group-users-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>{groupName} - Users</h2>
+          <h2>
+            {groupName} - {t('groups.usersModal.users')}
+          </h2>
           <button className="modal-close" onClick={onClose}>
             <X size={20} />
           </button>
@@ -197,14 +201,14 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
                   lastMemberClickedIndex.current = null;
                 }}
               >
-                <Plus size={20} /> Add Users
+                <Plus size={20} /> {t('groups.usersModal.addUsers')}
               </button>
               <button
                 className={`delete-selected-btn${selectedUsersToRemove.length > 0 || isRemoving ? ' visible' : ''}${isRemoving ? ' removing' : ''}`}
                 onClick={handleRemoveSelectedUsers}
                 disabled={isRemoving}
                 type="button"
-                title="Remove selected users from group"
+                title={t('groups.usersModal.removeUser')}
               >
                 <Trash2 size={18} />
                 {isRemoving ? `Removing…` : `Remove ${selectedUsersToRemove.length}`}
@@ -213,7 +217,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
 
             <div className="modal-body">
               {users.length === 0 ? (
-                <p className="empty-message">No users in this group</p>
+                <p className="empty-message">{t('groups.usersModal.noUsersInGroup')}</p>
               ) : (
                 <ul className="users-list">
                   {users.map((user, index) => {
@@ -252,7 +256,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
         ) : (
           <>
             <div className="modal-body">
-              <h3>Add users to group</h3>
+              <h3>{t('groups.usersModal.addUsersHeading')}</h3>
               {fetchError && (
                 <div
                   style={{
@@ -264,7 +268,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
                     fontSize: '0.9rem',
                   }}
                 >
-                  <strong>Error:</strong>
+                  <strong>{t('groups.usersModal.error')}</strong>
                   <p style={{ marginTop: '0.5rem', marginBottom: '0' }}>{fetchError}</p>
                 </div>
               )}
@@ -275,7 +279,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
                 <input
                   type="text"
                   className="user-autocomplete-input"
-                  placeholder="Search by name or email…"
+                  placeholder={t('groups.usersModal.searchPlaceholder')}
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
@@ -317,13 +321,13 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
                   })}
                 </ul>
               ) : (
-                <p className="empty-message">{searchQuery.trim() ? 'No users found' : 'No users available to add'}</p>
+                <p className="empty-message">{searchQuery.trim() ? t('groups.usersModal.noUsersFound') : t('groups.usersModal.noUsersAvailable')}</p>
               )}
             </div>
 
             <div className="modal-footer">
               <button className="cancel-btn" onClick={onClose}>
-                Cancel
+                {t('grid.confirmDelete.cancel')}
               </button>
               <button className="confirm-btn" onClick={handleAddUsers} disabled={selectedUsersToAdd.length === 0 || isAdding}>
                 {isAdding

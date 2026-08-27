@@ -1,22 +1,30 @@
 import { Crown, Eye, EyeOff, Trash2 } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ServerGrid as ServerGridBase } from 'tai-grid';
+import 'tai-grid/style.css';
 import GroupRegistrationForm from '../components/GroupRegistrationForm';
+import GroupUsersModal from '../components/GroupUsersModal';
+import MobileSearchToggle from '../components/MobileSearchToggle';
+import { useNotification } from '../components/NotificationContext';
+import { getApiBase } from '../config';
+import './Admin.css';
 const ServerGrid = ServerGridBase as React.ComponentType<any>;
 
 function GroupNameCell({ value, data }: { value: unknown; data: Record<string, unknown> }) {
+  const { t } = useTranslation();
   const isOwner = data?.is_owner === true;
   const isMember = data?.is_member === true;
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
       {isOwner && (
-        <span title="You own this group" style={{ display: 'inline-flex' }}>
+        <span title={t('groups.youOwnThisGroup')} style={{ display: 'inline-flex' }}>
           <Crown size={14} fill="#eab308" color="#eab308" />
         </span>
       )}
       {!isOwner && isMember && (
         <span
-          title="You belong to this group"
+          title={t('groups.youBelongToThisGroup')}
           style={{
             display: 'inline-block',
             width: '8px',
@@ -33,6 +41,7 @@ function GroupNameCell({ value, data }: { value: unknown; data: Record<string, u
 }
 
 function AccessKeyCell({ value }: { value: unknown }) {
+  const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const key = value != null ? String(value) : '';
   return (
@@ -42,20 +51,13 @@ function AccessKeyCell({ value }: { value: unknown }) {
         type="button"
         onClick={() => setVisible((v) => !v)}
         style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', display: 'flex', alignItems: 'center', padding: 0 }}
-        title={visible ? 'Hide key' : 'Show key'}
+        title={visible ? t('groups.hideKey') : t('groups.showKey')}
       >
         {visible ? <EyeOff size={14} /> : <Eye size={14} />}
       </button>
     </span>
   );
 }
-
-import 'tai-grid/style.css';
-import GroupUsersModal from '../components/GroupUsersModal';
-import MobileSearchToggle from '../components/MobileSearchToggle';
-import { useNotification } from '../components/NotificationContext';
-import { getApiBase } from '../config';
-import './Admin.css';
 
 const SEARCH_DEBOUNCE_MS = 300;
 
@@ -70,6 +72,7 @@ const SEARCH_DEBOUNCE_MS = 300;
  * - onQueryChange: Callback function for search query changes
  */
 export default function GroupsTab({ currentUser, query, onQueryChange }) {
+  const { t } = useTranslation();
   const [refreshKey, setRefreshKey] = useState(0);
   const [inputValue, setInputValue] = useState(query || '');
   const [selectedGroup, setSelectedGroup] = useState(null);
@@ -122,6 +125,35 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
     setShowGroupUsersModal(true);
   };
 
+  const gridLabels = {
+    loading: t('grid.loading'),
+    add: t('grid.add'),
+    updateFailed: t('grid.errors.updateFailed'),
+    itemUpdated: t('grid.success.itemUpdated'),
+    listViewRequiresProps: t('grid.errors.listViewRequiresProps'),
+    confirmDeleteTitle: t('grid.confirmDelete.title'),
+    confirmDeleteMessage: t('grid.confirmDelete.message'),
+    confirmDeleteLabel: t('grid.confirmDelete.delete'),
+    deletingLabel: t('grid.confirmDelete.deleting'),
+    cancelLabel: t('grid.confirmDelete.cancel'),
+    editTitle: t('grid.dialog.edit'),
+    addTitle: t('grid.dialog.add'),
+    grid: {
+      actionsHeader: t('table.actions'),
+      edit: t('table.edit'),
+      delete: t('table.delete'),
+      previous: t('grid.pagination.previous'),
+      next: t('grid.pagination.next'),
+      page: t('grid.pagination.page'),
+      of: t('grid.pagination.of'),
+    },
+    dialog: {
+      save: t('grid.dialog.save'),
+      cancel: t('grid.dialog.cancel'),
+      close: t('grid.dialog.close'),
+    },
+  };
+
   const handleGroupRowClick = (group: Record<string, unknown>) => {
     setPanelGroup(group);
     setPanelUsers([]);
@@ -155,9 +187,9 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
       setSelectedPanelUserIds([]);
       lastPanelClickedIndex.current = null;
       setRefreshKey((prev) => prev + 1);
-      showNotification(`${toRemove.length} user(s) removed from group`, 'success');
+      showNotification(t('groups.panel.removeSuccess', { count: toRemove.length }), 'success');
     } catch {
-      showNotification('Failed to remove users', 'error');
+      showNotification(t('groups.panel.removeFailed'), 'error');
     } finally {
       setIsPanelRemoving(false);
     }
@@ -192,13 +224,13 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
           <div className="mobile-tab-content hide-on-desktop">
             <div className="mobile-content-section">
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                <h2 style={{ margin: 0 }}>My Groups</h2>
+                <h2 style={{ margin: 0 }}>{t('groups.noGroupsYet')}</h2>
                 <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
-                  Enroll
+                  {t('groups.autoEnroll')}
                 </button>
               </div>
               {myGroupCount === 0 && (
-                <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '2rem 0' }}>You don't belong to any group, yet...</p>
+                <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '2rem 0' }}>{t('groups.noGroupsYet')}</p>
               )}
               {myGroupCount !== 0 && (
                 <div style={{ height: '400px', width: '100%' }}>
@@ -212,6 +244,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                     showAddButton={false}
                     getApiBase={getApiBase}
                     showNot={showNotification}
+                    labels={gridLabels}
                   />
                 </div>
               )}
@@ -224,15 +257,13 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
               {/* Left: groups list */}
               <div style={{ flex: '0 0 50%', minWidth: 0, paddingRight: '1.5rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                  <h2 style={{ margin: 0 }}>My Groups</h2>
+                  <h2 style={{ margin: 0 }}>{t('groups.myGroups')}</h2>
                   <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
-                    Enroll
+                    {t('groups.autoEnroll')}
                   </button>
                 </div>
                 {myGroupCount === 0 && (
-                  <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '3rem 0' }}>
-                    You don't belong to any group, yet...
-                  </p>
+                  <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '3rem 0' }}>{t('groups.noGroupsYet')}</p>
                 )}
                 {myGroupCount !== 0 && (
                   <ServerGrid
@@ -254,7 +285,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
               {/* Right: users panel */}
               <div style={{ flex: '0 0 50%', minWidth: 0, paddingLeft: '1.5rem' }}>
                 {!panelGroup && (
-                  <p style={{ color: '#6b7280', fontStyle: 'italic', marginTop: '4rem', textAlign: 'center' }}>Select a group to see its members</p>
+                  <p style={{ color: '#6b7280', fontStyle: 'italic', marginTop: '4rem', textAlign: 'center' }}>{t('groups.panel.selectGroup')}</p>
                 )}
                 {panelGroup && (
                   <>
@@ -270,7 +301,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         <input
                           type="search"
                           autoComplete="off"
-                          placeholder="Search members..."
+                          placeholder={t('groups.panel.searchMembers')}
                           value={panelSearch}
                           onChange={(e) => {
                             setPanelSearch(e.target.value);
@@ -279,18 +310,20 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         />
                       </div>
                       <button
-                        className={`delete-selected-btn visible${isPanelRemoving ? ' removing' : ''}`}
+                        className={`delete-selected-btn visible${isPanelRemoving ? 'removing' : ''}`}
                         onClick={handleRemoveSelectedPanelUsers}
                         type="button"
                         disabled={selectedPanelUserIds.length === 0 || isPanelRemoving}
-                        title="Remove selected users from group"
+                        title={t('groups.panel.removeTitle')}
                       >
                         <Trash2 size={16} />
-                        {isPanelRemoving ? `Removing…` : `Remove${selectedPanelUserIds.length > 0 ? ` ${selectedPanelUserIds.length}` : ''}`}
+                        {isPanelRemoving
+                          ? t('groups.panel.removing')
+                          : `${t('groups.panel.remove')}${selectedPanelUserIds.length > 0 ? ` ${selectedPanelUserIds.length}` : ''}`}
                       </button>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-                      <button className="server-grid-add-button" title="Add User" onClick={() => handleAddUsersClick(panelGroup)}>
+                      <button className="server-grid-add-button" title={t('groups.panel.addUser')} onClick={() => handleAddUsersClick(panelGroup)}>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="20"
@@ -307,17 +340,19 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         </svg>
                       </button>
                     </div>
-                    {panelLoading && <p style={{ color: '#6b7280' }}>Loading...</p>}
-                    {!panelLoading && filteredPanelUsers.length === 0 && <p style={{ color: '#6b7280', fontStyle: 'italic' }}>No members found.</p>}
+                    {panelLoading && <p style={{ color: '#6b7280' }}>{t('grid.loading')}</p>}
+                    {!panelLoading && filteredPanelUsers.length === 0 && (
+                      <p style={{ color: '#6b7280', fontStyle: 'italic' }}>{t('groups.panel.noMembersFound')}</p>
+                    )}
                     {!panelLoading && filteredPanelUsers.length > 0 && (
                       <div className="grid-wrapper" style={{ width: '100%', overflowX: 'auto' }}>
                         <table className="data-grid-table">
                           <thead>
                             <tr>
-                              <th>First Name</th>
-                              <th>Last Name</th>
-                              <th>Email</th>
-                              <th>Role</th>
+                              <th>{t('table.firstName')}</th>
+                              <th>{t('table.lastName')}</th>
+                              <th>{t('table.email')}</th>
+                              <th>{t('table.role')}</th>
                               <th style={{ width: '40px' }}>
                                 <input
                                   type="checkbox"
@@ -333,7 +368,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                                       lastPanelClickedIndex.current = null;
                                     }
                                   }}
-                                  title="Select all"
+                                  title={t('groups.panel.selectAll')}
                                 />
                               </th>
                             </tr>
@@ -393,16 +428,20 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
           <div className="mobile-tab-content hide-on-desktop">
             <div className="mobile-content-section">
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                <h2 style={{ margin: 0 }}>Groups</h2>
+                <h2 style={{ margin: 0 }}>{t('tabs.groups')}</h2>
                 <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
-                  Enroll
+                  {t('groups.autoEnroll')}
                 </button>
               </div>
               <MobileSearchToggle value={inputValue} onChange={handleSearchChange} />
               <div style={{ height: '500px', width: '100%' }}>
                 <ServerGrid
                   key={refreshKey}
-                  columns={['name', 'access_key', 'user_count']}
+                  columns={[
+                    { field: 'name', displayName: t('table.name') },
+                    { field: 'access_key', displayName: t('groups.table.accessKey') },
+                    { field: 'user_count', displayName: t('groups.table.userCount') },
+                  ]}
                   columnRenderers={{ name: GroupNameCell, access_key: AccessKeyCell }}
                   path="groups"
                   allowEditing={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
@@ -421,24 +460,25 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                           />
                         </svg>
                       ),
-                      tooltip: 'Manage Users',
+                      tooltip: t('groups.manageUsers'),
                       onClick: handleAddUsersClick,
                     },
                   ]}
                   getApiBase={getApiBase}
                   showNot={showNotification}
+                  labels={gridLabels}
                   transformEditPayload={(payload) => {
                     const name = String(payload.name || '').trim();
-                    if (!name) throw new Error('Group name cannot be empty');
+                    if (!name) throw new Error(t('groups.errors.nameRequired'));
                     const access_key = String(payload.access_key || '').trim();
-                    if (!access_key) throw new Error('Access key cannot be empty');
+                    if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
                     return { name, access_key };
                   }}
                   transformAddPayload={(payload) => {
                     const name = String(payload.name || '').trim();
-                    if (!name) throw new Error('Group name cannot be empty');
+                    if (!name) throw new Error(t('groups.errors.nameRequired'));
                     const access_key = String(payload.access_key || '').trim();
-                    if (!access_key) throw new Error('Access key cannot be empty');
+                    if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
                     return { name, access_key };
                   }}
                 />
@@ -452,7 +492,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
               {/* Left: groups list */}
               <div style={{ flex: '0 0 50%', minWidth: 0, paddingRight: '1.5rem' }}>
                 <div className="tab-header">
-                  <h2>Groups Management</h2>
+                  <h2>{t('groups.managementTitle')}</h2>
                   <div className="user-search">
                     <span className="search-icon">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -460,16 +500,26 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
                       </svg>
                     </span>
-                    <input type="search" autoComplete="off" placeholder="Search groups..." value={inputValue} onChange={handleSearchChange} />
+                    <input
+                      type="search"
+                      autoComplete="off"
+                      placeholder={t('groups.searchPlaceholder')}
+                      value={inputValue}
+                      onChange={handleSearchChange}
+                    />
                   </div>
                   <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
-                    Enroll
+                    {t('groups.autoEnroll')}
                   </button>
                 </div>
                 <div>
                   <ServerGrid
                     key={refreshKey}
-                    columns={['name', 'access_key', 'user_count']}
+                    columns={[
+                      { field: 'name', displayName: t('table.name') },
+                      { field: 'access_key', displayName: t('groups.table.accessKey') },
+                      { field: 'user_count', displayName: t('groups.table.userCount') },
+                    ]}
                     columnRenderers={{ name: GroupNameCell, access_key: AccessKeyCell }}
                     path="groups"
                     allowEditing={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
@@ -488,24 +538,25 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                             />
                           </svg>
                         ),
-                        tooltip: 'Manage Users',
+                        tooltip: t('groups.manageUsers'),
                         onClick: handleAddUsersClick,
                       },
                     ]}
                     getApiBase={getApiBase}
                     showNot={showNotification}
+                    labels={gridLabels}
                     transformEditPayload={(payload) => {
                       const name = String(payload.name || '').trim();
-                      if (!name) throw new Error('Group name cannot be empty');
+                      if (!name) throw new Error(t('groups.errors.nameRequired'));
                       const access_key = String(payload.access_key || '').trim();
-                      if (!access_key) throw new Error('Access key cannot be empty');
+                      if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
                       return { name, access_key };
                     }}
                     transformAddPayload={(payload) => {
                       const name = String(payload.name || '').trim();
-                      if (!name) throw new Error('Group name cannot be empty');
+                      if (!name) throw new Error(t('groups.errors.nameRequired'));
                       const access_key = String(payload.access_key || '').trim();
-                      if (!access_key) throw new Error('Access key cannot be empty');
+                      if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
                       return { name, access_key };
                     }}
                     onRowClick={handleGroupRowClick}
@@ -517,7 +568,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
               {/* Right: users panel */}
               <div style={{ flex: '0 0 50%', minWidth: 0, paddingLeft: '1.5rem' }}>
                 {!panelGroup && (
-                  <p style={{ color: '#6b7280', fontStyle: 'italic', marginTop: '4rem', textAlign: 'center' }}>Select a group to see its members</p>
+                  <p style={{ color: '#6b7280', fontStyle: 'italic', marginTop: '4rem', textAlign: 'center' }}>{t('groups.panel.selectGroup')}</p>
                 )}
                 {panelGroup && (
                   <>
@@ -533,7 +584,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         <input
                           type="search"
                           autoComplete="off"
-                          placeholder="Search members..."
+                          placeholder={t('groups.panel.searchMembers')}
                           value={panelSearch}
                           onChange={(e) => {
                             setPanelSearch(e.target.value);
@@ -542,18 +593,20 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         />
                       </div>
                       <button
-                        className={`delete-selected-btn visible${isPanelRemoving ? ' removing' : ''}`}
+                        className={`delete-selected-btn visible${isPanelRemoving ? 'removing' : ''}`}
                         onClick={handleRemoveSelectedPanelUsers}
                         type="button"
                         disabled={selectedPanelUserIds.length === 0 || isPanelRemoving}
-                        title="Remove selected users from group"
+                        title={t('groups.panel.removeTitle')}
                       >
                         <Trash2 size={16} />
-                        {isPanelRemoving ? `Removing…` : `Remove${selectedPanelUserIds.length > 0 ? ` ${selectedPanelUserIds.length}` : ''}`}
+                        {isPanelRemoving
+                          ? t('groups.panel.removing')
+                          : `${t('groups.panel.remove')}${selectedPanelUserIds.length > 0 ? ` ${selectedPanelUserIds.length}` : ''}`}
                       </button>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-                      <button className="server-grid-add-button" title="Add User" onClick={() => handleAddUsersClick(panelGroup)}>
+                      <button className="server-grid-add-button" title={t('groups.panel.addUser')} onClick={() => handleAddUsersClick(panelGroup)}>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="20"
@@ -570,17 +623,19 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         </svg>
                       </button>
                     </div>
-                    {panelLoading && <p style={{ color: '#6b7280' }}>Loading...</p>}
-                    {!panelLoading && filteredPanelUsers.length === 0 && <p style={{ color: '#6b7280', fontStyle: 'italic' }}>No members found.</p>}
+                    {panelLoading && <p style={{ color: '#6b7280' }}>{t('grid.loading')}</p>}
+                    {!panelLoading && filteredPanelUsers.length === 0 && (
+                      <p style={{ color: '#6b7280', fontStyle: 'italic' }}>{t('groups.panel.noMembersFound')}</p>
+                    )}
                     {!panelLoading && filteredPanelUsers.length > 0 && (
                       <div className="grid-wrapper" style={{ width: '100%', overflowX: 'auto' }}>
                         <table className="data-grid-table">
                           <thead>
                             <tr>
-                              <th>First Name</th>
-                              <th>Last Name</th>
-                              <th>Email</th>
-                              <th>Role</th>
+                              <th>{t('table.firstName')}</th>
+                              <th>{t('table.lastName')}</th>
+                              <th>{t('table.email')}</th>
+                              <th>{t('table.role')}</th>
                               <th style={{ width: '40px' }}>
                                 <input
                                   type="checkbox"
@@ -596,7 +651,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                                       lastPanelClickedIndex.current = null;
                                     }
                                   }}
-                                  title="Select all"
+                                  title={t('groups.panel.selectAll')}
                                 />
                               </th>
                             </tr>
@@ -675,12 +730,12 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-              <h3 style={{ margin: 0 }}>Join a Group</h3>
+              <h3 style={{ margin: 0 }}>{t('groups.joinGroup')}</h3>
               <button
                 type="button"
                 onClick={() => setShowEnrollModal(false)}
                 style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.25rem', color: '#6b7280', lineHeight: 1 }}
-                title="Close"
+                title={t('common.close')}
               >
                 ✕
               </button>
@@ -720,6 +775,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                 .catch(() => {})
                 .finally(() => setPanelLoading(false));
             }
+            setRefreshKey((prev) => prev + 1);
           }}
         />
       )}
@@ -728,6 +784,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
 }
 
 function GroupsForm({ data, setData }) {
+  const { t } = useTranslation();
   const [showKey, setShowKey] = useState(false);
   const getValue = (field) => (data && data[field]) || '';
   const handleChange = (field) => (e) => setData((prev) => ({ ...prev, [field]: e.target.value }));
@@ -736,18 +793,18 @@ function GroupsForm({ data, setData }) {
     <div className="add-user-form">
       <div className="add-user-form-grid">
         <div>
-          <label className="form-label">Group Name *</label>
+          <label className="form-label">{t('groups.form.groupName')}</label>
           <input
             type="text"
             autoComplete="nope"
             className="form-input"
             value={getValue('name')}
             onChange={handleChange('name')}
-            placeholder="e.g., Sector 1, Emergency Room, etc."
+            placeholder={t('groups.form.groupNamePlaceholder')}
           />
         </div>
         <div>
-          <label className="form-label">Access Key *</label>
+          <label className="form-label">{t('groups.form.accessKey')}</label>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <input
               type={showKey ? 'text' : 'password'}
@@ -755,7 +812,7 @@ function GroupsForm({ data, setData }) {
               className="form-input"
               value={getValue('access_key')}
               onChange={handleChange('access_key')}
-              placeholder="Access key"
+              placeholder={t('groups.form.accessKeyPlaceholder')}
               style={{ paddingRight: '2.5rem' }}
             />
             <button
@@ -771,7 +828,7 @@ function GroupsForm({ data, setData }) {
                 display: 'flex',
                 alignItems: 'center',
               }}
-              title={showKey ? 'Hide key' : 'Show key'}
+              title={showKey ? t('groups.hideKey') : t('groups.showKey')}
             >
               {showKey ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>

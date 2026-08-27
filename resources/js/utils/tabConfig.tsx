@@ -10,11 +10,12 @@ const TAB_ICON_MAP = {
 };
 
 // Tab label map - base labels for tabs
-const TAB_LABEL_MAP = {
-  users: 'Users',
-  groups: 'Groups',
-  'waiting-list': 'Waiting List',
-  settings: 'Settings',
+
+const TAB_LABEL_KEY_MAP = {
+  users: 'tabs.users',
+  groups: 'tabs.groups',
+  'waiting-list': 'tabs.waitingList',
+  settings: 'tabs.settings',
 };
 
 /**
@@ -52,8 +53,9 @@ export const TabConfig = {
    * @param {boolean} forMobile - Whether the label is for mobile view
    * @returns {string} - Tab label
    */
-  getTabLabel(tab, forMobile = false) {
-    return TAB_LABEL_MAP[tab] || tab;
+  getTabLabel(tab, t) {
+    const key = TAB_LABEL_KEY_MAP[tab];
+    return key ? t(key) : tab;
   },
 
   /**

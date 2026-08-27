@@ -1,11 +1,13 @@
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   onSuccess: () => void;
 }
 
 export default function GroupRegistrationForm({ onSuccess }: Props) {
+  const { t } = useTranslation();
   const [groupName, setGroupName] = useState('');
   const [accessKey, setAccessKey] = useState('');
   const [showKey, setShowKey] = useState(false);
@@ -31,12 +33,12 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message || data.error || 'Invalid group name or access key');
+        setError(data.message || data.error || t('groups.registration.invalidCredentials'));
       } else {
         onSuccess();
       }
     } catch {
-      setError('Connection error. Please try again.');
+      setError(t('groups.registration.connectionError'));
     } finally {
       setLoading(false);
     }
@@ -45,7 +47,9 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
   return (
     <form onSubmit={handleSubmit} autoComplete="off" style={{ marginTop: '1.5rem', width: '100%' }}>
       <div style={{ marginBottom: '1rem' }}>
-        <label style={{ display: 'block', marginBottom: '0.375rem', fontWeight: 500, fontSize: '0.875rem', color: '#374151' }}>Group Name</label>
+        <label style={{ display: 'block', marginBottom: '0.375rem', fontWeight: 500, fontSize: '0.875rem', color: '#374151' }}>
+          {t('groups.registration.groupName')}
+        </label>
         <input
           type="text"
           autoComplete="nope"
@@ -53,7 +57,7 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
           required
           value={groupName}
           onChange={(e) => setGroupName(e.target.value)}
-          placeholder="Enter the group name"
+          placeholder={t('groups.registration.groupNamePlaceholder')}
           disabled={loading}
           style={{
             width: '100%',
@@ -67,7 +71,9 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
-        <label style={{ display: 'block', marginBottom: '0.375rem', fontWeight: 500, fontSize: '0.875rem', color: '#374151' }}>Secret Key</label>
+        <label style={{ display: 'block', marginBottom: '0.375rem', fontWeight: 500, fontSize: '0.875rem', color: '#374151' }}>
+          {t('groups.registration.secretKey')}
+        </label>
         <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
           <input
             type={showKey ? 'text' : 'password'}
@@ -76,7 +82,7 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
             required
             value={accessKey}
             onChange={(e) => setAccessKey(e.target.value)}
-            placeholder="Enter the group secret key"
+            placeholder={t('groups.registration.secretKeyPlaceholder')}
             disabled={loading}
             style={{
               width: '100%',
@@ -101,7 +107,7 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
               alignItems: 'center',
               padding: 0,
             }}
-            title={showKey ? 'Hide key' : 'Show key'}
+            title={showKey ? t('groups.hideKey') : t('groups.showKey')}
           >
             {showKey ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
@@ -140,7 +146,7 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
           opacity: loading ? 0.7 : 1,
         }}
       >
-        {loading ? 'Registering...' : 'Register'}
+        {loading ? t('groups.registration.registering') : t('groups.registration.register')}
       </button>
     </form>
   );

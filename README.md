@@ -73,6 +73,98 @@ These settings are configured in `.prettierrc` and will be applied automatically
    - Select "Prettier - Code formatter"
 4. Enable "Format On Save" if desired
 
+## Internationalisation (i18n)
+
+The app uses **i18next** and **react-i18next** for multi-language support.
+
+### Supported Languages
+
+| Code | Language          | File                                |
+| ---- | ----------------- | ----------------------------------- |
+| `en` | English (default) | `resources/js/locales/en/common.ts` |
+| `fi` | Finnish           | `resources/js/locales/fi/common.ts` |
+| `sv` | Swedish           | `resources/js/locales/sv/common.ts` |
+
+The selected language is saved in **localStorage** under the key `app_language` and persists across page reloads.
+
+### How It Works
+
+The i18n configuration lives in `resources/js/i18n.ts`. It is imported once in the app entry point and automatically detects the saved language from localStorage, falling back to English if none is set.
+
+To use translations in a component:
+
+```tsx
+import { useTranslation } from 'react-i18next';
+
+function MyComponent() {
+  const { t } = useTranslation();
+  return <h1>{t('some.key')}</h1>;
+}
+```
+
+### Translation File Structure
+
+All translation keys are nested objects inside `resources/js/locales/{lang}/common.ts`:
+
+```
+resources/js/locales/
+├── en/
+│   └── common.ts   ← English translations
+└── fi/
+│    └── common.ts   ← Finnish translations
+└── sv/
+    └── common.ts   ← Swedish translations
+```
+
+Example structure:
+
+```ts
+const enCommon = {
+  grid: {
+    loading: 'Loading...',
+    add: 'Add',
+  },
+  groups: {
+    managementTitle: 'Groups Management',
+  },
+};
+```
+
+Used in code as: `t('grid.loading')`, `t('groups.managementTitle')`
+
+### Adding a New Translation Key
+
+1. Add the key to `resources/js/locales/en/common.ts`
+2. Add the same key with a translated value to `resources/js/locales/fi/common.ts` and also in `resources/js/locales/sv/common.ts`.
+3. Use it in a component with `t('your.new.key')`
+
+> All language files must always have the same keys. If a key is missing in a language file, i18next will fall back to English.
+
+### Adding a New Language
+
+1. Create a new folder: `resources/js/locales/{lang}/common.ts`
+2. Copy `en/common.ts` as a template and translate all values
+3. Import it in `resources/js/i18n.ts`:
+
+```ts
+import svCommon from './locales/sv/common';
+
+i18n.init({
+  resources: {
+    en: { translation: enCommon },
+    fi: { translation: fiCommon },
+    sv: { translation: svCommon }, // ← add here
+  },
+  supportedLngs: ['en', 'fi', 'sv'], // ← add language code
+});
+```
+
+4. Add the language option to the `LanguageSwitcher` component
+
+### Language Switcher
+
+The `LanguageSwitcher` component (located in `resources/js/components/`) renders a dropdown that calls `i18n.changeLanguage(code)` and saves the choice to localStorage automatically.
+
 ## Running the app
 
 Run the following command in a terminal:

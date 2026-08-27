@@ -1,6 +1,8 @@
 import { ChevronDown, LogOut, Settings } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import LanguageSwitcher from '../components/language-switcher';
 import { getAssetUrl } from '../config';
 import './Admin.css';
 
@@ -17,6 +19,7 @@ const Header = ({ currentUser, onLogout, onSettingsClick, currentPage = 'dashboa
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -57,25 +60,26 @@ const Header = ({ currentUser, onLogout, onSettingsClick, currentPage = 'dashboa
     <div className="admin-header">
       <h1 className="admin-logo">
         <img src={getAssetUrl('tai.png')} alt="TAI logo" className="admin-logo-image" />
-        {currentUser?.role_type === 'student' && <span className="admin-logo-subtitle">My Dashboard</span>}
+        {currentUser?.role_type === 'student' && <span className="admin-logo-subtitle">{t('user.myDashboard')}</span>}
       </h1>
 
       {/* Navigation buttons - centered */}
       <div className="header-nav-buttons">
         <button className={`nav-button ${currentPage === 'dashboard' ? 'active' : ''}`} onClick={handleDashboardClick}>
-          <strong>Dashboard</strong>
+          <strong>{t('nav.dashboard')}</strong>
         </button>
         <button className={`nav-button ${currentPage === 'patients' ? 'active' : ''}`} onClick={handlePatientsClick}>
-          <strong>Patients</strong>
+          <strong>{t('nav.patients')}</strong>
         </button>
       </div>
 
       <div className="admin-header-actions">
+        <LanguageSwitcher />
         {!isMobile && (
           <div className="user-dropdown-container" ref={dropdownRef}>
             <button className="user-dropdown-trigger" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
               <span className="user-info-text">
-                Welcome, <strong>{currentUser?.name}</strong>
+                {t('user.welcome')}, <strong>{currentUser?.name}</strong>
               </span>
               <ChevronDown size={16} className={`dropdown-icon ${isDropdownOpen ? 'open' : ''}`} />
             </button>
@@ -84,11 +88,11 @@ const Header = ({ currentUser, onLogout, onSettingsClick, currentPage = 'dashboa
               <div className="user-dropdown-menu">
                 <button className="dropdown-menu-item" onClick={handleSettingsClick}>
                   <Settings size={16} />
-                  Settings
+                  {t('user.settings')}
                 </button>
                 <button className="dropdown-menu-item logout-item" onClick={handleLogoutClick}>
                   <LogOut size={16} />
-                  Logout
+                  {t('user.logout')}
                 </button>
               </div>
             )}

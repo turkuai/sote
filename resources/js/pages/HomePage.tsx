@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
 import './Admin.css';
 
+import { useTranslation } from 'react-i18next';
 import { usePasswordForm } from '../hooks/usePasswordForm';
 import { useResponsive } from '../hooks/useResponsive';
 import { useUserManagement } from '../hooks/useUserManagement';
@@ -18,6 +19,7 @@ import WaitingListTab from './WaitingListTab';
 export default function HomePage() {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { tab: urlTab } = useParams<{ tab: string }>();
 
   const [userQuery, setUserQuery] = useState('');
@@ -116,7 +118,7 @@ export default function HomePage() {
           tabs={tabs}
           activeTab={activeTab}
           onTabClick={handleTabClick}
-          getTabLabel={TabConfig.getTabLabel}
+          getTabLabel={(tab) => TabConfig.getTabLabel(tab, t)}
           renderTabIcon={TabConfig.renderTabIcon}
           collapsed={sidebarCollapsed}
           onToggleCollapse={() =>
