@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
-import { getApiBase } from '../config';
 import { useNotification } from '../components/NotificationContext';
+import { getApiBase } from '../config';
 
 export default function WaitingListTab({ currentUser }) {
   const { showNotification } = useNotification();
@@ -10,9 +10,7 @@ export default function WaitingListTab({ currentUser }) {
   const gridRef = useRef(null);
 
   // Custom renderer for name
-  const NameRenderer = ({ data }) => (
-    <span>{`${data?.first_name || ''} ${data?.last_name || ''}`.trim()}</span>
-  );
+  const NameRenderer = ({ data }) => <span>{`${data?.first_name || ''} ${data?.last_name || ''}`.trim()}</span>;
 
   // Custom renderer for action button
   const ActionRenderer = ({ data }) => (
@@ -20,7 +18,7 @@ export default function WaitingListTab({ currentUser }) {
       onClick={() => handleApprove(data.id, data.first_name, data.last_name)}
       style={{
         padding: '8px 16px',
-        backgroundColor: '#10b981',
+        backgroundColor: '#ce1717',
         color: 'white',
         border: 'none',
         borderRadius: '4px',
@@ -37,12 +35,12 @@ export default function WaitingListTab({ currentUser }) {
     try {
       // Get CSRF token from meta tag
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-      
+
       const response = await fetch(`${getApiBase()}/api/users/${userId}`, {
         method: 'PATCH',
         credentials: 'include',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json',
           'X-CSRF-TOKEN': csrfToken,
         },
@@ -54,7 +52,7 @@ export default function WaitingListTab({ currentUser }) {
       if (response.ok) {
         showNotification(`${firstName} ${lastName} has been approved and assigned as Nurse.`, 'success');
         // Force grid to refetch by incrementing the counter
-        setRefreshCounter(prev => prev + 1);
+        setRefreshCounter((prev) => prev + 1);
       } else {
         const data = await response.json();
         showNotification(data.message || 'Failed to approve user', 'error');
@@ -70,9 +68,7 @@ export default function WaitingListTab({ currentUser }) {
       <div className="tab-header">
         <h2>Waiting for Approval</h2>
       </div>
-      <p style={{ color: '#666', marginBottom: '20px' }}>
-        Users pending approval. Click "Accept" to approve and assign as Nurse.
-      </p>
+      <p style={{ color: '#666', marginBottom: '20px' }}>Users pending approval. Click "Accept" to approve and assign as Nurse.</p>
 
       <div style={{ height: '500px', width: '100%' }}>
         <ServerGrid
