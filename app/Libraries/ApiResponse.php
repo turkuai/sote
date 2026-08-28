@@ -2,6 +2,8 @@
 
 namespace App\Libraries;
 
+use Illuminate\Pagination\LengthAwarePaginator;
+
 class ApiResponse
 {
     /**
@@ -72,7 +74,7 @@ class ApiResponse
      * @param string $message
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function paginated($data, $message = 'Success')
+    public static function paginated(LengthAwarePaginator $data, $message = 'Success')
     {
         return response()->json([
             'success' => true,
@@ -85,6 +87,34 @@ class ApiResponse
                 'from' => $data->firstItem(),
                 'to' => $data->lastItem(),
             ],
+            /*
+              * In the frontend, ./grid/src/api/api.ts checks for a root-level
+              * "totalPages" property. Specifically, line 86 contains:
+              *
+              * const pages = typeof payloadObj.totalPages === 'number'
+              *   ? payloadObj.totalPages
+              *   : 1;
+              *
+              * This means the frontend expects "totalPages" to exist directly
+              * in the root of the response object.
+              *
+              * The paginated() response previously returned the page count only
+              * as "pagination.last_page", so ServerGrid could not detect the total
+              * number of pages and defaulted to 1.
+              *
+              * Although pagination metadata would logically belong inside the
+              * "pagination" object, the current frontend implementation expects
+              * "totalPages" at the root level. Therefore, it is also returned here
+              * for compatibility with ServerGrid.
+              *
+              * At this point, api.ts should be treated as read-only because tai-grid
+              * does not use this source file directly. The package uses the built
+              * files from the dist folder. Therefore, modifying api.ts alone would
+              * not affect the application. Changing this behavior in tai-grid would
+              * require modifying the package source and rebuilding the package so
+              * that the changes are reflected in dist.
+            */
+            'totalPages' => $data->lastPage(),
             'message' => $message,
         ]);
     }

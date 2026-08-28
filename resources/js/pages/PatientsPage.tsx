@@ -18,6 +18,10 @@ export default function PatientsPage() {
     navigate('/home', { replace: true });
   };
 
+  const handleSettingsClick = () => {
+    navigate(`/home/settings`);
+  };
+
   return (
     <div className="admin-page">
       <Header
@@ -26,6 +30,7 @@ export default function PatientsPage() {
         currentPage="patients"
         onNavigateDashboard={handleNavigateDashboard}
         isMobile={isMobile}
+        onSettingsClick={handleSettingsClick}
       />
 
       <div className="admin-content" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>

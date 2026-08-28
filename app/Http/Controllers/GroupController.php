@@ -23,11 +23,21 @@ class GroupController extends Controller
             $query->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"]);
         }
         
-        $groups = $query->get();
+        /*
+          * Match the number of items displayed per page in ServerGrid.
+          * This value must stay synchronized with ServerGrid's pageSize. Otherwise,
+          * the frontend pagination may not match the number of records returned by the backend.
+          * In the future, we should consider passing pageSize from the frontend as a query
+          * parameter. This would require modifying the tai-grid package directly.
+          * ServerGrid already sends the current page as "?page=...", which Laravel's
+          * paginate() automatically recognizes and uses to retrieve the correct page.
+        */
+        $pageSize = 10;
+        $groupsPaginator = $query->paginate($pageSize);
         $currentUserId = Auth::id();
 
         // Map users_count to user_count for frontend compatibility
-        $groups = $groups->map(function ($group) use ($currentUserId) {
+        $groups = $groupsPaginator->getCollection()->map(function ($group) use ($currentUserId) {
             return [
                 'id' => $group->id,
                 'name' => $group->name,
@@ -39,8 +49,10 @@ class GroupController extends Controller
                 'updated_at' => $group->updated_at,
             ];
         });
+
+        $groupsPaginator->setCollection($groups);
         
-        return ApiResponse::success($groups, 'Groups retrieved successfully');
+        return ApiResponse::paginated($groupsPaginator, 'Groups retrieved successfully');
     }
 
     /**

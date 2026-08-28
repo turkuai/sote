@@ -223,6 +223,12 @@ PUT    /api/groups/{id}        → Update group
 DELETE /api/groups/{id}        → Delete group
 ```
 
+### **Patients**
+```
+GET    /api/patients           → List all patients
+GET    /api/patients/{id}      → Get specific patient
+```
+
 ### **Example API Request:**
 
 ```bash

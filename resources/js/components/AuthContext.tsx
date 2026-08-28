@@ -1,11 +1,12 @@
+import { AuthContextData, AuthorizedUserData, LoginResult, RegisterResult } from '@/types';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getApiBase } from '../config';
 
-const AuthContext = createContext(null);
+const AuthContext = createContext<AuthContextData | null>(null);
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState<AuthorizedUserData | null>(null);
   const [emailVerified, setEmailVerified] = useState(true);
   const [loading, setLoading] = useState(true);
 
@@ -31,7 +32,7 @@ export const AuthProvider = ({ children }) => {
               name: data.name,
               role_type: data.role_type,
               email: data.email,
-            });
+            } satisfies AuthorizedUserData);
             setIsAuthenticated(true);
             setEmailVerified(data.email_verified_at ? true : false);
           } else {
@@ -55,7 +56,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Login function
-  const login = async (email, password, rememberMe = false) => {
+  const login = async (email: string, password: string, rememberMe: boolean = false): Promise<LoginResult> => {
     try {
       // Attempt login
       const response = await fetch('/api/login', {
@@ -74,7 +75,7 @@ export const AuthProvider = ({ children }) => {
         return {
           success: false,
           error: data.message || 'Invalid email or password',
-        };
+        } satisfies LoginResult;
       }
 
       // Fetch user data after successful login
@@ -94,7 +95,7 @@ export const AuthProvider = ({ children }) => {
           name: userData.name,
           role_type: userData.role_type,
           email: userData.email,
-        });
+        } satisfies AuthorizedUserData);
         setIsAuthenticated(true);
         setEmailVerified(userData.email_verified_at ? true : false);
       }
@@ -105,7 +106,7 @@ export const AuthProvider = ({ children }) => {
       return {
         success: false,
         error: 'Connection error. Please try again.',
-      };
+      } satisfies LoginResult;
     }
   };
 
@@ -129,7 +130,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Register function
-  const register = async (firstName, lastName, email, password, passwordConfirmation) => {
+  const register = async (
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+    passwordConfirmation: string,
+  ): Promise<RegisterResult> => {
     try {
       const response = await fetch('/api/register', {
         method: 'POST',
@@ -174,7 +181,7 @@ export const AuthProvider = ({ children }) => {
           name: userData.name,
           role_type: userData.role_type,
           email: userData.email,
-        });
+        } satisfies AuthorizedUserData);
         setIsAuthenticated(true);
         setEmailVerified(userData.email_verified_at ? true : false);
       }
@@ -207,16 +214,18 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{
-        isAuthenticated,
-        currentUser,
-        emailVerified,
-        login,
-        register,
-        logout,
-        loading,
-        resendVerification,
-      }}
+      value={
+        {
+          isAuthenticated,
+          currentUser,
+          emailVerified,
+          login,
+          register,
+          logout,
+          loading,
+          resendVerification,
+        } satisfies AuthContextData
+      }
     >
       {children}
     </AuthContext.Provider>

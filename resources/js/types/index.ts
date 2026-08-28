@@ -38,3 +38,33 @@ export interface User {
   updated_at: string;
   [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface LoginResult {
+  success: boolean;
+  error?: string;
+}
+
+export interface RegisterResult {
+  success: boolean;
+  error?: string;
+  errors?: any; //TODO, try to find the exact type.
+}
+
+export interface AuthorizedUserData {
+  id: number;
+  username: string;
+  name: string;
+  role_type: string;
+  email: string;
+}
+
+export interface AuthContextData {
+  isAuthenticated: boolean;
+  currentUser: AuthorizedUserData | null;
+  emailVerified: boolean;
+  login: (email: string, password: string, rememberMe: boolean) => Promise<LoginResult>;
+  register: (firstName: string, lastName: string, email: string, password: string, passwordConfirmation: string) => Promise<RegisterResult>;
+  logout: () => Promise<void>;
+  loading: boolean;
+  resendVerification: () => Promise<void>;
+}
