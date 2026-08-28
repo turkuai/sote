@@ -1,9 +1,8 @@
-import React from 'react';
-import { useAuth } from '../components/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../components/AuthContext';
 import { useResponsive } from '../hooks/useResponsive';
-import Header from './Header';
 import './Admin.css';
+import Header from './Header';
 
 export default function PatientsPage() {
   const { currentUser, logout } = useAuth();
@@ -19,6 +18,10 @@ export default function PatientsPage() {
     navigate('/home', { replace: true });
   };
 
+  const handleSettingsClick = () => {
+    navigate(`/home/settings`);
+  };
+
   return (
     <div className="admin-page">
       <Header
@@ -27,6 +30,7 @@ export default function PatientsPage() {
         currentPage="patients"
         onNavigateDashboard={handleNavigateDashboard}
         isMobile={isMobile}
+        onSettingsClick={handleSettingsClick}
       />
 
       <div className="admin-content" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
