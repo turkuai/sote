@@ -64,6 +64,7 @@ Route::prefix('api')->group(function () {
         // Patients API
         Route::get("/patients", [PatientController::class, "index"]);
         Route::get("/patients/{id}", [PatientController::class, "show"]);
+        Route::delete('/patients/{id}', [PatientController::class, 'destroy'])->middleware('checkRole:admin,manager');
     });
 });
 

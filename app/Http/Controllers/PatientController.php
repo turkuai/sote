@@ -36,6 +36,26 @@ class PatientController extends Controller
     }
   }
 
+   /**
+   * Delete a patient
+   */
+  public function destroy($id)
+  {
+    $patients = Patient::find($id);
+
+    if (!$patients) {
+      return ApiResponse::notFound('Patient not found');
+    }
+
+    if (auth()->id() == $id) {
+      return ApiResponse::error('Self-deletion is not allowed.', 422);
+    }
+
+    $patients->delete();
+
+    return ApiResponse::success(null, 'Patient deleted successfully');
+  } 
+  
   //Get specific patient via id
   public function show($id)
   {
