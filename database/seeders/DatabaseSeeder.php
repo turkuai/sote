@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\Patient;
 use App\Libraries\Role;
 use Illuminate\Support\Facades\Hash;
 
@@ -62,6 +63,18 @@ class DatabaseSeeder extends Seeder
                 'role_type' => 'nurse',
                 'email_verified_at' => now(),
             ]);
+        }
+
+        // Create 100 test patients
+        for ($i = 1; $i <= 100; $i++) {
+            Patient::create([
+                'first_name' => "Test",
+                'last_name' => "Patient $i",
+                'social_id' => "$i",
+                'arrival_date' => now(),
+                'remarks' => "test",
+            ]);
+
         }
     }
 }
