@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 const NotificationContext = createContext(null);
 
@@ -44,9 +44,7 @@ export const NotificationProvider = ({ children }) => {
           className={[
             'notification-banner',
             notification.visible ? 'notification-banner--visible' : '',
-            notification.type === 'error'
-              ? 'notification-banner--error'
-              : 'notification-banner--success',
+            notification.type === 'error' ? 'notification-banner--error' : 'notification-banner--success',
           ]
             .filter(Boolean)
             .join(' ')}
@@ -65,5 +63,3 @@ export const useNotification = () => {
   }
   return ctx;
 };
-
-

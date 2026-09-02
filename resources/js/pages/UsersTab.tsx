@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
 import MobileSearchToggle from '../components/MobileSearchToggle';
@@ -10,27 +11,23 @@ const SEARCH_DEBOUNCE_MS = 300;
 
 /**
  * UsersTab component
- * 
+ *
  * Extracted from Admin.js - handles both mobile and desktop user management views
  * Uses CSS classes for responsive visibility instead of conditional rendering
  * Search is debounced: waits 300ms after last keystroke before triggering the API.
- * 
+ *
  * Props:
  * - currentUser: Current logged in user object
  * - query: Search query string (debounced value used for API)
  * - onQueryChange: Callback function for search query changes
  * - onDeleteUser: Callback function for deleting a user
  */
-export default function UsersTab({
-  currentUser,
-  query,
-  onQueryChange,
-  onDeleteUser,
-}) {
+export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUser }) {
   const [refreshKey, setRefreshKey] = useState(0);
   const [inputValue, setInputValue] = useState(query || '');
   const debounceRef = useRef(null);
   const { showNotification } = useNotification();
+  const { t } = useTranslation();
 
   // Sync input from parent query (e.g. when debounced update lands or initial load)
   useEffect(() => {
@@ -61,10 +58,14 @@ export default function UsersTab({
       <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
         {isYou && (
           <span
-            title="This is you"
+            title={t('users.thisIsYou')}
             style={{
-              display: 'inline-block', width: '8px', height: '8px',
-              borderRadius: '50%', background: '#3b82f6', flexShrink: 0,
+              display: 'inline-block',
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              background: '#3b82f6',
+              flexShrink: 0,
             }}
           />
         )}
@@ -74,24 +75,23 @@ export default function UsersTab({
   };
 
   // Custom renderer para role_type - mostrar "Waiting list" si es null
-  const RoleTypeRenderer = ({ data }) => (
-    <span>{data?.role_type || 'Waiting list'}</span>
-  );
+  const RoleTypeRenderer = ({ data }) => <span>{data?.role_type || t('users.waitingList')}</span>;
 
   return (
     <>
       {/* Mobile view - same ServerGrid and add popup as desktop (all fields: first_name, last_name, email, role) */}
       <div className="mobile-tab-content hide-on-desktop">
         <div className="mobile-content-section">
-          <h2>Users</h2>
-          <MobileSearchToggle
-            value={inputValue}
-            onChange={handleSearchChange}
-          />
+          <h2>{t('tabs.users')}</h2>
+          <MobileSearchToggle value={inputValue} onChange={handleSearchChange} />
           <div style={{ height: '500px', width: '100%' }}>
             <ServerGrid
               key={refreshKey}
-              columns={['name', 'email', 'role_type']}
+              columns={[
+                { field: 'name', displayName: t('table.name') },
+                { field: 'email', displayName: t('table.email') },
+                { field: 'role_type', displayName: t('table.roleType') },
+              ]}
               columnRenderers={{
                 name: NameRenderer,
               }}
@@ -104,6 +104,34 @@ export default function UsersTab({
               formComponent={UsersForm}
               getApiBase={getApiBase}
               showNot={showNotification}
+              labels={{
+                loading: t('grid.loading'),
+                add: t('grid.add'),
+                updateFailed: t('grid.errors.updateFailed'),
+                itemUpdated: t('grid.success.itemUpdated'),
+                listViewRequiresProps: t('grid.errors.listViewRequiresProps'),
+                confirmDeleteTitle: t('grid.confirmDelete.title'),
+                confirmDeleteMessage: t('grid.confirmDelete.message'),
+                confirmDeleteLabel: t('grid.confirmDelete.delete'),
+                deletingLabel: t('grid.confirmDelete.deleting'),
+                cancelLabel: t('grid.confirmDelete.cancel'),
+                editTitle: t('grid.dialog.edit'),
+                addTitle: t('grid.dialog.add'),
+                grid: {
+                  actionsHeader: t('table.actions'),
+                  edit: t('table.edit'),
+                  delete: t('table.delete'),
+                  previous: t('grid.pagination.previous'),
+                  next: t('grid.pagination.next'),
+                  page: t('grid.pagination.page'),
+                  of: t('grid.pagination.of'),
+                },
+                dialog: {
+                  save: t('grid.dialog.save'),
+                  cancel: t('grid.dialog.cancel'),
+                  close: t('grid.dialog.close'),
+                },
+              }}
               transformEditPayload={(payload) => {
                 const password = String(payload.password || '').trim();
                 const confirmPassword = String(payload.confirmPassword || '').trim();
@@ -119,12 +147,12 @@ export default function UsersTab({
 
                 // If only one password field filled, error
                 if (!password || !confirmPassword) {
-                  throw new Error('To change the password, fill both password fields.');
+                  throw new Error(t('users.errors.fillBothPasswordFields'));
                 }
 
                 // If passwords don't match, error
                 if (password !== confirmPassword) {
-                  throw new Error('Passwords do not match');
+                  throw new Error(t('users.errors.passwordsDoNotMatch'));
                 }
 
                 // Admins can change passwords
@@ -133,7 +161,7 @@ export default function UsersTab({
                 }
 
                 // Non-admins don't edit users here
-                throw new Error('You are not allowed to change this password.');
+                throw new Error(t('users.errors.notAllowedToChangePassword'));
               }}
               transformAddPayload={(payload) => {
                 const email = String(payload.email || '').trim();
@@ -144,10 +172,10 @@ export default function UsersTab({
 
                 if (password || confirmPassword) {
                   if (!password || !confirmPassword) {
-                    throw new Error('Please fill both password fields or leave both empty');
+                    throw new Error(t('users.errors.fillBothOrLeaveEmpty'));
                   }
                   if (password !== confirmPassword) {
-                    throw new Error('Passwords do not match');
+                    throw new Error(t('users.errors.passwordsDoNotMatch'));
                   }
                 }
 
@@ -173,46 +201,24 @@ export default function UsersTab({
       {/* Desktop view */}
       <div className="hide-on-mobile">
         <div className="tab-header">
-          <h2>Users Management</h2>
+          <h2>{t('users.managementTitle')}</h2>
           <div className="user-search">
-          <span className="search-icon">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle
-                cx="11"
-                cy="11"
-                r="6"
-                stroke="#6b7280"
-                strokeWidth="2"
-              />
-              <line
-                x1="15"
-                y1="15"
-                x2="20"
-                y2="20"
-                stroke="#6b7280"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </span>
-          <input
-            type="text"
-            autoComplete="off"
-            placeholder="Search users..."
-            value={inputValue}
-            onChange={handleSearchChange}
-          />
+            <span className="search-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
+                <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </span>
+            <input type="text" autoComplete="off" placeholder={t('users.searchPlaceholder')} value={inputValue} onChange={handleSearchChange} />
           </div>
         </div>
         <ServerGrid
           key={refreshKey}
-          columns={['name', 'email', 'role_type']}
+          columns={[
+            { field: 'name', displayName: t('table.name') },
+            { field: 'email', displayName: t('table.email') },
+            { field: 'role_type', displayName: t('table.roleType') },
+          ]}
           columnRenderers={{
             name: NameRenderer,
           }}
@@ -225,6 +231,34 @@ export default function UsersTab({
           formComponent={UsersForm}
           getApiBase={getApiBase}
           showNot={showNotification}
+          labels={{
+            loading: t('grid.loading'),
+            add: t('grid.add'),
+            updateFailed: t('grid.errors.updateFailed'),
+            itemUpdated: t('grid.success.itemUpdated'),
+            listViewRequiresProps: t('grid.errors.listViewRequiresProps'),
+            confirmDeleteTitle: t('grid.confirmDelete.title'),
+            confirmDeleteMessage: t('grid.confirmDelete.message'),
+            confirmDeleteLabel: t('grid.confirmDelete.delete'),
+            deletingLabel: t('grid.confirmDelete.deleting'),
+            cancelLabel: t('grid.confirmDelete.cancel'),
+            editTitle: t('grid.dialog.edit'),
+            addTitle: t('grid.dialog.add'),
+            grid: {
+              actionsHeader: t('table.actions'),
+              edit: t('table.edit'),
+              delete: t('table.delete'),
+              previous: t('grid.pagination.previous'),
+              next: t('grid.pagination.next'),
+              page: t('grid.pagination.page'),
+              of: t('grid.pagination.of'),
+            },
+            dialog: {
+              save: t('grid.dialog.save'),
+              cancel: t('grid.dialog.cancel'),
+              close: t('grid.dialog.close'),
+            },
+          }}
           transformEditPayload={(payload) => {
             const password = String(payload.password || '').trim();
             const confirmPassword = String(payload.confirmPassword || '').trim();
@@ -240,19 +274,19 @@ export default function UsersTab({
 
             // If only one filled, error
             if (!password || !confirmPassword) {
-              throw new Error('To change the password, fill both password fields.');
+              throw new Error(t('users.errors.fillBothPasswordFields'));
             }
 
             // If passwords don't match, error
             if (password !== confirmPassword) {
-              throw new Error('Passwords do not match');
+              throw new Error(t('users.errors.passwordsDoNotMatch'));
             }
 
             // Admins can change passwords
             if (isAdmin) {
               return { ...restPayload, password };
             }
-            throw new Error('You are not allowed to change this password.');
+            throw new Error(t('users.errors.notAllowedToChangePassword'));
           }}
           transformAddPayload={(payload) => {
             const email = String(payload.email || '').trim();
@@ -263,10 +297,10 @@ export default function UsersTab({
 
             if (password || confirmPassword) {
               if (!password || !confirmPassword) {
-                throw new Error('Please fill both password fields or leave both empty');
+                throw new Error(t('users.errors.fillBothOrLeaveEmpty'));
               }
               if (password !== confirmPassword) {
-                throw new Error('Passwords do not match');
+                throw new Error(t('users.errors.passwordsDoNotMatch'));
               }
             }
 
@@ -285,113 +319,78 @@ export default function UsersTab({
           }}
         />
       </div>
-
     </>
   );
 }
 
-
-
 function UsersForm({ data, setData }) {
+  const { t } = useTranslation();
   const isEditing = !!(data && data.id);
   const getValue = (field) => (data && data[field]) || '';
-  const handleChange = (field) => (e) =>
-    setData((prev) => ({ ...prev, [field]: e.target.value }));
+  const handleChange = (field) => (e) => setData((prev) => ({ ...prev, [field]: e.target.value }));
 
   return (
     <div className="add-user-form">
       <div className="add-user-form-grid">
         <div>
-          <label className="form-label">First name *</label>
-          <input
-            type="text"
-            className="form-input"
-            value={getValue('first_name')}
-            onChange={handleChange('first_name')}
-          />
+          <label className="form-label">{t('users.form.firstName')}</label>
+          <input type="text" className="form-input" value={getValue('first_name')} onChange={handleChange('first_name')} />
         </div>
         <div>
-          <label className="form-label">Last name *</label>
-          <input
-            type="text"
-            className="form-input"
-            value={getValue('last_name')}
-            onChange={handleChange('last_name')}
-          />
+          <label className="form-label">{t('users.form.lastName')}</label>
+          <input type="text" className="form-input" value={getValue('last_name')} onChange={handleChange('last_name')} />
         </div>
         <div>
-          <label className="form-label">Email *</label>
-          <input
-            type="email"
-            className="form-input"
-            value={getValue('email')}
-            onChange={handleChange('email')}
-          />
+          <label className="form-label">{t('users.form.email')}</label>
+          <input type="email" className="form-input" value={getValue('email')} onChange={handleChange('email')} />
         </div>
         <div>
-          <label className="form-label">Role</label>
-          <select
-            className="form-select"
-            value={getValue('role_type') || 'nurse'}
-            onChange={handleChange('role_type')}
-          >
-            <option value="nurse">Nurse (Read-only)</option>
-            <option value="manager">Manager (CRUD)</option>
-            <option value="admin">Admin (Full Access)</option>
+          <label className="form-label">{t('users.form.role')}</label>
+          <select className="form-select" value={getValue('role_type') || 'nurse'} onChange={handleChange('role_type')}>
+            <option value="nurse">{t('users.roles.nurse')}</option>
+            <option value="manager">{t('users.roles.manager')}</option>
+            <option value="admin">{t('users.roles.admin')}</option>
           </select>
         </div>
         {!isEditing && (
           <>
             <div>
-              <label className="form-label">Password (optional)</label>
+              <label className="form-label">{t('users.form.passwordOptional')}</label>
+              <input type="password" className="form-input" value={getValue('password')} onChange={handleChange('password')} />
+            </div>
+            <div>
+              <label className="form-label">{t('users.form.confirmPasswordOptional')}</label>
+              <input type="password" className="form-input" value={getValue('confirmPassword')} onChange={handleChange('confirmPassword')} />
+            </div>
+          </>
+        )}
+
+        {isEditing && (
+          <>
+            <div style={{ gridColumn: '1 / -1', fontSize: '0.875rem', color: '#6b7280' }}>{t('users.form.passwordHint')}</div>
+            <div>
+              <label className="form-label">{t('users.form.password')}</label>
               <input
                 type="password"
                 className="form-input"
                 value={getValue('password')}
                 onChange={handleChange('password')}
+                placeholder={t('users.form.newPasswordPlaceholder')}
               />
             </div>
             <div>
-              <label className="form-label">Confirm password (optional)</label>
+              <label className="form-label">{t('users.form.confirmPassword')}</label>
               <input
                 type="password"
                 className="form-input"
                 value={getValue('confirmPassword')}
                 onChange={handleChange('confirmPassword')}
+                placeholder={t('users.form.confirmNewPasswordPlaceholder')}
               />
             </div>
           </>
-    )}
-
-    {isEditing && (
-      <>
-        <div style={{ gridColumn: '1 / -1', fontSize: '0.875rem', color: '#6b7280' }}>
-          Leave <strong>Password</strong> and <strong>Confirm password</strong> empty to keep the current password.
-        </div>
-        <div>
-          <label className="form-label">Password</label>
-          <input
-            type="password"
-            className="form-input"
-            value={getValue('password')}
-            onChange={handleChange('password')}
-            placeholder="New password (optional)"
-          />
-        </div>
-        <div>
-          <label className="form-label">Confirm password</label>
-          <input
-            type="password"
-            className="form-input"
-            value={getValue('confirmPassword')}
-            onChange={handleChange('confirmPassword')}
-            placeholder="Confirm new password"
-          />
-        </div>
-      </>
-    )}
+        )}
       </div>
     </div>
   );
 }
-

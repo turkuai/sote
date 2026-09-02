@@ -1,43 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import './Admin.css';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import 'tai-grid/style.css';
 import { getApiBase } from '../config';
+import './Admin.css';
 
 /**
  * SettingsTab component - User settings including user details, password change, and logout
  * @param {Object} currentUser - Current authenticated user object
  * @param {Function} onLogout - Handler for logout button click
  */
-const SettingsTab = ({
-  currentUser,
-  onLogout
-}) => {
+const SettingsTab = ({ currentUser, onLogout }) => {
+  const { t } = useTranslation();
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: '',
     newPassword: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
 
   const [passwordStatus, setPasswordStatus] = useState(null);
 
   const handlePasswordInputChange = (field, value) => {
-    setPasswordForm(prev => ({ ...prev, [field]: value }));
+    setPasswordForm((prev) => ({ ...prev, [field]: value }));
   };
 
   const handlePasswordSubmit = async (event) => {
     event.preventDefault();
 
     if (!passwordForm.currentPassword || !passwordForm.newPassword || !passwordForm.confirmPassword) {
-      setPasswordStatus({ type: 'error', message: 'Please fill in all fields before submitting.' });
+      setPasswordStatus({ type: 'error', message: t('settings.password.errors.fillAllFields') });
       return;
     }
 
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      setPasswordStatus({ type: 'error', message: 'New password and confirmation do not match.' });
+      setPasswordStatus({ type: 'error', message: t('settings.password.errors.passwordMismatch') });
       return;
     }
 
     if (passwordForm.newPassword.length < 6) {
-      setPasswordStatus({ type: 'error', message: 'New password must be at least 6 characters long.' });
+      setPasswordStatus({ type: 'error', message: t('settings.password.errors.passwordTooShort') });
       return;
     }
 
@@ -50,30 +50,30 @@ const SettingsTab = ({
         },
         body: JSON.stringify({
           password: passwordForm.newPassword,
-          current_password: passwordForm.currentPassword
-        })
+          current_password: passwordForm.currentPassword,
+        }),
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to change password');
+        throw new Error(errorData.error || t('settings.password.errors.failed'));
       }
 
-      setPasswordStatus({ type: 'success', message: 'Password changed successfully!' });
+      setPasswordStatus({ type: 'success', message: t('settings.password.success') });
       setPasswordForm({
         currentPassword: '',
         newPassword: '',
-        confirmPassword: ''
+        confirmPassword: '',
       });
     } catch (error) {
       console.error('Password change error:', error);
-      setPasswordStatus({ type: 'error', message: error.message || 'Failed to change password. Please try again.' });
+      setPasswordStatus({ type: 'error', message: error.message || t('settings.password.errors.tryAgain') });
     }
   };
 
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
@@ -85,75 +85,70 @@ const SettingsTab = ({
     return (
       <div className="admin-settings">
         <div className="admin-settings-section">
-          <h3>User Details</h3>
+          <h3>{t('settings.mobile.userDetails')}</h3>
           <div className="settings-field">
-            <span className="settings-label">Name</span>
+            <span className="settings-label">{t('settings.fields.name')}</span>
             <span className="settings-value">{currentUser?.name || '-'}</span>
           </div>
           <div className="settings-field">
-            <span className="settings-label">Username</span>
+            <span className="settings-label">{t('settings.fields.username')}</span>
             <span className="settings-value">{currentUser?.username || '-'}</span>
           </div>
           <div className="settings-field">
-            <span className="settings-label">Role</span>
+            <span className="settings-label">{t('settings.fields.role')}</span>
             <span className="settings-value">{currentUser?.role_type || '-'}</span>
           </div>
         </div>
 
         <div className="admin-settings-section">
-          <h3>Change Password</h3>
+          <h3>{t('settings.mobile.changePassword')}</h3>
           <form className="password-form" onSubmit={handlePasswordSubmit} autoComplete="off">
             <label className="password-form-field">
-              <span>Current password</span>
+              <span>{t('settings.password.current')}</span>
               <input
                 type="password"
                 value={passwordForm.currentPassword}
                 onChange={(e) => handlePasswordInputChange('currentPassword', e.target.value)}
-                placeholder="Enter current password"
+                placeholder={t('settings.password.placeholders.current')}
               />
             </label>
             <label className="password-form-field">
-              <span>New password</span>
+              <span>{t('settings.password.new')}</span>
               <input
                 type="password"
                 value={passwordForm.newPassword}
                 onChange={(e) => handlePasswordInputChange('newPassword', e.target.value)}
-                placeholder="Enter new password"
+                placeholder={t('settings.password.placeholders.new')}
               />
             </label>
             <label className="password-form-field">
-              <span>Confirm new password</span>
+              <span>{t('settings.password.confirmNew')}</span>
               <input
                 type="password"
                 value={passwordForm.confirmPassword}
                 onChange={(e) => handlePasswordInputChange('confirmPassword', e.target.value)}
-                placeholder="Re-enter new password"
+                placeholder={t('settings.password.placeholders.confirm')}
               />
             </label>
 
             {passwordStatus && (
-              <div
-                className={`password-status ${passwordStatus.type === 'error' ? 'error' : 'success'}`}
-                role="alert"
-              >
+              <div className={`password-status ${passwordStatus.type === 'error' ? 'error' : 'success'}`} role="alert">
                 {passwordStatus.message}
               </div>
             )}
 
             <button type="submit" className="password-submit-btn">
-              Update Password
+              {t('settings.actions.updatePassword')}
             </button>
           </form>
         </div>
 
         <div className="admin-settings-section">
-          <h3>Account</h3>
+          <h3>{t('settings.mobile.account')}</h3>
           <button type="button" className="settings-logout-btn" onClick={onLogout}>
-            Logout
+            {t('user.logout')}
           </button>
         </div>
-
-
       </div>
     );
   }
@@ -161,113 +156,83 @@ const SettingsTab = ({
   return (
     <div className="settings-container">
       <div className="settings-header">
-        <h2>Settings</h2>
-        <p>Manage your account settings and set e-mail preferences.</p>
+        <h2>{t('settings.header.title')}</h2>
+        <p>{t('settings.header.description')}</p>
       </div>
-      
+
       <div className="settings-layout">
         <div className="settings-sidebar">
-          <button 
-            className="settings-nav-item active"
-          >
-            Profile
-          </button>
+          <button className="settings-nav-item active">{t('settings.tabs.profile')}</button>
         </div>
 
         <div className="settings-content">
           <div className="settings-profile">
-            <h3>Profile</h3>
-            <p className="settings-description">This is how others will see you on the site.</p>
+            <h3>{t('settings.profile.title')}</h3>
+            <p className="settings-description">{t('settings.profile.description')}</p>
 
             <div className="settings-form-group">
-              <label>Name</label>
-              <input 
-                type="text" 
-                value={currentUser?.name || 'Mohammad Admin'} 
-                readOnly
-                className="settings-input"
-              />
+              <label>{t('settings.fields.name')}</label>
+              <input type="text" value={currentUser?.name || 'Mohammad Admin'} readOnly className="settings-input" />
             </div>
 
             <div className="settings-form-group">
-              <label>Username</label>
-              <input 
-                type="text" 
-                value={currentUser?.username || 'admin'} 
-                readOnly
-                className="settings-input"
-              />
+              <label>{t('settings.fields.username')}</label>
+              <input type="text" value={currentUser?.username || 'admin'} readOnly className="settings-input" />
             </div>
 
             <div className="settings-form-group">
-              <label>Role</label>
-              <input 
-                type="text" 
-                value={currentUser?.role_type || 'Administrator'} 
-                readOnly
-                className="settings-input"
-              />
+              <label>{t('settings.fields.role')}</label>
+              <input type="text" value={currentUser?.role_type || 'Administrator'} readOnly className="settings-input" />
             </div>
 
             <div className="settings-form-group">
-              <label>Current Password</label>
+              <label>{t('settings.password.current')}</label>
               <input
                 type="password"
                 autoComplete="new-password"
                 value={passwordForm.currentPassword}
                 onChange={(e) => handlePasswordInputChange('currentPassword', e.target.value)}
-                placeholder="Enter current password"
+                placeholder={t('settings.password.placeholders.current')}
                 className="settings-input"
               />
             </div>
 
             <div className="settings-form-group">
-              <label>New Password</label>
+              <label>{t('settings.password.new')}</label>
               <input
                 type="password"
                 autoComplete="new-password"
                 value={passwordForm.newPassword}
                 onChange={(e) => handlePasswordInputChange('newPassword', e.target.value)}
-                placeholder="Enter new password"
+                placeholder={t('settings.password.placeholders.new')}
                 className="settings-input"
               />
             </div>
 
             <div className="settings-form-group">
-              <label>Confirm Password</label>
+              <label>{t('settings.password.confirm')}</label>
               <input
                 type="password"
                 autoComplete="new-password"
                 value={passwordForm.confirmPassword}
                 onChange={(e) => handlePasswordInputChange('confirmPassword', e.target.value)}
-                placeholder="Confirm new password"
+                placeholder={t('settings.password.placeholders.confirmDesktop')}
                 className="settings-input"
               />
             </div>
 
             {passwordStatus && (
-              <div
-                className={`password-status ${passwordStatus.type === 'error' ? 'error' : 'success'}`}
-                role="alert"
-              >
+              <div className={`password-status ${passwordStatus.type === 'error' ? 'error' : 'success'}`} role="alert">
                 {passwordStatus.message}
               </div>
             )}
 
             <div className="settings-actions">
-              <button 
-                type="button" 
-                className="settings-update-btn"
-                onClick={handlePasswordSubmit}
-              >
-                Update Profile
+              <button type="button" className="settings-update-btn" onClick={handlePasswordSubmit}>
+                {t('settings.actions.updateProfile')}
               </button>
-              <button 
-                type="button" 
-                className="settings-logout-btn-new" 
-                onClick={onLogout}
-              >
-                Logout
+              <button type="button" className="settings-logout-btn-new" onClick={onLogout}>
+                {t('user.logout')}
               </button>
             </div>
           </div>
@@ -278,4 +243,3 @@ const SettingsTab = ({
 };
 
 export default SettingsTab;
-

@@ -1,4 +1,3 @@
-import React from 'react';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import './Admin.css';
 
@@ -36,5 +35,3 @@ export default function HomeTabs({ tabs, activeTab, onTabClick, getTabLabel, ren
     </nav>
   );
 }
-
-

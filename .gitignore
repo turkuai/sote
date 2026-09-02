@@ -8,7 +8,6 @@
 /.idea
 /.nova
 /.phpunit.cache
-/.vscode
 /.zed
 /bootstrap/ssr
 /node_modules

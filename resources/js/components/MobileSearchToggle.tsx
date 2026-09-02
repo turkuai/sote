@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
 import { Search, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
-const MobileSearchToggle = ({ value, onChange, placeholder = "Search ..." }) => {
+const MobileSearchToggle = ({ value, onChange, placeholder = 'Search ...' }) => {
   const [open, setOpen] = useState(false);
   const inputRef = useRef(null);
 
@@ -12,15 +12,14 @@ const MobileSearchToggle = ({ value, onChange, placeholder = "Search ..." }) => 
   if (open) {
     return (
       <div className="mobile-search-bar">
-        <input
-          ref={inputRef}
-          type="search"
-          autoComplete="off"
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-        />
-        <button onClick={() => { setOpen(false); onChange({ target: { value: '' } }); }} aria-label="Close search">
+        <input ref={inputRef} type="search" autoComplete="off" placeholder={placeholder} value={value} onChange={onChange} />
+        <button
+          onClick={() => {
+            setOpen(false);
+            onChange({ target: { value: '' } });
+          }}
+          aria-label="Close search"
+        >
           <X size={18} />
         </button>
       </div>
@@ -35,4 +34,3 @@ const MobileSearchToggle = ({ value, onChange, placeholder = "Search ..." }) => 
 };
 
 export default MobileSearchToggle;
-

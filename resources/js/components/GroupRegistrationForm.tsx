@@ -1,11 +1,13 @@
-import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   onSuccess: () => void;
 }
 
 export default function GroupRegistrationForm({ onSuccess }: Props) {
+  const { t } = useTranslation();
   const [groupName, setGroupName] = useState('');
   const [accessKey, setAccessKey] = useState('');
   const [showKey, setShowKey] = useState(false);
@@ -22,7 +24,7 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
         method: 'POST',
         credentials: 'include',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ group_name: groupName, access_key: accessKey }),
@@ -31,12 +33,12 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message || data.error || 'Invalid group name or access key');
+        setError(data.message || data.error || t('groups.registration.invalidCredentials'));
       } else {
         onSuccess();
       }
     } catch {
-      setError('Connection error. Please try again.');
+      setError(t('groups.registration.connectionError'));
     } finally {
       setLoading(false);
     }
@@ -46,7 +48,7 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
     <form onSubmit={handleSubmit} autoComplete="off" style={{ marginTop: '1.5rem', width: '100%' }}>
       <div style={{ marginBottom: '1rem' }}>
         <label style={{ display: 'block', marginBottom: '0.375rem', fontWeight: 500, fontSize: '0.875rem', color: '#374151' }}>
-          Group Name
+          {t('groups.registration.groupName')}
         </label>
         <input
           type="text"
@@ -55,15 +57,22 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
           required
           value={groupName}
           onChange={(e) => setGroupName(e.target.value)}
-          placeholder="Enter the group name"
+          placeholder={t('groups.registration.groupNamePlaceholder')}
           disabled={loading}
-          style={{ width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #d1d5db', borderRadius: '0.375rem', fontSize: '0.875rem', boxSizing: 'border-box' }}
+          style={{
+            width: '100%',
+            padding: '0.5rem 0.75rem',
+            border: '1px solid #d1d5db',
+            borderRadius: '0.375rem',
+            fontSize: '0.875rem',
+            boxSizing: 'border-box',
+          }}
         />
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
         <label style={{ display: 'block', marginBottom: '0.375rem', fontWeight: 500, fontSize: '0.875rem', color: '#374151' }}>
-          Secret Key
+          {t('groups.registration.secretKey')}
         </label>
         <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
           <input
@@ -73,15 +82,32 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
             required
             value={accessKey}
             onChange={(e) => setAccessKey(e.target.value)}
-            placeholder="Enter the group secret key"
+            placeholder={t('groups.registration.secretKeyPlaceholder')}
             disabled={loading}
-            style={{ width: '100%', padding: '0.5rem 2.5rem 0.5rem 0.75rem', border: '1px solid #d1d5db', borderRadius: '0.375rem', fontSize: '0.875rem', boxSizing: 'border-box' }}
+            style={{
+              width: '100%',
+              padding: '0.5rem 2.5rem 0.5rem 0.75rem',
+              border: '1px solid #d1d5db',
+              borderRadius: '0.375rem',
+              fontSize: '0.875rem',
+              boxSizing: 'border-box',
+            }}
           />
           <button
             type="button"
             onClick={() => setShowKey((v) => !v)}
-            style={{ position: 'absolute', right: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', display: 'flex', alignItems: 'center', padding: 0 }}
-            title={showKey ? 'Hide key' : 'Show key'}
+            style={{
+              position: 'absolute',
+              right: '0.5rem',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: '#6b7280',
+              display: 'flex',
+              alignItems: 'center',
+              padding: 0,
+            }}
+            title={showKey ? t('groups.hideKey') : t('groups.showKey')}
           >
             {showKey ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
@@ -89,7 +115,17 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
       </div>
 
       {error && (
-        <div style={{ marginBottom: '1rem', padding: '0.75rem', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.375rem', color: '#dc2626', fontSize: '0.875rem' }}>
+        <div
+          style={{
+            marginBottom: '1rem',
+            padding: '0.75rem',
+            background: '#fef2f2',
+            border: '1px solid #fecaca',
+            borderRadius: '0.375rem',
+            color: '#dc2626',
+            fontSize: '0.875rem',
+          }}
+        >
           {error}
         </div>
       )}
@@ -97,9 +133,20 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
       <button
         type="submit"
         disabled={loading}
-        style={{ width: '100%', padding: '0.625rem', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '0.375rem', fontSize: '0.875rem', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}
+        style={{
+          width: '100%',
+          padding: '0.625rem',
+          background: '#3b82f6',
+          color: 'white',
+          border: 'none',
+          borderRadius: '0.375rem',
+          fontSize: '0.875rem',
+          fontWeight: 600,
+          cursor: loading ? 'not-allowed' : 'pointer',
+          opacity: loading ? 0.7 : 1,
+        }}
       >
-        {loading ? 'Registering...' : 'Register'}
+        {loading ? t('groups.registration.registering') : t('groups.registration.register')}
       </button>
     </form>
   );

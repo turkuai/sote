@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { X, Plus, Trash2 } from 'lucide-react';
-import { getApiBase } from '../config';
+import { Plus, Search, Trash2, X } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import './GroupUsersModal.css';
 
 export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdded }) {
+  const { t } = useTranslation();
   const [users, setUsers] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showAddUsers, setShowAddUsers] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
+  const [showAddUsers, setShowAddUsers] = useState(true);
   const [selectedUsersToAdd, setSelectedUsersToAdd] = useState([]);
   const [fetchError, setFetchError] = useState(null);
-  const [debugInfo, setDebugInfo] = useState({});
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedUsersToRemove, setSelectedUsersToRemove] = useState<number[]>([]);
+  const lastClickedIndex = useRef<number | null>(null);
+  const lastMemberClickedIndex = useRef<number | null>(null);
 
   // Fetch group with users
   useEffect(() => {
@@ -27,7 +33,6 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
           console.log('API Response:', data);
           console.log('Group users:', data.data.users);
           setUsers(data.data.users || []);
-          setDebugInfo(prev => ({ ...prev, groupUsers: data.data.users }));
         }
       } catch (error) {
         console.error('Error fetching group users:', error);
@@ -49,33 +54,31 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
         console.log('=== Fetching ALL Users ===');
         const url = `/api/users`;
         console.log('Fetching from:', url);
-        
+
         const response = await fetch(url, {
           credentials: 'include',
         });
-        
+
         console.log('Response status:', response.status);
         console.log('Response headers:', {
           'content-type': response.headers.get('content-type'),
           'x-powered-by': response.headers.get('x-powered-by'),
         });
-        
+
         // Read response as text first to diagnose
         const responseText = await response.text();
         console.log('Raw response text (first 500 chars):', responseText.substring(0, 500));
-        
+
         if (!response.ok) {
           const error = `API Error ${response.status}: ${responseText.substring(0, 300)}`;
           console.error(error);
           setFetchError(error);
           return;
         }
-        
+
         try {
           const data = JSON.parse(responseText);
-          console.log('✓ Parsed JSON successfully');
-          console.log('Data structure:', { success: data.success, hasData: !!data.data, count: Array.isArray(data.data) ? data.data.length : 'N/A' });
-          
+
           // Extract users array
           let allUsersArray = [];
           if (Array.isArray(data.data)) {
@@ -83,23 +86,12 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
           } else if (Array.isArray(data)) {
             allUsersArray = data;
           }
-          
-          console.log(`Found ${allUsersArray.length} total users`);
-          
+
           // Filter out users already in the group
-          const groupUserIds = users.map(u => u.id);
-          const availableUsers = allUsersArray.filter(u => !groupUserIds.includes(u.id));
-          
-          console.log(`Filtered to ${availableUsers.length} available users`);
-          console.log('Available users:', availableUsers);
-          
+          const groupUserIds = users.map((u) => u.id);
+          const availableUsers = allUsersArray.filter((u) => !groupUserIds.includes(u.id));
+
           setAllUsers(availableUsers);
-          setDebugInfo(prev => ({
-            ...prev,
-            totalUsers: allUsersArray.length,
-            groupUserIds: groupUserIds,
-            availableCount: availableUsers.length,
-          }));
         } catch (parseError) {
           const error = `Failed to parse JSON: ${parseError.message}`;
           console.error(error);
@@ -107,7 +99,6 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
           setFetchError(error);
         }
       } catch (error) {
-        console.error('Network error:', error);
         setFetchError(error.message || 'Network error');
       }
     };
@@ -115,9 +106,17 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
     fetchAllUsers();
   }, [showAddUsers, users]);
 
+  const filteredSuggestions = allUsers.filter((user) => {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase();
+    const fullName = `${user.first_name} ${user.last_name}`.toLowerCase();
+    return fullName.includes(q) || (user.email && user.email.toLowerCase().includes(q));
+  });
+
   const handleAddUsers = async () => {
     if (selectedUsersToAdd.length === 0) return;
 
+    setIsAdding(true);
     try {
       // Add each user to the group via pivot table
       for (const userId of selectedUsersToAdd) {
@@ -142,26 +141,30 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
       if (onUserAdded) onUserAdded();
     } catch (error) {
       console.error('Error adding users:', error);
+    } finally {
+      setIsAdding(false);
     }
   };
 
-  const handleRemoveUser = async (userId) => {
+  const handleRemoveSelectedUsers = async () => {
+    if (selectedUsersToRemove.length === 0) return;
+    setIsRemoving(true);
     try {
-      const response = await fetch(`/api/groups/${groupId}/users/${userId}`, {
-        method: 'DELETE',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if (response.ok) {
-        // Remove user from local state
-        setUsers(users.filter(u => u.id !== userId));
-        if (onUserAdded) onUserAdded();
-      } else {
-        console.error('Failed to remove user:', response.status);
+      for (const userId of selectedUsersToRemove) {
+        await fetch(`/api/groups/${groupId}/users/${userId}`, {
+          method: 'DELETE',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+        });
       }
+      setUsers((prev) => prev.filter((u) => !selectedUsersToRemove.includes(u.id)));
+      setSelectedUsersToRemove([]);
+      lastMemberClickedIndex.current = null;
+      if (onUserAdded) onUserAdded();
     } catch (error) {
-      console.error('Error removing user:', error);
+      console.error('Error removing users:', error);
+    } finally {
+      setIsRemoving(false);
     }
   };
 
@@ -169,7 +172,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
     return (
       <div className="modal-overlay" onClick={onClose}>
         <div className="modal-content group-users-modal" onClick={(e) => e.stopPropagation()}>
-          <div>Loading...</div>
+          <div>{t('grid.loading')}</div>
         </div>
       </div>
     );
@@ -179,7 +182,9 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content group-users-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>{groupName} - Users</h2>
+          <h2>
+            {groupName} - {t('groups.usersModal.users')}
+          </h2>
           <button className="modal-close" onClick={onClose}>
             <X size={20} />
           </button>
@@ -188,35 +193,62 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
         {!showAddUsers ? (
           <>
             <div className="modal-add-button">
-              <button 
+              <button
                 className="add-user-btn"
-                onClick={() => setShowAddUsers(true)}
+                onClick={() => {
+                  setShowAddUsers(true);
+                  setSelectedUsersToRemove([]);
+                  lastMemberClickedIndex.current = null;
+                }}
               >
-                <Plus size={20} /> Add Users
+                <Plus size={20} /> {t('groups.usersModal.addUsers')}
+              </button>
+              <button
+                className={`delete-selected-btn${selectedUsersToRemove.length > 0 || isRemoving ? ' visible' : ''}${isRemoving ? ' removing' : ''}`}
+                onClick={handleRemoveSelectedUsers}
+                disabled={isRemoving}
+                type="button"
+                title={t('groups.usersModal.removeUser')}
+              >
+                <Trash2 size={18} />
+                {isRemoving ? `Removing…` : `Remove ${selectedUsersToRemove.length}`}
               </button>
             </div>
 
             <div className="modal-body">
               {users.length === 0 ? (
-                <p className="empty-message">No users in this group</p>
+                <p className="empty-message">{t('groups.usersModal.noUsersInGroup')}</p>
               ) : (
                 <ul className="users-list">
-                  {users.map(user => (
-                    <li key={user.id} className="user-item">
-                      <div style={{ flex: 1 }}>
-                        <span className="user-name">{user.first_name} {user.last_name}</span>
-                        <span className="user-email">{user.email}</span>
-                      </div>
-                      <button
-                        className="remove-user-btn"
-                        onClick={() => handleRemoveUser(user.id)}
-                        title="Remove user from group"
-                        type="button"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </li>
-                  ))}
+                  {users.map((user, index) => {
+                    const checked = selectedUsersToRemove.includes(user.id);
+                    const handleMemberClick = (e: React.MouseEvent) => {
+                      if (e.shiftKey && lastMemberClickedIndex.current !== null) {
+                        e.preventDefault();
+                        const from = Math.min(lastMemberClickedIndex.current, index);
+                        const to = Math.max(lastMemberClickedIndex.current, index);
+                        const rangeIds = users.slice(from, to + 1).map((u) => u.id);
+                        const allChecked = rangeIds.every((id) => selectedUsersToRemove.includes(id));
+                        setSelectedUsersToRemove((prev) =>
+                          allChecked ? prev.filter((id) => !rangeIds.includes(id)) : [...new Set([...prev, ...rangeIds])],
+                        );
+                      } else {
+                        lastMemberClickedIndex.current = index;
+                        setSelectedUsersToRemove((prev) => (checked ? prev.filter((id) => id !== user.id) : [...prev, user.id]));
+                      }
+                    };
+                    return (
+                      <li key={user.id} className={`user-item${checked ? ' selected' : ''}`} onClick={handleMemberClick}>
+                        <input type="checkbox" className="user-list-checkbox" checked={checked} onChange={() => {}} tabIndex={-1} />
+                        <div style={{ flex: 1 }}>
+                          <span className="user-name">
+                            {user.first_name} {user.last_name}
+                          </span>
+                          <span className="user-email">{user.email}</span>
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </div>
@@ -224,67 +256,83 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
         ) : (
           <>
             <div className="modal-body">
-              <h3>Select users to add</h3>
+              <h3>{t('groups.usersModal.addUsersHeading')}</h3>
               {fetchError && (
-                <div style={{ color: '#dc2626', marginBottom: '1rem', padding: '1rem', backgroundColor: '#fee2e2', borderRadius: '6px', fontSize: '0.9rem' }}>
-                  <strong>Error:</strong>
+                <div
+                  style={{
+                    color: '#dc2626',
+                    marginBottom: '1rem',
+                    padding: '1rem',
+                    backgroundColor: '#fee2e2',
+                    borderRadius: '6px',
+                    fontSize: '0.9rem',
+                  }}
+                >
+                  <strong>{t('groups.usersModal.error')}</strong>
                   <p style={{ marginTop: '0.5rem', marginBottom: '0' }}>{fetchError}</p>
                 </div>
               )}
-              
-              {/* Debug info - remove later */}
-              {debugInfo.totalUsers !== undefined && (
-                <div style={{ fontSize: '0.85rem', color: '#666', marginBottom: '1rem', padding: '0.75rem', backgroundColor: '#f3f4f6', borderRadius: '6px', fontFamily: 'monospace' }}>
-                  <div>Total users in system: {debugInfo.totalUsers}</div>
-                  <div>Users in this group: {debugInfo.groupUserIds?.length || 0}</div>
-                  <div>Available to add: {debugInfo.availableCount}</div>
-                </div>
-              )}
-              
-              {allUsers.length === 0 && !fetchError ? (
-                <div>
-                  <p className="empty-message">No users available to add</p>
-                  
-                </div>
+
+              {/* Search input */}
+              <div className="user-autocomplete-input-wrap" style={{ marginBottom: '0.75rem' }}>
+                <Search size={16} className="user-autocomplete-icon" />
+                <input
+                  type="text"
+                  className="user-autocomplete-input"
+                  placeholder={t('groups.usersModal.searchPlaceholder')}
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    lastClickedIndex.current = null;
+                  }}
+                  autoComplete="off"
+                />
+              </div>
+
+              {/* Always-visible user list */}
+              {filteredSuggestions.length > 0 ? (
+                <ul className="user-autocomplete-list">
+                  {filteredSuggestions.map((user, index) => {
+                    const checked = selectedUsersToAdd.includes(user.id);
+                    const handleClick = (e: React.MouseEvent) => {
+                      if (e.shiftKey && lastClickedIndex.current !== null) {
+                        e.preventDefault();
+                        const from = Math.min(lastClickedIndex.current, index);
+                        const to = Math.max(lastClickedIndex.current, index);
+                        const rangeIds = filteredSuggestions.slice(from, to + 1).map((u) => u.id);
+                        const allChecked = rangeIds.every((id) => selectedUsersToAdd.includes(id));
+                        setSelectedUsersToAdd((prev) =>
+                          allChecked ? prev.filter((id) => !rangeIds.includes(id)) : [...new Set([...prev, ...rangeIds])],
+                        );
+                      } else {
+                        lastClickedIndex.current = index;
+                        setSelectedUsersToAdd((prev) => (checked ? prev.filter((id) => id !== user.id) : [...prev, user.id]));
+                      }
+                    };
+                    return (
+                      <li key={user.id} className={`user-autocomplete-option${checked ? ' selected' : ''}`} onClick={handleClick}>
+                        <input type="checkbox" className="user-list-checkbox" checked={checked} onChange={() => {}} tabIndex={-1} />
+                        <span className="user-autocomplete-name">
+                          {user.first_name} {user.last_name}
+                        </span>
+                        <span className="user-autocomplete-email">{user.email}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
               ) : (
-                <div className="users-checkbox-list">
-                  {allUsers.map(user => (
-                    <label key={user.id} className="checkbox-item">
-                      <input
-                        type="checkbox"
-                        checked={selectedUsersToAdd.includes(user.id)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedUsersToAdd([...selectedUsersToAdd, user.id]);
-                          } else {
-                            setSelectedUsersToAdd(selectedUsersToAdd.filter(id => id !== user.id));
-                          }
-                        }}
-                      />
-                      <span>{user.first_name} {user.last_name}</span>
-                      <span className="user-email">{user.email}</span>
-                    </label>
-                  ))}
-                </div>
+                <p className="empty-message">{searchQuery.trim() ? t('groups.usersModal.noUsersFound') : t('groups.usersModal.noUsersAvailable')}</p>
               )}
             </div>
 
             <div className="modal-footer">
-              <button 
-                className="cancel-btn"
-                onClick={() => {
-                  setShowAddUsers(false);
-                  setSelectedUsersToAdd([]);
-                }}
-              >
-                Cancel
+              <button className="cancel-btn" onClick={onClose}>
+                {t('grid.confirmDelete.cancel')}
               </button>
-              <button 
-                className="confirm-btn"
-                onClick={handleAddUsers}
-                disabled={selectedUsersToAdd.length === 0}
-              >
-                Add {selectedUsersToAdd.length} User{selectedUsersToAdd.length !== 1 ? 's' : ''}
+              <button className="confirm-btn" onClick={handleAddUsers} disabled={selectedUsersToAdd.length === 0 || isAdding}>
+                {isAdding
+                  ? `Adding ${selectedUsersToAdd.length} User${selectedUsersToAdd.length !== 1 ? 's' : ''}…`
+                  : `Add ${selectedUsersToAdd.length} User${selectedUsersToAdd.length !== 1 ? 's' : ''}`}
               </button>
             </div>
           </>

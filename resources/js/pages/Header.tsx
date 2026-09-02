@@ -1,6 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { ChevronDown, Settings, LogOut } from 'lucide-react';
+import { ChevronDown, LogOut, Settings } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import LanguageSwitcher from '../components/language-switcher';
 import { getAssetUrl } from '../config';
 import './Admin.css';
 
@@ -8,22 +10,14 @@ import './Admin.css';
  * Header component - Displays the header with title, user info, and action buttons
  * @param {Object} currentUser - Current authenticated user object
  * @param {Function} onLogout - Handler for logout button click
- * @param {Function} onSettingsClick - Handler for settings menu click
  * @param {string} currentPage - Current page (dashboard or patients)
- * @param {Function} onNavigateDashboard - Handler for dashboard navigation
  * @param {boolean} isMobile - Whether the current view is mobile
  */
-const Header = ({ 
-  currentUser, 
-  onLogout, 
-  onSettingsClick, 
-  currentPage = 'dashboard',
-  onNavigateDashboard,
-  isMobile = false 
-}) => {
+const Header = ({ currentUser, onLogout, currentPage = 'dashboard', isMobile = false  }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -38,9 +32,7 @@ const Header = ({
 
   const handleSettingsClick = () => {
     setIsDropdownOpen(false);
-    if (onSettingsClick) {
-      onSettingsClick();
-    }
+    navigate('/home/settings');
   };
 
   const handleLogoutClick = () => {
@@ -53,51 +45,33 @@ const Header = ({
   };
 
   const handleDashboardClick = () => {
-    if (onNavigateDashboard) {
-      onNavigateDashboard();
-    } else {
       navigate('/home', { replace: true });
-    }
   };
 
   return (
     <div className="admin-header">
       <h1 className="admin-logo">
-        <img
-          src={getAssetUrl('tai.png')}
-          alt="TAI logo"
-          className="admin-logo-image"
-        />
-        {currentUser?.role_type === 'student' && (
-          <span className="admin-logo-subtitle">My Dashboard</span>
-        )}
+        <img src={getAssetUrl('tai.png')} alt="TAI logo" className="admin-logo-image" />
+        {currentUser?.role_type === 'student' && <span className="admin-logo-subtitle">{t('user.myDashboard')}</span>}
       </h1>
 
       {/* Navigation buttons - centered */}
       <div className="header-nav-buttons">
-        <button 
-          className={`nav-button ${currentPage === 'dashboard' ? 'active' : ''}`}
-          onClick={handleDashboardClick}
-        >
-          <strong>Dashboard</strong>
+        <button className={`nav-button ${currentPage === 'dashboard' ? 'active' : ''}`} onClick={handleDashboardClick}>
+          <strong>{t('nav.dashboard')}</strong>
         </button>
-        <button 
-          className={`nav-button ${currentPage === 'patients' ? 'active' : ''}`}
-          onClick={handlePatientsClick}
-        >
-          <strong>Patients</strong>
+        <button className={`nav-button ${currentPage === 'patients' ? 'active' : ''}`} onClick={handlePatientsClick}>
+          <strong>{t('nav.patients')}</strong>
         </button>
       </div>
 
       <div className="admin-header-actions">
+        <LanguageSwitcher />
         {!isMobile && (
           <div className="user-dropdown-container" ref={dropdownRef}>
-            <button
-              className="user-dropdown-trigger"
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            >
+            <button className="user-dropdown-trigger" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
               <span className="user-info-text">
-                Welcome, <strong>{currentUser?.name}</strong>
+                {t('user.welcome')}, <strong>{currentUser?.name}</strong>
               </span>
               <ChevronDown size={16} className={`dropdown-icon ${isDropdownOpen ? 'open' : ''}`} />
             </button>
@@ -106,11 +80,11 @@ const Header = ({
               <div className="user-dropdown-menu">
                 <button className="dropdown-menu-item" onClick={handleSettingsClick}>
                   <Settings size={16} />
-                  Settings
+                  {t('user.settings')}
                 </button>
                 <button className="dropdown-menu-item logout-item" onClick={handleLogoutClick}>
                   <LogOut size={16} />
-                  Logout
+                  {t('user.logout')}
                 </button>
               </div>
             )}
@@ -122,5 +96,3 @@ const Header = ({
 };
 
 export default Header;
-
-
