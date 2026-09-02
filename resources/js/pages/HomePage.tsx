@@ -40,7 +40,7 @@ export default function HomePage() {
   const [userQuery, setUserQuery] = useState('');
   const [groupQuery, setGroupQuery] = useState('');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() =>
-    typeof window !== 'undefined' ? localStorage.getItem('sidebar_collapsed') === 'true' : false
+    typeof window !== 'undefined' ? localStorage.getItem('sidebar_collapsed') === 'true' : false,
   );
 
   // Password form hook
@@ -142,43 +142,45 @@ export default function HomePage() {
           getTabLabel={(tab) => TabConfig.getTabLabel(tab, t)}
           renderTabIcon={TabConfig.renderTabIcon}
           collapsed={sidebarCollapsed}
-          onToggleCollapse={() => setSidebarCollapsed(c => {
-            const next = !c;
-            localStorage.setItem('sidebar_collapsed', String(next));
-            return next;
-          })}
+          onToggleCollapse={() =>
+            setSidebarCollapsed((c) => {
+              const next = !c;
+              localStorage.setItem('sidebar_collapsed', String(next));
+              return next;
+            })
+          }
         />
 
         <div className="admin-content-area">
           <div className="admin-content-card">
-          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
-            <div style={{ display: activeTab === 'users' ? 'block' : 'none' }}>
-              <UsersTab currentUser={currentUser} query={userQuery} onQueryChange={setUserQuery} onDeleteUser={handleDeleteUser} />
-            </div>
-          )}
+            {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
+              <div style={{ display: activeTab === 'users' ? 'block' : 'none' }}>
+                <UsersTab currentUser={currentUser} query={userQuery} onQueryChange={setUserQuery} onDeleteUser={handleDeleteUser} />
+              </div>
+            )}
 
-          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
-            <div style={{ display: activeTab === 'groups' ? 'block' : 'none' }}>
-              <GroupsTab currentUser={currentUser} query={groupQuery} onQueryChange={setGroupQuery} />
-            </div>
-          )}
+            {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
+              <div style={{ display: activeTab === 'groups' ? 'block' : 'none' }}>
+                <GroupsTab currentUser={currentUser} query={groupQuery} onQueryChange={setGroupQuery} />
+              </div>
+            )}
 
-          {currentUser?.role_type === 'nurse' && (
-            <div style={{ display: activeTab === 'groups' ? 'block' : 'none' }}>
-              <GroupsTab currentUser={currentUser} query={groupQuery} onQueryChange={setGroupQuery} />
-            </div>
-          )}
+            {currentUser?.role_type === 'nurse' && (
+              <div style={{ display: activeTab === 'groups' ? 'block' : 'none' }}>
+                <GroupsTab currentUser={currentUser} query={groupQuery} onQueryChange={setGroupQuery} />
+              </div>
+            )}
 
-          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
-            <div style={{ display: activeTab === 'waiting-list' ? 'block' : 'none' }}>
-              <WaitingListTab currentUser={currentUser} />
-            </div>
-          )}
+            {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
+              <div style={{ display: activeTab === 'waiting-list' ? 'block' : 'none' }}>
+                <WaitingListTab currentUser={currentUser} />
+              </div>
+            )}
 
-          <div style={{ display: activeTab === 'settings' ? 'block' : 'none' }}>
-            <SettingsTab currentUser={currentUser} onLogout={handleLogout} />
+            <div style={{ display: activeTab === 'settings' ? 'block' : 'none' }}>
+              <SettingsTab currentUser={currentUser} onLogout={handleLogout} />
+            </div>
           </div>
-        </div>
         </div>
       </div>
 

@@ -25,7 +25,7 @@ export function useServerGet(path, currentPage, query, setData, setTotalPages, s
       if (!fullUrl.startsWith('/')) {
         fullUrl = '/' + fullUrl;
       }
-      
+
       const separator = fullUrl.includes('?') ? '&' : '?';
       fullUrl = `${fullUrl}${separator}page=${currentPage}`;
 
@@ -52,9 +52,7 @@ export function useServerGet(path, currentPage, query, setData, setTotalPages, s
           payload = await res.json();
         } catch (parseErr) {
           const text = await res.text().catch(() => '');
-          const message = text
-            ? `Invalid JSON response: ${text.slice(0, 200)}`
-            : 'Invalid JSON response from server.';
+          const message = text ? `Invalid JSON response: ${text.slice(0, 200)}` : 'Invalid JSON response from server.';
           throw new Error(message);
         }
       } else {
@@ -66,13 +64,9 @@ export function useServerGet(path, currentPage, query, setData, setTotalPages, s
       }
 
       if (!res.ok) {
-        throw new Error(
-          payload?.error ||
-          payload?.message ||
-          `Request failed with status ${res.status}`
-        );
+        throw new Error(payload?.error || payload?.message || `Request failed with status ${res.status}`);
       }
-      
+
       // Handle different response structures
       let rows = [];
       let pages = 1;
@@ -100,4 +94,3 @@ export function useServerGet(path, currentPage, query, setData, setTotalPages, s
 
   return fetchData;
 }
-

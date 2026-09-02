@@ -1,5 +1,5 @@
-import { useNotification } from './NotificationContext';
 import { getApiBase } from '../config';
+import { useNotification } from './NotificationContext';
 
 // Helper to get CSRF token from cookie
 function getCsrfToken() {
@@ -49,7 +49,7 @@ export function useServerDelete(path, fetchData, setError) {
       // Try to parse response as JSON, but handle HTML/plain text errors
       let responseData = {};
       const contentType = res.headers.get('content-type') || '';
-      
+
       if (contentType.includes('application/json')) {
         try {
           responseData = await res.json();
@@ -61,19 +61,14 @@ export function useServerDelete(path, fetchData, setError) {
       if (!res.ok) {
         // Check for database constraint errors
         const errorMessage = responseData.error || responseData.message || `Delete failed with status ${res.status}`;
-        
+
         // Check if it's a foreign key constraint error
         const errorStr = String(errorMessage).toLowerCase();
-        if (errorStr.includes('foreign key constraint') || 
-            errorStr.includes('cannot delete') ||
-            errorStr.includes('1451')) {
-          showNotification(
-            'Cannot delete this record because it is referenced by other data.',
-            'error'
-          );
+        if (errorStr.includes('foreign key constraint') || errorStr.includes('cannot delete') || errorStr.includes('1451')) {
+          showNotification('Cannot delete this record because it is referenced by other data.', 'error');
           throw new Error('Cannot delete this record because it is referenced by other data.');
         }
-        
+
         showNotification(errorMessage, 'error');
         throw new Error(errorMessage);
       }
@@ -88,4 +83,3 @@ export function useServerDelete(path, fetchData, setError) {
 
   return performDelete;
 }
-

@@ -1,4 +1,3 @@
-import React from 'react';
 import '../pages/Admin.css';
 
 export default function PasswordForm({ form, status, onInputChange, onSubmit }) {
@@ -38,10 +37,7 @@ export default function PasswordForm({ form, status, onInputChange, onSubmit }) 
         </label>
 
         {status && (
-          <div
-            className={`password-status ${status.type === 'error' ? 'error' : 'success'}`}
-            role="alert"
-          >
+          <div className={`password-status ${status.type === 'error' ? 'error' : 'success'}`} role="alert">
             {status.message}
           </div>
         )}
@@ -53,4 +49,3 @@ export default function PasswordForm({ form, status, onInputChange, onSubmit }) 
     </div>
   );
 }
-
