@@ -1,24 +1,26 @@
 <?php
 
-use App\Http\Controllers\PatientController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\RegisterController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\PatientController;
+use App\Http\Controllers\PermissionExampleController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 // API Routes - must be BEFORE fallback to avoid Inertia catching them
 Route::prefix('api')->group(function () {
     // Public endpoints
     Route::post('/login', [LoginController::class, 'login']);
     Route::post('/register', [RegisterController::class, 'register']);
-    
+
     // Current authenticated user
     Route::get('/user', function () {
         if (Auth::check()) {
             $user = Auth::user();
+
             return response()->json([
                 'id' => $user->id,
                 'name' => $user->name,
@@ -29,6 +31,7 @@ Route::prefix('api')->group(function () {
                 'role_type' => $user->role_type,
             ]);
         }
+
         return response()->json(['error' => 'Unauthenticated'], 401);
     });
 
@@ -56,14 +59,15 @@ Route::prefix('api')->group(function () {
         Route::delete('/groups/{id}/users/{userId}', [GroupController::class, 'removeUserFromGroup'])->middleware('checkRole:admin,manager');
 
         // Permission Examples
-        Route::get('/permissions', [\App\Http\Controllers\PermissionExampleController::class, 'getPermissions']);
-        Route::get('/users/{id}/permissions', [\App\Http\Controllers\PermissionExampleController::class, 'getUserPermissions']);
+        Route::get('/permissions', [PermissionExampleController::class, 'getPermissions']);
+        Route::get('/users/{id}/permissions', [PermissionExampleController::class, 'getUserPermissions']);
 
         Route::post('/logout', [LoginController::class, 'logout']);
 
         // Patients API
-        Route::get("/patients", [PatientController::class, "index"]);
-        Route::get("/patients/{id}", [PatientController::class, "show"]);
+        Route::get('/patients', [PatientController::class, 'index']);
+        Route::get('/patients/{id}', [PatientController::class, 'show']);
+        Route::put('/patients/{id}', [PatientController::class, 'update']);
     });
 });
 
@@ -97,4 +101,3 @@ Route::fallback(function () {
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
-
