@@ -53,6 +53,4 @@ Route::middleware(['auth'])->group(function () {
     // Authentication API
     Route::post('/register', [RegisterController::class, 'register']);
     Route::post('/logout', [LoginController::class, 'logout']);
-
-    
 });

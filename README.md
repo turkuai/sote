@@ -66,11 +66,12 @@ These settings are configured in `.prettierrc` and will be applied automatically
 ### Setup in VSCode
 
 1. Install the **Prettier** extension (ID: `esbenp.prettier-vscode`)
-2. Set it as your default formatter:
+2. Install the **PHP Intelephense** extension (ID: `bmewburn.vscode-intelephense-client`)
+3. Set it as your default formatter:
    - Open VSCode Settings
    - Search for "Default Formatter"
    - Select "Prettier - Code formatter"
-3. Enable "Format On Save" if desired
+4. Enable "Format On Save" if desired
 
 ## Internationalisation (i18n)
 
@@ -220,6 +221,12 @@ POST   /api/groups             → Create group
 GET    /api/groups/{id}        → Get specific group
 PUT    /api/groups/{id}        → Update group
 DELETE /api/groups/{id}        → Delete group
+```
+
+### **Patients**
+```
+GET    /api/patients           → List all patients
+GET    /api/patients/{id}      → Get specific patient
 ```
 
 ### **Example API Request:**

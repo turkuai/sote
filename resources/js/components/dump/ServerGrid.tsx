@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
 import { Plus } from 'lucide-react';
-import Grid from './Grid';
-import ServerGridEditDialog from './ServerGridEditDialog';
-import ConfirmDialog from './ConfirmDialog';
-import { useServerGet } from './serverGet';
-import { useServerPost } from './serverPost';
-import { useServerDelete } from './serverDelete';
-import { useNotification } from './NotificationContext';
+import { useEffect, useState } from 'react';
 import { getApiBase } from '../config';
+import ConfirmDialog from './ConfirmDialog';
+import Grid from './Grid';
+import { useNotification } from './NotificationContext';
+import { useServerDelete } from './serverDelete';
+import { useServerGet } from './serverGet';
+import ServerGridEditDialog from './ServerGridEditDialog';
+import { useServerPost } from './serverPost';
 
 // Helper to get CSRF token from cookie
 function getCsrfToken() {
@@ -26,24 +26,23 @@ const formatColumnName = (columnName) => {
   if (typeof columnName !== 'string') return '';
   return columnName
     .split('_')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 };
 
 export default function ServerGrid({
   columns,
   columnRenderers = {},
-  path,                 // API endpoint
+  path, // API endpoint
   allowEditing = false,
   allowDelete = false,
   pageSize = 20,
-  showAddButton = true,// Show add button by default (except history tab which doesn't use ServerGrid)
-  formComponent : FormComponent,
+  showAddButton = true, // Show add button by default (except history tab which doesn't use ServerGrid)
+  formComponent: FormComponent,
   transformAddPayload,
   transformEditPayload,
-  onAddUsers,           // Callback for custom action (e.g., Add Users button)
-  ...rest               // anything else you want to pass to Grid
-
+  onAddUsers, // Callback for custom action (e.g., Add Users button)
+  ...rest // anything else you want to pass to Grid
 }) {
   const query = typeof rest.query === 'string' ? rest.query : '';
   const [data, setData] = useState([]);
@@ -113,13 +112,7 @@ export default function ServerGrid({
 
       // Special-case combined "name" field ONLY for Users grid
       // Users grid shows first_name + last_name as combined "name" field
-      if (
-        path.includes('users') &&
-        typeof payload.name === 'string' && 
-        payload.name.trim() && 
-        !payload.first_name && 
-        !payload.last_name
-      ) {
+      if (path.includes('users') && typeof payload.name === 'string' && payload.name.trim() && !payload.first_name && !payload.last_name) {
         const parts = payload.name.trim().split(/\s+/);
         payload.first_name = parts[0];
         payload.last_name = parts.slice(1).join(' ') || '';
@@ -129,10 +122,7 @@ export default function ServerGrid({
       delete payload.created_at;
       delete payload.updated_at;
 
-      const finalPayload =
-        typeof transformEditPayload === 'function'
-          ? transformEditPayload(payload)
-          : payload;
+      const finalPayload = typeof transformEditPayload === 'function' ? transformEditPayload(payload) : payload;
 
       const csrfToken = getCsrfToken();
       const res = await fetch(getApiBase() + updateUrl, {
@@ -189,36 +179,26 @@ export default function ServerGrid({
   };
 
   // Create column configuration with display names
-  const columnConfig = columns.map(col => ({
+  const columnConfig = columns.map((col) => ({
     field: col,
-    displayName: formatColumnName(col)
+    displayName: formatColumnName(col),
   }));
 
   return (
     <div style={{ position: 'relative' }}>
-      {loading && (
-        <div className="grid-loading-overlay">
-          Loading...
-        </div>
-      )}
-      {error && (
-        <div className="grid-error-message">
-          {error}
-        </div>
-      )}
+      {loading && <div className="grid-loading-overlay">Loading...</div>}
+      {error && <div className="grid-error-message">{error}</div>}
 
       {/* Add Button */}
       {showAddButton && (
-        <div style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          marginBottom: '1rem'
-        }}>
-          <button
-            onClick={handleAdd}
-            className="server-grid-add-button"
-            type="button"
-          >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            marginBottom: '1rem',
+          }}
+        >
+          <button onClick={handleAdd} className="server-grid-add-button" type="button">
             <Plus size={20} />
           </button>
         </div>
@@ -267,9 +247,7 @@ export default function ServerGrid({
           isEditing={false}
           onCancel={handleCloseAddModal}
           onSave={() => handleAddRow(formData)}
-          formComponent={
-            <FormComponent data={formData} setData={setFormData} />
-          }
+          formComponent={<FormComponent data={formData} setData={setFormData} />}
         />
       )}
 
@@ -278,27 +256,27 @@ export default function ServerGrid({
           isEditing={true}
           onCancel={handleCloseEditModal}
           onSave={handleSaveEdit}
-          formComponent={
-            <FormComponent data={formData} setData={setFormData} />
-          } 
+          formComponent={<FormComponent data={formData} setData={setFormData} />}
         />
       )}
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '10px',
-          marginTop: '20px',
-          alignItems: 'center'
-        }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '10px',
+            marginTop: '20px',
+            alignItems: 'center',
+          }}
+        >
           <button
             onClick={handlePreviousPage}
             disabled={currentPage === 1}
             style={{
               padding: '8px 16px',
               cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
-              opacity: currentPage === 1 ? 0.5 : 1
+              opacity: currentPage === 1 ? 0.5 : 1,
             }}
           >
             Previous
@@ -312,7 +290,7 @@ export default function ServerGrid({
             style={{
               padding: '8px 16px',
               cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
-              opacity: currentPage === totalPages ? 0.5 : 1
+              opacity: currentPage === totalPages ? 0.5 : 1,
             }}
           >
             Next
@@ -322,4 +300,3 @@ export default function ServerGrid({
     </div>
   );
 }
-

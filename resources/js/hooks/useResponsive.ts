@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * Custom hook for managing responsive/mobile detection
@@ -14,7 +14,7 @@ export const useResponsive = () => {
   // Effect to handle window resize and update mobile state
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     const handleResize = () => {
       const mobile = window.innerWidth < 640;
       setIsMobile(mobile);
@@ -27,7 +27,6 @@ export const useResponsive = () => {
 
   return {
     isMobile,
-    setIsMobile
+    setIsMobile,
   };
 };
-
