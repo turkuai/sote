@@ -9,7 +9,7 @@ export const usePasswordForm = () => {
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: '',
     newPassword: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
 
   // Password form status state
@@ -17,7 +17,7 @@ export const usePasswordForm = () => {
 
   // Handler for password input changes
   const handlePasswordInputChange = (field, value) => {
-    setPasswordForm(prev => ({ ...prev, [field]: value }));
+    setPasswordForm((prev) => ({ ...prev, [field]: value }));
   };
 
   // Handler for password form submission
@@ -43,7 +43,7 @@ export const usePasswordForm = () => {
     setPasswordForm({
       currentPassword: '',
       newPassword: '',
-      confirmPassword: ''
+      confirmPassword: '',
     });
   };
 
@@ -58,8 +58,7 @@ export const usePasswordForm = () => {
     handlers: {
       handlePasswordInputChange,
       handlePasswordSubmit,
-      clearPasswordStatus
-    }
+      clearPasswordStatus,
+    },
   };
 };
-

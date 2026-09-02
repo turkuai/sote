@@ -204,7 +204,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
                 <Plus size={20} /> {t('groups.usersModal.addUsers')}
               </button>
               <button
-                className={`delete-selected-btn${selectedUsersToRemove.length > 0 || isRemoving ? 'visible' : ''}${isRemoving ? 'removing' : ''}`}
+                className={`delete-selected-btn${selectedUsersToRemove.length > 0 || isRemoving ? ' visible' : ''}${isRemoving ? ' removing' : ''}`}
                 onClick={handleRemoveSelectedUsers}
                 disabled={isRemoving}
                 type="button"
@@ -238,7 +238,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
                       }
                     };
                     return (
-                      <li key={user.id} className={`user-item${checked ? 'selected' : ''}`} onClick={handleMemberClick}>
+                      <li key={user.id} className={`user-item${checked ? ' selected' : ''}`} onClick={handleMemberClick}>
                         <input type="checkbox" className="user-list-checkbox" checked={checked} onChange={() => {}} tabIndex={-1} />
                         <div style={{ flex: 1 }}>
                           <span className="user-name">
@@ -310,7 +310,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
                       }
                     };
                     return (
-                      <li key={user.id} className={`user-autocomplete-option${checked ? 'selected' : ''}`} onClick={handleClick}>
+                      <li key={user.id} className={`user-autocomplete-option${checked ? ' selected' : ''}`} onClick={handleClick}>
                         <input type="checkbox" className="user-list-checkbox" checked={checked} onChange={() => {}} tabIndex={-1} />
                         <span className="user-autocomplete-name">
                           {user.first_name} {user.last_name}

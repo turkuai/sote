@@ -19,7 +19,7 @@ export default function VerifyEmail() {
     })
       .then((r) => r.json())
       .then((data) => {
-        setStatus(data.success ? 'Email verified!' : (data.error || 'Invalid or expired link.'));
+        setStatus(data.success ? 'Email verified!' : data.error || 'Invalid or expired link.');
         if (data.success) setTimeout(() => navigate('/home', { replace: true }), 1500);
       })
       .catch(() => setStatus('Error.'));
@@ -31,4 +31,3 @@ export default function VerifyEmail() {
     </div>
   );
 }
-
