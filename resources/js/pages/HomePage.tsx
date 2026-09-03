@@ -12,6 +12,7 @@ import GroupsTab from './GroupsTab';
 import Header from './Header';
 import HomeTabs from './HomeTabs';
 import MobileNav from './MobileNav';
+import PatientsTab from './PatientsTab';
 import SettingsTab from './SettingsTab';
 import UsersTab from './UsersTab';
 import WaitingListTab from './WaitingListTab';
@@ -174,6 +175,12 @@ export default function HomePage() {
             {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
               <div style={{ display: activeTab === 'waiting-list' ? 'block' : 'none' }}>
                 <WaitingListTab currentUser={currentUser} />
+              </div>
+            )}
+
+            {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
+              <div style={{ display: activeTab === 'patients' ? 'block' : 'none' }}>
+                <PatientsTab currentUser={currentUser} />
               </div>
             )}
 
