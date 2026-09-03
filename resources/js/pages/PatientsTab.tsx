@@ -35,7 +35,7 @@ export default function PatientsTab ({ currentUser, query }) {
             allowDelete={currentUser?.role_type === 'admin'}
             pageSize={10}
             query={query}
-            showAddButton={false} // Change maybe add button? ------------------------------------------------------
+            showAddButton={true}
             showNot={showNotification}
             getApiBase={getApiBase}
             />

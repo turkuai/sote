@@ -20,7 +20,6 @@ class PatientController extends Controller
       * ServerGrid already sends the current page as "?page=...", which Laravel's
       * paginate() automatically recognizes and uses to retrieve the correct page.
     */
-    
     $pageSize = 10;
     try {
       $patients = Patient::paginate($pageSize);
@@ -31,7 +30,7 @@ class PatientController extends Controller
       );
     } catch (Exception $e) {
       return ApiResponse::error(
-        "Error: $e could not be retrieved.",
+        "Error: Patients could not be retrieved. Error: {$e->getMessage()}",
         500,
       );
     }
