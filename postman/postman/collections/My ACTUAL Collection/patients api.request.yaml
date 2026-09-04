@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:8000/api/patients
+method: GET
+order: 2000

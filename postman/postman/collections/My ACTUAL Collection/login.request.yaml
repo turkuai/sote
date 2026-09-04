@@ -1,0 +1,23 @@
+$kind: http-request
+description: |-
+  This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.
+
+  A successful POST request typically returns a `200 OK` or `201 Created` response code.
+url: http://localhost:8000/api/login
+method: POST
+headers:
+  Accept: application/json
+  Cookie: sote_session=eyJpdiI6IjBOMW9vTi8xWVFxc1NVZDZLS2V2L0E9PSIsInZhbHVlIjoiNXpzQWlTdVBCUngzbEx3RkVmRXpCKzJUTjh0M2Q5d1krOU1xUmZVY0RZajFteVBqTGZwd2RjSzdWVDU0dHF2MXJJcTJzL2IyWmE1T3RhOFpwMy8rT25lUzZKVnRJR1dJTmt0UmhOT3BvcjcvTnZ2aTlaVElkektWdXJaM2E2R2EiLCJtYWMiOiJlMzEzMGUyZmMxMWIyODNkOTQzNDliOTFjNWVmNThmZGRhMzBlYTEwOTc1OTUyYjk1YjlmM2I3NjMwMmI3NTcyIiwidGFnIjoiIn0%3D
+body:
+  type: json
+  content: '{"email":"admin@example.com", "password":"admin123", "remember":false}'
+auth:
+  type: apikey
+scripts:
+  - type: afterResponse
+    code: |
+      pm.test("Successful POST request", function () {
+          pm.expect(pm.response.code).to.be.oneOf([200, 201]);
+      });
+    language: text/javascript
+order: 1000

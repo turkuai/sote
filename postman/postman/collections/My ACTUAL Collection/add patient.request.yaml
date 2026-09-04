@@ -1,0 +1,7 @@
+$kind: http-request
+url: http://localhost:8000/api/patients
+method: POST
+body:
+  type: json
+  content: '{"first_name":"Sara", "last_name":"Oonanen", "social_id":"7786", "remarks":"hi"}'
+order: 3000
