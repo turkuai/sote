@@ -16,13 +16,13 @@ class GroupController extends Controller
     public function index(Request $request)
     {
         $query = Group::withCount('users');
-        
+
         // Search by name
         if ($request->has('search') && $request->search) {
             $search = strtolower($request->search);
             $query->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"]);
         }
-        
+
         /*
           * Match the number of items displayed per page in ServerGrid.
           * This value must stay synchronized with ServerGrid's pageSize. Otherwise,
@@ -51,7 +51,7 @@ class GroupController extends Controller
         });
 
         $groupsPaginator->setCollection($groups);
-        
+
         return ApiResponse::paginated($groupsPaginator, 'Groups retrieved successfully');
     }
 
@@ -61,7 +61,7 @@ class GroupController extends Controller
     public function show($id)
     {
         $group = Group::with('users')->find($id);
-        
+
         if (!$group) {
             return ApiResponse::notFound('Group not found');
         }
@@ -88,7 +88,7 @@ class GroupController extends Controller
 
         // Add creator as a member of the group
         $group->users()->attach($user->id);
-        
+
         return ApiResponse::success($group, 'Group created successfully', 201);
     }
 
@@ -98,7 +98,7 @@ class GroupController extends Controller
     public function update(Request $request, $id)
     {
         $group = Group::find($id);
-        
+
         if (!$group) {
             return ApiResponse::notFound('Group not found');
         }
@@ -124,7 +124,7 @@ class GroupController extends Controller
     public function destroy($id)
     {
         $group = Group::find($id);
-        
+
         if (!$group) {
             return ApiResponse::notFound('Group not found');
         }
@@ -186,6 +186,26 @@ class GroupController extends Controller
     }
 
     /**
+     * Remove groups from patients 
+     */
+    public function removeGroupsFromPatients(Request $request)
+    {
+        $validated = $request->validate([
+            'patient_id' => 'required|array',
+            'group_id' => 'required|array',
+        ]);
+
+        $patient = \App\Models\Patient::find($validated['patient_id']);
+        if (!$patient) {
+            return ApiResponse::notFound('Patient not found');
+        }
+
+        $patient->groups()->detach($validated['group_id']);
+
+        return ApiResponse::success(null, 'Group removed from patient successfully');
+    }
+
+    /**
      * Get groups the authenticated user belongs to
      */
     public function myGroups(Request $request)
@@ -214,8 +234,8 @@ class GroupController extends Controller
         ]);
 
         $group = Group::where('name', $validated['group_name'])
-                      ->whereRaw('BINARY access_key = ?', [$validated['access_key']])
-                      ->first();
+            ->whereRaw('BINARY access_key = ?', [$validated['access_key']])
+            ->first();
 
         if (!$group) {
             return ApiResponse::error('Invalid group name or access key', 404);

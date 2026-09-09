@@ -45,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/groups/{id}', [GroupController::class, 'destroy'])->middleware('checkRole:admin');
     Route::post('/groups/{id}/users/{userId}', [GroupController::class, 'addUserToGroup'])->middleware('checkRole:admin');
     Route::delete('/groups/{id}/users/{userId}', [GroupController::class, 'removeUserFromGroup'])->middleware('checkRole:admin');
+    Route::delete('/patients/{patient_id}/groups/{group_id}', [GroupController::class, 'removeGroupsFromPatients'])->middleware('checkRole:admin,manager');
     
     // Permission Examples
     Route::get('/permissions', [\App\Http\Controllers\PermissionExampleController::class, 'getPermissions']);
