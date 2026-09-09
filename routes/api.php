@@ -1,6 +1,6 @@
 <?php
 
-use IllGet-ChildItem C:\xampp\mysql\data\*.err | Get-Contentollers\UserController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Api\LoginController;
 use App\Libraries\ApiResponse;
@@ -45,7 +45,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/groups/{id}', [GroupController::class, 'destroy'])->middleware('checkRole:admin');
     Route::post('/groups/{id}/users/{userId}', [GroupController::class, 'addUserToGroup'])->middleware('checkRole:admin');
     Route::delete('/groups/{id}/users/{userId}', [GroupController::class, 'removeUserFromGroup'])->middleware('checkRole:admin');
-    
+    Route::post('/groups/{id}/patients/{patientId}', [GroupController::class, 'addPatientToGroup'])->middleware('checkRole:admin');
+
     // Permission Examples
     Route::get('/permissions', [\App\Http\Controllers\PermissionExampleController::class, 'getPermissions']);
     Route::get('/users/{id}/permissions', [\App\Http\Controllers\PermissionExampleController::class, 'getUserPermissions']);

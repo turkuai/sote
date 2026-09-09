@@ -14,7 +14,7 @@ Route::prefix('api')->group(function () {
     // Public endpoints
     Route::post('/login', [LoginController::class, 'login']);
     Route::post('/register', [RegisterController::class, 'register']);
-    
+
     // Current authenticated user
     Route::get('/user', function () {
         if (Auth::check()) {
@@ -54,6 +54,7 @@ Route::prefix('api')->group(function () {
         Route::delete('/groups/{id}', [GroupController::class, 'destroy'])->middleware('checkRole:admin,manager');
         Route::post('/groups/{id}/users/{userId}', [GroupController::class, 'addUserToGroup'])->middleware('checkRole:admin,manager');
         Route::delete('/groups/{id}/users/{userId}', [GroupController::class, 'removeUserFromGroup'])->middleware('checkRole:admin,manager');
+        Route::post('/groups/{id}/patients/{patientId}', [GroupController::class, 'addPatientToGroup'])->middleware('checkRole:admin,manager');
 
         // Permission Examples
         Route::get('/permissions', [\App\Http\Controllers\PermissionExampleController::class, 'getPermissions']);
@@ -95,6 +96,5 @@ Route::fallback(function () {
     return redirect('/');
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
-
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';
