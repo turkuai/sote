@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\Api\RegisterController;
+use App\Http\Controllers\PatientController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Api\LoginController;
 use App\Libraries\ApiResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 // Public endpoints
 Route::post('/login', [LoginController::class, 'login']);
