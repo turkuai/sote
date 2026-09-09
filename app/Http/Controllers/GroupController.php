@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Libraries\ApiResponse;
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -16,22 +17,22 @@ class GroupController extends Controller
     public function index(Request $request)
     {
         $query = Group::withCount('users');
-        
+
         // Search by name
         if ($request->has('search') && $request->search) {
             $search = strtolower($request->search);
             $query->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"]);
         }
-        
+
         /*
-          * Match the number of items displayed per page in ServerGrid.
-          * This value must stay synchronized with ServerGrid's pageSize. Otherwise,
-          * the frontend pagination may not match the number of records returned by the backend.
-          * In the future, we should consider passing pageSize from the frontend as a query
-          * parameter. This would require modifying the tai-grid package directly.
-          * ServerGrid already sends the current page as "?page=...", which Laravel's
-          * paginate() automatically recognizes and uses to retrieve the correct page.
-        */
+         * Match the number of items displayed per page in ServerGrid.
+         * This value must stay synchronized with ServerGrid's pageSize. Otherwise,
+         * the frontend pagination may not match the number of records returned by the backend.
+         * In the future, we should consider passing pageSize from the frontend as a query
+         * parameter. This would require modifying the tai-grid package directly.
+         * ServerGrid already sends the current page as "?page=...", which Laravel's
+         * paginate() automatically recognizes and uses to retrieve the correct page.
+         */
         $pageSize = 10;
         $groupsPaginator = $query->paginate($pageSize);
         $currentUserId = Auth::id();
@@ -51,7 +52,7 @@ class GroupController extends Controller
         });
 
         $groupsPaginator->setCollection($groups);
-        
+
         return ApiResponse::paginated($groupsPaginator, 'Groups retrieved successfully');
     }
 
@@ -60,13 +61,35 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        $group = Group::with('users')->find($id);
-        
-        if (!$group) {
+
+
+        $group = User::whereHas('groups', function ($query) use ($id) {
+            $query->where('groups.id', $id);
+        });
+
+        $temp = $group;
+
+        $pageSize = 10;
+        $groupsPaginator2 = $temp->paginate($pageSize);
+
+
+
+        // Does map for some unkown reason doesnt work without it dont remove even though it does nothing
+        $groups2 = $groupsPaginator2->getCollection()->map(function ($temp) use ($id) {
+            return (
+                $temp
+            );
+        });
+
+
+
+        $groupsPaginator2->setCollection($groups2);
+
+        if (!$groups2) {
             return ApiResponse::notFound('Group not found');
         }
 
-        return ApiResponse::success($group, 'Group retrieved successfully');
+        return ApiResponse::paginated($groupsPaginator2, 'Group retrieved successfully');
     }
 
     /**
@@ -88,7 +111,7 @@ class GroupController extends Controller
 
         // Add creator as a member of the group
         $group->users()->attach($user->id);
-        
+
         return ApiResponse::success($group, 'Group created successfully', 201);
     }
 
@@ -98,7 +121,7 @@ class GroupController extends Controller
     public function update(Request $request, $id)
     {
         $group = Group::find($id);
-        
+
         if (!$group) {
             return ApiResponse::notFound('Group not found');
         }
@@ -124,7 +147,7 @@ class GroupController extends Controller
     public function destroy($id)
     {
         $group = Group::find($id);
-        
+
         if (!$group) {
             return ApiResponse::notFound('Group not found');
         }
@@ -214,8 +237,8 @@ class GroupController extends Controller
         ]);
 
         $group = Group::where('name', $validated['group_name'])
-                      ->whereRaw('BINARY access_key = ?', [$validated['access_key']])
-                      ->first();
+            ->whereRaw('BINARY access_key = ?', [$validated['access_key']])
+            ->first();
 
         if (!$group) {
             return ApiResponse::error('Invalid group name or access key', 404);

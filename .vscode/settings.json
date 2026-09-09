@@ -8,7 +8,7 @@
   },
 
   "[php]": {
-    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
+    "editor.defaultFormatter": "DEVSENSE.phptools-vscode",
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
     "editor.wordWrapColumn": 150

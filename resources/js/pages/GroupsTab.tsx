@@ -156,6 +156,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
 
   const handleGroupRowClick = (group: Record<string, unknown>) => {
     setPanelGroup(group);
+    console.log(panelGroup.id)
     setPanelUsers([]);
     setPanelSearch('');
     setSelectedPanelUserIds([]);
@@ -341,97 +342,22 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                       </button>
                     </div>
                     {panelLoading && <p style={{ color: '#6b7280' }}>{t('grid.loading')}</p>}
-                    {!panelLoading && filteredPanelUsers.length === 0 && (
-                      <p style={{ color: '#6b7280', fontStyle: 'italic' }}>{t('groups.panel.noMembersFound')}</p>
-                    )}
-                    {!panelLoading && filteredPanelUsers.length > 0 && (
-
+                    {!panelLoading && (
                       <ServerGrid 
                         key={refreshKey}
                         columns={[
-                          { field: 'firstName', displayName: t('table.firstName') },
-                          { field: 'lastName', displayName: t('table.lastName') },
+                          { field: 'name', displayName: t('table.name') },
                           { field: 'email', displayName: t('table.email') },
-                          { field: 'role', displayName: t('table.role') },
+                          { field: 'role_type', displayName: t('table.role') },
                         ]}
-                        path="groups/´${group.id}´"
+                        path="groups/1"
                         allowEditing={false}
                         allowDelete={true}
                         pageSize={10}
                         showAddButton={false}
                         getApiBase={getApiBase}
                         showNot={showNotification}
-                        onRowClick={handleGroupRowClick}
                     />
-                        
-                      
-                      // <div className="grid-wrapper" style={{ width: '100%', overflowX: 'auto' }}>
-                      //   <table className="data-grid-table">
-                      //     <thead>
-                      //       <tr>
-                      //         <th>{t('table.firstName')}</th>
-                      //         <th>{t('table.lastName')}</th>
-                      //         <th>{t('table.email')}</th>
-                      //         <th>{t('table.role')}</th>
-                      //         <th style={{ width: '40px' }}>
-                      //           <input
-                      //             type="checkbox"
-                      //             className="user-list-checkbox"
-                      //             checked={
-                      //               filteredPanelUsers.length > 0 && filteredPanelUsers.every((u) => selectedPanelUserIds.includes(u.id as number))
-                      //             }
-                      //             onChange={(e) => {
-                      //               if (e.target.checked) {
-                      //                 setSelectedPanelUserIds(filteredPanelUsers.map((u) => u.id as number));
-                      //               } else {
-                      //                 setSelectedPanelUserIds([]);
-                      //                 lastPanelClickedIndex.current = null;
-                      //               }
-                      //             }}
-                      //             title={t('groups.panel.selectAll')}
-                      //           />
-                      //         </th>
-                      //       </tr>
-                      //     </thead>
-                      //     <tbody>
-                      //       {filteredPanelUsers.map((user, index) => {
-                      //         const checked = selectedPanelUserIds.includes(user.id as number);
-                      //         const handleClick = (e: React.MouseEvent) => {
-                      //           if (e.shiftKey && lastPanelClickedIndex.current !== null) {
-                      //             e.preventDefault();
-                      //             const from = Math.min(lastPanelClickedIndex.current, index);
-                      //             const to = Math.max(lastPanelClickedIndex.current, index);
-                      //             const rangeIds = filteredPanelUsers.slice(from, to + 1).map((u) => u.id as number);
-                      //             const allChecked = rangeIds.every((id) => selectedPanelUserIds.includes(id));
-                      //             setSelectedPanelUserIds((prev) =>
-                      //               allChecked ? prev.filter((id) => !rangeIds.includes(id)) : [...new Set([...prev, ...rangeIds])],
-                      //             );
-                      //           } else {
-                      //             lastPanelClickedIndex.current = index;
-                      //             setSelectedPanelUserIds((prev) =>
-                      //               checked ? prev.filter((id) => id !== (user.id as number)) : [...prev, user.id as number],
-                      //             );
-                      //           }
-                      //         };
-                      //         return (
-                      //           <tr
-                      //             key={String(user.id)}
-                      //             onClick={handleClick}
-                      //             style={{ cursor: 'pointer', backgroundColor: checked ? '#eff6ff' : undefined, userSelect: 'none' }}
-                      //           >
-                      //             <td>{String(user.first_name ?? '')}</td>
-                      //             <td>{String(user.last_name ?? '')}</td>
-                      //             <td>{String(user.email ?? '')}</td>
-                      //             <td>{String(user.role_type ?? '')}</td>
-                      //             <td>
-                      //               <input type="checkbox" className="user-list-checkbox" checked={checked} onChange={() => {}} tabIndex={-1} />
-                      //             </td>
-                      //           </tr>
-                      //         );
-                      //       })}
-                      //     </tbody>
-                      //   </table>
-                      // </div>
                     )}
                   </>
                 )}
@@ -644,94 +570,22 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                       </button>
                     </div>
                     {panelLoading && <p style={{ color: '#6b7280' }}>{t('grid.loading')}</p>}
-                    {!panelLoading && filteredPanelUsers.length === 0 && (
-                      <p style={{ color: '#6b7280', fontStyle: 'italic' }}>{t('groups.panel.noMembersFound')}</p>
-                    )}
-                    {!panelLoading && filteredPanelUsers.length > 0 && (
+                    {!panelLoading && (
                       <ServerGrid 
                         key={refreshKey}
                         columns={[
-                          { field: 'firstName', displayName: t('table.firstName') },
-                          { field: 'lastName', displayName: t('table.lastName') },
+                          { field: 'name', displayName: t('table.name') },
                           { field: 'email', displayName: t('table.email') },
-                          { field: 'role', displayName: t('table.role') },
+                          { field: 'role_type', displayName: t('table.role') },
                         ]}
-                        path="groups/my"
+                        path="groups/1"
                         allowEditing={false}
-                        allowDelete={false}
+                        allowDelete={true}
                         pageSize={10}
                         showAddButton={false}
                         getApiBase={getApiBase}
                         showNot={showNotification}
-                        onRowClick={handleGroupRowClick}
                     />
-                      // <div className="grid-wrapper" style={{ width: '100%', overflowX: 'auto' }}>
-                      //   <table className="data-grid-table">
-                      //     <thead>
-                      //       <tr>
-                      //         <th>{t('table.firstName')}</th>
-                      //         <th>{t('table.lastName')}</th>
-                      //         <th>{t('table.email')}</th>
-                      //         <th>{t('table.role')}</th>
-                      //         <th style={{ width: '40px' }}>
-                      //           <input
-                      //             type="checkbox"
-                      //             className="user-list-checkbox"
-                      //             checked={
-                      //               filteredPanelUsers.length > 0 && filteredPanelUsers.every((u) => selectedPanelUserIds.includes(u.id as number))
-                      //             }
-                      //             onChange={(e) => {
-                      //               if (e.target.checked) {
-                      //                 setSelectedPanelUserIds(filteredPanelUsers.map((u) => u.id as number));
-                      //               } else {
-                      //                 setSelectedPanelUserIds([]);
-                      //                 lastPanelClickedIndex.current = null;
-                      //               }
-                      //             }}
-                      //             title={t('groups.panel.selectAll')}
-                      //           />
-                      //         </th>
-                      //       </tr>
-                      //     </thead>
-                      //     <tbody>
-                      //       {filteredPanelUsers.map((user, index) => {
-                      //         const checked = selectedPanelUserIds.includes(user.id as number);
-                      //         const handleClick = (e: React.MouseEvent) => {
-                      //           if (e.shiftKey && lastPanelClickedIndex.current !== null) {
-                      //             e.preventDefault();
-                      //             const from = Math.min(lastPanelClickedIndex.current, index);
-                      //             const to = Math.max(lastPanelClickedIndex.current, index);
-                      //             const rangeIds = filteredPanelUsers.slice(from, to + 1).map((u) => u.id as number);
-                      //             const allChecked = rangeIds.every((id) => selectedPanelUserIds.includes(id));
-                      //             setSelectedPanelUserIds((prev) =>
-                      //               allChecked ? prev.filter((id) => !rangeIds.includes(id)) : [...new Set([...prev, ...rangeIds])],
-                      //             );
-                      //           } else {
-                      //             lastPanelClickedIndex.current = index;
-                      //             setSelectedPanelUserIds((prev) =>
-                      //               checked ? prev.filter((id) => id !== (user.id as number)) : [...prev, user.id as number],
-                      //             );
-                      //           }
-                      //         };
-                      //         return (
-                      //           <tr
-                      //             key={String(user.id)}
-                      //             onClick={handleClick}
-                      //             style={{ cursor: 'pointer', backgroundColor: checked ? '#eff6ff' : undefined, userSelect: 'none' }}
-                      //           >
-                      //             <td>{String(user.first_name ?? '')}</td>
-                      //             <td>{String(user.last_name ?? '')}</td>
-                      //             <td>{String(user.email ?? '')}</td>
-                      //             <td>{String(user.role_type ?? '')}</td>
-                      //             <td>
-                      //               <input type="checkbox" className="user-list-checkbox" checked={checked} onChange={() => {}} tabIndex={-1} />
-                      //             </td>
-                      //           </tr>
-                      //         );
-                      //       })}
-                      //     </tbody>
-                      //   </table>
-                      // </div>
                     )}
                   </>
                 )}
