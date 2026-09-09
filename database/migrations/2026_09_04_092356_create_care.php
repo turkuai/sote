@@ -24,10 +24,11 @@ return new class extends Migration
                 ->nullOnDelete();
         });
 
-        Schema::create('care_problem', function (Blueprint $table) {
+        Schema::create('care_problems', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('author_id');
+            $table->unsignedBigInteger('patient_id');
             $table->string('description', 1000);
             $table->timestamps();
 
@@ -38,6 +39,10 @@ return new class extends Migration
             $table->foreign('author_id', 'fk_author_id')
                 ->references('id')
                 ->on('users');
+
+            $table->foreign('patient_id', 'fk_patient_id')
+                ->references('id')
+                ->on('patients');
         });
 
         Schema::create('care_problem_items', function (Blueprint $table) {
@@ -50,7 +55,7 @@ return new class extends Migration
 
             $table->foreign('problem_id', 'fk_care_problem_id')
                 ->references('id')
-                ->on('care_problem');
+                ->on('care_problems');
 
             $table->foreign('author_id', 'fk_user_id')
                 ->references('id')
