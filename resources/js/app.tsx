@@ -6,13 +6,13 @@ import { AuthProvider, useAuth } from './components/AuthContext';
 import { NotificationProvider } from './components/NotificationContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import './i18n';
+import ProtectedLayout from './layouts/ProtectedLayout';
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
 import PatientsPage from './pages/PatientsPage';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail';
 import WaitingApproval from './pages/WaitingApproval';
-import ProtectedLayout from './layouts/ProtectedLayout';
 
 function App() {
   const { isAuthenticated, loading, currentUser } = useAuth();
@@ -58,9 +58,8 @@ function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/home/:tab" element={<HomePage />} />
           <Route path="/patients" element={<PatientsPage />} />
-        </Route>     
+        </Route>
       </Route>
-      
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

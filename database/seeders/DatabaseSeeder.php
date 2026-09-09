@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Patient;
+use App\Models\CareCategory;
+use App\Models\CareProblem;
 use App\Libraries\Role;
 use Illuminate\Support\Facades\Hash;
 
@@ -74,8 +76,24 @@ class DatabaseSeeder extends Seeder
                 'arrival_date' => now(),
                 'remarks' => "test",
             ]);
+        }
 
+        for ($i = 1; $i <= 5; $i++) {
+            // Create the main parent category
+            $parentCategory = CareCategory::create([
+                'parent_category_id' => null,
+                'name' => "Main Category $i",
+                'description' => "Description for main category $i",
+            ]);
+
+            // Create 2 subcategories for each main category
+            for ($j = 1; $j <= 2; $j++) {
+                CareCategory::create([
+                    'parent_category_id' => $parentCategory->id,
+                    'name' => "Subcategory $j (Main $i)",
+                    'description' => "Description for subcategory $j of main category $i",
+                ]);
+            }
         }
     }
 }
-

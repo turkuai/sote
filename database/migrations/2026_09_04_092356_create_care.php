@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('parent_category_id')->nullable();
             $table->string('name', 100);
             $table->string('description', 1000);
+            $table->timestamps();
 
             $table->foreign('parent_category_id', 'fk_care_categories_parent_id')
                 ->references('id')
@@ -28,6 +29,7 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('author_id');
             $table->string('description', 1000);
+            $table->timestamps();
 
             $table->foreign('category_id', 'fk_patient_category')
                 ->references('id')
@@ -44,6 +46,7 @@ return new class extends Migration
             $table->string('description', 1000);
             $table->unsignedBigInteger('author_id');
             $table->enum('type', ['0', '1', '2']);
+            $table->timestamps();
 
             $table->foreign('problem_id', 'fk_care_problem_id')
                 ->references('id')
