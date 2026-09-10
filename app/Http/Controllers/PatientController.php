@@ -24,13 +24,13 @@ class PatientController extends Controller
     try {
       $patients = Patient::paginate($pageSize);
 
-      return ApiResponse::success(
+      return ApiResponse::paginated(
         $patients,
         "All patients have been retrieved."
       );
     } catch (Exception $e) {
       return ApiResponse::error(
-        "Error: Patients could not be retrieved.",
+        "Error: Patients could not be retrieved. Error: {$e->getMessage()}",
         500,
       );
     }
