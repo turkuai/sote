@@ -1,4 +1,4 @@
-import { Crown, Eye, EyeOff, Trash2 } from 'lucide-react';
+import { Crown, Eye, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ServerGrid as ServerGridBase } from 'tai-grid';
@@ -80,11 +80,9 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
   const [showEnrollModal, setShowEnrollModal] = useState(false);
   const [myGroupCount, setMyGroupCount] = useState<number | null>(null);
   const [panelGroup, setPanelGroup] = useState<Record<string, unknown> | null>(null);
-  const [panelUsers, setPanelUsers] = useState<Record<string, unknown>[]>([]);
   const [panelLoading, setPanelLoading] = useState(false);
-  const [isPanelRemoving, setIsPanelRemoving] = useState(false);
   const [panelSearch, setPanelSearch] = useState('');
-  const [selectedPanelUserIds, setSelectedPanelUserIds] = useState<number[]>([]);
+  const [groupPath, setGroupPath] = useState('');
   const lastPanelClickedIndex = useRef<number | null>(null);
   const debounceRef = useRef(null);
   const { showNotification } = useNotification();
@@ -98,10 +96,6 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
       .catch(() => setMyGroupCount(0));
   }, [currentUser, refreshKey]);
 
-  // Sync input from parent query
-  useEffect(() => {
-    setInputValue(query || '');
-  }, [query]);
 
   // Debounce: only call onQueryChange 300ms after last keystroke
   const handleSearchChange = (e) => {
@@ -111,6 +105,16 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
     debounceRef.current = setTimeout(() => {
       debounceRef.current = null;
       onQueryChange(value);
+    }, SEARCH_DEBOUNCE_MS);
+  };
+
+  const handleSearchChange2 = (e) => {
+    const value2 = e.target.value;
+    setPanelSearch(value2);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      debounceRef.current = null;
+      onQueryChange(value2);
     }, SEARCH_DEBOUNCE_MS);
   };
 
@@ -156,65 +160,19 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
 
   const handleGroupRowClick = (group: Record<string, unknown>) => {
     setPanelGroup(group);
-    console.log(panelGroup.id)
-    setPanelUsers([]);
+    setGroupPath(`groups/${group.id}/users`)
     setPanelSearch('');
-    setSelectedPanelUserIds([]);
     lastPanelClickedIndex.current = null;
+    
     setPanelLoading(true);
     fetch(`${getApiBase()}/api/groups/${group.id}`, { credentials: 'include' })
       .then((r) => r.json())
       .then((res) => {
         const users = res?.data?.users ?? res?.users ?? [];
-        setPanelUsers(Array.isArray(users) ? users : []);
       })
-      .catch(() => setPanelUsers([]))
+      .catch()
       .finally(() => setPanelLoading(false));
   };
-
-  const handleRemoveSelectedPanelUsers = async () => {
-    if (!panelGroup || selectedPanelUserIds.length === 0) return;
-    const toRemove = [...selectedPanelUserIds];
-    setIsPanelRemoving(true);
-    try {
-      for (const userId of toRemove) {
-        await fetch(`${getApiBase()}/api/groups/${panelGroup.id}/users/${userId}`, {
-          method: 'DELETE',
-          credentials: 'include',
-          headers: { 'X-XSRF-TOKEN': decodeURIComponent(document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1] ?? '') },
-        });
-      }
-      setPanelUsers((prev) => prev.filter((u) => !toRemove.includes(u.id as number)));
-      setSelectedPanelUserIds([]);
-      lastPanelClickedIndex.current = null;
-      setRefreshKey((prev) => prev + 1);
-      showNotification(t('groups.panel.removeSuccess', { count: toRemove.length }), 'success');
-    } catch {
-      showNotification(t('groups.panel.removeFailed'), 'error');
-    } finally {
-      setIsPanelRemoving(false);
-    }
-  };
-
-  const filteredPanelUsers = panelSearch.trim()
-    ? panelUsers.filter((u) => {
-        const q = panelSearch.toLowerCase();
-        return (
-          String(u.first_name ?? '')
-            .toLowerCase()
-            .includes(q) ||
-          String(u.last_name ?? '')
-            .toLowerCase()
-            .includes(q) ||
-          String(u.email ?? '')
-            .toLowerCase()
-            .includes(q) ||
-          String(u.role_type ?? '')
-            .toLowerCase()
-            .includes(q)
-        );
-      })
-    : panelUsers;
 
   return (
     <>
@@ -310,18 +268,6 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                           }}
                         />
                       </div>
-                      <button
-                        className={`delete-selected-btn visible${isPanelRemoving ? 'removing' : ''}`}
-                        onClick={handleRemoveSelectedPanelUsers}
-                        type="button"
-                        disabled={selectedPanelUserIds.length === 0 || isPanelRemoving}
-                        title={t('groups.panel.removeTitle')}
-                      >
-                        <Trash2 size={16} />
-                        {isPanelRemoving
-                          ? t('groups.panel.removing')
-                          : `${t('groups.panel.remove')}${selectedPanelUserIds.length > 0 ? ` ${selectedPanelUserIds.length}` : ''}`}
-                      </button>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                       <button className="server-grid-add-button" title={t('groups.panel.addUser')} onClick={() => handleAddUsersClick(panelGroup)}>
@@ -350,7 +296,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                           { field: 'email', displayName: t('table.email') },
                           { field: 'role_type', displayName: t('table.role') },
                         ]}
-                        path="groups/1"
+                        path={groupPath}
                         allowEditing={false}
                         allowDelete={true}
                         pageSize={10}
@@ -532,24 +478,9 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                           autoComplete="off"
                           placeholder={t('groups.panel.searchMembers')}
                           value={panelSearch}
-                          onChange={(e) => {
-                            setPanelSearch(e.target.value);
-                            lastPanelClickedIndex.current = null;
-                          }}
+                          onChange={handleSearchChange2}
                         />
                       </div>
-                      <button
-                        className={`delete-selected-btn visible${isPanelRemoving ? 'removing' : ''}`}
-                        onClick={handleRemoveSelectedPanelUsers}
-                        type="button"
-                        disabled={selectedPanelUserIds.length === 0 || isPanelRemoving}
-                        title={t('groups.panel.removeTitle')}
-                      >
-                        <Trash2 size={16} />
-                        {isPanelRemoving
-                          ? t('groups.panel.removing')
-                          : `${t('groups.panel.remove')}${selectedPanelUserIds.length > 0 ? ` ${selectedPanelUserIds.length}` : ''}`}
-                      </button>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                       <button className="server-grid-add-button" title={t('groups.panel.addUser')} onClick={() => handleAddUsersClick(panelGroup)}>
@@ -578,10 +509,11 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                           { field: 'email', displayName: t('table.email') },
                           { field: 'role_type', displayName: t('table.role') },
                         ]}
-                        path="groups/1"
+                        path={groupPath}
                         allowEditing={false}
-                        allowDelete={true}
+                        allowDelete={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
                         pageSize={10}
+                        query={query}
                         showAddButton={false}
                         getApiBase={getApiBase}
                         showNot={showNotification}
@@ -661,7 +593,6 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                 .then((r) => r.json())
                 .then((res) => {
                   const users = res?.data?.users ?? res?.users ?? [];
-                  setPanelUsers(Array.isArray(users) ? users : []);
                 })
                 .catch(() => {})
                 .finally(() => setPanelLoading(false));
