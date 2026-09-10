@@ -25,7 +25,7 @@ export default function PatientsTab ({ currentUser, query }) {
         <ServerGrid 
             columns={[
                 { field: 'name', displayName: t('table.name') },
-                { field: 'Remarks', displayName: t('table.remarks') },
+                { field: 'remarks', displayName: t('table.remarks') },
               ]}
                 columnRenderers={{
                 name: NameRenderer,
