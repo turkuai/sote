@@ -17,6 +17,5 @@ class CareProblemItems extends Model
         'description',
         'author_id',
         'type',
-
     ];
 }

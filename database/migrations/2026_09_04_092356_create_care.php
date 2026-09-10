@@ -13,53 +13,40 @@ return new class extends Migration
     {
         Schema::create('care_categories', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('parent_category_id')->nullable();
+            $table->foreignId('parent_category_id')
+                ->constrained('care_categories')
+                ->onDelete('restrict');
             $table->string('name', 100);
             $table->string('description', 1000);
             $table->timestamps();
-
-            $table->foreign('parent_category_id', 'fk_care_categories_parent_id')
-                ->references('id')
-                ->on('care_categories')
-                ->nullOnDelete();
         });
 
         Schema::create('care_problems', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('author_id');
-            $table->unsignedBigInteger('patient_id');
+            $table->foreignId('category_id')
+                ->constrained('care_categories')
+                ->onDelete('restrict');
+            $table->foreignID('author_id')
+                ->constrained('users')
+                ->onDelete('restrict');;
+            $table->foreignID('patient_id')
+                ->constrained('patients')
+                ->onDelete('restrict');;
             $table->string('description', 1000);
             $table->timestamps();
-
-            $table->foreign('category_id', 'fk_patient_category')
-                ->references('id')
-                ->on('care_categories');
-
-            $table->foreign('author_id', 'fk_author_id')
-                ->references('id')
-                ->on('users');
-
-            $table->foreign('patient_id', 'fk_patient_id')
-                ->references('id')
-                ->on('patients');
         });
 
         Schema::create('care_problem_items', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('problem_id');
+            $table->foreignID('problem_id')
+                ->constrained('care_problems')
+                ->onDelete('restrict');;
             $table->string('description', 1000);
-            $table->unsignedBigInteger('author_id');
-            $table->enum('type', ['0', '1', '2']);
+            $table->foreignId('author_id')
+                ->constrained('users')
+                ->onDelete('restrict');;
+            $table->enum('type', ['goal', 'activity', 'review']);
             $table->timestamps();
-
-            $table->foreign('problem_id', 'fk_care_problem_id')
-                ->references('id')
-                ->on('care_problems');
-
-            $table->foreign('author_id', 'fk_user_id')
-                ->references('id')
-                ->on('users');
         });
     }
 
@@ -68,12 +55,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::disableForeignKeyConstraints();
-
         Schema::dropIfExists('care_problem_items');
         Schema::dropIfExists('care_problem');
         Schema::dropIfExists('care_categories');
-
-        Schema::enableForeignKeyConstraints();
     }
 };
