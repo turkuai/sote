@@ -54,20 +54,20 @@ function PatientsForm({ data, setData }) {
     <div className="add-user-form">
       <div className="add-user-form-grid">
         <div>
-          <label className="form-label">{t('patients.form.firstName')}</label>
+          <label className="form-label">{t('table.form.firstName')}</label>
           <input type="text" className="form-input" value={getValue('first_name')} onChange={handleChange('first_name')} />
         </div>
         <div>
-          <label className="form-label">{t('patients.form.lastName')}</label>
+          <label className="form-label">{t('table.form.lastName')}</label>
           <input type="text" className="form-input" value={getValue('last_name')} onChange={handleChange('last_name')} />
         </div>
         <div>
-          <label className="form-label">{t('patients.form.socialId')}</label>
+          <label className="form-label">{t('table.form.socialId')}</label>
           <input type="text" className="form-input" value={getValue('social_id')} onChange={handleChange('social_id')} />
         </div>
         <div>
-          <label className="form-label">{t('patients.form.reform')}</label>
-          <input type="text" className="form-input" value={getValue('reform')} onChange={handleChange('reform')} />
+          <label className="form-label">{t('table.form.remarks')}</label>
+          <input type="text" className="form-input" value={getValue('remarks')} onChange={handleChange('remarks')} />
         </div>
 
       </div>
