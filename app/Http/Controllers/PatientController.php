@@ -10,70 +10,70 @@ use Illuminate\Support\Facades\Validator;
 
 class PatientController extends Controller
 {
-    // Get all the patients
-    public function index()
-    {
-        /*
-          * Match the number of items displayed per page in ServerGrid.
-          * This value must stay synchronized with ServerGrid's pageSize. Otherwise,
-          * the frontend pagination may not match the number of records returned by the backend.
-          * In the future, we should consider passing pageSize from the frontend as a query
-          * parameter. This would require modifying the tai-grid package directly.
-          * ServerGrid already sends the current page as "?page=...", which Laravel's
-          * paginate() automatically recognizes and uses to retrieve the correct page.
-        */
-        $pageSize = 10;
-        try {
-            $patients = Patient::paginate($pageSize);
+  // Get all the patients
+  public function index()
+  {
+    /*
+      * Match the number of items displayed per page in ServerGrid.
+      * This value must stay synchronized with ServerGrid's pageSize. Otherwise,
+      * the frontend pagination may not match the number of records returned by the backend.
+      * In the future, we should consider passing pageSize from the frontend as a query
+      * parameter. This would require modifying the tai-grid package directly.
+      * ServerGrid already sends the current page as "?page=...", which Laravel's
+      * paginate() automatically recognizes and uses to retrieve the correct page.
+    */
+    $pageSize = 10;
+    try {
+      $patients = Patient::paginate($pageSize);
 
-            return ApiResponse::success(
-                $patients,
-                'All patients have been retrieved.'
-            );
-        } catch (Exception $e) {
-            return ApiResponse::error(
-                'Error: Patients could not be retrieved.',
-                500,
-            );
-        }
+      return ApiResponse::success(
+        $patients,
+          'All patients have been retrieved.'
+      );
+    } catch (Exception $e) {
+      return ApiResponse::error(
+        'Error: Patients could not be retrieved.',
+        500,
+      );
     }
+ }
 
     // Get specific patient via id
     public function show($id)
     {
-        $patient = Patient::find($id);
+      $patient = Patient::find($id);
 
-        if (! $patient) {
-            return ApiResponse::error('Patient not found');
-        }
+      if (! $patient) {
+        return ApiResponse::error('Patient not found');
+    }
 
-        return ApiResponse::success($patient, 'Patients Retrieved succesfully');
+      return ApiResponse::success($patient, 'Patients Retrieved succesfully');
     }
 
     // Update a patient
     public function update(Request $request, $id)
     {
-        $patient = Patient::find($id);
+      $patient = Patient::find($id);
 
-        if (! $patient) {
-            return ApiResponse::notFound('Patient not found');
+      if (! $patient) {
+        return ApiResponse::notFound('Patient not found');
         }
 
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'sometimes|required|string|max:255',
-            'last_name' => 'sometimes|required|string|max:255',
-            'social_id' => 'sometimes|required|string|size:11',
-            'arrival_date' => 'sometimes|nullable|date',
-            'remarks' => 'sometimes|nullable|string',
-        ]);
+      $validator = Validator::make($request->all(), [
+        'first_name' => 'sometimes|required|string|max:255',
+        'last_name' => 'sometimes|required|string|max:255',
+        'social_id' => 'sometimes|required|string|size:11',
+        'arrival_date' => 'sometimes|nullable|date',
+        'remarks' => 'sometimes|nullable|string',
+      ]);
 
-        if ($validator->fails()) {
-            return ApiResponse::validationError($validator->errors());
-        }
+      if ($validator->fails()) {
+        return ApiResponse::validationError($validator->errors());
+      }
 
-        $patient->update($validator->validated());
-        $patient->refresh();
+      $patient->update($validator->validated());
+      $patient->refresh();
 
-        return ApiResponse::success($patient, 'Patient updated successfully');
+      return ApiResponse::success($patient, 'Patient updated successfully');
     }
 }
