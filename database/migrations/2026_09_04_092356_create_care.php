@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('care_categories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('parent_category_id')
+                ->nullable()
                 ->constrained('care_categories')
                 ->onDelete('restrict');
             $table->string('name', 100);
@@ -28,10 +29,10 @@ return new class extends Migration
                 ->onDelete('restrict');
             $table->foreignID('author_id')
                 ->constrained('users')
-                ->onDelete('restrict');;
+                ->onDelete('restrict');
             $table->foreignID('patient_id')
                 ->constrained('patients')
-                ->onDelete('restrict');;
+                ->onDelete('restrict');
             $table->string('description', 1000);
             $table->timestamps();
         });
@@ -40,7 +41,7 @@ return new class extends Migration
             $table->id();
             $table->foreignID('problem_id')
                 ->constrained('care_problems')
-                ->onDelete('restrict');;
+                ->onDelete('restrict');
             $table->string('description', 1000);
             $table->foreignId('author_id')
                 ->constrained('users')
