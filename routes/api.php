@@ -14,7 +14,7 @@ Route::prefix('api')->group(function () {
     // Public endpoints
     Route::post('/login', [LoginController::class, 'login']);
     Route::post('/register', [RegisterController::class, 'register']);
-    
+
     // Current authenticated user
     Route::get('/user', function () {
         if (Auth::check()) {
@@ -62,8 +62,10 @@ Route::prefix('api')->group(function () {
         Route::post('/logout', [LoginController::class, 'logout']);
 
         // Patients API
-        Route::get("/patients", [PatientController::class, "index"]);
-        Route::get("/patients/{id}", [PatientController::class, "show"]);
+        Route::get('/patients', [PatientController::class, 'index']);
+        Route::post('/patients', [PatientController::class, 'store'])->middleware('checkRole:admin,manager');
+        Route::get('/patients/{id}', [PatientController::class, 'show']);
+        Route::get('/patients/{id}/groups', [PatientController::class, 'getGroups'])->middleware('checkRole:admin');
     });
 });
 
@@ -95,6 +97,5 @@ Route::fallback(function () {
     return redirect('/');
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
-
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';
