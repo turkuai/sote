@@ -49,6 +49,7 @@ const enCommon = {
     groups: 'Groups',
     waitingList: 'Waiting List',
     settings: 'Settings',
+    patients: 'Patients'
   },
 
   welcome: {
@@ -136,6 +137,7 @@ const enCommon = {
     firstName: 'First Name',
     lastName: 'Last Name',
     role: 'Role',
+    remarks: 'Remarks'
   },
 
   groups: {

@@ -5,6 +5,14 @@ import { useAuth } from '../components/AuthContext';
 import { getAssetUrl } from '../config';
 import './Register.css';
 
+type FieldErrors = {
+  first_name?: string[];
+  last_name?: string[];
+  email?: string[];
+  password?: string[];
+  password_confirmation?: string[];
+};
+
 export default function Register() {
   const { register, isAuthenticated, currentUser } = useAuth();
   const navigate = useNavigate();
@@ -14,7 +22,7 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [error, setError] = useState('');
-  const [fieldErrors, setFieldErrors] = useState({});
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
