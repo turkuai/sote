@@ -10,12 +10,10 @@ import './Admin.css';
  * Header component - Displays the header with title, user info, and action buttons
  * @param {Object} currentUser - Current authenticated user object
  * @param {Function} onLogout - Handler for logout button click
- * @param {Function} onSettingsClick - Handler for settings menu click
  * @param {string} currentPage - Current page (dashboard or patients)
- * @param {Function} onNavigateDashboard - Handler for dashboard navigation
  * @param {boolean} isMobile - Whether the current view is mobile
  */
-const Header = ({ currentUser, onLogout, onSettingsClick, currentPage = 'dashboard', onNavigateDashboard, isMobile = false }) => {
+const Header = ({ currentUser, onLogout, currentPage = 'dashboard', isMobile = false  }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
@@ -34,9 +32,7 @@ const Header = ({ currentUser, onLogout, onSettingsClick, currentPage = 'dashboa
 
   const handleSettingsClick = () => {
     setIsDropdownOpen(false);
-    if (onSettingsClick) {
-      onSettingsClick();
-    }
+    navigate('/home/settings');
   };
 
   const handleLogoutClick = () => {
@@ -49,11 +45,7 @@ const Header = ({ currentUser, onLogout, onSettingsClick, currentPage = 'dashboa
   };
 
   const handleDashboardClick = () => {
-    if (onNavigateDashboard) {
-      onNavigateDashboard();
-    } else {
       navigate('/home', { replace: true });
-    }
   };
 
   return (

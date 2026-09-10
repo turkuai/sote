@@ -20,4 +20,3 @@ export function getAssetUrl(path) {
   const p = path.startsWith('/') ? path.slice(1) : path;
   return base + p;
 }
-

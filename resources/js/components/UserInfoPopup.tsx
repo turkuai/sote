@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { createPortal } from 'react-dom';
 
 function UserInfoPopup({ username, password, onClose }) {
@@ -43,21 +43,19 @@ function UserInfoPopup({ username, password, onClose }) {
   const dialogContent = (
     <div className="user-info-popup-overlay" onClick={onClose}>
       <div className="user-info-popup" onClick={(e) => e.stopPropagation()}>
-        <button className="user-info-popup-close" onClick={onClose}>×</button>
-        
+        <button className="user-info-popup-close" onClick={onClose}>
+          ×
+        </button>
+
         <div className="user-info-popup-content">
           <h2 className="user-info-popup-title">User Created</h2>
-          
+
           <div className="user-info-section">
             <div className="user-info-item">
               <label className="user-info-label">Username:</label>
               <div className="user-info-value-container">
                 <span className="user-info-value">{username}</span>
-                <button 
-                  className="user-info-copy-btn"
-                  onClick={handleCopyUsername}
-                  title="Copy username"
-                >
+                <button className="user-info-copy-btn" onClick={handleCopyUsername} title="Copy username">
                   {copiedUsername ? '✓ Copied' : 'Copy'}
                 </button>
               </div>
@@ -67,11 +65,7 @@ function UserInfoPopup({ username, password, onClose }) {
               <label className="user-info-label">Temporary Password:</label>
               <div className="user-info-value-container">
                 <span className="user-info-value">{password}</span>
-                <button 
-                  className="user-info-copy-btn"
-                  onClick={handleCopyPassword}
-                  title="Copy password"
-                >
+                <button className="user-info-copy-btn" onClick={handleCopyPassword} title="Copy password">
                   {copiedPassword ? '✓ Copied' : 'Copy'}
                 </button>
               </div>
@@ -95,4 +89,3 @@ function UserInfoPopup({ username, password, onClose }) {
 }
 
 export default UserInfoPopup;
-
