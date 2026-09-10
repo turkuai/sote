@@ -30,4 +30,9 @@ class Patient extends Model
     {
         return $this->belongsToMany(Sector::class, 'patient_sectors');
     }
+
+    public function userGroups()
+    {
+        return $this->belongsToMany(Group::class, 'patient_groups');
+    }
 }

@@ -12,6 +12,7 @@ import PatientsPage from './pages/PatientsPage';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail';
 import WaitingApproval from './pages/WaitingApproval';
+import ProtectedLayout from './layouts/ProtectedLayout';
 
 function App() {
   const { isAuthenticated, loading, currentUser } = useAuth();
@@ -52,12 +53,14 @@ function App() {
       <Route path="/register" element={isAuthenticated ? <Navigate to="/home" replace /> : <Register />} />
       <Route path="/waiting-approval" element={isAuthenticated && !currentUser?.role_type ? <WaitingApproval /> : <Navigate to="/" replace />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
-
       <Route element={<ProtectedRoute />}>
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/home/:tab" element={<HomePage />} />
-        <Route path="/patients" element={<PatientsPage />} />
+        <Route element={<ProtectedLayout />}>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/home/:tab" element={<HomePage />} />
+          <Route path="/patients" element={<PatientsPage />} />
+        </Route>     
       </Route>
+      
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
