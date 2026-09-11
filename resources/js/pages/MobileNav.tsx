@@ -1,4 +1,3 @@
-import React from 'react';
 import { Settings, Users } from 'lucide-react';
 import './Admin.css';
 
@@ -7,12 +6,12 @@ import './Admin.css';
  * @param {Array} tabs - Array of tab identifiers to display
  * @param {string} activeTab - Currently active tab identifier
  * @param {Function} onTabClick
- * @param {Object} currentUser 
+ * @param {Object} currentUser
  */
 const MobileNav = ({ tabs, activeTab, onTabClick, currentUser }) => {
   const tabIconMap = {
     users: Users,
-    settings: Settings
+    settings: Settings,
   };
 
   const renderTabIcon = (tab) => {
@@ -21,28 +20,16 @@ const MobileNav = ({ tabs, activeTab, onTabClick, currentUser }) => {
       return null;
     }
 
-    return (
-      <IconComponent
-        size={22}
-        strokeWidth={2.2}
-        aria-hidden="true"
-      />
-    );
+    return <IconComponent size={22} strokeWidth={2.2} aria-hidden="true" />;
   };
 
   return (
-    <nav 
-      className="admin-mobile-nav admin-mobile-nav--no-camera" 
-      aria-label="Navigation"
-    >
-      {tabs.map(tab => (
+    <nav className="admin-mobile-nav admin-mobile-nav--no-camera" aria-label="Navigation">
+      {tabs.map((tab) => (
         <button
           type="button"
           onClick={() => onTabClick(tab)}
-          className={[
-            'admin-mobile-nav__cell',
-            activeTab === tab ? 'is-active' : ''
-          ].join(' ').trim()}
+          className={['admin-mobile-nav__cell', activeTab === tab ? 'is-active' : ''].join(' ').trim()}
           aria-label={tab}
           key={tab}
         >
@@ -54,5 +41,3 @@ const MobileNav = ({ tabs, activeTab, onTabClick, currentUser }) => {
 };
 
 export default MobileNav;
-
-

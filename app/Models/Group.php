@@ -22,4 +22,9 @@ class Group extends Model
     {
         return $this->belongsToMany(User::class, 'user_groups');
     }
+
+    public function patients()
+    {
+        return $this->belongsToMany(Patient::class, 'patient_groups');
+    }
 }

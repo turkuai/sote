@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from './components/AuthContext';
 import { NotificationProvider } from './components/NotificationContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import './i18n';
+import ProtectedLayout from './layouts/ProtectedLayout';
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
 import PatientsPage from './pages/PatientsPage';
@@ -52,11 +53,12 @@ function App() {
       <Route path="/register" element={isAuthenticated ? <Navigate to="/home" replace /> : <Register />} />
       <Route path="/waiting-approval" element={isAuthenticated && !currentUser?.role_type ? <WaitingApproval /> : <Navigate to="/" replace />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
-
       <Route element={<ProtectedRoute />}>
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/home/:tab" element={<HomePage />} />
-        <Route path="/patients" element={<PatientsPage />} />
+        <Route element={<ProtectedLayout />}>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/home/:tab" element={<HomePage />} />
+          <Route path="/patients" element={<PatientsPage />} />
+        </Route>
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

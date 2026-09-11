@@ -11,9 +11,7 @@ export const useUserManagement = () => {
 
   // Handler for deleting a user with validation
   const handleDeleteUser = async (row) => {
-    const fullName = row.first_name && row.last_name
-      ? `${row.first_name} ${row.last_name}`
-      : (row.name || row.email || '');
+    const fullName = row.first_name && row.last_name ? `${row.first_name} ${row.last_name}` : row.name || row.email || '';
 
     if (fullName === currentUser?.name) {
       showNotification('You cannot delete your own account!', 'error');
@@ -25,8 +23,7 @@ export const useUserManagement = () => {
 
   return {
     handlers: {
-      handleDeleteUser
-    }
+      handleDeleteUser,
+    },
   };
 };
-

@@ -49,6 +49,7 @@ const svCommon = {
     groups: 'Grupper',
     waitingList: 'Väntelista',
     settings: 'Inställningar',
+    patients: 'Patienter'
   },
 
   welcome: {
@@ -136,6 +137,7 @@ const svCommon = {
     firstName: 'Förnamn',
     lastName: 'Efternamn',
     role: 'Roll',
+    remarks: 'anmärkningar'
   },
 
   groups: {

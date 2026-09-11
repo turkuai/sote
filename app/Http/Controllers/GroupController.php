@@ -16,18 +16,28 @@ class GroupController extends Controller
     public function index(Request $request)
     {
         $query = Group::withCount('users');
-        
+
         // Search by name
         if ($request->has('search') && $request->search) {
             $search = strtolower($request->search);
             $query->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"]);
         }
-        
-        $groups = $query->get();
+
+        /*
+          * Match the number of items displayed per page in ServerGrid.
+          * This value must stay synchronized with ServerGrid's pageSize. Otherwise,
+          * the frontend pagination may not match the number of records returned by the backend.
+          * In the future, we should consider passing pageSize from the frontend as a query
+          * parameter. This would require modifying the tai-grid package directly.
+          * ServerGrid already sends the current page as "?page=...", which Laravel's
+          * paginate() automatically recognizes and uses to retrieve the correct page.
+        */
+        $pageSize = 10;
+        $groupsPaginator = $query->paginate($pageSize);
         $currentUserId = Auth::id();
 
         // Map users_count to user_count for frontend compatibility
-        $groups = $groups->map(function ($group) use ($currentUserId) {
+        $groups = $groupsPaginator->getCollection()->map(function ($group) use ($currentUserId) {
             return [
                 'id' => $group->id,
                 'name' => $group->name,
@@ -39,8 +49,10 @@ class GroupController extends Controller
                 'updated_at' => $group->updated_at,
             ];
         });
-        
-        return ApiResponse::success($groups, 'Groups retrieved successfully');
+
+        $groupsPaginator->setCollection($groups);
+
+        return ApiResponse::paginated($groupsPaginator, 'Groups retrieved successfully');
     }
 
     /**
@@ -49,7 +61,7 @@ class GroupController extends Controller
     public function show($id)
     {
         $group = Group::with('users')->find($id);
-        
+
         if (!$group) {
             return ApiResponse::notFound('Group not found');
         }
@@ -76,7 +88,7 @@ class GroupController extends Controller
 
         // Add creator as a member of the group
         $group->users()->attach($user->id);
-        
+
         return ApiResponse::success($group, 'Group created successfully', 201);
     }
 
@@ -86,7 +98,7 @@ class GroupController extends Controller
     public function update(Request $request, $id)
     {
         $group = Group::find($id);
-        
+
         if (!$group) {
             return ApiResponse::notFound('Group not found');
         }
@@ -112,7 +124,7 @@ class GroupController extends Controller
     public function destroy($id)
     {
         $group = Group::find($id);
-        
+
         if (!$group) {
             return ApiResponse::notFound('Group not found');
         }
@@ -202,8 +214,8 @@ class GroupController extends Controller
         ]);
 
         $group = Group::where('name', $validated['group_name'])
-                      ->whereRaw('BINARY access_key = ?', [$validated['access_key']])
-                      ->first();
+            ->whereRaw('BINARY access_key = ?', [$validated['access_key']])
+            ->first();
 
         if (!$group) {
             return ApiResponse::error('Invalid group name or access key', 404);

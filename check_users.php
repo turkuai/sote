@@ -15,4 +15,3 @@ echo "Total users: " . $users->count() . "\n";
 foreach ($users as $user) {
     echo "- ID: " . $user->id . " | Email: " . $user->email . " | Name: " . $user->first_name . " " . $user->last_name . "\n";
 }
-?>
