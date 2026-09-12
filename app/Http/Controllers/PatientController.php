@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Libraries\ApiResponse;
 use App\Models\Patient;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Exception;
 
 class PatientController extends Controller
 {
   //Get all the patients
-  public function index()
+  public function index(Request $request)
   {
     /*
       * Match the number of items displayed per page in ServerGrid.
@@ -22,15 +24,23 @@ class PatientController extends Controller
     */
     $pageSize = 10;
     try {
-      $patients = Patient::paginate($pageSize);
+      $query = Patient::query();
+      if($request->has("search") && $request->search) {
+        $search = strtolower($request->search);
+        $query->where(function ($whereQuery) use ($search) {
+          $whereQuery->whereRaw("LOWER(first_name) LIKE ?", ["%{$search}%"])
+           ->orWhereRaw('LOWER(last_name) LIKE ?', ["%{$search}%"]);
+        });
+      }
+      $patientsPaginator = $query->paginate($pageSize);
 
-      return ApiResponse::success(
-        $patients,
+      return ApiResponse::paginated(
+        $patientsPaginator,
         "All patients have been retrieved."
       );
-    } catch (Exception $e) {
+    } catch (\Throwable $e) {
       return ApiResponse::error(
-        "Error: Patients could not be retrieved.",
+        $e->getMessage(),
         500,
       );
     }
@@ -46,5 +56,66 @@ class PatientController extends Controller
     }
 
     return ApiResponse::success($patient, "Patients Retrieved succesfully");
+  }
+
+  public function store(Request $request) {
+    $validator = Validator::make($request->all(),[
+        'first_name' => 'required|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'social_id' => 'required|string',
+        'arrival_date' => 'required|date',
+        'remarks' => 'nullable|string',
+    ]);
+
+    if ($validator->fails()) {
+      return ApiResponse::validationError($validator->errors());
+    }
+
+    $data = $validator->validated();
+
+    $patient = Patient::create($data);
+
+    return ApiResponse::success($patient, 'Patient created successfully', 201);
+  }
+
+  public function update(Request $request, $id) {
+
+    $patient = Patient::find($id);
+
+    if(!$patient) {
+      return ApiResponse::notFound('Patient not found');
+    }
+
+    $validator = Validator::make($request->all(),[
+        'first_name' => 'required|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'social_id' => 'required|string',
+        'arrival_date' => 'required|date',
+        'remarks' => 'nullable|string',
+    ]);
+
+    if ($validator->fails()) {
+      return ApiResponse::validationError($validator->errors());
+    }
+
+    $data = $validator->validated();
+
+    $patient->update($data);
+
+    $patient->refresh();
+
+    return ApiResponse::success($patient, 'Patient created successfully');
+  }
+
+  public function destroy($id) {
+    $patient = Patient::find($id);
+
+    if(!$patient) {
+      return ApiResponse::notFound("Patient not found");
+    }
+
+    $patient->delete();
+
+    return ApiResponse::success($patient, "Patient deleted succesfully");
   }
 }

@@ -278,6 +278,17 @@ const svCommon = {
       empty: 'Du är inte med i någon grupp.',
     },
   },
+
+  patients: {
+    patient_title: 'Patienter',
+    form: {
+      firstName: 'Förnamn',
+      lastName: 'Efternamn',
+      socialID: 'Personbeteckning',
+      arrivalDate: 'Ankomstdatum',
+      remarks: 'Ytterligare information',
+    },
+  },
 };
 
 export default svCommon;

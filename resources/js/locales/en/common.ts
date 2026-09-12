@@ -1,13 +1,13 @@
 const enCommon = {
-    common: {
-        language: 'Language',
-        english: 'English',
-        finnish: 'Finnish',
-        swedish: 'Swedish',
-        loading: 'Loading...',
-        navigation: 'Navigation',
-        close: 'Close',
-    },
+  common: {
+    language: 'Language',
+    english: 'English',
+    finnish: 'Finnish',
+    swedish: 'Swedish',
+    loading: 'Loading...',
+    navigation: 'Navigation',
+    close: 'Close',
+  },
 
   nav: {
     dashboard: 'Dashboard',
@@ -276,6 +276,17 @@ const enCommon = {
       title: 'My Groups',
       description: 'Groups you are currently registered in.',
       empty: 'You are not registered in any group.',
+    },
+  },
+
+  patients: {
+    patient_title: 'Patients',
+    form: {
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      socialID: 'Social ID',
+      arrivalDate: 'Arrival Date',
+      remarks: 'Remarks',
     },
   },
 };

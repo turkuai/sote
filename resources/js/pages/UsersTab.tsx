@@ -74,7 +74,7 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
     );
   };
 
-  // Custom renderer para role_type - mostrar "Waiting list" si es null
+  // Custom renderer for role_type - displays "Waiting list" if it's null
   const RoleTypeRenderer = ({ data }) => <span>{data?.role_type || t('users.waitingList')}</span>;
 
   return (
@@ -83,7 +83,10 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
       <div className="mobile-tab-content hide-on-desktop">
         <div className="mobile-content-section">
           <h2>{t('tabs.users')}</h2>
-          <MobileSearchToggle value={inputValue} onChange={handleSearchChange} />
+          <MobileSearchToggle
+            value={inputValue}
+            onChange={handleSearchChange}
+          />
           <div style={{ height: '500px', width: '100%' }}>
             <ServerGrid
               key={refreshKey}
@@ -204,12 +207,38 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
           <h2>{t('users.managementTitle')}</h2>
           <div className="user-search">
             <span className="search-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
-                <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="11"
+                  cy="11"
+                  r="6"
+                  stroke="#6b7280"
+                  strokeWidth="2"
+                />
+                <line
+                  x1="15"
+                  y1="15"
+                  x2="20"
+                  y2="20"
+                  stroke="#6b7280"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
               </svg>
             </span>
-            <input type="text" autoComplete="off" placeholder={t('users.searchPlaceholder')} value={inputValue} onChange={handleSearchChange} />
+            <input
+              type="text"
+              autoComplete="off"
+              placeholder={t('users.searchPlaceholder')}
+              value={inputValue}
+              onChange={handleSearchChange}
+            />
           </div>
         </div>
         <ServerGrid
@@ -334,19 +363,38 @@ function UsersForm({ data, setData }) {
       <div className="add-user-form-grid">
         <div>
           <label className="form-label">{t('users.form.firstName')}</label>
-          <input type="text" className="form-input" value={getValue('first_name')} onChange={handleChange('first_name')} />
+          <input
+            type="text"
+            className="form-input"
+            value={getValue('first_name')}
+            onChange={handleChange('first_name')}
+          />
         </div>
         <div>
           <label className="form-label">{t('users.form.lastName')}</label>
-          <input type="text" className="form-input" value={getValue('last_name')} onChange={handleChange('last_name')} />
+          <input
+            type="text"
+            className="form-input"
+            value={getValue('last_name')}
+            onChange={handleChange('last_name')}
+          />
         </div>
         <div>
           <label className="form-label">{t('users.form.email')}</label>
-          <input type="email" className="form-input" value={getValue('email')} onChange={handleChange('email')} />
+          <input
+            type="email"
+            className="form-input"
+            value={getValue('email')}
+            onChange={handleChange('email')}
+          />
         </div>
         <div>
           <label className="form-label">{t('users.form.role')}</label>
-          <select className="form-select" value={getValue('role_type') || 'nurse'} onChange={handleChange('role_type')}>
+          <select
+            className="form-select"
+            value={getValue('role_type') || 'nurse'}
+            onChange={handleChange('role_type')}
+          >
             <option value="nurse">{t('users.roles.nurse')}</option>
             <option value="manager">{t('users.roles.manager')}</option>
             <option value="admin">{t('users.roles.admin')}</option>
@@ -356,11 +404,21 @@ function UsersForm({ data, setData }) {
           <>
             <div>
               <label className="form-label">{t('users.form.passwordOptional')}</label>
-              <input type="password" className="form-input" value={getValue('password')} onChange={handleChange('password')} />
+              <input
+                type="password"
+                className="form-input"
+                value={getValue('password')}
+                onChange={handleChange('password')}
+              />
             </div>
             <div>
               <label className="form-label">{t('users.form.confirmPasswordOptional')}</label>
-              <input type="password" className="form-input" value={getValue('confirmPassword')} onChange={handleChange('confirmPassword')} />
+              <input
+                type="password"
+                className="form-input"
+                value={getValue('confirmPassword')}
+                onChange={handleChange('confirmPassword')}
+              />
             </div>
           </>
         )}

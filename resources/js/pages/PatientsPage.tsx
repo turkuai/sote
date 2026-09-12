@@ -1,8 +1,10 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
 import { useResponsive } from '../hooks/useResponsive';
 import './Admin.css';
 import Header from './Header';
+import PatientsData from './PatientsData';
 
 export default function PatientsPage() {
   const { currentUser, logout } = useAuth();
@@ -22,6 +24,8 @@ export default function PatientsPage() {
     navigate(`/home/settings`);
   };
 
+  const [userQuery, setUserQuery] = React.useState('');
+
   return (
     <div className="admin-page">
       <Header
@@ -33,10 +37,16 @@ export default function PatientsPage() {
         onSettingsClick={handleSettingsClick}
       />
 
-      <div className="admin-content" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+      <div
+        className="admin-content"
+        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}
+      >
         <div style={{ textAlign: 'center' }}>
-          <h1>Patients</h1>
-          <p>Patients page content goes here...</p>
+          <PatientsData
+            currentUser={currentUser}
+            query={userQuery}
+            onQueryChange={setUserQuery}
+          />
         </div>
       </div>
     </div>

@@ -277,6 +277,17 @@ const fiCommon = {
       empty: 'Et ole rekisteröitynyt mihinkään ryhmään.',
     },
   },
+
+  patients: {
+    patient_title: 'Potilaat',
+    form: {
+      firstName: 'Etunimi',
+      lastName: 'Sukunimi',
+      socialID: 'Henkilöllisyystunnus',
+      arrivalDate: 'Saapumispäivä',
+      remarks: 'Lisätiedot',
+    },
+  },
 };
 
 export default fiCommon;
