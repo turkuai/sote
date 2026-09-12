@@ -136,32 +136,19 @@ export default function PatientsData(props: PatientsDataProps) {
                 throw new Error(t('users.errors.notAllowedToChangePassword'));
               }}
               transformAddPayload={(payload) => {
-                const email = String(payload.email || '').trim();
-                const first = String(payload.first_name || '').trim();
-                const last = String(payload.last_name || '').trim();
-                const password = String(payload.password || '').trim();
-                const confirmPassword = String(payload.confirmPassword || '').trim();
-
-                if (password || confirmPassword) {
-                  if (!password || !confirmPassword) {
-                    throw new Error(t('users.errors.fillBothOrLeaveEmpty'));
-                  }
-                  if (password !== confirmPassword) {
-                    throw new Error(t('users.errors.passwordsDoNotMatch'));
-                  }
-                }
+                const first_name = String(payload.first_name || '').trim();
+                const last_name = String(payload.last_name || '').trim();
+                const social_id = String(payload.social_id || '').trim();
+                const arrival_date = String(payload.arrival_date || '');
+                const remarks = String(payload.remarks);
 
                 const payloadOut: any = {
-                  first_name: first,
-                  last_name: last,
-                  email,
-                  role_type: payload.role_type || 'nurse',
+                  first_name,
+                  last_name,
+                  social_id,
+                  arrival_date,
+                  remarks,
                 };
-
-                // Only send password when admin actually set one
-                if (password) {
-                  payloadOut.password = password;
-                }
 
                 return payloadOut;
               }}
