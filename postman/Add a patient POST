@@ -37,7 +37,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+          "raw": "{\"email\":\"admin@example.com\", \"password\":\"admin123\", \"remember\":false}",
           "options": {
             "raw": {
               "language": "json"
@@ -45,7 +45,7 @@
           }
         },
         "url": {
-          "raw": "http://localhost:8000/api/users?page=1",
+          "raw": "http://localhost:8000/api/login",
           "protocol": "http",
           "host": [
             "localhost"
@@ -53,13 +53,7 @@
           "port": "8000",
           "path": [
             "api",
-            "users"
-          ],
-          "query": [
-            {
-              "key": "page",
-              "value": "1"
-            }
+            "login"
           ]
         },
         "description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
@@ -67,12 +61,50 @@
       "response": []
     },
     {
-      "name": "patients",
+      "name": "patients api",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": ""
+          "raw": "http://localhost:8000/api/patients",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "patients"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "add patient",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"first_name\":\"Sara\", \"last_name\":\"Oonanen\", \"social_id\":\"7786\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/patients",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "patients"
+          ]
         }
       },
       "response": []

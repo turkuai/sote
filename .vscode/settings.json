@@ -1,16 +1,17 @@
 //Settings
-
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit"
   },
-
   "[php]": {
-    "editor.defaultFormatter": "DEVSENSE.phptools-vscode",
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
     "editor.wordWrapColumn": 150
+  },
+  "[xml]": {
+    "editor.defaultFormatter": "redhat.vscode-xml"
   }
 }
