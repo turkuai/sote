@@ -14,8 +14,7 @@ class GroupController extends Controller
     /**
      * Get all groups with their users
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $query = Group::withCount('users');
 
         // Search by name
@@ -59,8 +58,7 @@ class GroupController extends Controller
     /**
      * Get a specific group with its users
      */
-    public function show($id)
-    {
+    public function show($id) {
         $group = Group::with('users')->find($id);
 
         if (!$group) {
@@ -95,8 +93,7 @@ class GroupController extends Controller
     /**
      * Update a group
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         $group = Group::find($id);
 
         if (!$group) {
@@ -121,8 +118,7 @@ class GroupController extends Controller
     /**
      * Delete a group
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         $group = Group::find($id);
 
         if (!$group) {
@@ -186,8 +182,7 @@ class GroupController extends Controller
     /**
      * Add a patient to a group
      */
-    public function addPatientToGroup($groupId, $patientId)
-    {
+    public function addPatientToGroup($groupId, $patientId) {
         $group = Group::find($groupId);
         if (!$group) {
             return ApiResponse::notFound('Group not found');
