@@ -1,0 +1,8 @@
+.patient-data {
+  text-align: 'center';
+  border: 1px solid inset;
+  background-color: white;
+  border-radius: 15px;
+  padding: 25px;
+  margin: 25px;
+}

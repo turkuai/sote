@@ -4,6 +4,7 @@ import { useAuth } from '../components/AuthContext';
 import { useResponsive } from '../hooks/useResponsive';
 import './Admin.css';
 import Header from './Header';
+import './PatientPage.css';
 import PatientsData from './PatientsData';
 
 export default function PatientsPage() {
@@ -41,7 +42,7 @@ export default function PatientsPage() {
         className="admin-content"
         style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}
       >
-        <div style={{ textAlign: 'center' }}>
+        <div className="patient-data">
           <PatientsData
             currentUser={currentUser}
             query={userQuery}
