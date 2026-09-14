@@ -6,8 +6,16 @@ type LanguageSwitcherProps = {
   className?: string;
 };
 
+const languageNames = {
+  en: 'English',
+  fi: 'Suomi',
+  sv: 'Svenska',
+} as const;
+
+type SupportedLanguage = keyof typeof languageNames;
+
 export default function LanguageSwitcher({ className = '' }: LanguageSwitcherProps) {
-  const { i18n, t } = useTranslation();
+  const { i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -24,12 +32,12 @@ export default function LanguageSwitcher({ className = '' }: LanguageSwitcherPro
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-    const handleLanguageChange = (language: 'en' | 'fi' | 'sv') => {
-        i18n.changeLanguage(language);
-        setIsOpen(false);
-    };
+  const handleLanguageChange = (language: SupportedLanguage) => {
+    i18n.changeLanguage(language);
+    setIsOpen(false);
+  };
 
-    const currentLabel = currentLanguage === 'fi' ? t('common.finnish') : currentLanguage === 'sv' ? t('common.swedish') : t('common.english');
+  const currentLabel = languageNames[currentLanguage as SupportedLanguage] ?? languageNames.en;
 
   return (
     <div className={className}>
@@ -47,21 +55,21 @@ export default function LanguageSwitcher({ className = '' }: LanguageSwitcherPro
           <ChevronDown size={16} className={`dropdown-icon ${isOpen ? 'open' : ''}`} />
         </button>
 
-                {isOpen && (
-                    <div className="user-dropdown-menu">
-                        <button type="button" className="dropdown-menu-item" onClick={() => handleLanguageChange('en')}>
-                            {t('common.english')}
-                        </button>
-                        <button type="button" className="dropdown-menu-item" onClick={() => handleLanguageChange('fi')}>
-                            {t('common.finnish')}
-                        </button>
+        {isOpen && (
+          <div className="user-dropdown-menu">
+            <button type="button" className="dropdown-menu-item" onClick={() => handleLanguageChange('en')}>
+              {languageNames.en}
+            </button>
+            <button type="button" className="dropdown-menu-item" onClick={() => handleLanguageChange('fi')}>
+              {languageNames.fi}
+            </button>
 
-                        <button type="button" className="dropdown-menu-item" onClick={() => handleLanguageChange('sv')}>
-                            {t('common.swedish')}
-                        </button>
-                    </div>
-                )}
-            </div>
-        </div>
-    );
+            <button type="button" className="dropdown-menu-item" onClick={() => handleLanguageChange('sv')}>
+              {languageNames.sv}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }

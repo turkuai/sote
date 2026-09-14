@@ -23,7 +23,7 @@ else
 fi
 
 echo "==> Running database migrations..."
-php artisan migrate --seed
+php artisan migrate:fresh --seed
 
 echo "==> Installing frontend dependencies..."
 npm install

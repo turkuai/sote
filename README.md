@@ -224,6 +224,7 @@ DELETE /api/groups/{id}        → Delete group
 ```
 
 ### **Patients**
+
 ```
 GET    /api/patients           → List all patients
 GET    /api/patients/{id}      → Get specific patient
@@ -300,7 +301,7 @@ resources/
         ├── validation.ts
         └── components.tsx
 routes/
-└── web.php                   ← All API routes
+└── api.php                   ← All API routes
 ```
 
 ---
@@ -449,7 +450,7 @@ It will recreate the database without sessions if you remove the migration.
 
 ### **Q: How do I protect routes?**
 
-Add middleware to `routes/web.php`:
+Add middleware to `routes/api.php`:
 
 ```php
 Route::delete('/api/users/{id}', [UserController::class, 'destroy'])
