@@ -96,7 +96,6 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
       .catch(() => setMyGroupCount(0));
   }, [currentUser, refreshKey]);
 
-
   // Debounce: only call onQueryChange 300ms after last keystroke
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -160,10 +159,10 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
 
   const handleGroupRowClick = (group: Record<string, unknown>) => {
     setPanelGroup(group);
-    setGroupPath(`groups/${group.id}/users`)
+    setGroupPath(`groups/${group.id}/users`);
     setPanelSearch('');
     lastPanelClickedIndex.current = null;
-    
+
     setPanelLoading(true);
     fetch(`${getApiBase()}/api/groups/${group.id}`, { credentials: 'include' })
       .then((r) => r.json())
@@ -289,7 +288,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                     </div>
                     {panelLoading && <p style={{ color: '#6b7280' }}>{t('grid.loading')}</p>}
                     {!panelLoading && (
-                      <ServerGrid 
+                      <ServerGrid
                         key={refreshKey}
                         columns={[
                           { field: 'name', displayName: t('table.name') },
@@ -303,7 +302,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         showAddButton={false}
                         getApiBase={getApiBase}
                         showNot={showNotification}
-                    />
+                      />
                     )}
                   </>
                 )}
@@ -502,7 +501,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                     </div>
                     {panelLoading && <p style={{ color: '#6b7280' }}>{t('grid.loading')}</p>}
                     {!panelLoading && (
-                      <ServerGrid 
+                      <ServerGrid
                         key={refreshKey}
                         columns={[
                           { field: 'name', displayName: t('table.name') },
@@ -517,7 +516,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         showAddButton={false}
                         getApiBase={getApiBase}
                         showNot={showNotification}
-                    />
+                      />
                     )}
                   </>
                 )}
