@@ -50,11 +50,11 @@ Route::prefix('api')->group(function () {
     Route::get('/groups', [GroupController::class, 'index'])->middleware('checkRole:manager,admin');
     Route::post('/groups', [GroupController::class, 'store'])->middleware('checkRole:admin,manager');
     Route::get('/groups/{id}', [GroupController::class, 'show'])->middleware('checkRole:manager,admin');
-    Route::patch('/groups/{id}', [GroupController::class, 'update'])->middleware('checkRole:admin');
-    Route::delete('/groups/{id}', [GroupController::class, 'destroy'])->middleware('checkRole:admin');
-    Route::post('/groups/{id}/users/{userId}', [GroupController::class, 'addUserToGroup'])->middleware('checkRole:admin');
-    Route::delete('/groups/{id}/users/{userId}', [GroupController::class, 'removeUserFromGroup'])->middleware('checkRole:admin');
-    Route::post('/groups/{id}/patients/{patientId}', [GroupController::class, 'addPatientToGroup'])->middleware('checkRole:admin');
+    Route::patch('/groups/{id}', [GroupController::class, 'update'])->middleware('checkRole:admin,manager');
+    Route::delete('/groups/{id}', [GroupController::class, 'destroy'])->middleware('checkRole:admin,manager');
+    Route::post('/groups/{id}/users/{userId}', [GroupController::class, 'addUserToGroup'])->middleware('checkRole:admin,manager');
+    Route::delete('/groups/{id}/users/{userId}', [GroupController::class, 'removeUserFromGroup'])->middleware('checkRole:admin,manager');
+    Route::post('/groups/{id}/patients/{patientId}', [GroupController::class, 'addPatientToGroup'])->middleware('checkRole:admin,manager');
 
     // Permission Examples
     Route::get('/permissions', [\App\Http\Controllers\PermissionExampleController::class, 'getPermissions']);
@@ -66,7 +66,7 @@ Route::prefix('api')->group(function () {
     Route::get('/patients', [PatientController::class, 'index']);
     Route::post('/patients', [PatientController::class, 'store'])->middleware('checkRole:admin,manager');
     Route::get('/patients/{id}', [PatientController::class, 'show']);
-    Route::get('/patients/{id}/groups', [PatientController::class, 'getGroups'])->middleware('checkRole:admin');
+    Route::get('/patients/{id}/groups', [PatientController::class, 'getGroups'])->middleware('checkRole:admin,manager');
   });
 });
 
