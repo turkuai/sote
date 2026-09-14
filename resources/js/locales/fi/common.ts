@@ -48,6 +48,7 @@ const fiCommon = {
     groups: 'Ryhmät',
     waitingList: 'Odotuslista',
     settings: 'Asetukset',
+    patients: 'Potilaat'
   },
 
   welcome: {
@@ -135,6 +136,7 @@ const fiCommon = {
     firstName: 'Etunimi',
     lastName: 'Sukunimi',
     role: 'Rooli',
+    remarks: 'Huomautukset'
   },
 
   groups: {
