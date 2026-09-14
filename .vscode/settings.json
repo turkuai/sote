@@ -10,7 +10,7 @@
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
     "editor.wordWrapColumn": 150,
-    "editor.detectIndentation": false
+    "editor.detectIndentation": false,
   },
   "[xml]": {
     "editor.defaultFormatter": "redhat.vscode-xml"
