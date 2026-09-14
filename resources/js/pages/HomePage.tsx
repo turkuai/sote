@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams, useOutletContext } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import './Admin.css';
 
 import { useTranslation } from 'react-i18next';

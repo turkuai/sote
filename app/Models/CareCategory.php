@@ -5,16 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CareCategory extends Model
-{
+class CareCategory extends Model {
 
-    use HasFactory;
+  use HasFactory;
 
-    public $timestamps = true;
+  public $timestamps = true;
 
-    protected $fillable = [
-        'parent_category_id',
-        'name',
-        'description',
-    ];
+  protected $fillable = [
+    'parent_category_id',
+    'name',
+    'description',
+  ];
 }
