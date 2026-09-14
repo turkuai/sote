@@ -4,24 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Libraries\ApiResponse;
 use App\Models\Group;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class GroupController extends Controller {
-  /**
-   * Get all groups with their users
-   */
-  public function index(Request $request) {
-    $query = Group::withCount('users');
+class GroupController extends Controller
+{
+    /**
+     * Get all groups with their users
+     */
+    public function index(Request $request)
+    {
+        $query = Group::withCount('users');
 
-    // Search by name
-    if ($request->has('search') && $request->search) {
-      $search = strtolower($request->search);
-      $query->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"]);
-    }
+        // Search by name
+        if ($request->has('search') && $request->search) {
+            $search = strtolower($request->search);
+            $query->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"]);
+        }
 
-    /*
+        /*
           * Match the number of items displayed per page in ServerGrid.
           * This value must stay synchronized with ServerGrid's pageSize. Otherwise,
           * the frontend pagination may not match the number of records returned by the backend.
@@ -48,20 +51,21 @@ class GroupController extends Controller {
       ];
     });
 
-    $groupsPaginator->setCollection($groups);
+        $groupsPaginator->setCollection($groups);
 
-    return ApiResponse::paginated($groupsPaginator, 'Groups retrieved successfully');
-  }
-
-  /**
-   * Get a specific group with its users
-   */
-  public function show($id) {
-    $group = Group::with('users')->find($id);
-
-    if (!$group) {
-      return ApiResponse::notFound('Group not found');
+        return ApiResponse::paginated($groupsPaginator, 'Groups retrieved successfully');
     }
+
+    /**
+     * Get a specific group with its users
+     */
+    public function show($id)
+    {
+        $group = Group::with('users')->find($id);
+
+        if (!$group) {
+            return ApiResponse::notFound('Group not found');
+        }
 
     return ApiResponse::success($group, 'Group retrieved successfully');
   }
@@ -82,21 +86,22 @@ class GroupController extends Controller {
     $user = Auth::user();
     $group = Group::create(array_merge($validator->validated(), ['owner_id' => $user->id]));
 
-    // Add creator as a member of the group
-    $group->users()->attach($user->id);
+        // Add creator as a member of the group
+        $group->users()->attach($user->id);
 
-    return ApiResponse::success($group, 'Group created successfully', 201);
-  }
-
-  /**
-   * Update a group
-   */
-  public function update(Request $request, $id) {
-    $group = Group::find($id);
-
-    if (!$group) {
-      return ApiResponse::notFound('Group not found');
+        return ApiResponse::success($group, 'Group created successfully', 201);
     }
+
+    /**
+     * Update a group
+     */
+    public function update(Request $request, $id)
+    {
+        $group = Group::find($id);
+
+        if (!$group) {
+            return ApiResponse::notFound('Group not found');
+        }
 
     $validator = Validator::make($request->all(), [
       'name' => 'sometimes|string|max:255|unique:groups,name,' . $id,
@@ -113,15 +118,16 @@ class GroupController extends Controller {
     return ApiResponse::success($group, 'Group updated successfully');
   }
 
-  /**
-   * Delete a group
-   */
-  public function destroy($id) {
-    $group = Group::find($id);
+    /**
+     * Delete a group
+     */
+    public function destroy($id)
+    {
+        $group = Group::find($id);
 
-    if (!$group) {
-      return ApiResponse::notFound('Group not found');
-    }
+        if (!$group) {
+            return ApiResponse::notFound('Group not found');
+        }
 
     $group->delete();
 
@@ -174,6 +180,32 @@ class GroupController extends Controller {
     // Remove user from group
     $group->users()->detach($userId);
 
+        return ApiResponse::success(null, 'User removed from group successfully');
+    }
+
+    /**
+     * Add a patient to a group
+     */
+    public function addPatientToGroup($groupId, $patientId)
+    {
+        $group = Group::find($groupId);
+        if (!$group) {
+            return ApiResponse::notFound('Group not found');
+        }
+
+        $patient = Patient::find($patientId);
+        if (!$patient) {
+            return ApiResponse::notFound('Patient not found');
+        }
+
+        if ($group->patients()->where('patient_id', $patientId)->exists()) {
+            return ApiResponse::error('Patient is already in this group', 400);
+        }
+
+        $group->patients()->attach($patientId);
+
+        return ApiResponse::success(['message' => 'Patient added to group successfully'], 'Patient added to group', 201);
+    }
     return ApiResponse::success(null, 'User removed from group successfully');
   }
 
