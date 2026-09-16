@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class GroupController extends Controller {
-  
+
   /**
    * Get all groups with their users
    */
@@ -50,47 +50,40 @@ class GroupController extends Controller {
       ];
     });
 
-        $groupsPaginator->setCollection($groups);
+    $groupsPaginator->setCollection($groups);
 
-        return ApiResponse::paginated($groupsPaginator, 'Groups retrieved successfully');
+    return ApiResponse::paginated($groupsPaginator, 'Groups retrieved successfully');
+  }
+
+  /**
+   * Get a specific group with its users
+   */
+  public function show($id) {
+    $group = User::whereHas('groups', function ($query) use ($id) {
+      $query->where('groups.id', $id);
+    });
+
+    $temp = $group;
+
+    $pageSize = 10;
+    $groupsPaginator2 = $temp->paginate($pageSize);
+
+    // Does map for some unkown reason doesnt work without it dont remove even though it does nothing
+    $groups2 = $groupsPaginator2->getCollection()->map(function ($temp) use ($id) {
+      return (
+        $temp
+      );
+    });
+
+    $groupsPaginator2->setCollection($groups2);
+
+    if (!$groups2) {
+      return ApiResponse::notFound('Group not found');
     }
 
-    /**
-     * Get a specific group with its users
-     */
-    public function show($id)
-    {
+    return ApiResponse::paginated($groupsPaginator2, 'Group retrieved successfully');
+  }
 
-
-        $group = User::whereHas('groups', function ($query) use ($id) {
-            $query->where('groups.id', $id);
-        });
-
-        $temp = $group;
-
-        $pageSize = 10;
-        $groupsPaginator2 = $temp->paginate($pageSize);
-
-
-
-        // Does map for some unkown reason doesnt work without it dont remove even though it does nothing
-        $groups2 = $groupsPaginator2->getCollection()->map(function ($temp) use ($id) {
-            return (
-                $temp
-            );
-        });
-
-
-
-        $groupsPaginator2->setCollection($groups2);
-
-        if (!$groups2) {
-            return ApiResponse::notFound('Group not found');
-        }
-
-        return ApiResponse::paginated($groupsPaginator2, 'Group retrieved successfully');
-      }
-  
   /**
    * Create a new group
    */
