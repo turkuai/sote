@@ -55,47 +55,58 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
         const url = `/api/users`;
         console.log('Fetching from:', url);
 
-        const response = await fetch(url, {
-          credentials: 'include',
-        });
+        // The users endpoint is paginated, so one request only returns the first page.
+        // Read the page count from page 1, then fetch the remaining pages.
+        const fetchPage = async (page) => {
+          const response = await fetch(`${url}?page=${page}`, {
+            credentials: 'include',
+          });
 
-        console.log('Response status:', response.status);
-        console.log('Response headers:', {
-          'content-type': response.headers.get('content-type'),
-          'x-powered-by': response.headers.get('x-powered-by'),
-        });
+          console.log('Response status:', response.status);
+          console.log('Response headers:', {
+            'content-type': response.headers.get('content-type'),
+            'x-powered-by': response.headers.get('x-powered-by'),
+          });
 
-        // Read response as text first to diagnose
-        const responseText = await response.text();
-        console.log('Raw response text (first 500 chars):', responseText.substring(0, 500));
+          // Read response as text first to diagnose
+          const responseText = await response.text();
+          console.log('Raw response text (first 500 chars):', responseText.substring(0, 500));
 
-        if (!response.ok) {
-          const error = `API Error ${response.status}: ${responseText.substring(0, 300)}`;
-          console.error(error);
-          setFetchError(error);
-          return;
-        }
+          if (!response.ok) {
+            const error = `API Error ${response.status}: ${responseText.substring(0, 300)}`;
+            console.error(error);
+            throw new Error(error);
+          }
 
-        try {
           const data = JSON.parse(responseText);
 
           // Extract users array
-          let allUsersArray = [];
+          let rows = [];
           if (Array.isArray(data.data)) {
-            allUsersArray = data.data;
+            rows = data.data;
           } else if (Array.isArray(data)) {
-            allUsersArray = data;
+            rows = data;
           }
+
+          // ApiResponse::paginated() reports the page count as pagination.last_page (also totalPages at the root)
+          const lastPage = data?.pagination?.last_page ?? data?.totalPages ?? 1;
+          return { rows, lastPage };
+        };
+
+        try {
+          const firstPage = await fetchPage(1);
+          const remainingPages = Array.from({ length: firstPage.lastPage - 1 }, (_, index) => index + 2);
+          const otherPages = await Promise.all(remainingPages.map((page) => fetchPage(page)));
+          const allUsersArray = [firstPage, ...otherPages].flatMap((page) => page.rows);
 
           // Filter out users already in the group
           const groupUserIds = users.map((u) => u.id);
           const availableUsers = allUsersArray.filter((u) => !groupUserIds.includes(u.id));
 
           setAllUsers(availableUsers);
-        } catch (parseError) {
-          const error = `Failed to parse JSON: ${parseError.message}`;
+        } catch (pageError) {
+          const error = pageError.message;
           console.error(error);
-          console.error('Response that failed to parse:', responseText.substring(0, 1000));
           setFetchError(error);
         }
       } catch (error) {
