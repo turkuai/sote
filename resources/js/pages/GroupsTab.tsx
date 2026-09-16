@@ -796,7 +796,7 @@ function GroupsForm({ data, setData }) {
           <label className="form-label">{t('groups.form.groupName')}</label>
           <input
             type="text"
-            autoComplete="nope"
+            autoComplete="off"
             className="form-input"
             value={getValue('name')}
             onChange={handleChange('name')}
@@ -808,7 +808,7 @@ function GroupsForm({ data, setData }) {
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <input
               type={showKey ? 'text' : 'password'}
-              autoComplete="nope"
+              autoComplete="off"
               className="form-input"
               value={getValue('access_key')}
               onChange={handleChange('access_key')}

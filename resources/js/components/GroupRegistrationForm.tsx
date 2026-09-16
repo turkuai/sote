@@ -52,7 +52,7 @@ export default function GroupRegistrationForm({ onSuccess }: Props) {
         </label>
         <input
           type="text"
-          autoComplete="nope"
+          autoComplete="off"
           name="grp_name_x"
           required
           value={groupName}
