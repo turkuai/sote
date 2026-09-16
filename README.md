@@ -189,11 +189,12 @@ php artisan migrate:fresh --seed
 
 ## Test users
 
-| Email             | Password    | Role    |
-| ----------------- | ----------- | ------- |
-| admin@example.com | admin123    | Admin   |
-| jane@example.com  | password123 | Manager |
-| bob@example.com   | password123 | Nurse   |
+| Email                    | Password            | Role    |
+| -----------------        | -----------         | ------- |
+| admin@example.com        | admin-limes-194     | Admin   |
+| jane@example.com         | jane-pineapples-194 | Manager |
+| bob@example.com          | bob-persimons-194   | Nurse   |
+
 
 ## API Endpoints
 
