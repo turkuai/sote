@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Libraries\ApiResponse;
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class GroupController extends Controller {
+
   /**
    * Get all groups with their users
    */
@@ -57,13 +59,29 @@ class GroupController extends Controller {
    * Get a specific group with its users
    */
   public function show($id) {
-    $group = Group::with('users')->find($id);
+    $group = User::whereHas('groups', function ($query) use ($id) {
+      $query->where('groups.id', $id);
+    });
 
-    if (!$group) {
+    $temp = $group;
+
+    $pageSize = 10;
+    $groupsPaginator2 = $temp->paginate($pageSize);
+
+    // Does map for some unkown reason doesnt work without it dont remove even though it does nothing
+    $groups2 = $groupsPaginator2->getCollection()->map(function ($temp) use ($id) {
+      return (
+        $temp
+      );
+    });
+
+    $groupsPaginator2->setCollection($groups2);
+
+    if (!$groups2) {
       return ApiResponse::notFound('Group not found');
     }
 
-    return ApiResponse::success($group, 'Group retrieved successfully');
+    return ApiResponse::paginated($groupsPaginator2, 'Group retrieved successfully');
   }
 
   /**
