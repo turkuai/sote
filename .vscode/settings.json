@@ -9,7 +9,9 @@
     "editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
-    "editor.wordWrapColumn": 150
+    "editor.wordWrapColumn": 150,
+    "editor.detectIndentation": false,
+    "intelephense.format.braces": "k&r"
   },
   "[xml]": {
     "editor.defaultFormatter": "redhat.vscode-xml"

@@ -77,4 +77,33 @@ class PatientController extends Controller {
 
     return ApiResponse::success($groups, "Patient groups retrieved successfully");
   }
+
+  // Assign a group to a patient
+  public function addGroupToPatient(Request $request, $id) {
+    $patient = Patient::find($id);
+
+    if (!$patient) {
+      return ApiResponse::error("Patient not found", 404);
+    }
+
+    $validator = Validator::make($request->all(), [
+      'group_id' => 'required|exists:groups,id',
+    ]);
+
+    if ($validator->fails()) {
+      return ApiResponse::validationError($validator->errors());
+    }
+
+    $groupId = $request->input('group_id');
+
+    // Check if the group is already assigned to the patient
+    if ($patient->patient_groups()->where('group_id', $groupId)->exists()) {
+      return ApiResponse::error("Group is already assigned to the patient", 400);
+    }
+
+    // Assign the group to the patient
+    $patient->patient_groups()->attach($groupId);
+
+    return ApiResponse::success(null, "Group assigned to patient successfully");
+  }
 }
