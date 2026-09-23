@@ -9,14 +9,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class GroupController extends Controller
-{
+class GroupController extends Controller {
 
   /**
    * Get all groups with their users
    */
-  public function index(Request $request)
-  {
+  public function index(Request $request) {
     $query = Group::withCount('users');
 
     // Search by name
@@ -60,8 +58,7 @@ class GroupController extends Controller
   /**
    * Get a specific group with its users
    */
-  public function getRegisteredUsers(Request $request, $id)
-  {
+  public function getRegisteredUsers(Request $request, $id) {
     $group = User::whereHas('groups', function ($query) use ($id) {
       $query->where('groups.id', $id);
     });
@@ -98,8 +95,7 @@ class GroupController extends Controller
     return ApiResponse::paginated($groupsPaginator2, 'Group retrieved successfully');
   }
 
-  public function getUnregisteredUsers(Request $request, $id)
-  {
+  public function getUnregisteredUsers(Request $request, $id) {
     $group = User::whereDoesntHave('groups', function ($query) use ($id) {
       $query->where('groups.id', $id);
     });
@@ -139,8 +135,7 @@ class GroupController extends Controller
   /**
    * Create a new group
    */
-  public function store(Request $request)
-  {
+  public function store(Request $request) {
     $validator = Validator::make($request->all(), [
       'name' => 'required|string|max:255|unique:groups,name',
       'access_key' => 'required|string|max:255',
@@ -162,8 +157,7 @@ class GroupController extends Controller
   /**
    * Update a group
    */
-  public function update(Request $request, $id)
-  {
+  public function update(Request $request, $id) {
     $group = Group::find($id);
 
     if (!$group) {
@@ -188,8 +182,7 @@ class GroupController extends Controller
   /**
    * Delete a group
    */
-  public function destroy($id)
-  {
+  public function destroy($id) {
     $group = Group::find($id);
 
     if (!$group) {
@@ -204,8 +197,7 @@ class GroupController extends Controller
   /**
    * Add a user to a group
    */
-  public function addUserToGroup($groupId, $userId)
-  {
+  public function addUserToGroup($groupId, $userId) {
     // Check if group exists
     $group = Group::find($groupId);
     if (!$group) {
@@ -232,8 +224,7 @@ class GroupController extends Controller
   /**
    * Remove a user from a group
    */
-  public function removeUserFromGroup($groupId, $userId)
-  {
+  public function removeUserFromGroup($groupId, $userId) {
     // Check if group exists
     $group = Group::find($groupId);
     if (!$group) {
@@ -255,8 +246,7 @@ class GroupController extends Controller
   /**
    * Get groups the authenticated user belongs to
    */
-  public function myGroups(Request $request)
-  {
+  public function myGroups(Request $request) {
     $user = $request->user();
     $groups = $user->groups()->get()->map(function ($group) {
       return [
@@ -273,8 +263,7 @@ class GroupController extends Controller
   /**
    * Allow an authenticated user to self-register into a group using the access key
    */
-  public function join(Request $request)
-  {
+  public function join(Request $request) {
     $validated = $request->validate([
       'group_name' => 'required|string',
       'access_key' => 'required|string',
