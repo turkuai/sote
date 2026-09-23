@@ -59,29 +59,13 @@ class GroupController extends Controller {
    * Get a specific group with its users
    */
   public function show($id) {
-    $group = User::whereHas('groups', function ($query) use ($id) {
-      $query->where('groups.id', $id);
-    });
+    $group = Group::with('users')->find($id);
 
-    $temp = $group;
-
-    $pageSize = 10;
-    $groupsPaginator2 = $temp->paginate($pageSize);
-
-    // Does map for some unkown reason doesnt work without it dont remove even though it does nothing
-    $groups2 = $groupsPaginator2->getCollection()->map(function ($temp) use ($id) {
-      return (
-        $temp
-      );
-    });
-
-    $groupsPaginator2->setCollection($groups2);
-
-    if (!$groups2) {
+    if (!$group) {
       return ApiResponse::notFound('Group not found');
     }
 
-    return ApiResponse::paginated($groupsPaginator2, 'Group retrieved successfully');
+    return ApiResponse::success($group, 'Group retrieved successfully');
   }
 
   /**
