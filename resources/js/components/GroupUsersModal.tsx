@@ -1,5 +1,5 @@
 import { Plus, Search, Trash2, X } from 'lucide-react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DataSetView from '../../../grid/src/DataSetView';
 import { getApiBase } from '../config';
@@ -209,44 +209,6 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
                 {isRemoving ? `Removing…` : `Remove ${selectedUsersToRemove.length}`}
               </button>
             </div>
-
-            <div className="modal-body">
-              {users.length === 0 ? (
-                <p className="empty-message">{t('groups.usersModal.noUsersInGroup')}</p>
-              ) : (
-                <ul className="users-list">
-                  {users.map((user, index) => {
-                    const checked = selectedUsersToRemove.includes(user.id);
-                    const handleMemberClick = (e: React.MouseEvent) => {
-                      if (e.shiftKey && lastMemberClickedIndex.current !== null) {
-                        e.preventDefault();
-                        const from = Math.min(lastMemberClickedIndex.current, index);
-                        const to = Math.max(lastMemberClickedIndex.current, index);
-                        const rangeIds = users.slice(from, to + 1).map((u) => u.id);
-                        const allChecked = rangeIds.every((id) => selectedUsersToRemove.includes(id));
-                        setSelectedUsersToRemove((prev) =>
-                          allChecked ? prev.filter((id) => !rangeIds.includes(id)) : [...new Set([...prev, ...rangeIds])],
-                        );
-                      } else {
-                        lastMemberClickedIndex.current = index;
-                        setSelectedUsersToRemove((prev) => (checked ? prev.filter((id) => id !== user.id) : [...prev, user.id]));
-                      }
-                    };
-                    return (
-                      <li key={user.id} className={`user-item${checked ? ' selected' : ''}`} onClick={handleMemberClick}>
-                        <input type="checkbox" className="user-list-checkbox" checked={checked} onChange={() => {}} tabIndex={-1} />
-                        <div style={{ flex: 1 }}>
-                          <span className="user-name">
-                            {user.first_name} {user.last_name}
-                          </span>
-                          <span className="user-email">{user.email}</span>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </div>
           </>
         ) : (
           <>
@@ -295,7 +257,13 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
             </div>
 
             <div className="modal-footer">
-              <button className="cancel-btn" onClick={() => setShowAddUsers(false)}>
+              <button
+                className="cancel-btn"
+                onClick={() => {
+                  setShowAddUsers(false);
+                  onClose();
+                }}
+              >
                 {t('grid.confirmDelete.cancel')}
               </button>
               <button className="confirm-btn" onClick={handleAddUsers} disabled={selectedUsersToAdd.length === 0 || isAdding}>
