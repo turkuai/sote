@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ServerGrid as ServerGridBase } from 'tai-grid';
 import 'tai-grid/style.css';
 import GroupRegistrationForm from '../components/GroupRegistrationForm';
+import FieldValidationError from '../components/FieldValidationError';
 import GroupUsersModal from '../components/GroupUsersModal';
 import MobileSearchToggle from '../components/MobileSearchToggle';
 import { useNotification } from '../components/NotificationContext';
@@ -604,7 +605,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
   );
 }
 
-function GroupsForm({ data, setData }) {
+function GroupsForm({ data, setData, errors }) {
   const { t } = useTranslation();
   const [showKey, setShowKey] = useState(false);
   const getValue = (field) => (data && data[field]) || '';
@@ -623,6 +624,7 @@ function GroupsForm({ data, setData }) {
             onChange={handleChange('name')}
             placeholder={t('groups.form.groupNamePlaceholder')}
           />
+          <FieldValidationError errors={errors} field="name" />
         </div>
         <div>
           <label className="form-label">{t('groups.form.accessKey')}</label>
@@ -654,6 +656,7 @@ function GroupsForm({ data, setData }) {
               {showKey ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
+          <FieldValidationError errors={errors} field="access_key" />
         </div>
       </div>
     </div>

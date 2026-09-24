@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
 import MobileSearchToggle from '../components/MobileSearchToggle';
+import FieldValidationError from '../components/FieldValidationError';
 import { useNotification } from '../components/NotificationContext';
 import { getApiBase } from '../config';
 import './Admin.css';
@@ -323,7 +324,7 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
   );
 }
 
-function UsersForm({ data, setData }) {
+function UsersForm({ data, setData, errors }) {
   const { t } = useTranslation();
   const isEditing = !!(data && data.id);
   const getValue = (field) => (data && data[field]) || '';
@@ -335,14 +336,17 @@ function UsersForm({ data, setData }) {
         <div>
           <label className="form-label">{t('users.form.firstName')}</label>
           <input type="text" className="form-input" value={getValue('first_name')} onChange={handleChange('first_name')} />
+          <FieldValidationError errors={errors} field="first_name" />
         </div>
         <div>
           <label className="form-label">{t('users.form.lastName')}</label>
           <input type="text" className="form-input" value={getValue('last_name')} onChange={handleChange('last_name')} />
+          <FieldValidationError errors={errors} field="last_name" />
         </div>
         <div>
           <label className="form-label">{t('users.form.email')}</label>
           <input type="email" className="form-input" value={getValue('email')} onChange={handleChange('email')} />
+          <FieldValidationError errors={errors} field="email" />
         </div>
         <div>
           <label className="form-label">{t('users.form.role')}</label>
@@ -351,16 +355,19 @@ function UsersForm({ data, setData }) {
             <option value="manager">{t('users.roles.manager')}</option>
             <option value="admin">{t('users.roles.admin')}</option>
           </select>
+          <FieldValidationError errors={errors} field="role_type" />
         </div>
         {!isEditing && (
           <>
             <div>
               <label className="form-label">{t('users.form.passwordOptional')}</label>
               <input type="password" className="form-input" value={getValue('password')} onChange={handleChange('password')} />
+              <FieldValidationError errors={errors} field="password" />
             </div>
             <div>
               <label className="form-label">{t('users.form.confirmPasswordOptional')}</label>
               <input type="password" className="form-input" value={getValue('confirmPassword')} onChange={handleChange('confirmPassword')} />
+              <FieldValidationError errors={errors} field="confirmPassword" />
             </div>
           </>
         )}
@@ -377,6 +384,7 @@ function UsersForm({ data, setData }) {
                 onChange={handleChange('password')}
                 placeholder={t('users.form.newPasswordPlaceholder')}
               />
+              <FieldValidationError errors={errors} field="password" />
             </div>
             <div>
               <label className="form-label">{t('users.form.confirmPassword')}</label>
@@ -387,6 +395,7 @@ function UsersForm({ data, setData }) {
                 onChange={handleChange('confirmPassword')}
                 placeholder={t('users.form.confirmNewPasswordPlaceholder')}
               />
+              <FieldValidationError errors={errors} field="confirmPassword" />
             </div>
           </>
         )}
