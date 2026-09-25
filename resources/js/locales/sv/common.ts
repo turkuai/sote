@@ -278,6 +278,12 @@ const svCommon = {
       empty: 'Du är inte med i någon grupp.',
     },
   },
+  caretree: {
+    care_need: 'Vårdtillstånd',
+    goal: 'Vårdplanens mål',
+    activity: 'Planerade åtgärder',
+    review: 'Vårdbedömning',
+  },
 };
 
 export default svCommon;
