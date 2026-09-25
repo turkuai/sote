@@ -5,7 +5,6 @@ import { ServerGrid as ServerGridBase } from 'tai-grid';
 import 'tai-grid/style.css';
 import GroupRegistrationForm from '../components/GroupRegistrationForm';
 import GroupUsersModal from '../components/GroupUsersModal';
-import MobileSearchToggle from '../components/MobileSearchToggle';
 import { useNotification } from '../components/NotificationContext';
 import { getApiBase } from '../config';
 import './Admin.css';
@@ -178,39 +177,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
       {/* Nurse view: only their own groups + enroll modal */}
       {currentUser?.role_type === 'nurse' && (
         <>
-          {/* Mobile nurse view */}
-          <div className="mobile-tab-content hide-on-desktop">
-            <div className="mobile-content-section">
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                <h2 style={{ margin: 0 }}>{t('groups.noGroupsYet')}</h2>
-                <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
-                  {t('groups.autoEnroll')}
-                </button>
-              </div>
-              {myGroupCount === 0 && (
-                <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', margin: '2rem 0' }}>{t('groups.noGroupsYet')}</p>
-              )}
-              {myGroupCount !== 0 && (
-                <div style={{ height: '400px', width: '100%' }}>
-                  <ServerGrid
-                    key={refreshKey}
-                    columns={['name']}
-                    path="groups/my"
-                    allowEditing={false}
-                    allowDelete={false}
-                    pageSize={10}
-                    showAddButton={false}
-                    getApiBase={getApiBase}
-                    showNot={showNotification}
-                    labels={gridLabels}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Desktop nurse view */}
-          <div className="hide-on-mobile">
+          <div className="groups-layout">
             <div style={{ display: 'flex', gap: 0, alignItems: 'flex-start' }}>
               {/* Left: groups list */}
               <div style={{ flex: '0 0 50%', minWidth: 0, paddingRight: '1.5rem' }}>
@@ -315,70 +282,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
       {/* Admin/Manager view: all groups */}
       {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
         <>
-          {/* Mobile view */}
-          <div className="mobile-tab-content hide-on-desktop">
-            <div className="mobile-content-section">
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                <h2 style={{ margin: 0 }}>{t('tabs.groups')}</h2>
-                <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
-                  {t('groups.autoEnroll')}
-                </button>
-              </div>
-              <MobileSearchToggle value={inputValue} onChange={handleSearchChange} />
-              <div style={{ height: '500px', width: '100%' }}>
-                <ServerGrid
-                  key={refreshKey}
-                  columns={[
-                    { field: 'name', displayName: t('table.name') },
-                    { field: 'access_key', displayName: t('groups.table.accessKey') },
-                    { field: 'user_count', displayName: t('groups.table.userCount') },
-                  ]}
-                  columnRenderers={{ name: GroupNameCell, access_key: AccessKeyCell }}
-                  path="groups"
-                  allowEditing={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
-                  allowDelete={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
-                  pageSize={10}
-                  showAddButton={currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'}
-                  query={query}
-                  formComponent={GroupsForm}
-                  rowActions={[
-                    {
-                      icon: (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                          <path
-                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
-                            fill="#0891b2"
-                          />
-                        </svg>
-                      ),
-                      tooltip: t('groups.manageUsers'),
-                      onClick: handleAddUsersClick,
-                    },
-                  ]}
-                  getApiBase={getApiBase}
-                  showNot={showNotification}
-                  labels={gridLabels}
-                  transformEditPayload={(payload) => {
-                    const name = String(payload.name || '').trim();
-                    if (!name) throw new Error(t('groups.errors.nameRequired'));
-                    const access_key = String(payload.access_key || '').trim();
-                    if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
-                    return { name, access_key };
-                  }}
-                  transformAddPayload={(payload) => {
-                    const name = String(payload.name || '').trim();
-                    if (!name) throw new Error(t('groups.errors.nameRequired'));
-                    const access_key = String(payload.access_key || '').trim();
-                    if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
-                    return { name, access_key };
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Desktop view */}
-          <div className="hide-on-mobile">
+          <div className="groups-layout">
             <div style={{ display: 'flex', gap: 0, alignItems: 'flex-start' }}>
               {/* Left: groups list */}
               <div style={{ flex: '0 0 50%', minWidth: 0, paddingRight: '1.5rem' }}>

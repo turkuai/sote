@@ -564,6 +564,14 @@
   color: #9ca3af;
 }
 
+.users-tab .mobile-search-toggle {
+  display: none;
+}
+
+.groups-layout > div {
+  width: 100%;
+}
+
 /* Mobile Tab Content */
 .mobile-tab-content {
   background-color: #f3f4f6;
@@ -1353,6 +1361,32 @@
     margin-right: 0.75rem;
     margin-left: 0.75rem;
     padding: 0.75rem;
+  }
+
+  .users-tab .tab-header {
+    position: relative;
+  }
+
+  .users-tab .users-tab-search {
+    display: none;
+  }
+
+  .users-tab .mobile-search-toggle {
+    display: flex;
+  }
+
+  .groups-layout > div > div {
+    flex-direction: column;
+  }
+
+  .groups-layout > div > div > div {
+    flex: 1 1 auto !important;
+    width: 100%;
+    padding: 0 !important;
+  }
+
+  .groups-layout > div > div > div:nth-child(2) {
+    display: none;
   }
 }
 
