@@ -20,7 +20,7 @@ export default function WaitingListTab({ currentUser }) {
       onClick={() => handleApprove(data.id, data.first_name, data.last_name)}
       style={{
         padding: '8px 16px',
-        backgroundColor: '#10b981',
+        backgroundColor: '#ce1717',
         color: 'white',
         border: 'none',
         borderRadius: '4px',

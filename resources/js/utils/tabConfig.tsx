@@ -7,6 +7,7 @@ const TAB_ICON_MAP = {
   groups: Folder,
   'waiting-list': Clock,
   settings: Settings,
+  patients: Users
 };
 
 // Tab label map - base labels for tabs
@@ -16,6 +17,7 @@ const TAB_LABEL_KEY_MAP = {
   groups: 'tabs.groups',
   'waiting-list': 'tabs.waitingList',
   settings: 'tabs.settings',
+  patients: 'tabs.patients'
 };
 
 /**
@@ -35,6 +37,7 @@ export const TabConfig = {
     if (currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') {
       tabs.push('users');
       tabs.push('groups');
+      tabs.push('patients');
       tabs.push('waiting-list');
     }
 
