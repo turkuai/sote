@@ -1,14 +1,14 @@
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { CSSProperties, ReactNode, useState } from 'react';
 
-interface ItemTreeProps {
+interface TreeItemProps {
   content: ReactNode;
   children?: ReactNode;
   contentStyle?: CSSProperties;
 }
 
-export function ItemTree({ content, children, contentStyle }: ItemTreeProps) {
-  const [open, setOpen] = useState(false);
+export function TreeItem({ content, children, contentStyle }: TreeItemProps) {
+  const [open, setOpen] = useState(true);
   const hasChildren = !!children;
 
   return (
