@@ -137,7 +137,14 @@ const svCommon = {
     firstName: 'Förnamn',
     lastName: 'Efternamn',
     role: 'Roll',
-    remarks: 'anmärkningar'
+    remarks: 'Anmärkningar',
+
+    form: {
+      firstName: 'Förnamn',
+      lastName: 'Efternamn',
+      socialId: 'Personbeteckning',
+      remarks: 'Anmärkningar',
+    },
   },
 
   groups: {

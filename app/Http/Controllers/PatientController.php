@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PatientController extends Controller {
-  //Get all the patients
+  // Get all the patients
   public function index() {
     /*
       * Match the number of items displayed per page in ServerGrid.
@@ -22,12 +22,13 @@ class PatientController extends Controller {
       * paginate() automatically recognizes and uses to retrieve the correct page.
     */
     $pageSize = 10;
+
     try {
       $patients = Patient::paginate($pageSize);
 
       return ApiResponse::paginated(
         $patients,
-        "All patients have been retrieved."
+        'All patients have been retrieved.'
       );
     } catch (Exception $e) {
       return ApiResponse::error(
@@ -37,15 +38,41 @@ class PatientController extends Controller {
     }
   }
 
-  //Get specific patient via id
+  // Get specific patient via id
   public function show($id) {
     $patient = Patient::find($id);
 
-    if (!$patient) {
-      return ApiResponse::error("Patient not found");
+    if (! $patient) {
+      return ApiResponse::error('Patient not found');
     }
 
-    return ApiResponse::success($patient, "Patients Retrieved succesfully");
+    return ApiResponse::success($patient, 'Patients Retrieved succesfully');
+  }
+
+  // Update a patient
+  public function update(Request $request, $id) {
+    $patient = Patient::find($id);
+
+    if (! $patient) {
+      return ApiResponse::notFound('Patient not found');
+    }
+
+    $validator = Validator::make($request->all(), [
+      'first_name' => 'sometimes|required|string|max:255',
+      'last_name' => 'sometimes|required|string|max:255',
+      'social_id' => 'sometimes|required|string|size:11',
+      'arrival_date' => 'sometimes|nullable|date',
+      'remarks' => 'sometimes|nullable|string',
+    ]);
+
+    if ($validator->fails()) {
+      return ApiResponse::validationError($validator->errors());
+    }
+
+    $patient->update($validator->validated());
+    $patient->refresh();
+
+    return ApiResponse::success($patient, 'Patient updated successfully');
   }
 
   //Create a new patient
@@ -53,7 +80,8 @@ class PatientController extends Controller {
     $validator = Validator::make($request->all(), [
       'first_name' => 'required|string|max:255',
       'last_name' => 'required|string|max:255',
-      'social_id' => 'required|string|max:255|unique:patients,social_id'
+      'social_id' => 'required|string|max:255|unique:patients,social_id',
+      'remarks' => ''
     ]);
 
     if ($validator->fails()) {
