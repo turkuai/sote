@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CareCategory extends Model {
-
+class CareCategory extends Model
+{
   use HasFactory;
 
   public $timestamps = true;

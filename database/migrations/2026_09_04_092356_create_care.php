@@ -8,7 +8,8 @@ return new class extends Migration {
   /**
    * Run the migrations.
    */
-  public function up(): void {
+  public function up(): void
+  {
     Schema::create('care_categories', function (Blueprint $table) {
       $table->id();
       $table->foreignId('parent_category_id')
@@ -16,7 +17,8 @@ return new class extends Migration {
         ->constrained('care_categories')
         ->onDelete('restrict');
       $table->string('name', 100);
-      $table->string('description', 1000);
+      $table->string('description', 1000)
+        ->nullable();
       $table->timestamps();
     });
 
@@ -52,7 +54,8 @@ return new class extends Migration {
   /**
    * Reverse the migrations.
    */
-  public function down(): void {
+  public function down(): void
+  {
     Schema::dropIfExists('care_problem_items');
     Schema::dropIfExists('care_problem');
     Schema::dropIfExists('care_categories');
