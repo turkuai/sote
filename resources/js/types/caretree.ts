@@ -1,42 +1,19 @@
-export interface User {
-  id: number;
-  name: string;
-}
-
-export interface PatientProblem {
-  id: number;
-  category_id: number;
-  user_id: number;
-  patient_id: number;
-  description: string;
-  creation_at: string;
-}
-
 export interface PatientProblemItem {
   id: number;
   problem_id: number;
   description: string;
-  user_id: number;
+  user_name: string;
   created_at: string;
-  type: 0 | 1 | 2 | 3;
+  type: 'goal' | 'activity' | 'review';
 }
 
 export interface FinalData {
   category: string[];
-  description: {
-    id: number;
-    category_id: number;
-    user: string;
-    patient_id: number;
-    description: string;
-    creation_at: string;
-  };
-  hoitotavoite: {
-    id: number;
-    problem_id: number;
-    description: string;
-    user: string;
-    created_at: string;
-    type: number;
-  }[];
+  id: number;
+  category_id: number;
+  user: string;
+  patient_id: number;
+  description: string;
+  creation_at: string;
+  planItems: PatientProblemItem[];
 }
