@@ -114,9 +114,12 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
   });
 
   const handleAddUsers = async () => {
-    if (selectedUsersToAdd.length === 0) return;
+    if (selectedUsersToAdd.length === 0) {
+      return;
+    }
 
     setIsAdding(true);
+
     try {
       // Add each user to the group via pivot table
       for (const userId of selectedUsersToAdd) {
@@ -130,7 +133,11 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
       // Refresh the group users
       const response = await fetch(`/api/groups/${groupId}`, {
         credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+        },
       });
+
       if (response.ok) {
         const data = await response.json();
         setUsers(data.data.users || []);
@@ -138,9 +145,8 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
 
       setSelectedUsersToAdd([]);
       setShowAddUsers(false);
+
       if (onUserAdded) onUserAdded();
-    } catch (error) {
-      console.error('Error adding users:', error);
     } finally {
       setIsAdding(false);
     }

@@ -189,11 +189,11 @@ php artisan migrate:fresh --seed
 
 ## Test users
 
-| Email             | Password    | Role    |
-| ----------------- | ----------- | ------- |
-| admin@example.com | admin123    | Admin   |
-| jane@example.com  | password123 | Manager |
-| bob@example.com   | password123 | Nurse   |
+| Email             | Password            | Role    |
+| ----------------- | ------------------- | ------- |
+| admin@example.com | admin-limes-194     | Admin   |
+| jane@example.com  | jane-pineapples-194 | Manager |
+| bob@example.com   | bob-persimons-194   | Nurse   |
 
 ## API Endpoints
 
@@ -224,6 +224,7 @@ DELETE /api/groups/{id}        → Delete group
 ```
 
 ### **Patients**
+
 ```
 GET    /api/patients           → List all patients
 GET    /api/patients/{id}      → Get specific patient
@@ -300,7 +301,7 @@ resources/
         ├── validation.ts
         └── components.tsx
 routes/
-└── web.php                   ← All API routes
+└── api.php                   ← All API routes
 ```
 
 ---
@@ -449,7 +450,7 @@ It will recreate the database without sessions if you remove the migration.
 
 ### **Q: How do I protect routes?**
 
-Add middleware to `routes/web.php`:
+Add middleware to `routes/api.php`:
 
 ```php
 Route::delete('/api/users/{id}', [UserController::class, 'destroy'])
