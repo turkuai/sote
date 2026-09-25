@@ -77,4 +77,23 @@ class PatientController extends Controller {
 
     return ApiResponse::success($groups, "Patient groups retrieved successfully");
   }
+
+  /**
+   * Remove groups from patients 
+   */
+  public function removeGroupsFromPatients(Request $request) {
+    $validated = $request->validate([
+      'patient_id' => 'required|array',
+      'group_id' => 'required|array',
+    ]);
+
+    $patient = \App\Models\Patient::find($validated['patient_id']);
+    if (!$patient) {
+      return ApiResponse::notFound('Patient not found');
+    }
+
+    $patient->groups()->detach($validated['group_id']);
+
+    return ApiResponse::success(null, 'Group removed from patient successfully');
+  }
 }
