@@ -1,5 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useGridLabels } from '../hooks/useCurrentLanguage';
+import { useDialogLabels } from '../hooks/useCurrentLanguage';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
 import { useNotification } from '../components/NotificationContext';
@@ -112,20 +114,8 @@ export default function WaitingListTab({ currentUser }) {
             cancelLabel: t('grid.confirmDelete.cancel'),
             editTitle: t('grid.dialog.edit'),
             addTitle: t('grid.dialog.add'),
-            grid: {
-              actionsHeader: t('table.actions'),
-              edit: t('table.edit'),
-              delete: t('table.delete'),
-              previous: t('grid.pagination.previous'),
-              next: t('grid.pagination.next'),
-              page: t('grid.pagination.page'),
-              of: t('grid.pagination.of'),
-            },
-            dialog: {
-              save: t('grid.dialog.save'),
-              cancel: t('grid.dialog.cancel'),
-              close: t('grid.dialog.close'),
-            },
+            grid: useGridLabels(),
+            dialog: useDialogLabels()
           }}
         />
       </div>
