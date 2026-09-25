@@ -82,7 +82,6 @@ class PatientController extends Controller {
       'last_name' => 'required|string|max:255',
       'social_id' => 'required|string|max:255|unique:patients,social_id',
       'remarks' => ''
-
     ]);
 
     if ($validator->fails()) {
