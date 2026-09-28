@@ -79,8 +79,8 @@ class PatientController extends Controller {
   }
 
   // Assign a group to a patient
-  public function addGroupToPatient(Request $request, $id) {
-    $patient = Patient::find($id);
+  public function addGroupToPatient(Request $request, $patientId, $groupId) {
+    $patient = Patient::find($patientId);
 
     if (!$patient) {
       return ApiResponse::error("Patient not found", 404);
