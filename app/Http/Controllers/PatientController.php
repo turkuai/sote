@@ -9,11 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class PatientController extends Controller
-{
+class PatientController extends Controller {
   //Get all the patients
-  public function index()
-  {
+  public function index() {
     /*
       * Match the number of items displayed per page in ServerGrid.
       * This value must stay synchronized with ServerGrid's pageSize. Otherwise,
@@ -40,8 +38,7 @@ class PatientController extends Controller
   }
 
   //Get specific patient via id
-  public function show($id)
-  {
+  public function show($id) {
     $patient = Patient::with('userGroups:id,name')->find($id);
 
     if (!$patient) {
@@ -52,8 +49,7 @@ class PatientController extends Controller
   }
 
   //Create a new patient
-  public function store(Request $request)
-  {
+  public function store(Request $request) {
     $validator = Validator::make($request->all(), [
       'first_name' => 'required|string|max:255',
       'last_name' => 'required|string|max:255',
@@ -70,8 +66,7 @@ class PatientController extends Controller
   }
 
   // GET groups assigned to a patient
-  public function getGroups(Request $request, $id)
-  {
+  public function getGroups(Request $request, $id) {
     $patient = Patient::find($id);
 
     if (!$patient) {
