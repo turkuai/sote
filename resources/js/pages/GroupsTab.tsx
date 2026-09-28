@@ -133,12 +133,12 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
 
   const handleGroupRowClick = (group: Record<string, unknown>) => {
     setPanelGroup(group);
-    setGroupPath(`groups/${group.id}/users`);
+    setGroupPath(`groups/${group.id}/registered-users`);
     setPanelSearch('');
     lastPanelClickedIndex.current = null;
 
     setPanelLoading(true);
-    fetch(`${getApiBase()}/api/groups/${group.id}`, { credentials: 'include' })
+    fetch(`${getApiBase()}/api/groups/${group.id}/registered-users`, { credentials: 'include' })
       .then((r) => r.json())
       .then((res) => {
         const users = res?.data?.users ?? res?.users ?? [];
