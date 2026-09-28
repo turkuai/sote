@@ -8,7 +8,7 @@ import './GroupUsersModal.css';
 export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdded }) {
   const { t } = useTranslation();
   const [users, setUsers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
   const [showAddUsers, setShowAddUsers] = useState(true);
@@ -24,29 +24,6 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
   }, [users]);
 
   // Fetch group with users
-  useEffect(() => {
-    const fetchGroupUsers = async () => {
-      try {
-        const response = await fetch(`/api/groups/${groupId}/unregistered-users`, {
-          credentials: 'include',
-        });
-        if (response.ok) {
-          const data = await response.json();
-          console.log('=== Group Data ===');
-          console.log('Group ID:', groupId);
-          console.log('Group Name:', groupName);
-          console.log('API Response:', data);
-          console.log('Group users:', data.data.users);
-        }
-      } catch (error) {
-        console.error('Error fetching group users:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchGroupUsers();
-  }, [groupId, groupName]);
 
   // loadPage function utilized by DataSetView
   const loadPage = useCallback(
