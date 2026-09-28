@@ -1,4 +1,4 @@
-import { FinalData } from '@/types/caretree';
+import { CareProblem } from '@/types/caretree';
 import { Dot } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import Tree from './Tree';
@@ -6,7 +6,7 @@ import { TreeItem } from './TreeItem';
 import { buildCategoryTree } from './buildCategoryTree';
 
 interface CareTreeProps {
-  data: FinalData;
+  data: CareProblem;
 }
 
 export function CareTree({ data }: CareTreeProps) {

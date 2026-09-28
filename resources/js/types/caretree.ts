@@ -7,7 +7,7 @@ export interface PatientProblemItem {
   type: 'goal' | 'activity' | 'review';
 }
 
-export interface FinalData {
+export interface CareProblem {
   category: string[];
   id: number;
   category_id: number;
