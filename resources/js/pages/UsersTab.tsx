@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useGridLabels } from '../hooks/useCurrentLanguage';
-import { useDialogLabels } from '../hooks/useCurrentLanguage';
+import { useServerGridLabels } from '../hooks/useCurrentLanguage';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
 import MobileSearchToggle from '../components/MobileSearchToggle';
@@ -106,22 +105,7 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
               formComponent={UsersForm}
               getApiBase={getApiBase}
               showNot={showNotification}
-              labels={{
-                loading: t('grid.loading'),
-                add: t('grid.add'),
-                updateFailed: t('grid.errors.updateFailed'),
-                itemUpdated: t('grid.success.itemUpdated'),
-                listViewRequiresProps: t('grid.errors.listViewRequiresProps'),
-                confirmDeleteTitle: t('grid.confirmDelete.title'),
-                confirmDeleteMessage: t('grid.confirmDelete.message'),
-                confirmDeleteLabel: t('grid.confirmDelete.delete'),
-                deletingLabel: t('grid.confirmDelete.deleting'),
-                cancelLabel: t('grid.confirmDelete.cancel'),
-                editTitle: t('grid.dialog.edit'),
-                addTitle: t('grid.dialog.add'),
-                grid: useGridLabels(),
-                dialog: useDialogLabels()
-              }}
+              labels={useServerGridLabels()}
               transformEditPayload={(payload) => {
                 const password = String(payload.password || '').trim();
                 const confirmPassword = String(payload.confirmPassword || '').trim();
@@ -221,22 +205,7 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
           formComponent={UsersForm}
           getApiBase={getApiBase}
           showNot={showNotification}
-          labels={{
-            loading: t('grid.loading'),
-            add: t('grid.add'),
-            updateFailed: t('grid.errors.updateFailed'),
-            itemUpdated: t('grid.success.itemUpdated'),
-            listViewRequiresProps: t('grid.errors.listViewRequiresProps'),
-            confirmDeleteTitle: t('grid.confirmDelete.title'),
-            confirmDeleteMessage: t('grid.confirmDelete.message'),
-            confirmDeleteLabel: t('grid.confirmDelete.delete'),
-            deletingLabel: t('grid.confirmDelete.deleting'),
-            cancelLabel: t('grid.confirmDelete.cancel'),
-            editTitle: t('grid.dialog.edit'),
-            addTitle: t('grid.dialog.add'),
-            grid: useGridLabels(),
-            dialog: useDialogLabels()
-          }}
+          labels={useServerGridLabels()}
           transformEditPayload={(payload) => {
             const password = String(payload.password || '').trim();
             const confirmPassword = String(payload.confirmPassword || '').trim();
