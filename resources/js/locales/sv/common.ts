@@ -49,6 +49,7 @@ const svCommon = {
     groups: 'Grupper',
     waitingList: 'Väntelista',
     settings: 'Inställningar',
+    patients: 'Patienter'
   },
 
   welcome: {
@@ -136,6 +137,14 @@ const svCommon = {
     firstName: 'Förnamn',
     lastName: 'Efternamn',
     role: 'Roll',
+    remarks: 'Anmärkningar',
+
+    form: {
+      firstName: 'Förnamn',
+      lastName: 'Efternamn',
+      socialId: 'Personbeteckning',
+      remarks: 'Anmärkningar',
+    },
   },
 
   groups: {
@@ -277,6 +286,12 @@ const svCommon = {
       description: 'Grupper du tillhör.',
       empty: 'Du är inte med i någon grupp.',
     },
+  },
+  caretree: {
+    care_need: 'Vårdtillstånd',
+    goal: 'Vårdplanens mål',
+    activity: 'Planerade åtgärder',
+    review: 'Vårdbedömning',
   },
 };
 

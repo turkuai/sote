@@ -1,74 +1,63 @@
-import { FinalData } from '@/types/caretree';
+import { CareProblem } from '@/types/caretree';
 import { Dot } from 'lucide-react';
-import { ItemTree } from './ItemTree';
+import { useTranslation } from 'react-i18next';
 import Tree from './Tree';
+import { TreeItem } from './TreeItem';
+import { buildCategoryTree } from './buildCategoryTree';
 
 interface CareTreeProps {
-  data: FinalData;
+  data: CareProblem;
 }
 
 export function CareTree({ data }: CareTreeProps) {
+  const { t } = useTranslation();
+
   const labels = data.category.map((line) => line);
+
+  const descriptionNode = (
+    <TreeItem
+      content={
+        <div>
+          <div style={{ fontSize: '14px', color: '#444' }}>
+            {data.description}
+            <span style={{ fontSize: '12px', color: '#777', marginLeft: '8px' }}>
+              {data.creation_at} | {data.user}
+            </span>
+          </div>
+        </div>
+      }
+      contentStyle={{ borderBottom: '1px solid #e5e5e5', background: '#fff', padding: '6px' }}
+    />
+  );
+
+  const categoryTree = buildCategoryTree(labels, descriptionNode);
 
   return (
     <Tree>
-      {/* Hoidontarve hierarchy */}
-      <ItemTree content={labels[0]} contentStyle={{ background: '#fafafa', borderBottom: '1px solid #e5e5e5' }}>
-        <ItemTree content={labels[1]} contentStyle={{ background: '#fafafa', borderBottom: '1px solid #e5e5e5' }}>
-          <ItemTree content={labels[2]} contentStyle={{ background: '#fafafa', borderBottom: '1px solid #e5e5e5' }}>
-            <ItemTree
-              content={
-                <div>
-                  <div style={{ fontSize: '14px', color: '#444' }}>
-                    {data.description.description}
-                    <span style={{ fontSize: '12px', color: '#777', marginLeft: '8px' }}>
-                      {data.description.creation_at} | {data.description.user}
-                    </span>
-                  </div>
-                </div>
-              }
-              contentStyle={{ borderBottom: '1px solid #e5e5e5', background: '#fff', padding: '6px' }}
-            />
-          </ItemTree>
-        </ItemTree>
-      </ItemTree>
+      {categoryTree}
 
-      <ItemTree
-        content="Hoidon arviointi"
+      {/* GOALS */}
+      <TreeItem
+        content={t('caretree.goal')}
         contentStyle={{
           fontWeight: 700,
           fontSize: '18px',
           borderBottom: '1px solid #e5e5e5',
         }}
       >
-        {data.hoitotavoite
-          .filter((item) => item.type === 0)
+        {data.planItems
+          .filter((item) => item.type === 'goal')
           .map((item) => (
-            <ItemTree
+            <TreeItem
               key={item.id}
               content={
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                  }}
-                >
-                  {/* Bullet icon */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Dot size={18} />
-
-                  {/* Text block */}
                   <div>
                     <div style={{ fontSize: '14px', color: '#444' }}>
                       {item.description}
-                      <span
-                        style={{
-                          fontSize: '12px',
-                          color: '#777',
-                          marginLeft: '8px',
-                        }}
-                      >
-                        {item.created_at} | {item.user}
+                      <span style={{ fontSize: '12px', color: '#777', marginLeft: '8px' }}>
+                        {item.created_at} | {item.user_name}
                       </span>
                     </div>
                   </div>
@@ -81,10 +70,11 @@ export function CareTree({ data }: CareTreeProps) {
               }}
             />
           ))}
-      </ItemTree>
+      </TreeItem>
 
-      <ItemTree
-        content="Hoidon arviointi"
+      {/* ACTIVITIES */}
+      <TreeItem
+        content={t('caretree.activity')}
         contentStyle={{
           fontWeight: 700,
           fontSize: '18px',
@@ -92,35 +82,19 @@ export function CareTree({ data }: CareTreeProps) {
           borderBottom: '1px solid #e5e5e5',
         }}
       >
-        {data.hoitotavoite
-          .filter((item) => item.type === 1)
+        {data.planItems
+          .filter((item) => item.type === 'activity')
           .map((item) => (
-            <ItemTree
+            <TreeItem
               key={item.id}
               content={
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    marginLeft: '40px',
-                  }}
-                >
-                  {/* Bullet icon */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '40px' }}>
                   <Dot size={18} />
-
-                  {/* Text block */}
                   <div>
                     <div style={{ fontSize: '14px', color: '#444' }}>
                       {item.description}
-                      <span
-                        style={{
-                          fontSize: '12px',
-                          color: '#777',
-                          marginLeft: '8px',
-                        }}
-                      >
-                        {item.created_at} | {item.user}
+                      <span style={{ fontSize: '12px', color: '#777', marginLeft: '8px' }}>
+                        {item.created_at} | {item.user_name}
                       </span>
                     </div>
                   </div>
@@ -133,10 +107,11 @@ export function CareTree({ data }: CareTreeProps) {
               }}
             />
           ))}
-      </ItemTree>
+      </TreeItem>
 
-      <ItemTree
-        content="Hoidon arviointi"
+      {/* REVIEW */}
+      <TreeItem
+        content={t('caretree.review')}
         contentStyle={{
           fontWeight: 700,
           fontSize: '18px',
@@ -144,35 +119,19 @@ export function CareTree({ data }: CareTreeProps) {
           borderBottom: '1px solid #e5e5e5',
         }}
       >
-        {data.hoitotavoite
-          .filter((item) => item.type === 2)
+        {data.planItems
+          .filter((item) => item.type === 'review')
           .map((item) => (
-            <ItemTree
+            <TreeItem
               key={item.id}
               content={
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    marginLeft: '40px',
-                  }}
-                >
-                  {/* Bullet icon */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '40px' }}>
                   <Dot size={18} />
-
-                  {/* Text block */}
                   <div>
                     <div style={{ fontSize: '14px', color: '#444' }}>
                       {item.description}
-                      <span
-                        style={{
-                          fontSize: '12px',
-                          color: '#777',
-                          marginLeft: '8px',
-                        }}
-                      >
-                        {item.created_at} | {item.user}
+                      <span style={{ fontSize: '12px', color: '#777', marginLeft: '8px' }}>
+                        {item.created_at} | {item.user_name}
                       </span>
                     </div>
                   </div>
@@ -185,7 +144,7 @@ export function CareTree({ data }: CareTreeProps) {
               }}
             />
           ))}
-      </ItemTree>
+      </TreeItem>
     </Tree>
   );
 }
