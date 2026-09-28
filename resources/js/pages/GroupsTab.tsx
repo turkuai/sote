@@ -209,6 +209,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                     getApiBase={getApiBase}
                     showNot={showNotification}
                     onRowClick={handleGroupRowClick}
+                    labels={gridLabels}
                   />
                 )}
               </div>
@@ -276,6 +277,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         showAddButton={false}
                         getApiBase={getApiBase}
                         showNot={showNotification}
+                        labels={gridLabels}
                       />
                     )}
                   </>
@@ -490,6 +492,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         showAddButton={false}
                         getApiBase={getApiBase}
                         showNot={showNotification}
+                        labels={gridLabels}
                       />
                     )}
                   </>
