@@ -87,14 +87,14 @@ class PatientController extends Controller {
     }
 
     $validator = Validator::make($request->all(), [
-      'group_id' => 'required|exists:groups,id',
+      'groupId' => 'required|exists:groups,id',
     ]);
 
     if ($validator->fails()) {
       return ApiResponse::validationError($validator->errors());
     }
 
-    $groupId = $request->input('group_id');
+    $groupId = $request->input('groupId');
 
     // Check if the group is already assigned to the patient
     if ($patient->patient_groups()->where('group_id', $groupId)->exists()) {
