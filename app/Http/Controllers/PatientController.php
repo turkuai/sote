@@ -76,7 +76,6 @@ class PatientController extends Controller {
   }
 
   //Create a new patient
-
   public function store(Request $request) {
     $validator = Validator::make($request->all(), [
       'first_name' => 'required|string|max:255',
@@ -93,7 +92,6 @@ class PatientController extends Controller {
 
     return ApiResponse::success($patient, 'Patient created successfully', 201);
   }
-
 
   // GET groups assigned to a patient
   public function getGroups(Request $request, $id) {
