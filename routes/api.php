@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\LoginController;
 use App\Libraries\ApiResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 // API Routes - must be BEFORE fallback to avoid Inertia catching them
 Route::prefix('api')->group(function () {
@@ -54,7 +55,6 @@ Route::prefix('api')->group(function () {
     Route::delete('/groups/{id}', [GroupController::class, 'destroy'])->middleware('checkRole:admin,manager');
     Route::post('/groups/{id}/users/{userId}', [GroupController::class, 'addUserToGroup'])->middleware('checkRole:admin,manager');
     Route::delete('/groups/{id}/users/{userId}', [GroupController::class, 'removeUserFromGroup'])->middleware('checkRole:admin,manager');
-    Route::delete('/patients/{patientId}/groups/{groupId}', [GroupController::class, 'removePatientFromGroup'])->middleware('checkRole:admin,manager');
 
     // Permission Examples
     Route::get('/permissions', [\App\Http\Controllers\PermissionExampleController::class, 'getPermissions']);
@@ -67,6 +67,7 @@ Route::prefix('api')->group(function () {
     Route::post('/patients', [PatientController::class, 'store'])->middleware('checkRole:admin,manager');
     Route::get('/patients/{id}', [PatientController::class, 'show']);
     Route::get('/patients/{id}/groups', [PatientController::class, 'getGroups'])->middleware('checkRole:admin,manager');
+    Route::delete('/patients/{patientId}/groups/{groupId}', [PatientController::class, 'removeGroupsFromPatients'])->middleware('checkRole:admin,manager');
   });
 });
 
