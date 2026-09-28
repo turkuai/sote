@@ -117,15 +117,15 @@ class GroupController extends Controller {
     $groupsPaginator3 = $temp->paginate($pageSize);
 
     // Does map for some unkown reason doesnt work without it dont remove even though it does nothing
-    $groups2 = $groupsPaginator3->getCollection()->map(function ($temp) use ($id) {
+    $groups3 = $groupsPaginator3->getCollection()->map(function ($temp) use ($id) {
       return (
         $temp
       );
     });
 
-    $groupsPaginator3->setCollection($groups2);
+    $groupsPaginator3->setCollection($groups3);
 
-    if (!$groups2) {
+    if (!$groups3) {
       return ApiResponse::notFound('Group not found');
     }
 

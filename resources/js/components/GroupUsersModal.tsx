@@ -56,7 +56,7 @@ export default function GroupUsersModal({ groupId, groupName, onClose, onUserAdd
         const searchParam = searchQuery.trim() ? `&search=${encodeURIComponent(searchQuery.trim())}` : '';
 
         // The search parameter is passed to the backend API here
-        const response = await fetch(`${getApiBase()}/api/users?page=${page}${searchParam}`, {
+        const response = await fetch(`${getApiBase()}/api/groups/${groupId}/unregistered-users?page=${page}${searchParam}`, {
           credentials: 'include',
         });
 
