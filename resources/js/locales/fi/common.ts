@@ -136,7 +136,14 @@ const fiCommon = {
     firstName: 'Etunimi',
     lastName: 'Sukunimi',
     role: 'Rooli',
-    remarks: 'Huomautukset'
+    remarks: 'Huomautukset',
+
+    form: {
+      firstName: 'Etunimi',
+      lastName: 'Sukunimi',
+      socialId: 'Henkilötunnus',
+      remarks: 'Huomautukset',
+    },
   },
 
   groups: {

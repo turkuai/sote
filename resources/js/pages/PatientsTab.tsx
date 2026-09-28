@@ -1,3 +1,4 @@
+import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ServerGrid } from 'tai-grid';
@@ -71,37 +72,41 @@ export default function PatientsTab({ currentUser, query }) {
         allowDelete={currentUser?.role_type === 'admin'}
         pageSize={10}
         query={query}
+        formComponent={PatientsForm}
         showAddButton={true}
         showNot={showNotification}
         getApiBase={getApiBase}
-        onRowClick={handlePatientRowClick}
+        labels={useServerGridLabels()}
       />
-
-      <section style={{ marginTop: '1.5rem', borderTop: '1px solid #e5e7eb', paddingTop: '1.25rem' }} aria-live="polite">
-        <h2 style={{ marginTop: 0 }}>Groups assigned</h2>
-        {!selectedPatient && <p style={{ color: '#6b7280', fontStyle: 'italic' }}>Select a patient to view assigned groups.</p>}
-        {selectedPatient && (
-          <>
-            <p style={{ color: '#374151', fontWeight: 600 }}>
-              {selectedPatient.first_name} {selectedPatient.last_name}
-            </p>
-            {isLoadingGroups && <p style={{ color: '#6b7280' }}>Loading groups...</p>}
-            {!isLoadingGroups && groupsError && <p style={{ color: '#b91c1c' }}>Unable to load assigned groups.</p>}
-            {!isLoadingGroups && !groupsError && assignedGroups.length === 0 && (
-              <p style={{ color: '#6b7280', fontStyle: 'italic' }}>No groups assigned.</p>
-            )}
-            {!isLoadingGroups && !groupsError && assignedGroups.length > 0 && (
-              <ul style={{ margin: 0, paddingLeft: '1.25rem' }}>
-                {assignedGroups.map((group) => (
-                  <li key={group.id} style={{ marginBottom: '0.5rem' }}>
-                    {group.name}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </>
-        )}
-      </section>
     </>
+  );
+}
+
+function PatientsForm({ data, setData }) {
+  const { t } = useTranslation();
+  const getValue = (field) => (data && data[field]) || '';
+  const handleChange = (field) => (e) => setData((prev) => ({ ...prev, [field]: e.target.value }));
+
+  return (
+    <div className="add-user-form">
+      <div className="add-user-form-grid">
+        <div>
+          <label className="form-label">{t('table.form.firstName')}</label>
+          <input type="text" className="form-input" value={getValue('first_name')} onChange={handleChange('first_name')} />
+        </div>
+        <div>
+          <label className="form-label">{t('table.form.lastName')}</label>
+          <input type="text" className="form-input" value={getValue('last_name')} onChange={handleChange('last_name')} />
+        </div>
+        <div>
+          <label className="form-label">{t('table.form.socialId')}</label>
+          <input type="text" className="form-input" value={getValue('social_id')} onChange={handleChange('social_id')} />
+        </div>
+        <div>
+          <label className="form-label">{t('table.form.remarks')}</label>
+          <input type="text" className="form-input" value={getValue('remarks')} onChange={handleChange('remarks')} />
+        </div>
+      </div>
+    </div>
   );
 }

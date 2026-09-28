@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Libraries\ApiResponse;
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class GroupController extends Controller {
+
   /**
    * Get all groups with their users
    */
@@ -56,14 +58,78 @@ class GroupController extends Controller {
   /**
    * Get a specific group with its users
    */
-  public function show($id) {
-    $group = Group::with('users')->find($id);
+  public function getRegisteredUsers(Request $request, $id) {
+    $group = User::whereHas('groups', function ($query) use ($id) {
+      $query->where('groups.id', $id);
+    });
 
-    if (!$group) {
+    // Search by first_name, last_name, full name, or email
+    if ($request->has('search') && $request->search) {
+      $search = strtolower($request->search);
+      $group->where(function ($query) use ($search) {
+        $query->whereRaw('LOWER(first_name) LIKE ?', ["%{$search}%"])
+          ->orWhereRaw('LOWER(last_name) LIKE ?', ["%{$search}%"])
+          ->orWhereRaw('LOWER(email) LIKE ?', ["%{$search}%"])
+          ->orWhereRaw('LOWER(CONCAT(first_name, " ", last_name)) LIKE ?', ["%{$search}%"]);
+      });
+    }
+
+    $temp = $group;
+
+    $pageSize = 10;
+    $groupsPaginator2 = $temp->paginate($pageSize);
+
+    // Does map for some unkown reason doesnt work without it dont remove even though it does nothing
+    $groups2 = $groupsPaginator2->getCollection()->map(function ($temp) use ($id) {
+      return (
+        $temp
+      );
+    });
+
+    $groupsPaginator2->setCollection($groups2);
+
+    if (!$groups2) {
       return ApiResponse::notFound('Group not found');
     }
 
-    return ApiResponse::success($group, 'Group retrieved successfully');
+    return ApiResponse::paginated($groupsPaginator2, 'Group retrieved successfully');
+  }
+
+  public function getUnregisteredUsers(Request $request, $id) {
+    $group = User::whereDoesntHave('groups', function ($query) use ($id) {
+      $query->where('groups.id', $id);
+    });
+
+    // Search by first_name, last_name, full name, or email
+    if ($request->has('search') && $request->search) {
+      $search = strtolower($request->search);
+      $group->where(function ($query) use ($search) {
+        $query->whereRaw('LOWER(first_name) LIKE ?', ["%{$search}%"])
+          ->orWhereRaw('LOWER(last_name) LIKE ?', ["%{$search}%"])
+          ->orWhereRaw('LOWER(email) LIKE ?', ["%{$search}%"])
+          ->orWhereRaw('LOWER(CONCAT(first_name, " ", last_name)) LIKE ?', ["%{$search}%"]);
+      });
+    }
+
+    $temp = $group;
+
+    $pageSize = 10;
+    $groupsPaginator3 = $temp->paginate($pageSize);
+
+    // Does map for some unkown reason doesnt work without it dont remove even though it does nothing
+    $groups3 = $groupsPaginator3->getCollection()->map(function ($temp) use ($id) {
+      return (
+        $temp
+      );
+    });
+
+    $groupsPaginator3->setCollection($groups3);
+
+    if (!$groups3) {
+      return ApiResponse::notFound('Group not found');
+    }
+
+    return ApiResponse::paginated($groupsPaginator3, 'Group retrieved successfully');
   }
 
   /**

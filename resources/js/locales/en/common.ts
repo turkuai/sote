@@ -137,7 +137,14 @@ const enCommon = {
     firstName: 'First Name',
     lastName: 'Last Name',
     role: 'Role',
-    remarks: 'Remarks'
+    remarks: 'Remarks',
+
+    form: {
+      firstName: 'First name',
+      lastName: 'Last name',
+      socialId: 'Social id',
+      remarks: 'Remarks',
+    },
   },
 
   groups: {
