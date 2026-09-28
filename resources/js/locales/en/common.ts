@@ -1,13 +1,13 @@
 const enCommon = {
-    common: {
-        language: 'Language',
-        english: 'English',
-        finnish: 'Finnish',
-        swedish: 'Swedish',
-        loading: 'Loading...',
-        navigation: 'Navigation',
-        close: 'Close',
-    },
+  common: {
+    language: 'Language',
+    english: 'English',
+    finnish: 'Finnish',
+    swedish: 'Swedish',
+    loading: 'Loading...',
+    navigation: 'Navigation',
+    close: 'Close',
+  },
 
   nav: {
     dashboard: 'Dashboard',
@@ -286,6 +286,13 @@ const enCommon = {
       description: 'Groups you are currently registered in.',
       empty: 'You are not registered in any group.',
     },
+  },
+
+  caretree: {
+    care_need: 'Care Need',
+    goal: 'Care Goal',
+    activity: 'Planned Activities',
+    review: 'Care Review',
   },
 };
 

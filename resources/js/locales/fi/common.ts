@@ -286,6 +286,12 @@ const fiCommon = {
       empty: 'Et ole rekisteröitynyt mihinkään ryhmään.',
     },
   },
+  caretree: {
+    care_need: 'Hoidontarve',
+    goal: 'Hoidon tavoite',
+    activity: 'Suunnitellut toiminnot',
+    review: 'Hoidon arviointi',
+  },
 };
 
 export default fiCommon;
