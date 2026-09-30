@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from './components/AuthContext';
 import { NotificationProvider } from './components/NotificationContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import './i18n';
+import ProtectedLayout from './layouts/ProtectedLayout';
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
 import PatientReportPage from './pages/PatientReportPage';
@@ -13,7 +14,6 @@ import PatientsPage from './pages/PatientsPage';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail';
 import WaitingApproval from './pages/WaitingApproval';
-import ProtectedLayout from './layouts/ProtectedLayout';
 
 function App() {
   const { isAuthenticated, loading, currentUser } = useAuth();

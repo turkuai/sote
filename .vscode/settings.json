@@ -13,6 +13,5 @@
   },
   "[xml]": {
     "editor.defaultFormatter": "redhat.vscode-xml"
-  },
-  "intelephense.format.braces": "k&r"
+  }
 }

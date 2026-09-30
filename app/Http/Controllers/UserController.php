@@ -10,13 +10,11 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-class UserController extends Controller
-{
+class UserController extends Controller {
   /**
    * Get all users with their groups
    */
-  public function index(Request $request)
-  {
+  public function index(Request $request) {
     try {
       $query = User::with('groups');
 
@@ -62,8 +60,7 @@ class UserController extends Controller
   /**
    * Get a specific user with their groups
    */
-  public function show($id)
-  {
+  public function show($id) {
     $user = User::with('groups')->find($id);
 
     if (!$user) {
@@ -76,8 +73,7 @@ class UserController extends Controller
   /**
    * Create a new user
    */
-  public function store(Request $request)
-  {
+  public function store(Request $request) {
     $validator = Validator::make($request->all(), [
       'first_name' => 'required|string|max:255',
       'last_name' => 'required|string|max:255',
@@ -112,8 +108,7 @@ class UserController extends Controller
   /**
    * Update a user
    */
-  public function update(Request $request, $id)
-  {
+  public function update(Request $request, $id) {
     $user = User::find($id);
 
     if (!$user) {
@@ -165,8 +160,7 @@ class UserController extends Controller
   /**
    * Delete a user
    */
-  public function destroy($id)
-  {
+  public function destroy($id) {
     $user = User::find($id);
 
     if (!$user) {
@@ -185,8 +179,7 @@ class UserController extends Controller
   /**
    * Get all available roles
    */
-  public function getRoles()
-  {
+  public function getRoles() {
     $roles = Role::all();
     return ApiResponse::success($roles, 'Available roles retrieved successfully');
   }
