@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
-import MobileSearchToggle from '../components/MobileSearchToggle';
 import { useNotification } from '../components/NotificationContext';
 import { getApiBase } from '../config';
 import './Admin.css';
@@ -61,39 +60,6 @@ export default function PatientsTab({ currentUser, query, onQueryChange }) {
   return (
     <div className="admin-content-area">
       <div className="admin-content-card">
-        {/* Mobile view */}
-        <div className="mobile-tab-content hide-on-desktop">
-          <div className="mobile-content-section">
-            <h2>{t('tabs.patients')}</h2>
-            <MobileSearchToggle value={inputValue} onChange={handleSearchChange} />
-            <div style={{ height: '500px', width: '100%' }}>
-              <ServerGrid
-                key={refreshKey}
-                columns={patientColumns}
-                columnRenderers={{
-                  name: NameRenderer,
-                  arrival_date: ArrivalDateRenderer,
-                }}
-                path="patients"
-                allowEditing={false}
-                allowDelete={false}
-                pageSize={10}
-                showAddButton={false}
-                rowActions={[
-                  {
-                    icon: <ChevronRight size={20} className="w-5 h-5 block text-slate-800" />,
-                    tooltip: t('patients.openOverlay'),
-                    onClick: openPatientReport,
-                  },
-                ]}
-                query={query}
-                getApiBase={getApiBase}
-                showNot={showNotification}
-              />
-            </div>
-          </div>
-        </div>
-
         {/* Desktop view */}
         <div className="hide-on-mobile">
           <div className="tab-header">

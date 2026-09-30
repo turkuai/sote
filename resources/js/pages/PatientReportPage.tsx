@@ -1,3 +1,5 @@
+import { CareTreeTest } from '@/components/Treecomponents/CareTreeTest';
+
 /**
  * Patient report page.
  * Route: /patients/:patientId (see resources/js/app.tsx).
@@ -6,7 +8,9 @@
 export default function PatientReportPage() {
   return (
     <div className="admin-content-area">
-      <div className="admin-content-card"></div>
+      <div className="admin-content-card">
+        <CareTreeTest />
+      </div>
     </div>
   );
 }
