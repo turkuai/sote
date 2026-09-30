@@ -11,13 +11,13 @@ use App\Libraries\Role;
 use App\Models\CareProblemItems;
 use Illuminate\Support\Facades\Hash;
 
-class DatabaseSeeder extends Seeder
-{
+class DatabaseSeeder extends Seeder {
+  
   /**
    * Seed the application's database.
    */
-  public function run(): void
-  {
+  public function run(): void {
+
     // Create admin user with full permissions
     $admin = User::create([
       'name' => 'Admin User',
@@ -88,84 +88,85 @@ class DatabaseSeeder extends Seeder
     $categories = [
       [
         'name' => "Aineenvaihdunta",
-        'description' => "aineenvaihduntaan ja immunologiseen järjestelmään liittyvät osatekijät matalalle ja korkealle verensokerille",
+        'description' => "Aineenvaihduntaan ja immunologiseen järjestelmään liittyvät osatekijät matalalle ja korkealle verensokerille",
         'subItems' => ["Verensokerin muutos"],
       ],
 
       [
         'name' => "Aisti- ja neurologiset toiminnot",
-        'description' => "aisti- ja neurologisiin toimintoihin liittyvät osatekijät potilaan kuulo-, näkö-, tunto-, haju- ja maku- sekä tasapainoaisteissa tapahtuvia muutoksia ja häiriöitä sekä aistien toimintaa edistäviä auttamiskeinoja.",
+        'description' => "Aisti- ja neurologisiin toimintoihin liittyvät osatekijät potilaan kuulo-, näkö-, tunto-, haju- ja maku- sekä tasapainoaisteissa tapahtuvia muutoksia ja häiriöitä sekä aistien toimintaa edistäviä auttamiskeinoja",
         'subItems' => ["Aistitoiminnan muutos"],
       ],
 
       [
         'name' => "Elämänkaari",
-        'description' => "Elämänkaari -elämän vaiheisiin liittyvät osatekijät",
+        'description' => "Elämän eri vaiheisiin liittyvät osatekijät",
         'subItems' => ["Toimintakyky", "Lähestyvä kuolema"],
       ],
 
       [
         'name' => "Erittäminen",
-        'description' => "ruoansulatukseen, virtsateiden toimintaan, verenvuotoon ja muuhun erittämiseen liittyvät osatekijät",
+        'description' => "Ruoansulatukseen, virtsateiden toimintaan, verenvuotoon ja muuhun erittämiseen liittyvät osatekijät",
         'subItems' => ["Virtsaamiseen liittyvä häiriö", "Verenvuoto", "Muu erittämiseen liittyvä häiriö"],
       ],
 
       [
         'name' => "Hengitys",
-        'description' => "keuhkojen toimintaan ja hengittämiseen liittyvät osatekijät",
+        'description' => "Keuhkojen toimintaan ja hengittämiseen liittyvät osatekijät",
         'subItems' => ["Hengitysvaikeus"],
       ],
 
       [
         'name' => "Hoidon ja jatkohoidon koordinointi",
-        'description' => "moniammatillisen hoidon ja jatkohoidon sekä yksilöllisten palvelutarpeiden koordinointi ja ohjaus",
+        'description' => "Moniammatillisen hoidon ja jatkohoidon sekä yksilöllisten palvelutarpeiden koordinointi ja ohjaus",
         'subItems' => ["Asiantuntijapalvelujen tarve", "Jatkohoidon tarve"],
       ],
 
       [
         'name' => "Kivunhoito",
-        'description' => "kipuun ja kivunhoitoon liittyvät osatekijät",
+        'description' => "Kipuun ja kivunhoitoon liittyvät osatekijät",
         'subItems' => [],
       ],
 
       [
         'name' => "Kudoseheys",
-        'description' => "lima- ja sarveiskalvojen sekä ihon ja ihonalaisten kerrosten kuntoon liittyvät osatekijät",
+        'description' => "Lima- ja sarveiskalvojen sekä ihon ja ihonalaisten kerrosten kuntoon liittyvät osatekijät",
         'subItems' => ["Ihorikko", "Kirurginen haava", "Diabeettinen jalkahaava", "Säärihaava", "Painehaava", "Tulehtunut haava"],
       ],
 
       [
         'name' => "Lääkehoito",
-        'description' => "lääkkeiden käyttöön ja lääkehoidon toteuttamiseen liittyvät osatekijät",
+        'description' => "Lääkkeiden käyttöön ja lääkehoidon toteuttamiseen liittyvät osatekijät",
         'subItems' => [],
       ],
 
       [
         'name' => "Nestetasapaino",
-        'description' => "elimistön nestemäärään liittyvät osatekijät",
+        'description' => "Elimistön nestemäärään liittyvät osatekijät",
         'subItems' => [],
       ],
+
       [
         'name' => "Psyykkinen toimintakyky",
-        'description' => "psyykkisen toimintakykyyn liittyvät osatekijät",
+        'description' => "Psyykkisen toimintakykyyn liittyvät osatekijät",
         'subItems' => [],
       ],
 
       [
         'name' => "Päivittäiset toiminnot ja omatoimisuus",
-        'description' => "omatoimisuuteen ja fyysiseen toimintakykyyn liittyvät osatekijät",
+        'description' => "Omatoimisuuteen ja fyysiseen toimintakykyyn liittyvät osatekijät",
         'subItems' => [],
       ],
 
       [
         'name' => "Ravitsemus",
-        'description' => "ravinnon ja ravintoaineiden turvaamiseen liittyvät osatekijät",
+        'description' => "Ravinnon ja ravintoaineiden turvaamiseen liittyvät osatekijät",
         'subItems' => [],
       ],
 
       [
         'name' => "Verenkierto",
-        'description' => "eri elinten verenkiertoon liittyvät osatekijät",
+        'description' => "Eri elinten verenkiertoon liittyvät osatekijät",
         'subItems' => [],
       ],
     ];
