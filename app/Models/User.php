@@ -67,8 +67,4 @@ class User extends Authenticatable {
   public function isRole($roleType) {
     return $this->role_type === $roleType;
   }
-
-  public function patients() {
-    return Patient::forUser($this->id);
-  }
 }
