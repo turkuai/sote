@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-
 class PatientController extends Controller {
   // Get all the patients
   public function index() {
@@ -38,8 +37,6 @@ class PatientController extends Controller {
       );
     }
   }
-
-
 
   // Get specific patient via id
   public function show($id) {
