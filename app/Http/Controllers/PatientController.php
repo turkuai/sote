@@ -105,4 +105,35 @@ class PatientController extends Controller {
 
     return ApiResponse::success($groups, "Patient groups retrieved successfully");
   }
+
+  // GET patients that belong to any group the given user is a member of
+  public function getUserPatients(Request $request) {
+    // Default to the authenticated user when no user_id is supplied
+    $userId = $request->query('user_id', Auth::id());
+
+    $validator = Validator::make(
+      ['user_id' => $userId],
+      ['user_id' => 'required|integer|exists:users,id']
+    );
+
+    if ($validator->fails()) {
+      return ApiResponse::validationError($validator->errors());
+    }
+
+    try {
+      /*
+       * Match ServerGrid's pageSize (see index() for why).
+       * ServerGrid sends ?page=N which paginate() picks up automatically.
+       */
+      $pageSize = 10;
+      $patients = Patient::forUser(Auth::id())->paginate($pageSize);
+
+      return ApiResponse::paginated($patients, 'User patients retrieved successfully');
+    } catch (Exception $e) {
+      return ApiResponse::error(
+        "Error: User patients could not be retrieved. Error: {$e->getMessage()}",
+        500
+      );
+    }
+  }
 }
