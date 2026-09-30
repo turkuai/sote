@@ -1,6 +1,7 @@
 import { ChevronRight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
 import MobileSearchToggle from '../components/MobileSearchToggle';
@@ -16,8 +17,7 @@ export default function PatientsTab({ currentUser, query, onQueryChange }) {
   const debounceRef = useRef(null);
   const { showNotification } = useNotification();
   const { t } = useTranslation();
-  const [selectedPatient, setSelectedPatient] = useState(null);
-  const [showPatientOverlay, setShowPatientOverlay] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setInputValue(query || '');
@@ -33,9 +33,9 @@ export default function PatientsTab({ currentUser, query, onQueryChange }) {
     }, SEARCH_DEBOUNCE_MS);
   };
 
-  const handleOpenOverlayClick = (patient) => {
-    setSelectedPatient(patient);
-    setShowPatientOverlay(true);
+  // Row action: open the patient report page (route defined in app.tsx)
+  const openPatientReport = (patient) => {
+    navigate(`/patients/${patient.id}`);
   };
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function PatientsTab({ currentUser, query, onQueryChange }) {
                   {
                     icon: <ChevronRight size={20} className="w-5 h-5 block text-slate-800" />,
                     tooltip: t('patients.openOverlay'),
-                    onClick: handleOpenOverlayClick,
+                    onClick: openPatientReport,
                   },
                 ]}
                 query={query}
@@ -127,7 +127,7 @@ export default function PatientsTab({ currentUser, query, onQueryChange }) {
               {
                 icon: <ChevronRight size={20} className="w-5 h-5 block text-slate-800" />,
                 tooltip: t('groups.manageUsers'),
-                onClick: handleOpenOverlayClick,
+                onClick: openPatientReport,
               },
             ]}
           />
