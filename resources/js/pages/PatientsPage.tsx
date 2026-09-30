@@ -1,5 +1,6 @@
 import { ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useServerGridLabels } from '../hooks/useCurrentLanguage';
 import { useNavigate } from 'react-router-dom';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
@@ -53,6 +54,7 @@ export default function PatientsTab({ currentUser, query, onQueryChange }) {
             query={query}
             getApiBase={getApiBase}
             showNot={showNotification}
+            labels={useServerGridLabels()}
             rowActions={[
               {
                 icon: <ChevronRight size={20} className="w-5 h-5 block text-slate-800" />,
