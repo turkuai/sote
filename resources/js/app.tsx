@@ -9,6 +9,7 @@ import './i18n';
 import ProtectedLayout from './layouts/ProtectedLayout';
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
+import PatientReportPage from './pages/PatientReportPage';
 import PatientsPage from './pages/PatientsPage';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail';
@@ -58,6 +59,7 @@ function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/home/:tab" element={<HomePage />} />
           <Route path="/patients" element={<PatientsPage />} />
+          <Route path="/patients/:patientId" element={<PatientReportPage />} />
         </Route>
       </Route>
 
