@@ -126,7 +126,7 @@ class PatientController extends Controller {
        * ServerGrid sends ?page=N which paginate() picks up automatically.
        */
       $pageSize = 10;
-      $patients = Patient::forUser($userId)->paginate($pageSize);
+      $patients = Patient::forUser(Auth::id())->paginate($pageSize);
 
       return ApiResponse::paginated($patients, 'User patients retrieved successfully');
     } catch (Exception $e) {
