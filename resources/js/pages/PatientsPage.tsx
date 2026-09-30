@@ -1,5 +1,4 @@
 import { ChevronRight } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ServerGrid } from 'tai-grid';
@@ -9,27 +8,14 @@ import { getApiBase } from '../config';
 import './Admin.css';
 
 export default function PatientsTab({ currentUser, query, onQueryChange }) {
-  const [refreshKey] = useState(0);
-  const [inputValue, setInputValue] = useState(query || '');
-  const debounceRef = useRef(null);
   const { showNotification } = useNotification();
   const { t } = useTranslation();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setInputValue(query || '');
-  }, [query]);
 
   // Row action: open the patient report page (route defined in app.tsx)
   const openPatientReport = (patient) => {
     navigate(`/patients/${patient.id}`);
   };
-
-  useEffect(() => {
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, []);
 
   // Combine first_name + last_name into one displayed column
   const NameRenderer = ({ data }) => <span>{`${data?.first_name || ''} ${data?.last_name || ''}`.trim()}</span>;
@@ -54,7 +40,6 @@ export default function PatientsTab({ currentUser, query, onQueryChange }) {
             <h2>{t('Patients')}</h2>
           </div>
           <ServerGrid
-            key={refreshKey}
             columns={patientColumns}
             columnRenderers={{
               name: NameRenderer,
