@@ -8,8 +8,6 @@ import { useNotification } from '../components/NotificationContext';
 import { getApiBase } from '../config';
 import './Admin.css';
 
-const SEARCH_DEBOUNCE_MS = 300;
-
 export default function PatientsTab({ currentUser, query, onQueryChange }) {
   const [refreshKey] = useState(0);
   const [inputValue, setInputValue] = useState(query || '');
@@ -21,16 +19,6 @@ export default function PatientsTab({ currentUser, query, onQueryChange }) {
   useEffect(() => {
     setInputValue(query || '');
   }, [query]);
-
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setInputValue(value);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      debounceRef.current = null;
-      onQueryChange(value);
-    }, SEARCH_DEBOUNCE_MS);
-  };
 
   // Row action: open the patient report page (route defined in app.tsx)
   const openPatientReport = (patient) => {
@@ -64,15 +52,6 @@ export default function PatientsTab({ currentUser, query, onQueryChange }) {
         <div className="hide-on-mobile">
           <div className="tab-header">
             <h2>{t('Patients')}</h2>
-            <div className="user-search">
-              <span className="search-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
-                  <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </span>
-              <input type="text" autoComplete="off" placeholder={t('Search Patient')} value={inputValue} onChange={handleSearchChange} />
-            </div>
           </div>
           <ServerGrid
             key={refreshKey}
