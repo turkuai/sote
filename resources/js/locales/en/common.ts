@@ -1,13 +1,13 @@
 const enCommon = {
-    common: {
-        language: 'Language',
-        english: 'English',
-        finnish: 'Finnish',
-        swedish: 'Swedish',
-        loading: 'Loading...',
-        navigation: 'Navigation',
-        close: 'Close',
-    },
+  common: {
+    language: 'Language',
+    english: 'English',
+    finnish: 'Finnish',
+    swedish: 'Swedish',
+    loading: 'Loading...',
+    navigation: 'Navigation',
+    close: 'Close',
+  },
 
   nav: {
     dashboard: 'Dashboard',
@@ -49,7 +49,7 @@ const enCommon = {
     groups: 'Groups',
     waitingList: 'Waiting List',
     settings: 'Settings',
-    patients: 'Patients'
+    patients: 'Patients',
   },
 
   welcome: {
@@ -231,6 +231,25 @@ const enCommon = {
       approved: '{{name}} has been approved and assigned as Nurse.',
       failed: 'Failed to approve user',
       error: 'Error approving user',
+    },
+  },
+
+  patients: {
+    panel: {
+      groups: 'Groups',
+      addToGroup: 'Add to group',
+      removeFromGroup: 'Remove from group',
+      selectPatient: 'Select a patient to view details',
+      noGroups: 'This patient is not assigned to any groups.',
+    },
+    errors: {
+      loadGroups: 'Failed to load groups.',
+      addToGroup: 'Failed to add patient to group.',
+      removeFromGroup: 'Failed to remove patient from group.',
+    },
+    notifications: {
+      patientRemovedFromGroup: 'Patient removed from group successfully.',
+      patientAddedToGroup: 'Patient added to group successfully.',
     },
   },
 
