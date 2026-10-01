@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\RegisterController;
+use App\Http\Controllers\CareController;
 
 // API Routes - must be BEFORE fallback to avoid Inertia catching them
 Route::prefix('api')->group(function () {
@@ -69,6 +70,9 @@ Route::prefix('api')->group(function () {
     Route::patch('/patients/{id}', [PatientController::class, 'update'])->middleware('checkRole:admin,manager');
     Route::get('/patients/{id}', [PatientController::class, 'show']);
     Route::get('/patients/{id}/groups', [PatientController::class, 'getGroups'])->middleware('checkRole:admin');
+
+    // Care API
+    Route::get('/care', [CareController::class, 'fetchCare']);
   });
 });
 

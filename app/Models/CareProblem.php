@@ -17,4 +17,8 @@ class CareProblem extends Model {
     'patient_id',
     'description',
   ];
+
+  public function items() {
+    return $this->hasMany(CareProblemItems::class, 'problem_id');
+  }
 }
