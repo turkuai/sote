@@ -57,16 +57,11 @@ export default function LanguageSwitcher({ className = '' }: LanguageSwitcherPro
 
         {isOpen && (
           <div className="user-dropdown-menu">
-            <button type="button" className="dropdown-menu-item" onClick={() => handleLanguageChange('fi')}>
-              {languageNames.fi}
-            </button>
-            <button type="button" className="dropdown-menu-item" onClick={() => handleLanguageChange('sv')}>
-              {languageNames.sv}
-            </button>
-
-            <button type="button" className="dropdown-menu-item" onClick={() => handleLanguageChange('en')}>
-              {languageNames.en}
-            </button>
+            {(Object.keys(languageNames) as SupportedLanguage[]).map((language) => (
+              <button key={language} type="button" className="dropdown-menu-item" onClick={() => handleLanguageChange(language)}>
+                {languageNames[language]}
+              </button>
+            ))}
           </div>
         )}
       </div>
