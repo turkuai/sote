@@ -7,9 +7,9 @@ type LanguageSwitcherProps = {
 };
 
 const languageNames = {
-  en: 'English',
   fi: 'Suomi',
   sv: 'Svenska',
+  en: 'English',
 } as const;
 
 type SupportedLanguage = keyof typeof languageNames;
@@ -37,7 +37,7 @@ export default function LanguageSwitcher({ className = '' }: LanguageSwitcherPro
     setIsOpen(false);
   };
 
-  const currentLabel = languageNames[currentLanguage as SupportedLanguage] ?? languageNames.en;
+  const currentLabel = languageNames[currentLanguage as SupportedLanguage] ?? languageNames.fi;
 
   return (
     <div className={className}>
@@ -57,15 +57,15 @@ export default function LanguageSwitcher({ className = '' }: LanguageSwitcherPro
 
         {isOpen && (
           <div className="user-dropdown-menu">
-            <button type="button" className="dropdown-menu-item" onClick={() => handleLanguageChange('en')}>
-              {languageNames.en}
-            </button>
             <button type="button" className="dropdown-menu-item" onClick={() => handleLanguageChange('fi')}>
               {languageNames.fi}
             </button>
-
             <button type="button" className="dropdown-menu-item" onClick={() => handleLanguageChange('sv')}>
               {languageNames.sv}
+            </button>
+
+            <button type="button" className="dropdown-menu-item" onClick={() => handleLanguageChange('en')}>
+              {languageNames.en}
             </button>
           </div>
         )}
