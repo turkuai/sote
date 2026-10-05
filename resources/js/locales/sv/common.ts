@@ -1,9 +1,9 @@
 const svCommon = {
   common: {
     language: 'Språk',
-    english: 'Engelska',
-    finnish: 'Finska',
     swedish: 'Svenska',
+    finnish: 'Finska',
+    english: 'Engelska',
     loading: 'Laddar...',
     navigation: 'Navigering',
     close: 'Stäng',
@@ -49,7 +49,7 @@ const svCommon = {
     groups: 'Grupper',
     waitingList: 'Väntelista',
     settings: 'Inställningar',
-    patients: 'Patienter'
+    patients: 'Patienter',
   },
 
   welcome: {

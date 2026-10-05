@@ -1,8 +1,9 @@
 const fiCommon = {
   common: {
     language: 'Kieli',
-    english: 'Englanti',
     finnish: 'Suomi',
+    swedish: 'Ruotsi',
+    english: 'Englanti',
     loading: 'Ladataan...',
     navigation: 'Navigointi',
     close: 'Sulje',
@@ -48,7 +49,7 @@ const fiCommon = {
     groups: 'Ryhmät',
     waitingList: 'Odotuslista',
     settings: 'Asetukset',
-    patients: 'Potilaat'
+    patients: 'Potilaat',
   },
 
   welcome: {
