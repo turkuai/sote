@@ -9,6 +9,12 @@ import './Admin.css';
 
 const SEARCH_DEBOUNCE_MS = 300;
 
+const roleTranslationKeys = {
+  nurse: 'users.roles.nurse',
+  manager: 'users.roles.manager',
+  admin: 'users.roles.admin',
+};
+
 /**
  * UsersTab component
  *
@@ -16,18 +22,31 @@ const SEARCH_DEBOUNCE_MS = 300;
  */
 export default function UsersTab({ currentUser, query, onQueryChange }) {
   const [inputValue, setInputValue] = useState(query || '');
-  const debounceRef = useRef(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { t } = useTranslation();
   const { showNotification } = useNotification();
 
-  // Sync input from parent query (e.g. when debounced update lands or initial load)
+  const NameRenderer = ({ data }) => (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+      {data?.id === currentUser?.id && (
+        <span title={t('users.thisIsYou')} style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#3b82f6' }} />
+      )}
+      {`${data?.first_name || ''} ${data?.last_name || ''}`.trim()}
+    </span>
+  );
+
+  const RoleTyleRenderer = ({ data }) => {
+    const roleType = data?.role_type;
+    const translationKey = roleTranslationKeys[roleType] || 'users.waitingList';
+    return <span>{t(translationKey)}</span>;
+  };
+
   useEffect(() => {
     setInputValue(query || '');
   }, [query]);
 
-  // Debounce: only call onQueryChange 300ms after last keystroke
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
+  const handleSearchChange = (event) => {
+    const value = event.target.value;
     setInputValue(value);
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
@@ -55,7 +74,7 @@ export default function UsersTab({ currentUser, query, onQueryChange }) {
           </span>
           <input type="text" autoComplete="off" placeholder={t('users.searchPlaceholder')} value={inputValue} onChange={handleSearchChange} />
         </div>
-        <MobileSearchToggle value={inputValue} onChange={handleSearchChange} />
+        <MobileSearchToggle value={inputValue} onChange={handleSearchChange} placeholder={t('users.searchPlaceholder')} />
       </div>
       <ServerGrid
         columns={[
@@ -64,14 +83,8 @@ export default function UsersTab({ currentUser, query, onQueryChange }) {
           { field: 'role_type', displayName: t('table.roleType') },
         ]}
         columnRenderers={{
-          name: ({ data }) => (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
-              {data?.id === currentUser?.id && (
-                <span title={t('users.thisIsYou')} style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#3b82f6' }} />
-              )}
-              {`${data?.first_name || ''} ${data?.last_name || ''}`.trim()}
-            </span>
-          ),
+          name: NameRenderer,
+          role_type: RoleTyleRenderer,
         }}
         path="users"
         allowEditing={currentUser?.role_type === 'admin'}
@@ -110,7 +123,10 @@ export default function UsersTab({ currentUser, query, onQueryChange }) {
         transformEditPayload={(payload) => {
           const password = String(payload.password || '').trim();
           const confirmPassword = String(payload.confirmPassword || '').trim();
-          const { password: _password, confirmPassword: _confirmPassword, name: _name, ...restPayload } = payload;
+          const restPayload = { ...payload };
+          delete restPayload.password;
+          delete restPayload.confirmPassword;
+          delete restPayload.name;
           if (!password && !confirmPassword) return restPayload;
           if (!password || !confirmPassword) throw new Error(t('users.errors.fillBothPasswordFields'));
           if (password !== confirmPassword) throw new Error(t('users.errors.passwordsDoNotMatch'));
