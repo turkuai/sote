@@ -49,8 +49,8 @@ Route::prefix('api')->group(function () {
     Route::post('/groups/join', [GroupController::class, 'join']);
     Route::get('/groups', [GroupController::class, 'index'])->middleware('checkRole:manager,admin');
     Route::post('/groups', [GroupController::class, 'store'])->middleware('checkRole:admin,manager');
-    Route::get('/groups/{id}/users', [GroupController::class, 'show'])->middleware('checkRole:manager,admin');
-    Route::get('/groups/{id}', [GroupController::class, 'show'])->middleware('checkRole:manager,admin');
+    Route::get('/groups/{id}/registered-users', [GroupController::class, 'getRegisteredUsers'])->middleware('checkRole:manager,admin');
+    Route::get('/groups/{id}/unregistered-users', [GroupController::class, 'getUnregisteredUsers'])->middleware('checkRole:manager,admin');
     Route::patch('/groups/{id}', [GroupController::class, 'update'])->middleware('checkRole:admin,manager');
     Route::delete('/groups/{id}', [GroupController::class, 'destroy'])->middleware('checkRole:admin,manager');
     Route::post('/groups/{id}/users/{userId}', [GroupController::class, 'addUserToGroup'])->middleware('checkRole:admin,manager');
@@ -65,6 +65,8 @@ Route::prefix('api')->group(function () {
     // Patients API
     Route::get('/patients', [PatientController::class, 'index']);
     Route::post('/patients', [PatientController::class, 'store'])->middleware('checkRole:admin,manager');
+    Route::get('patients/user-patients', [PatientController::class, 'getUserPatients']);
+    Route::patch('/patients/{id}', [PatientController::class, 'update'])->middleware('checkRole:admin,manager');
     Route::get('/patients/{id}', [PatientController::class, 'show']);
     Route::get('/patients/{id}/groups', [PatientController::class, 'getGroups'])->middleware('checkRole:admin');
   });
