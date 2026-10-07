@@ -306,6 +306,13 @@ const enCommon = {
       empty: 'You are not registered in any group.',
     },
   },
+
+  caretree: {
+    care_need: 'Care Need',
+    goal: 'Care Goal',
+    activity: 'Planned Activities',
+    review: 'Care Review',
+  },
 };
 
 export default enCommon;

@@ -1,8 +1,9 @@
 const fiCommon = {
   common: {
     language: 'Kieli',
-    english: 'Englanti',
     finnish: 'Suomi',
+    swedish: 'Ruotsi',
+    english: 'Englanti',
     loading: 'Ladataan...',
     navigation: 'Navigointi',
     close: 'Sulje',
@@ -302,6 +303,12 @@ const fiCommon = {
       description: 'Ryhmät, joihin olet tällä hetkellä rekisteröitynyt.',
       empty: 'Et ole rekisteröitynyt mihinkään ryhmään.',
     },
+  },
+  caretree: {
+    care_need: 'Hoidontarve',
+    goal: 'Hoidon tavoite',
+    activity: 'Suunnitellut toiminnot',
+    review: 'Hoidon arviointi',
   },
 };
 

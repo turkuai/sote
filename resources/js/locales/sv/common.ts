@@ -1,9 +1,9 @@
 const svCommon = {
   common: {
     language: 'Språk',
-    english: 'Engelska',
-    finnish: 'Finska',
     swedish: 'Svenska',
+    finnish: 'Finska',
+    english: 'Engelska',
     loading: 'Laddar...',
     navigation: 'Navigering',
     close: 'Stäng',
@@ -304,6 +304,12 @@ const svCommon = {
       description: 'Grupper du tillhör.',
       empty: 'Du är inte med i någon grupp.',
     },
+  },
+  caretree: {
+    care_need: 'Vårdtillstånd',
+    goal: 'Vårdplanens mål',
+    activity: 'Planerade åtgärder',
+    review: 'Vårdbedömning',
   },
 };
 
