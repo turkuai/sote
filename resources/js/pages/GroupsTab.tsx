@@ -1,6 +1,7 @@
 import { Crown, Eye, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
 import { ServerGrid as ServerGridBase } from 'tai-grid';
 import 'tai-grid/style.css';
 import GroupRegistrationForm from '../components/GroupRegistrationForm';
@@ -127,43 +128,16 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
     setShowGroupUsersModal(true);
   };
 
-  const gridLabels = {
-    loading: t('grid.loading'),
-    add: t('grid.add'),
-    updateFailed: t('grid.errors.updateFailed'),
-    itemUpdated: t('grid.success.itemUpdated'),
-    listViewRequiresProps: t('grid.errors.listViewRequiresProps'),
-    confirmDeleteTitle: t('grid.confirmDelete.title'),
-    confirmDeleteMessage: t('grid.confirmDelete.message'),
-    confirmDeleteLabel: t('grid.confirmDelete.delete'),
-    deletingLabel: t('grid.confirmDelete.deleting'),
-    cancelLabel: t('grid.confirmDelete.cancel'),
-    editTitle: t('grid.dialog.edit'),
-    addTitle: t('grid.dialog.add'),
-    grid: {
-      actionsHeader: t('table.actions'),
-      edit: t('table.edit'),
-      delete: t('table.delete'),
-      previous: t('grid.pagination.previous'),
-      next: t('grid.pagination.next'),
-      page: t('grid.pagination.page'),
-      of: t('grid.pagination.of'),
-    },
-    dialog: {
-      save: t('grid.dialog.save'),
-      cancel: t('grid.dialog.cancel'),
-      close: t('grid.dialog.close'),
-    },
-  };
+  const gridLabels = useServerGridLabels();
 
   const handleGroupRowClick = (group: Record<string, unknown>) => {
     setPanelGroup(group);
-    setGroupPath(`groups/${group.id}/users`);
+    setGroupPath(`groups/${group.id}/registered-users`);
     setPanelSearch('');
     lastPanelClickedIndex.current = null;
 
     setPanelLoading(true);
-    fetch(`${getApiBase()}/api/groups/${group.id}`, { credentials: 'include' })
+    fetch(`${getApiBase()}/api/groups/${group.id}/registered-users`, { credentials: 'include' })
       .then((r) => r.json())
       .then((res) => {
         const users = res?.data?.users ?? res?.users ?? [];
@@ -202,6 +176,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                     getApiBase={getApiBase}
                     showNot={showNotification}
                     onRowClick={handleGroupRowClick}
+                    labels={gridLabels}
                   />
                 )}
               </div>
@@ -269,6 +244,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         showAddButton={false}
                         getApiBase={getApiBase}
                         showNot={showNotification}
+                        labels={gridLabels}
                       />
                     )}
                   </>
@@ -420,6 +396,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         showAddButton={false}
                         getApiBase={getApiBase}
                         showNot={showNotification}
+                        labels={gridLabels}
                       />
                     )}
                   </>

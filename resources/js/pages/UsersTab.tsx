@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useServerGridLabels } from '../hooks/useCurrentLanguage';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
 import MobileSearchToggle from '../components/MobileSearchToggle';
@@ -73,6 +74,96 @@ export default function UsersTab({ currentUser, query, onQueryChange }) {
             </svg>
           </span>
           <input type="text" autoComplete="off" placeholder={t('users.searchPlaceholder')} value={inputValue} onChange={handleSearchChange} />
+    <>
+      {/* Mobile view - same ServerGrid and add popup as desktop (all fields: first_name, last_name, email, role) */}
+      <div className="mobile-tab-content hide-on-desktop">
+        <div className="mobile-content-section">
+          <h2>{t('tabs.users')}</h2>
+          <MobileSearchToggle value={inputValue} onChange={handleSearchChange} />
+          <div style={{ height: '500px', width: '100%' }}>
+            <ServerGrid
+              key={refreshKey}
+              columns={[
+                { field: 'name', displayName: t('table.name') },
+                { field: 'email', displayName: t('table.email') },
+                { field: 'role_type', displayName: t('table.roleType') },
+              ]}
+              columnRenderers={{
+                name: NameRenderer,
+              }}
+              path="users"
+              allowEditing={currentUser?.role_type === 'admin'}
+              allowDelete={currentUser?.role_type === 'admin'}
+              pageSize={10}
+              showAddButton={currentUser?.role_type === 'admin'}
+              query={query}
+              formComponent={UsersForm}
+              getApiBase={getApiBase}
+              showNot={showNotification}
+              labels={useServerGridLabels()}
+              transformEditPayload={(payload) => {
+                const password = String(payload.password || '').trim();
+                const confirmPassword = String(payload.confirmPassword || '').trim();
+                const isAdmin = currentUser?.role_type === 'admin';
+
+                // Clone payload and remove virtual/password fields
+                const { password: _p, confirmPassword: _cp, name: _n, ...restPayload } = payload;
+
+                // If both password fields empty, just return other fields
+                if (!password && !confirmPassword) {
+                  return restPayload;
+                }
+
+                // If only one password field filled, error
+                if (!password || !confirmPassword) {
+                  throw new Error(t('users.errors.fillBothPasswordFields'));
+                }
+
+                // If passwords don't match, error
+                if (password !== confirmPassword) {
+                  throw new Error(t('users.errors.passwordsDoNotMatch'));
+                }
+
+                // Admins can change passwords
+                if (isAdmin) {
+                  return { ...restPayload, password };
+                }
+
+                // Non-admins don't edit users here
+                throw new Error(t('users.errors.notAllowedToChangePassword'));
+              }}
+              transformAddPayload={(payload) => {
+                const email = String(payload.email || '').trim();
+                const first = String(payload.first_name || '').trim();
+                const last = String(payload.last_name || '').trim();
+                const password = String(payload.password || '').trim();
+                const confirmPassword = String(payload.confirmPassword || '').trim();
+
+                if (password || confirmPassword) {
+                  if (!password || !confirmPassword) {
+                    throw new Error(t('users.errors.fillBothOrLeaveEmpty'));
+                  }
+                  if (password !== confirmPassword) {
+                    throw new Error(t('users.errors.passwordsDoNotMatch'));
+                  }
+                }
+
+                const payloadOut: any = {
+                  first_name: first,
+                  last_name: last,
+                  email,
+                  role_type: payload.role_type || 'nurse',
+                };
+
+                // Only send password when admin actually set one
+                if (password) {
+                  payloadOut.password = password;
+                }
+
+                return payloadOut;
+              }}
+            />
+          </div>
         </div>
         <MobileSearchToggle value={inputValue} onChange={handleSearchChange} placeholder={t('users.searchPlaceholder')} />
       </div>
@@ -150,6 +241,102 @@ export default function UsersTab({ currentUser, query, onQueryChange }) {
         }}
       />
     </div>
+
+      {/* Desktop view */}
+      <div className="hide-on-mobile">
+        <div className="tab-header">
+          <h2>{t('users.managementTitle')}</h2>
+          <div className="user-search">
+            <span className="search-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
+                <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </span>
+            <input type="text" autoComplete="off" placeholder={t('users.searchPlaceholder')} value={inputValue} onChange={handleSearchChange} />
+          </div>
+        </div>
+        <ServerGrid
+          key={refreshKey}
+          columns={[
+            { field: 'name', displayName: t('table.name') },
+            { field: 'email', displayName: t('table.email') },
+            { field: 'role_type', displayName: t('table.roleType') },
+          ]}
+          columnRenderers={{
+            name: NameRenderer,
+          }}
+          path="users"
+          allowEditing={currentUser?.role_type === 'admin'}
+          allowDelete={currentUser?.role_type === 'admin'}
+          pageSize={10}
+          showAddButton={currentUser?.role_type === 'admin'}
+          query={query}
+          formComponent={UsersForm}
+          getApiBase={getApiBase}
+          showNot={showNotification}
+          labels={useServerGridLabels()}
+          transformEditPayload={(payload) => {
+            const password = String(payload.password || '').trim();
+            const confirmPassword = String(payload.confirmPassword || '').trim();
+            const isAdmin = currentUser?.role_type === 'admin';
+
+            // Clone payload and remove virtual/password fields
+            const { password: _p, confirmPassword: _cp, name: _n, ...restPayload } = payload;
+
+            // If both empty, return other fields
+            if (!password && !confirmPassword) {
+              return restPayload;
+            }
+
+            // If only one filled, error
+            if (!password || !confirmPassword) {
+              throw new Error(t('users.errors.fillBothPasswordFields'));
+            }
+
+            // If passwords don't match, error
+            if (password !== confirmPassword) {
+              throw new Error(t('users.errors.passwordsDoNotMatch'));
+            }
+
+            // Admins can change passwords
+            if (isAdmin) {
+              return { ...restPayload, password };
+            }
+            throw new Error(t('users.errors.notAllowedToChangePassword'));
+          }}
+          transformAddPayload={(payload) => {
+            const email = String(payload.email || '').trim();
+            const first = String(payload.first_name || '').trim();
+            const last = String(payload.last_name || '').trim();
+            const password = String(payload.password || '').trim();
+            const confirmPassword = String(payload.confirmPassword || '').trim();
+
+            if (password || confirmPassword) {
+              if (!password || !confirmPassword) {
+                throw new Error(t('users.errors.fillBothOrLeaveEmpty'));
+              }
+              if (password !== confirmPassword) {
+                throw new Error(t('users.errors.passwordsDoNotMatch'));
+              }
+            }
+
+            const payloadOut: any = {
+              first_name: first,
+              last_name: last,
+              email,
+              role_type: payload.role_type || 'nurse',
+            };
+
+            if (password) {
+              payloadOut.password = password;
+            }
+
+            return payloadOut;
+          }}
+        />
+      </div>
+    </>
   );
 }
 
