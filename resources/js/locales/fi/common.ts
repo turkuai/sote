@@ -1,8 +1,9 @@
 const fiCommon = {
   common: {
     language: 'Kieli',
-    english: 'Englanti',
     finnish: 'Suomi',
+    swedish: 'Ruotsi',
+    english: 'Englanti',
     loading: 'Ladataan...',
     navigation: 'Navigointi',
     close: 'Sulje',
@@ -48,7 +49,7 @@ const fiCommon = {
     groups: 'Ryhmät',
     waitingList: 'Odotuslista',
     settings: 'Asetukset',
-    patients: 'Potilaat'
+    patients: 'Potilaat',
   },
 
   welcome: {
@@ -136,7 +137,14 @@ const fiCommon = {
     firstName: 'Etunimi',
     lastName: 'Sukunimi',
     role: 'Rooli',
-    remarks: 'Huomautukset'
+    remarks: 'Huomautukset',
+
+    form: {
+      firstName: 'Etunimi',
+      lastName: 'Sukunimi',
+      socialId: 'Henkilötunnus',
+      remarks: 'Huomautukset',
+    },
   },
 
   groups: {
@@ -278,6 +286,12 @@ const fiCommon = {
       description: 'Ryhmät, joihin olet tällä hetkellä rekisteröitynyt.',
       empty: 'Et ole rekisteröitynyt mihinkään ryhmään.',
     },
+  },
+  caretree: {
+    care_need: 'Hoidontarve',
+    goal: 'Hoidon tavoite',
+    activity: 'Suunnitellut toiminnot',
+    review: 'Hoidon arviointi',
   },
 };
 
