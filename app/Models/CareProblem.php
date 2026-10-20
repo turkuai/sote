@@ -21,4 +21,12 @@ class CareProblem extends Model {
   public function items() {
     return $this->hasMany(CareProblemItems::class, 'problem_id');
   }
+
+  public function category() {
+    return $this->belongsTo(CareCategory::class, 'category_id');
+  }
+
+  public function author() {
+    return $this->belongsTo(User::class, 'author_id');
+  }
 }

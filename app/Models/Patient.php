@@ -38,6 +38,17 @@ class Patient extends Model {
     return $this->belongsToMany(Group::class, 'patient_groups', 'patient_id', 'group_id');
   }
 
+  /**
+   * Care problems recorded for this patient
+   */
+  public function careProblems() {
+    return $this->hasMany(CareProblem::class, 'patient_id');
+  }
+
+  public function care_problem() {
+    return $this->hasMany(CareProblem::class, 'patient_id');
+  }
+
   public function scopeForUser($query, $userId) {
     return $query->whereIn('id', function ($subQuery) use ($userId) {
       $subQuery->select('patient_id')
