@@ -2,9 +2,9 @@ import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
 import { useTranslation } from 'react-i18next';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
+import FieldValidationError from '../components/FieldValidationError';
 import { useNotification } from '../components/NotificationContext';
 import { getApiBase } from '../config';
-import FieldValidationError from '../components/FieldValidationError';
 import './Admin.css';
 
 export default function PatientsTab({ currentUser, query }) {
@@ -18,45 +18,6 @@ export default function PatientsTab({ currentUser, query }) {
     );
   };
 
-<<<<<<< HEAD
-
-export default function PatientsTab ({ currentUser, query }) {
-
-    const { showNotification } = useNotification();
-    const { t } = useTranslation();
-    const NameRenderer = ({ data }) => {
-        return (
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
-            {`${data?.first_name || ''} ${data?.last_name || ''}`.trim()}
-        </span>
-        );
-    };
-
-
-    return(
-        <> 
-        <ServerGrid 
-            columns={[
-                { field: 'name', displayName: t('table.name') },
-                { field: 'remarks', displayName: t('table.remarks') },
-              ]}
-                columnRenderers={{
-                name: NameRenderer,
-            }}
-            path="patients"
-            allowEditing={currentUser?.role_type === 'admin'}
-            allowDelete={currentUser?.role_type === 'admin'}
-            pageSize={10}
-            query={query}
-            showAddButton={true}
-            formComponent={PatientForm}
-            showNot={showNotification}
-            getApiBase={getApiBase}
-            />
-        
-        </>
-    )
-=======
   return (
     <>
       <ServerGrid
@@ -109,7 +70,6 @@ function PatientsForm({ data, setData }) {
       </div>
     </div>
   );
->>>>>>> main
 }
 
 function PatientForm({ data, setData, errors }) {
