@@ -40,7 +40,7 @@ class PatientController extends Controller {
 
   // Get specific patient via id
   public function show($id) {
-    $patient = Patient::with('userGroups:id,name')->find($id);
+    $patient = Patient::with('userGroups:id, name')->find($id);
 
     if (! $patient) {
       return ApiResponse::error('Patient not found');
@@ -97,7 +97,7 @@ class PatientController extends Controller {
   public function addToGroup(Request $request, $id) {
     $patient = Patient::find($id);
 
-    if (! $patient) {
+    if (!$patient) {
       return ApiResponse::error(
         'Patient not found',
         404
