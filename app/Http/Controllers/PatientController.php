@@ -138,7 +138,7 @@ class PatientController extends Controller {
   public function removeFromGroup($id, $groupId) {
     $patient = Patient::find($id);
 
-    if (! $patient) {
+    if (!$patient) {
       return ApiResponse::error(
         'Patient not found',
         404
@@ -163,7 +163,7 @@ class PatientController extends Controller {
   public function getGroups(Request $request, $id) {
     $patient = Patient::find($id);
 
-    if (! $patient) {
+    if (!$patient) {
       return ApiResponse::error('Patient not found', 404);
     }
 
