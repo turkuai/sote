@@ -1,7 +1,7 @@
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import './Admin.css';
 
-export default function HomeTabs({ tabs, activeTab, onTabClick, getTabLabel, renderTabIcon, collapsed, onToggleCollapse }) {
+export default function TabsComponent({ tabs, activeTab, onTabClick, getTabLabel, renderTabIcon, collapsed, onToggleCollapse }) {
   return (
     <nav className={`admin-sidebar${collapsed ? ' collapsed' : ''}`} role="tablist">
       <button

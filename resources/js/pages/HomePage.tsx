@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useUserManagement } from '../hooks/useUserManagement';
 import { TabConfig } from '../utils/tabConfig';
 import GroupsTab from './GroupsTab';
-import HomeTabs from './HomeTabs';
+import HomeTabs from '../components/TabsComponent';
 import MobileNav from './MobileNav';
 import PatientsTab from './PatientsTab';
 import SettingsTab from './SettingsTab';
