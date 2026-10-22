@@ -40,7 +40,7 @@ class PatientController extends Controller {
 
   // Get specific patient via id
   public function show($id) {
-    $patient = Patient::find($id);
+    $patient = Patient::with('userGroups:id, name')->find($id);
 
     if (! $patient) {
       return ApiResponse::error('Patient not found');
@@ -93,17 +93,90 @@ class PatientController extends Controller {
     return ApiResponse::success($patient, 'Patient created successfully', 201);
   }
 
-  // GET groups assigned to a patient
+  // Add a patient to a group
+  public function addToGroup(Request $request, $id) {
+    $patient = Patient::find($id);
+
+    if (!$patient) {
+      return ApiResponse::error(
+        'Patient not found',
+        404
+      );
+    }
+
+    $validator = Validator::make($request->all(), [
+      'group_id' => 'required|exists:groups,id',
+    ]);
+
+    if ($validator->fails()) {
+      return ApiResponse::validationError(
+        $validator->errors()
+      );
+    }
+
+    $groupId = $validator->validated()['group_id'];
+
+    $alreadyExists = $patient->patient_groups()
+      ->where('groups.id', $groupId)
+      ->exists();
+
+    if ($alreadyExists) {
+      return ApiResponse::error(
+        'Patient is already assigned to this group',
+        409
+      );
+    }
+
+    $patient->patient_groups()->attach($groupId);
+
+    return ApiResponse::success(
+      $patient->patient_groups()->get(),
+      'Patient added to group successfully'
+    );
+  }
+  // Remove a patient from a group
+  public function removeFromGroup($id, $groupId) {
+    $patient = Patient::find($id);
+
+    if (!$patient) {
+      return ApiResponse::error(
+        'Patient not found',
+        404
+      );
+    }
+
+    $removed = $patient->patient_groups()->detach($groupId);
+
+    if ($removed === 0) {
+      return ApiResponse::error(
+        'Patient is not assigned to this group',
+        404
+      );
+    }
+
+    return ApiResponse::success(
+      $patient->patient_groups()->get(),
+      'Patient removed from group successfully'
+    );
+  }
+
   public function getGroups(Request $request, $id) {
     $patient = Patient::find($id);
 
     if (!$patient) {
-      return ApiResponse::error("Patient not found", 404);
+      return ApiResponse::error('Patient not found', 404);
     }
 
-    $groups = $patient->patient_groups;
+    $pageSize = (int) $request->get('pageSize', 10);
 
-    return ApiResponse::success($groups, "Patient groups retrieved successfully");
+    $groups = $patient->patient_groups()
+      ->select('groups.id', 'groups.name', 'groups.access_key')
+      ->paginate($pageSize);
+
+    return ApiResponse::paginated(
+      $groups,
+      'Patient groups retrieved successfully.'
+    );
   }
 
   // GET patients that belong to any group the given user is a member of

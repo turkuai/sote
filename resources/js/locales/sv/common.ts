@@ -218,6 +218,24 @@ const svCommon = {
       removeTitle: 'Ta bort valda användare från grupp',
     },
   },
+  patients: {
+    panel: {
+      groups: 'Grupper',
+      addToGroup: 'Lägg till i grupp',
+      removeFromGroup: 'Ta bort från grupp',
+      selectPatient: 'Välj en patient för att visa information',
+      noGroups: 'Patienten är inte tilldelad till någon grupp.',
+    },
+    errors: {
+      loadGroups: 'Det gick inte att ladda grupperna.',
+      addToGroup: 'Det gick inte att lägga till patienten i gruppen.',
+      removeFromGroup: 'Det gick inte att ta bort patienten från gruppen.',
+    },
+    notifications: {
+      patientRemovedFromGroup: 'Patienten togs bort från gruppen.',
+      patientAddedToGroup: 'Patienten lades till i gruppen.',
+    },
+  },
 
   waitingList: {
     title: 'Väntar på godkännande',
