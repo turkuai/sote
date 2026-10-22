@@ -74,6 +74,7 @@ Route::prefix('api')->group(function () {
     // Care API
     Route::get('/care/categories', [CareController::class, 'fetchCareCategories']);
     Route::get('/care/{patientId}', [CareController::class, 'fetchPatientProblems']);
+    Route::post('/care/problem', [CareController::class, 'addProblem'])->middleware('checkRole:admin,manager');
   });
 });
 

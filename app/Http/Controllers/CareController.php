@@ -70,4 +70,39 @@ class CareController extends Controller {
       );
     }
   }
+
+  // Add a new care problem for a patient
+  public function addProblem(Request $request) {
+    try {
+      $validator = Validator::make($request->all(), [
+        'patient_id' => 'required|integer|exists:patients,id',
+        'category_id' => 'required|integer|exists:care_categories,id',
+        'description' => 'required|string|max:1000',
+      ]);
+
+      if ($validator->fails()) {
+        return ApiResponse::validationError($validator->errors());
+      }
+
+      $validated = $validator->validated();
+
+      $problem = CareProblem::create([
+        'category_id' => $validated['category_id'],
+        'author_id' => Auth::id(),
+        'patient_id' => $validated['patient_id'],
+        'description' => $validated['description'],
+      ]);
+
+      return ApiResponse::success(
+        $problem->load('author:id,first_name,last_name'),
+        'Care problem added successfully',
+        201
+      );
+    } catch (Exception $e) {
+      return ApiResponse::error(
+        "Error: Care problem could not be added. Error: {$e->getMessage()}",
+        500
+      );
+    }
+  }
 }
