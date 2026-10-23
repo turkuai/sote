@@ -1,43 +1,24 @@
-import { Settings, Users } from 'lucide-react';
+import type { ReactNode } from 'react';
+import { NavLink } from 'react-router-dom';
 import './Admin.css';
 
-/**
- * MobileNav component - Mobile bottom navigation bar with tabs
- * @param {Array} tabs - Array of tab identifiers to display
- * @param {string} activeTab - Currently active tab identifier
- * @param {Function} onTabClick
- * @param {Object} currentUser
- */
-const MobileNav = ({ tabs, activeTab, onTabClick, currentUser }) => {
-  const tabIconMap = {
-    users: Users,
-    settings: Settings,
-  };
+type NavItem = { id: string; to: string; label: string; icon?: ReactNode };
 
-  const renderTabIcon = (tab) => {
-    const IconComponent = tabIconMap[tab];
-    if (!IconComponent) {
-      return null;
-    }
-
-    return <IconComponent size={22} strokeWidth={2.2} aria-hidden="true" />;
-  };
-
+export default function MobileNav({ items }: { items: NavItem[] }) {
   return (
-    <nav className="admin-mobile-nav admin-mobile-nav--no-camera" aria-label="Navigation">
-      {tabs.map((tab) => (
-        <button
-          type="button"
-          onClick={() => onTabClick(tab)}
-          className={['admin-mobile-nav__cell', activeTab === tab ? 'is-active' : ''].join(' ').trim()}
-          aria-label={tab}
-          key={tab}
+    <nav className="admin-mobile-nav admin-mobile-nav--no-camera" aria-label="Section navigation">
+      {items.map((item) => (
+        <NavLink
+          key={item.id}
+          to={item.to}
+          end
+          aria-label={item.label}
+          title={item.label}
+          className={({ isActive }) => `admin-mobile-nav__cell${isActive ? ' is-active' : ''}`}
         >
-          {renderTabIcon(tab)}
-        </button>
+          {item.icon}
+        </NavLink>
       ))}
     </nav>
   );
-};
-
-export default MobileNav;
+}

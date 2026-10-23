@@ -14,6 +14,7 @@ import PatientsPage from './pages/PatientsPage';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail';
 import WaitingApproval from './pages/WaitingApproval';
+import { GroupsPage, HomeIndexRedirect, PatientsTabPage, SettingsPage, UsersPage, WaitingListPage } from './pages/HomeTabPages';
 
 function App() {
   const { isAuthenticated, loading, currentUser } = useAuth();
@@ -56,8 +57,15 @@ function App() {
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route element={<ProtectedRoute />}>
         <Route element={<ProtectedLayout />}>
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/home/:tab" element={<HomePage />} />
+          <Route path="/home" element={<HomePage />}>
+            <Route index element={<HomeIndexRedirect />} />
+            <Route path="users" element={<UsersPage />} />
+            <Route path="groups" element={<GroupsPage />} />
+            <Route path="patients" element={<PatientsTabPage />} />
+            <Route path="waiting-list" element={<WaitingListPage />} />
+            <Route path="settings" element={<SettingsPage />} />
+            <Route path="*" element={<HomeIndexRedirect />} />
+          </Route>
           <Route path="/patients" element={<PatientsPage />} />
           <Route path="/patients/:patientId" element={<PatientReportPage />} />
         </Route>

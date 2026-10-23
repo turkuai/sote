@@ -453,6 +453,7 @@
   font-weight: 500;
   cursor: pointer;
   text-align: left;
+  text-decoration: none;
   width: 100%;
   transition:
     background-color 0.15s ease,
@@ -1000,6 +1001,7 @@
   justify-content: center;
   border-left: 1px solid #e5e7eb;
   border-radius: 0;
+  text-decoration: none;
   cursor: pointer;
   transition:
     color 0.15s ease,

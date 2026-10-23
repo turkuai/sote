@@ -1,9 +1,21 @@
+import type { ReactNode } from 'react';
+import { NavLink } from 'react-router-dom';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
-import './Admin.css';
+import '../pages/Admin.css';
 
-export default function TabsComponent({ tabs, activeTab, onTabClick, getTabLabel, renderTabIcon, collapsed, onToggleCollapse }) {
+type TabItem = { id: string; to: string; label: string; icon?: ReactNode };
+
+export default function TabsComponent({
+  items,
+  collapsed,
+  onToggleCollapse,
+}: {
+  items: TabItem[];
+  collapsed: boolean;
+  onToggleCollapse: () => void;
+}) {
   return (
-    <nav className={`admin-sidebar${collapsed ? ' collapsed' : ''}`} role="tablist">
+    <nav className={`admin-sidebar${collapsed ? ' collapsed' : ''}`} aria-label="Section navigation">
       <button
         type="button"
         className="sidebar-toggle"
@@ -14,24 +26,18 @@ export default function TabsComponent({ tabs, activeTab, onTabClick, getTabLabel
         {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
         {!collapsed && <span className="sidebar-label">Collapse</span>}
       </button>
-      {tabs.map((tab) => {
-        const isActive = activeTab === tab;
-
-        return (
-          <button
-            key={tab}
-            type="button"
-            onClick={() => onTabClick(tab)}
-            className={`admin-sidebar-item${isActive ? ' active' : ''}`}
-            role="tab"
-            aria-selected={isActive}
-            title={collapsed ? getTabLabel(tab) : undefined}
-          >
-            {renderTabIcon && renderTabIcon(tab)}
-            <span className="sidebar-label">{getTabLabel(tab)}</span>
-          </button>
-        );
-      })}
+      {items.map((item) => (
+        <NavLink
+          key={item.id}
+          to={item.to}
+          end
+          className={({ isActive }) => `admin-sidebar-item${isActive ? ' active' : ''}`}
+          title={collapsed ? item.label : undefined}
+        >
+          {item.icon}
+          <span className="sidebar-label">{item.label}</span>
+        </NavLink>
+      ))}
     </nav>
   );
 }
