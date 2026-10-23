@@ -75,6 +75,9 @@ Route::prefix('api')->group(function () {
     Route::get('/care/categories', [CareController::class, 'fetchCareCategories']);
     Route::get('/care/{patientId}', [CareController::class, 'fetchPatientProblems']);
     Route::post('/care/problem', [CareController::class, 'addProblem'])->middleware('checkRole:admin,manager');
+    Route::post('/care/problem/item', [CareController::class, 'addProblemItem']);
+    Route::patch('/care/problem/{id}', [CareController::class, 'updateProblem'])->middleware('checkRole:admin,manager');
+    Route::patch('/care/problem/item/{id}', [CareController::class, 'updateProblemItem']);
   });
 });
 

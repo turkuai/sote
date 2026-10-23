@@ -17,4 +17,11 @@ class CareProblemItems extends Model {
     'author_id',
     'type',
   ];
+
+  /**
+   * The care problem this item belongs to.
+   */
+  public function problem() {
+    return $this->belongsTo(CareProblem::class, 'problem_id');
+  }
 }
