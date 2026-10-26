@@ -393,4 +393,35 @@ public function addPatientToGroup($groupId, $patientId)
         201
     );
 }
+
+
+/**
+ * Remove a patient from a group
+ */
+public function removePatientFromGroup($groupId, $patientId)
+{
+    $group = Group::find($groupId);
+
+    if (!$group) {
+        return ApiResponse::notFound('Group not found');
+    }
+
+    $patient = Patient::find($patientId);
+
+    if (!$patient) {
+        return ApiResponse::notFound('Patient not found');
+    }
+
+    if (!$group->patients()->where('patient_id', $patientId)->exists()) {
+        return ApiResponse::notFound('Patient is not in this group');
+    }
+
+    $group->patients()->detach($patientId);
+
+    return ApiResponse::success(
+        null,
+        'Patient removed from group successfully'
+    );
+} 
+
 }
