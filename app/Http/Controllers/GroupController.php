@@ -325,5 +325,41 @@ public function getRegisteredPatients(Request $request, $id)
         'Registered patients retrieved successfully'
     );
 }
+ /**
+ * Get patients not registered in a specific group
+ */
+public function getUnregisteredPatients(Request $request, $id)
+{
+    $group = Group::find($id);
+
+    if (!$group) {
+        return ApiResponse::notFound('Group not found');
+    }
+
+    $query = Patient::whereDoesntHave('groups', function ($query) use ($id) {
+        $query->where('groups.id', $id);
+    });
+
+    // Search by first name or last name
+    if ($request->filled('search')) {
+        $search = strtolower($request->search);
+
+        $query->where(function ($query) use ($search) {
+            $query->whereRaw('LOWER(first_name) LIKE ?', ["%{$search}%"])
+                ->orWhereRaw('LOWER(last_name) LIKE ?', ["%{$search}%"])
+                ->orWhereRaw(
+                    'LOWER(CONCAT(first_name, " ", last_name)) LIKE ?',
+                    ["%{$search}%"]
+                );
+        });
+    }
+
+    $patients = $query->paginate(10);
+
+    return ApiResponse::paginated(
+        $patients,
+        'Unregistered patients retrieved successfully'
+    );
+}
 
 }
