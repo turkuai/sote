@@ -55,7 +55,7 @@ class CareController extends Controller {
     try {
       $patient = Patient::find($patientId);
 
-      if (! $patient) {
+      if (!$patient) {
         return ApiResponse::notFound('Patient not found');
       }
 
@@ -157,7 +157,7 @@ class CareController extends Controller {
     try {
       $problem = CareProblem::find($id);
 
-      if (! $problem) {
+      if (!$problem) {
         return ApiResponse::notFound('Care problem not found');
       }
 
@@ -176,7 +176,7 @@ class CareController extends Controller {
       ]);
 
       return ApiResponse::success(
-        $problem->load('author:id,first_name,last_name'),
+        $problem->load(+'author:id,first_name,last_name'),
         'Care problem updated successfully',
         200
       );
@@ -193,7 +193,7 @@ class CareController extends Controller {
     try {
       $item = CareProblemItems::find($id);
 
-      if (! $item) {
+      if (!$item) {
         return ApiResponse::notFound('Care problem item not found');
       }
 
