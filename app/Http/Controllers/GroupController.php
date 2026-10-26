@@ -361,5 +361,36 @@ public function getUnregisteredPatients(Request $request, $id)
         'Unregistered patients retrieved successfully'
     );
 }
+/**
+ * Add a patient to a group
+ */
+public function addPatientToGroup($groupId, $patientId)
+{
+    $group = Group::find($groupId);
 
+    if (!$group) {
+        return ApiResponse::notFound('Group not found');
+    }
+
+    $patient = Patient::find($patientId);
+
+    if (!$patient) {
+        return ApiResponse::notFound('Patient not found');
+    }
+
+    if ($group->patients()->where('patient_id', $patientId)->exists()) {
+        return ApiResponse::error(
+            'Patient is already in this group',
+            400
+        );
+    }
+
+    $group->patients()->attach($patientId);
+
+    return ApiResponse::success(
+        ['message' => 'Patient added to group successfully'],
+        'Patient added to group',
+        201
+    );
+}
 }
