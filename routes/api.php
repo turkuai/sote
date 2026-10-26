@@ -78,6 +78,9 @@ Route::prefix('api')->group(function () {
     Route::post('/care/problem/item', [CareController::class, 'addProblemItem']);
     Route::patch('/care/problem/{id}', [CareController::class, 'updateProblem'])->middleware('checkRole:admin,manager');
     Route::patch('/care/problem/item/{id}', [CareController::class, 'updateProblemItem']);
+    Route::post('/patients/{id}/groups', [PatientController::class, 'addToGroup'])->middleware('checkRole:admin,manager');
+    Route::delete('/patients/{id}/groups/{groupId}', [PatientController::class, 'removeFromGroup'])
+      ->middleware('checkRole:admin,manager');
   });
 });
 
