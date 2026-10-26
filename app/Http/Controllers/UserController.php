@@ -29,8 +29,9 @@ class UserController extends Controller {
       }
 
       // Search by name, email, or first_name
-      if ($request->has('search') && $request->search) {
-        $search = strtolower($request->search);
+      $search = strtolower($request->input('q', ''));
+
+      if ($search !== '') {
         $query->where(function ($q) use ($search) {
           $q->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"])
             ->orWhereRaw('LOWER(first_name) LIKE ?', ["%{$search}%"])
