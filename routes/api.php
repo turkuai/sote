@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\RegisterController;
+use App\Http\Controllers\CareController;
 
 // API Routes - must be BEFORE fallback to avoid Inertia catching them
 Route::prefix('api')->group(function () {
@@ -71,7 +72,15 @@ Route::prefix('api')->group(function () {
     Route::get('/patients/{id}/groups', [PatientController::class, 'getGroups'])->middleware('checkRole:admin');
     Route::post('/patients/{id}/groups', [PatientController::class, 'addToGroup'])->middleware('checkRole:admin,manager');
     Route::delete('/patients/{id}/groups/{groupId}', [PatientController::class, 'removeFromGroup'])
-    ->middleware('checkRole:admin,manager');
+      ->middleware('checkRole:admin,manager');
+
+    // Care API
+    Route::get('/care/categories', [CareController::class, 'fetchCareCategories']);
+    Route::get('/care/{patientId}', [CareController::class, 'fetchPatientProblems']);
+    Route::post('/care/problem', [CareController::class, 'addProblem'])->middleware('checkRole:admin,manager');
+    Route::post('/care/problem/item', [CareController::class, 'addProblemItem']);
+    Route::patch('/care/problem/{id}', [CareController::class, 'updateProblem'])->middleware('checkRole:admin,manager');
+    Route::patch('/care/problem/item/{id}', [CareController::class, 'updateProblemItem']);
   });
 });
 
