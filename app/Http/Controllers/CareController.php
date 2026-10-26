@@ -203,7 +203,6 @@ class CareController extends Controller {
 
       $validator = Validator::make($request->all(), [
         'description' => 'sometimes|required|string|max:1000',
-        'type' => 'sometimes|required|in:0,1,2,goal,activity,review',
       ]);
 
       if ($validator->fails()) {
@@ -215,17 +214,6 @@ class CareController extends Controller {
       $updateData = [];
       if (isset($validated['description'])) {
         $updateData['description'] = $validated['description'];
-      }
-      if (isset($validated['type'])) {
-        $typeMap = [
-          0 => 'goal',
-          1 => 'activity',
-          2 => 'review',
-          'goal' => 'goal',
-          'activity' => 'activity',
-          'review' => 'review',
-        ];
-        $updateData['type'] = $typeMap[$validated['type']];
       }
 
       $item->update($updateData);
