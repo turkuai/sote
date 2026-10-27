@@ -1,11 +1,11 @@
 import { ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { useServerGridLabels } from '../hooks/useCurrentLanguage';
 import { useNavigate } from 'react-router-dom';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
 import { useNotification } from '../components/NotificationContext';
 import { getApiBase } from '../config';
+import { useServerGridLabels } from '../hooks/useCurrentLanguage';
 import './Admin.css';
 
 export default function PatientsTab({ currentUser, query, onQueryChange }) {
@@ -46,7 +46,7 @@ export default function PatientsTab({ currentUser, query, onQueryChange }) {
               name: NameRenderer,
               arrival_date: ArrivalDateRenderer,
             }}
-            path="patients"
+            path="patients/user-patients"
             allowEditing={false}
             allowDelete={false}
             pageSize={10}
