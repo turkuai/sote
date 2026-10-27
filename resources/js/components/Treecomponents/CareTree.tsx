@@ -95,6 +95,7 @@ export function CareTree({ data: initialData }: CareTreeProps) {
         <TreeItem
           content={
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>{t('caretree.goal')}</span>
               <button
                 type="button"
                 aria-label={`Lisää: ${t('caretree.goal')}`}
@@ -114,7 +115,6 @@ export function CareTree({ data: initialData }: CareTreeProps) {
               >
                 <Plus size={20} />
               </button>
-              <span>{t('caretree.goal')}</span>
             </div>
           }
           contentStyle={{
@@ -154,6 +154,7 @@ export function CareTree({ data: initialData }: CareTreeProps) {
         <TreeItem
           content={
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>{t('caretree.activity')}</span>
               <button
                 type="button"
                 aria-label={`Lisää: ${t('caretree.activity')}`}
@@ -173,7 +174,6 @@ export function CareTree({ data: initialData }: CareTreeProps) {
               >
                 <Plus size={20} />
               </button>
-              <span>{t('caretree.activity')}</span>
             </div>
           }
           contentStyle={{
@@ -214,6 +214,7 @@ export function CareTree({ data: initialData }: CareTreeProps) {
         <TreeItem
           content={
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>{t('caretree.review')}</span>
               <button
                 type="button"
                 aria-label={`Lisää: ${t('caretree.review')}`}
@@ -233,7 +234,6 @@ export function CareTree({ data: initialData }: CareTreeProps) {
               >
                 <Plus size={20} />
               </button>
-              <span>{t('caretree.review')}</span>
             </div>
           }
           contentStyle={{
@@ -276,12 +276,6 @@ export function CareTree({ data: initialData }: CareTreeProps) {
           formComponent={<DescriptionForm description={description} onDescriptionChange={setDescription} />}
           onCancel={closeDialog}
           onSave={saveDescription}
-          labels={{
-            title: `Lisää: ${t(`caretree.${selectedType}`)}`,
-            save: 'Tallenna',
-            cancel: 'Peruuta',
-            close: 'Sulje',
-          }}
         />
       )}
     </>
