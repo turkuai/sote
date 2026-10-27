@@ -14,6 +14,7 @@ import PatientsPage from './pages/PatientsPage';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail';
 import WaitingApproval from './pages/WaitingApproval';
+import patientsinfo from './components/PatientsInfo';
 
 function App() {
   const { isAuthenticated, loading, currentUser } = useAuth();
@@ -60,6 +61,7 @@ function App() {
           <Route path="/home/:tab" element={<HomePage />} />
           <Route path="/patients" element={<PatientsPage />} />
           <Route path="/patients/:patientId" element={<PatientReportPage />} />
+          <Route path="/patients/:patientId/Info" element={<PatientsInfo/>} />
         </Route>
       </Route>
 
