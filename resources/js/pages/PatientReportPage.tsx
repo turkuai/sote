@@ -73,7 +73,7 @@ export default function PatientReportPage() {
   return (
     <div className="admin-content-area">
       <div className="admin-content-card">
-        <CareTreeList CareDataList={data} />
+        <CareTreeList careDataList={data} />
       </div>
     </div>
   );

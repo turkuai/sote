@@ -17,3 +17,8 @@ export interface CareProblem {
   creation_at: string;
   planItems: PatientProblemItem[];
 }
+export interface CareCategory {
+  name: string;
+  id: number;
+  parent_category_id: number | null;
+}
