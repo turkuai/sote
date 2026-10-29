@@ -149,7 +149,7 @@ function CareTreeList({ careDataList }: CareTreeListProps) {
               dispatch({ type: 'next' });
             }
           }}
-          labels={{ title: 'add Care Problems', save: state.activeStep == 2 ? 'Save' : 'Next' }}
+          labels={{ title: 'Add Care Problems', save: state.activeStep == 2 ? 'Save' : 'Next' }}
         />
       )}
     </>

@@ -28,7 +28,7 @@ function SelectSubCategories({ categories, parent_category_id, setNewData }: Sel
     <div className="ml-5">
       {children.map((c) => (
         <div key={c.id}>
-          <div>
+          <div className="my-1 p-[5px] flex items-center gap-2 hover:bg-blue-50">
             <input
               type="radio"
               name={parent_category_id.toString()}

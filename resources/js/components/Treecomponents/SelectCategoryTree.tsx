@@ -14,7 +14,7 @@ function SelectCategoryTree({ categories, setNewData }: SelectCategoryTreeProps)
     <div>
       {rootCategories.map((c) => (
         <div key={c.id}>
-          <div>
+          <div className="my-1 p-[5px] flex items-center gap-2 hover:bg-blue-50">
             <input
               type="radio"
               name="main"
