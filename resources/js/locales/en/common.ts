@@ -39,7 +39,7 @@ const enCommon = {
 
   user: {
     welcome: 'Welcome',
-    settings: 'Settings',
+    settings: 'My Profile',
     logout: 'Logout',
     myDashboard: 'My Dashboard',
   },
@@ -48,7 +48,7 @@ const enCommon = {
     users: 'Users',
     groups: 'Groups',
     waitingList: 'Waiting List',
-    settings: 'Settings',
+    settings: 'My Profile',
     patients: 'Patients',
   },
 
@@ -255,8 +255,8 @@ const enCommon = {
 
   settings: {
     header: {
-      title: 'Settings',
-      description: 'Manage your account settings and set e-mail preferences.',
+      title: 'My Profile',
+      description: 'Manage your account profile and set e-mail preferences.',
     },
     tabs: {
       profile: 'Profile',
