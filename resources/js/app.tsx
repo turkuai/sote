@@ -14,6 +14,7 @@ import PatientsPage from './pages/PatientsPage';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail';
 import WaitingApproval from './pages/WaitingApproval';
+import PatientInfo from './pages/PatientsInfoTest';
 
 function App() {
   const { isAuthenticated, loading, currentUser } = useAuth();
@@ -55,13 +56,14 @@ function App() {
       <Route path="/waiting-approval" element={isAuthenticated && !currentUser?.role_type ? <WaitingApproval /> : <Navigate to="/" replace />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route element={<ProtectedRoute />}>
-        <Route element={<ProtectedLayout />}>
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/home/:tab" element={<HomePage />} />
-          <Route path="/patients" element={<PatientsPage />} />
-          <Route path="/patients/:patientId" element={<PatientReportPage />} />
-        </Route>
+      <Route element={<ProtectedLayout />}>
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/home/:tab" element={<HomePage />} />
+        <Route path="/patients" element={<PatientsPage />} />
+        <Route path="/patients/:patientId" element={<PatientReportPage />} />
+        <Route path="/patients/:patientId/info" element={<PatientInfo />} />
       </Route>
+</Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
