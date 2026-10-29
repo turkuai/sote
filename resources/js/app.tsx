@@ -14,7 +14,11 @@ import PatientsPage from './pages/PatientsPage';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail';
 import WaitingApproval from './pages/WaitingApproval';
+<<<<<<< HEAD
 import PatientInfo from './pages/PatientsInfoTest';
+=======
+import patientsinfo from './components/PatientsInfo';
+>>>>>>> 450d13cee20e72bc7108284256c09634fdb21d03
 
 function App() {
   const { isAuthenticated, loading, currentUser } = useAuth();
@@ -56,12 +60,22 @@ function App() {
       <Route path="/waiting-approval" element={isAuthenticated && !currentUser?.role_type ? <WaitingApproval /> : <Navigate to="/" replace />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route element={<ProtectedRoute />}>
+<<<<<<< HEAD
       <Route element={<ProtectedLayout />}>
         <Route path="/home" element={<HomePage />} />
         <Route path="/home/:tab" element={<HomePage />} />
         <Route path="/patients" element={<PatientsPage />} />
         <Route path="/patients/:patientId" element={<PatientReportPage />} />
         <Route path="/patients/:patientId/info" element={<PatientInfo />} />
+=======
+        <Route element={<ProtectedLayout />}>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/home/:tab" element={<HomePage />} />
+          <Route path="/patients" element={<PatientsPage />} />
+          <Route path="/patients/:patientId" element={<PatientReportPage />} />
+          <Route path="/patients/:patientId/Info" element={<PatientsInfo/>} />
+        </Route>
+>>>>>>> 450d13cee20e72bc7108284256c09634fdb21d03
       </Route>
 </Route>
 

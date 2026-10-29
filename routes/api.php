@@ -82,6 +82,7 @@ Route::prefix('api')->group(function () {
     Route::post('/care/problem/item', [CareController::class, 'addProblemItem']);
     Route::patch('/care/problem/{id}', [CareController::class, 'updateProblem'])->middleware('checkRole:admin,manager');
     Route::patch('/care/problem/item/{id}', [CareController::class, 'updateProblemItem']);
+    
   });
 });
 

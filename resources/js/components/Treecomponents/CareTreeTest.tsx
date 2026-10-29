@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { CareTree } from './CareTree';
+
 export function CareTreeTest() {
   const { t } = useTranslation();
 
