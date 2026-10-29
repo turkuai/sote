@@ -14,11 +14,7 @@ import PatientsPage from './pages/PatientsPage';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail';
 import WaitingApproval from './pages/WaitingApproval';
-<<<<<<< HEAD
 import PatientInfo from './pages/PatientsInfoTest';
-=======
-import patientsinfo from './components/PatientsInfo';
->>>>>>> 450d13cee20e72bc7108284256c09634fdb21d03
 
 function App() {
   const { isAuthenticated, loading, currentUser } = useAuth();
