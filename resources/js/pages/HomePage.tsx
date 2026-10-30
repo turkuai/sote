@@ -5,13 +5,13 @@ import './Admin.css';
 import { useTranslation } from 'react-i18next';
 import { useUserManagement } from '../hooks/useUserManagement';
 import { TabConfig } from '../utils/tabConfig';
-import GroupsTab from './GroupsTab';
+// import GroupsTab from './GroupsTab';
 import HomeTabs from './HomeTabs';
 import MobileNav from './MobileNav';
-import PatientsTab from './PatientsTab';
-import SettingsTab from './SettingsTab';
-import UsersTab from './UsersTab';
-import WaitingListTab from './WaitingListTab';
+// import PatientsTab from './PatientsTab';
+// import SettingsTab from './SettingsTab';
+// import UsersTab from './UsersTab';
+// import WaitingListTab from './WaitingListTab';
 
 export default function HomePage() {
 
