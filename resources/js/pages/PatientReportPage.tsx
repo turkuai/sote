@@ -20,15 +20,16 @@ export default function PatientReportPage() {
 
 const { t } = useTranslation();
 const navigate = useNavigate();
-const { tab: urlTab } = useParams<{ tab: string }>();
 
-const defaultTab =
-    currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'
-      ? 'users'
-      : 'settings';
 
-const tabs = TabConfig.getTabs(currentUser, isMobile);
-const activeTab = urlTab || defaultTab;
+
+
+const { patientId, tab: urlTab } = useParams<{ patientId: string; tab: string }>();
+
+const tabs = ['care-tree', 'info']; // your two tab keys
+const defaultTab = 'care-tree';
+const activeTab = urlTab && tabs.includes(urlTab) ? urlTab : defaultTab;
+
 
 const [sidebarCollapsed, setSidebarCollapsed] = useState(() =>
     typeof window !== 'undefined'
@@ -36,9 +37,9 @@ const [sidebarCollapsed, setSidebarCollapsed] = useState(() =>
       : false
   );
 
-  const handleTabClick = (tab: string) => {
-    navigate(`/home/${tab}`);
-  };
+const handleTabClick = (tab: string) => {
+  navigate(`/patients/${patientId}/${tab}`);
+};
   
   return (
     <div className="admin-body hide-on-mobile">
