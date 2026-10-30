@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useOutletContext } from 'react-router-dom';
 import 'tai-grid/style.css';
 import { getApiBase } from '../config';
 import './Admin.css';
@@ -9,7 +10,12 @@ import './Admin.css';
  * @param {Object} currentUser - Current authenticated user object
  * @param {Function} onLogout - Handler for logout button click
  */
-const SettingsTab = ({ currentUser, onLogout }) => {
+const SettingsTab = ({}) => {
+  const { handleLogout: onLogout, currentUser } = useOutletContext<{
+    handleLogout: () => void;
+    currentUser: { role_type?: String; id?: string; name?: string; username?: string } | null;
+  }>();
+
   const { t } = useTranslation();
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: '',
@@ -182,7 +188,7 @@ const SettingsTab = ({ currentUser, onLogout }) => {
 
             <div className="settings-form-group">
               <label>{t('settings.fields.role')}</label>
-              <input type="text" value={currentUser?.role_type || 'Administrator'} readOnly className="settings-input" />
+              <input type="text" value={String(currentUser?.role_type || 'Administrator')} readOnly className="settings-input" />
             </div>
 
             <div className="settings-form-group">
