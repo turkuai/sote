@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ServerGridEditDialog } from 'tai-grid';
 import CareProblemDialogForm from './CareProblemDialogForm';
 import { CareTree } from './CareTree';
+import { dummyCategories } from './DialogComponents/dialogTest';
 
 //types
 type CareTreeListProps = {
@@ -24,41 +25,6 @@ type Action =
   | {
       type: 'next' | 'back' | 'reset';
     };
-
-export const dummyCategories = [
-  // Root categories
-  { id: 1, name: 'Elimination', parent_category_id: null },
-  { id: 2, name: 'Nutrition', parent_category_id: null },
-  { id: 3, name: 'Mobility', parent_category_id: null },
-  { id: 4, name: 'Sleep difficulties', parent_category_id: null },
-
-  // Elimination → subcategories
-  { id: 5, name: 'Bowel disorder', parent_category_id: 1 },
-  { id: 6, name: 'Urinary disorder', parent_category_id: 1 },
-
-  // Bowel disorder → leaves
-  { id: 7, name: 'Constipation', parent_category_id: 5 },
-  { id: 8, name: 'Diarrhea', parent_category_id: 5 },
-
-  // Urinary disorder → leaves
-  { id: 9, name: 'Urinary retention', parent_category_id: 6 },
-  { id: 10, name: 'Urinary incontinence', parent_category_id: 6 },
-
-  // Nutrition → leaves
-  { id: 11, name: 'Difficulty eating', parent_category_id: 2 },
-  { id: 12, name: 'Reduced appetite', parent_category_id: 2 },
-
-  // Mobility → one branch and one leaf
-  { id: 13, name: 'Walking difficulties', parent_category_id: 3 },
-  { id: 14, name: 'Difficulty changing position', parent_category_id: 3 },
-
-  // Walking difficulties → deeper branch
-  { id: 15, name: 'Balance difficulties', parent_category_id: 13 },
-
-  // Balance difficulties → leaves
-  { id: 16, name: 'Unsteady when standing', parent_category_id: 15 },
-  { id: 17, name: 'Unsteady when turning', parent_category_id: 15 },
-];
 
 //functionality for adding a new care problem
 function reducer(state: State, action: Action) {
@@ -89,9 +55,12 @@ function reducer(state: State, action: Action) {
 function CareTreeList({ careDataList }: CareTreeListProps) {
   const { t } = useTranslation();
   const [state, dispatch] = useReducer(reducer, { data: careDataList, activeStep: 0 });
+
   //variables related to the dialog
   const [isCareProblemDialogOpen, setIsCareProblemDialogOpen] = useState(false);
   const steps = ['Select Category', 'Enter a Description', 'Review & Save'];
+
+  //tracks nurses entry + nurse & patient info
   const [newData, setNewData] = useState<CareProblem>({
     category: [],
     id: 11,
