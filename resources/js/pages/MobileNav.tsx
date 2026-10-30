@@ -1,4 +1,4 @@
-import { Settings, Users } from 'lucide-react';
+import { Settings, Stethoscope, Users } from 'lucide-react';
 import './Admin.css';
 
 /**
@@ -11,6 +11,7 @@ import './Admin.css';
 const MobileNav = ({ tabs, activeTab, onTabClick, currentUser }) => {
   const tabIconMap = {
     users: Users,
+    patients: Stethoscope,
     settings: Settings,
   };
 
