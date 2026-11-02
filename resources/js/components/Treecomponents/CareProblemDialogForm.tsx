@@ -1,13 +1,13 @@
 import { ArrowLeft } from 'lucide-react';
-import ReviewEntries from './DialogComponents/ReviewEntries';
-import SelectCategoryTree from './DialogComponents/SelectCategoryTree';
+import ReviewEntries from './dialogComponents/ReviewEntries';
+import SelectCategoryTree from './dialogComponents/SelectCategoryTree';
 
 function CareProblemDialogForm({ categories, steps, activeStep, onBack, data, setData }) {
   return (
     <div>
       <div className="flex gap-2">
         <button
-          disabled={activeStep == 0}
+          disabled={activeStep === 0}
           onClick={() => onBack()}
           className="mb-4 flex size-6 shrink-0 items-center justify-center bg-transparent! rounded-lg text-black! hover:bg-blue-100!"
         >
@@ -18,10 +18,10 @@ function CareProblemDialogForm({ categories, steps, activeStep, onBack, data, se
 
       <div className="border-2 rounded-md p-2 my-2">
         {/** select categories */}
-        {activeStep == 0 && <SelectCategoryTree categories={categories} setNewData={setData} />}
+        {activeStep === 0 && <SelectCategoryTree categories={categories} setNewData={setData} />}
 
         {/** add a description */}
-        {activeStep == 1 && (
+        {activeStep === 1 && (
           <textarea
             className="w-full outline-none"
             rows={4}

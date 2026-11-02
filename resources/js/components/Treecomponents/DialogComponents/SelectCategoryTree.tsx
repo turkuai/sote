@@ -27,7 +27,7 @@ function SelectCategoryTree({ categories, setNewData }: SelectCategoryTreeProps)
             />
             {c.name}
           </div>
-          {selectedId == c.id && <SelectSubCategories categories={categories} parent_category_id={c.id} setNewData={setNewData} />}
+          {selectedId === c.id && <SelectSubCategories categories={categories} parent_category_id={c.id} setNewData={setNewData} />}
         </div>
       ))}
     </div>

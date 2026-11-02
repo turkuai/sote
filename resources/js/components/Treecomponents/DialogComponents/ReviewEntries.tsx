@@ -9,7 +9,7 @@ function ReviewEntries({ data }) {
             <span key={i} className="inline-flex items-center gap-2">
               {i > 0 && <span>→</span>}
 
-              <p className={i == data.category.length - 1 && 'font-semibold text-red-700'}>{c}</p>
+              <p className={i === data.category.length - 1 && 'font-semibold text-red-700'}>{c}</p>
             </span>
           ))}
         </div>
