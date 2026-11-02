@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
+import { useServerGridLabels } from '../hooks/useCurrentLanguage';
+import { useTranslation } from "react-i18next";
 /**
  * Patient info page.
  * Route: /patients/:patientId/info (see resources/js/app.tsx).
@@ -67,7 +68,7 @@ export default function PatientInfo() {
   if (loading) return <p>Loading patient information...</p>;
   if (error) return <p role="alert">{error}</p>;
   if (!patient) return <p>Patient not found.</p>;
-
+  const { t } = useTranslation();
   return (
     <main>
       

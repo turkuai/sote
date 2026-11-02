@@ -311,6 +311,23 @@ const svCommon = {
     activity: 'Planerade åtgärder',
     review: 'Vårdbedömning',
   },
+  patientInfo: {
+  loading: 'Laddar patientinformation...',
+  socialId: 'Personbeteckning',
+  arrivalDate: 'Ankomstdatum',
+  address: 'Adress',
+  phone: 'Telefon',
+  remarks: 'Anmärkningar',
+  job: 'Yrke',
+  notProvided: 'Ej angivet',
+  noRemarks: 'Inga anmärkningar',
+  errors: {
+    idMissing: 'Patient-ID saknas.',
+    notFound: 'Patienten hittades inte.',
+    loadFailed: 'Det gick inte att ladda patientinformationen.',
+    generic: 'Något gick fel.',
+  },
+},
 };
 
 export default svCommon;
