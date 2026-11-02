@@ -1,8 +1,9 @@
 import type { CareProblem } from '@/types/caretree';
-import { Dot, Plus } from 'lucide-react';
+import { Dot } from 'lucide-react';
 import { useReducer, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ServerGridEditDialog from '../../../../grid/src/ServerGridEditDialog';
+import AddItemButton from './AddItemButton';
 import DescriptionForm from './DescriptionForm';
 import Tree from './Tree';
 import { TreeItem } from './TreeItem';
@@ -96,25 +97,13 @@ export function CareTree({ data: initialData }: CareTreeProps) {
           content={
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span>{t('caretree.goal')}</span>
-              <button
-                type="button"
-                aria-label={`Lisää: ${t('caretree.goal')}`}
-                onClick={(event) => {
-                  event.stopPropagation();
+              <AddItemButton
+                label={`Lisää: ${t('caretree.goal')}`}
+                onClick={() => {
                   setDescription('');
                   setSelectedType('goal');
                 }}
-                style={{
-                  display: 'inline-flex',
-                  background: 'none',
-                  border: 'none',
-                  padding: '4px',
-                  cursor: 'pointer',
-                  color: 'inherit',
-                }}
-              >
-                <Plus size={20} />
-              </button>
+              />
             </div>
           }
           contentStyle={{
@@ -155,25 +144,13 @@ export function CareTree({ data: initialData }: CareTreeProps) {
           content={
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span>{t('caretree.activity')}</span>
-              <button
-                type="button"
-                aria-label={`Lisää: ${t('caretree.activity')}`}
-                onClick={(event) => {
-                  event.stopPropagation();
+              <AddItemButton
+                label={`Lisää: ${t('caretree.activity')}`}
+                onClick={() => {
                   setDescription('');
                   setSelectedType('activity');
                 }}
-                style={{
-                  display: 'inline-flex',
-                  background: 'none',
-                  border: 'none',
-                  padding: '4px',
-                  cursor: 'pointer',
-                  color: 'inherit',
-                }}
-              >
-                <Plus size={20} />
-              </button>
+              />
             </div>
           }
           contentStyle={{
@@ -215,25 +192,13 @@ export function CareTree({ data: initialData }: CareTreeProps) {
           content={
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span>{t('caretree.review')}</span>
-              <button
-                type="button"
-                aria-label={`Lisää: ${t('caretree.review')}`}
-                onClick={(event) => {
-                  event.stopPropagation();
+              <AddItemButton
+                label={`Lisää: ${t('caretree.review')}`}
+                onClick={() => {
                   setDescription('');
                   setSelectedType('review');
                 }}
-                style={{
-                  display: 'inline-flex',
-                  background: 'none',
-                  border: 'none',
-                  padding: '4px',
-                  cursor: 'pointer',
-                  color: 'inherit',
-                }}
-              >
-                <Plus size={20} />
-              </button>
+              />
             </div>
           }
           contentStyle={{
