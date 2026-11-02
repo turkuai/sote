@@ -67,15 +67,14 @@ export default function Login() {
         </div>
 
         {/* Microsoft Entra ID Login */}
-        <div style={{ marginTop: '1.5rem', borderTop: '1px solid #e5e7eb', paddingTop: '1.5rem' }}>
+        <div style={{ gap: '1.5rem', display: 'flex', flexDirection: 'column' }}>
           <a href="/auth/entra-id" style={{ textDecoration: 'none' }}>
             <button type="button" className="login-submit-btn" style={{ backgroundColor: '#c5192d', width: '100%', cursor: 'pointer' }}>
               {t('auth.entraIdButton')}
             </button>
           </a>
-          <p style={{ color: '#9ca3af', fontSize: '0.75rem', marginTop: '0.5rem' }}>{t('auth.entraIdSubtext')}</p>
         </div>
-
+        <hr></hr>
         <form onSubmit={handleSubmit} autoComplete="on">
           <div className="login-form-group">
             <label className="login-label">{t('auth.email')}</label>
@@ -91,7 +90,6 @@ export default function Login() {
               disabled={loading}
             />
           </div>
-
           <div className="login-form-group">
             <label className="login-label">{t('auth.password')}</label>
             <input
