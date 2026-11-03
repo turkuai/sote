@@ -4,6 +4,7 @@ const enCommon = {
     english: 'English',
     finnish: 'Finnish',
     swedish: 'Swedish',
+    estonia: 'Estonian',
     loading: 'Loading...',
     navigation: 'Navigation',
     close: 'Close',
