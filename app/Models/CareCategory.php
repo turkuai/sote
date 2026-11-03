@@ -16,4 +16,17 @@ class CareCategory extends Model {
     'name',
     'description',
   ];
+  /**
+   * Subcategories that belong to this category.
+   */
+  public function children() {
+    return $this->hasMany(CareCategory::class, 'parent_category_id');
+  }
+
+  /**
+   * Problems attached to this category.
+   */
+  public function problems() {
+    return $this->hasMany(CareProblem::class, 'category_id');
+  }
 }
