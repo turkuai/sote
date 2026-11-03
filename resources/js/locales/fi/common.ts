@@ -320,6 +320,7 @@ const fiCommon = {
   job: 'Työ',
   notProvided: 'Ei annettu',
   noRemarks: 'Ei huomautuksia',
+  na: 'Ei tietoa annettu',
   errors: {
     idMissing: 'potilas ID puuttuu.',
     notFound: 'Potilasta ei löydy.',

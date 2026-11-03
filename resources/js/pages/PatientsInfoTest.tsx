@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useServerGridLabels } from '../hooks/useCurrentLanguage';
+import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+
 /**
  * Patient info page.
  * Route: /patients/:patientId/info (see resources/js/app.tsx).
- * loads all info based on the patientId
+ * Loads all info based on the patientId.
  */
 
 type Patient = {
@@ -14,19 +14,25 @@ type Patient = {
   last_name: string;
   social_id: string;
   arrival_date?: string | null;
+  address?: string | null;
+  phone?: string | null;
+  job?: string | null;
   remarks?: string | null;
 };
 
+type ErrorKey = "missingId" | "notFound" | "loadFailed" | "generic";
+
 export default function PatientInfo() {
+  const { t } = useTranslation();
   const { patientId } = useParams<{ patientId: string }>();
 
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [errorKey, setErrorKey] = useState<ErrorKey | null>(null);
 
   useEffect(() => {
     if (!patientId) {
-      setError("Patient ID is missing.");
+      setErrorKey("missingId");
       setLoading(false);
       return;
     }
@@ -35,7 +41,7 @@ export default function PatientInfo() {
 
     async function fetchPatient() {
       setLoading(true);
-      setError("");
+      setErrorKey(null);
       try {
         const response = await fetch(`/api/patients/${patientId}`, {
           credentials: "include",
@@ -44,18 +50,15 @@ export default function PatientInfo() {
         });
 
         if (!response.ok) {
-          throw new Error(
-            response.status === 404
-              ? "Patient not found."
-              : "Could not load patient information."
-          );
+          setErrorKey(response.status === 404 ? "notFound" : "loadFailed");
+          return;
         }
-        
+
         const result = await response.json();
         setPatient(result.data ?? result);
       } catch (err) {
         if (err instanceof DOMException && err.name === "AbortError") return;
-        setError(err instanceof Error ? err.message : "Something went wrong.");
+        setErrorKey("generic");
       } finally {
         if (!controller.signal.aborted) setLoading(false);
       }
@@ -65,23 +68,26 @@ export default function PatientInfo() {
     return () => controller.abort();
   }, [patientId]);
 
-  if (loading) return <p>Loading patient information...</p>;
-  if (error) return <p role="alert">{error}</p>;
-  if (!patient) return <p>Patient not found.</p>;
-  const { t } = useTranslation();
+  if (loading) return <p>{t("patientInfo.loading")}</p>;
+  if (errorKey) return <p role="alert">{t(`patientInfo.errors.${errorKey}`)}</p>;
+  if (!patient) return <p>{t("patientInfo.errors.notFound")}</p>;
+
+  const na = t("patientInfo.na");
+
   return (
     <main>
-      
       <div className="admin-content-area">
-      <div className="admin-content-card">
-        <h1>{patient.first_name} {patient.last_name}</h1>
-        <p><strong>Social ID:</strong> {patient.social_id}</p>
-        <p><strong>Arrival date:</strong> {patient.arrival_date || "Not provided"}</p>
-        <p><strong>Address:</strong>{patient.address || "Not provided"}</p>
-        <p><strong>Phone:</strong>{patient.phone || "Not provided"}</p>
-        <p><strong>Remarks:</strong> {patient.remarks || "No remarks"}</p>
-        <p><strong>Job:</strong> {patient.job || "Not provided"}</p>
-      </div>
+        <div className="admin-content-card">
+          <h1>
+            {patient.first_name} {patient.last_name}
+          </h1>
+          <p><strong>{t("patientInfo.socialId")}:</strong> {patient.social_id}</p>
+          <p><strong>{t("patientInfo.arrivalDate")}:</strong> {patient.arrival_date || na}</p>
+          <p><strong>{t("patientInfo.address")}:</strong> {patient.address || na}</p>
+          <p><strong>{t("patientInfo.phone")}:</strong> {patient.phone || na}</p>
+          <p><strong>{t("patientInfo.job")}:</strong> {patient.job || na}</p>
+          <p><strong>{t("patientInfo.remarks")}:</strong> {patient.remarks || t("patientInfo.noRemarks")}</p>
+        </div>
       </div>
     </main>
   );

@@ -323,6 +323,7 @@ const enCommon = {
   job: 'Job',
   notProvided: 'Not provided',
   noRemarks: 'No remarks',
+  na: 'No information given',
   errors: {
     idMissing: 'Patient ID is missing.',
     notFound: 'Patient not found.',

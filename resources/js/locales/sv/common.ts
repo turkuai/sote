@@ -321,6 +321,7 @@ const svCommon = {
   job: 'Yrke',
   notProvided: 'Ej angivet',
   noRemarks: 'Inga anmärkningar',
+  na: 'ingen information lämnad',
   errors: {
     idMissing: 'Patient-ID saknas.',
     notFound: 'Patienten hittades inte.',
