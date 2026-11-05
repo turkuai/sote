@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ServerGridEditDialog } from 'tai-grid';
 import CareProblemDialogForm from './CareProblemDialogForm';
 import { CareTree } from './CareTree';
-import { dummyCategories } from './dialogComponents/dialogTest';
+import { dummyCategories } from './careDialogComponents/dialogTest';
 
 //types
 type CareTreeListProps = {
