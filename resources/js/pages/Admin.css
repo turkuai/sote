@@ -515,22 +515,18 @@
 /* Tab section header: title on left, search on right */
 .tab-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 1.25rem;
+  margin-bottom: 2rem;
   gap: 1rem;
 }
 
 .tab-header h2 {
-  margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.875rem;
   font-weight: 600;
-  color: #1f2937;
-  white-space: nowrap;
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: #000000;
+  margin: 0;
+  line-height: normal;
 }
 
 .tab-header .user-search {
@@ -803,9 +799,8 @@
   }
 
   .settings-layout {
-    display: flex;
-    gap: 3rem;
-    align-items: flex-start;
+    flex: 1;
+    max-width: 700px;
   }
 
   .settings-sidebar {
@@ -842,7 +837,9 @@
 
   .settings-content {
     flex: 1;
-    max-width: 700px;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
   }
 
   .settings-profile {
