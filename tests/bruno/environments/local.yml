@@ -1,5 +1,5 @@
 name: local
 variables:
   - name: baseUrl
-    value: http://localhost:8000
-    description: ""
+    value: http://127.0.0.1:8000
+    description: 'Local development server URL'
