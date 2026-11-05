@@ -33,7 +33,7 @@ export default function PatientInfo() {
     const controller = new AbortController();
 
     async function fetchPatient() {
-      setLoading(true);
+        setLoading(true);
       setError("");
       try {
         const response = await fetch(`/api/patients/${patientId}`, {
