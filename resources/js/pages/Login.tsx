@@ -74,7 +74,7 @@ export default function Login() {
             </button>
           </a>
         </div>
-        <hr></hr>
+        <hr />
         <form onSubmit={handleSubmit} autoComplete="on">
           <div className="login-form-group">
             <label className="login-label">{t('auth.email')}</label>
