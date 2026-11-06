@@ -9,7 +9,9 @@ export default function PatientReportPage() {
   return (
     <div className="admin-content-area">
       <div className="admin-content-card">
+        
         <CareTreeTest />
+        
       </div>
     </div>
   );

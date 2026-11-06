@@ -73,6 +73,7 @@ Route::prefix('api')->group(function () {
     Route::post('/patients/{id}/groups', [PatientController::class, 'addToGroup'])->middleware('checkRole:admin,manager');
     Route::delete('/patients/{id}/groups/{groupId}', [PatientController::class, 'removeFromGroup'])
       ->middleware('checkRole:admin,manager');
+    Route::get('/patients/{id}/info', [PatientController::class, 'show']);
 
     // Care API
     Route::get('/care/categories', [CareController::class, 'fetchCareCategories']);
@@ -81,6 +82,7 @@ Route::prefix('api')->group(function () {
     Route::post('/care/problem/item', [CareController::class, 'addProblemItem']);
     Route::patch('/care/problem/{id}', [CareController::class, 'updateProblem'])->middleware('checkRole:admin,manager');
     Route::patch('/care/problem/item/{id}', [CareController::class, 'updateProblemItem']);
+    
   });
 });
 
