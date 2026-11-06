@@ -1,7 +1,7 @@
+import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
 import { Crown, Eye, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
 import { ServerGrid as ServerGridBase } from 'tai-grid';
 import 'tai-grid/style.css';
 import GroupRegistrationForm from '../components/GroupRegistrationForm';

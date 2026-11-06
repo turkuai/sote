@@ -233,7 +233,24 @@ const fiCommon = {
       error: 'Virhe käyttäjän hyväksymisessä',
     },
   },
-
+  patients: {
+    panel: {
+      groups: 'Ryhmät',
+      addToGroup: 'Lisää ryhmään',
+      removeFromGroup: 'Poista ryhmästä',
+      selectPatient: 'Valitse potilas nähdäksesi tiedot',
+      noGroups: 'Potilasta ei ole liitetty mihinkään ryhmään.',
+    },
+    errors: {
+      loadGroups: 'Ryhmien lataaminen epäonnistui.',
+      addToGroup: 'Potilaan lisääminen ryhmään epäonnistui.',
+      removeFromGroup: 'Potilaan poistaminen ryhmästä epäonnistui.',
+    },
+    notifications: {
+      patientRemovedFromGroup: 'Potilas poistettiin ryhmästä onnistuneesti.',
+      patientAddedToGroup: 'Potilas lisättiin ryhmään onnistuneesti.',
+    },
+  },
   settings: {
     header: {
       title: 'Asetukset',
