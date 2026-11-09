@@ -53,7 +53,7 @@ class PatientController extends Controller {
   public function update(Request $request, $id) {
     $patient = Patient::find($id);
 
-    if (! $patient) {
+    if (!$patient) {
       return ApiResponse::notFound('Patient not found');
     }
 

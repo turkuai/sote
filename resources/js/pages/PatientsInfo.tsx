@@ -25,13 +25,19 @@ useEffect(() => {
 }, [patientId]);
 
     if (loading) { 
-      <p>Loading patient information...</p>;
+      return(
+      <p>Loading patient information...</p>
+      );
     }
     if (error) {
-      <p role="alert">{error}</p>;
+      return(
+      <p role="alert">{error}</p>
+      );
     }
     if (!patient) {
-      <p>Patient not found.</p>;
+      return(
+      <p>Patient not found.</p>
+      );
     }
 
   return (
