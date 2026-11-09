@@ -161,10 +161,6 @@ const SettingsTab = ({ currentUser, onLogout }) => {
       </div>
 
       <div className="settings-layout">
-        <div className="settings-sidebar">
-          <button className="settings-nav-item active">{t('settings.tabs.profile')}</button>
-        </div>
-
         <div className="settings-content">
           <div className="settings-profile">
             <h3>{t('settings.profile.title')}</h3>
