@@ -313,6 +313,24 @@ const enCommon = {
     activity: 'Planned Activities',
     review: 'Care Review',
   },
+  patientInfo: {
+  loading: 'Loading patient information...',
+  socialId: 'Social ID',
+  arrivalDate: 'Arrival date',
+  address: 'Address',
+  phone: 'Phone',
+  remarks: 'Remarks',
+  job: 'Job',
+  notProvided: 'Not provided',
+  noRemarks: 'No remarks',
+  na: 'No information given',
+  errors: {
+    idMissing: 'Patient ID is missing.',
+    notFound: 'Patient not found.',
+    loadFailed: 'Could not load patient information.',
+    generic: 'Something went wrong.',
+  },
+  },
 };
 
 export default enCommon;
