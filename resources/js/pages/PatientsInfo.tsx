@@ -1,72 +1,38 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { fetchPatient, type Patient } from "../api/fetchPatient";
 
-/**
- * Patient info page.
- * Route: /patients/:patientId/info (see resources/js/app.tsx).
- * loads all info based on the patientId
- */
+useEffect(() => {
+  if (!patientId) {
+    setError("Patient ID is missing.");
+    setLoading(false);
+    return;
+  }
 
-type Patient = {
-  id: number;
-  first_name: string;
-  last_name: string;
-  social_id: string;
-  arrival_date?: string | null;
-  remarks?: string | null;
-};
+  const controller = new AbortController();
+  setLoading(true);
+  setError("");
 
-export default function PatientInfo() {
-  const { patientId } = useParams<{ patientId: string }>();
+  fetchPatient(patientId, controller.signal)
+    .then(setPatient)
+    .catch((err) => {
+      if (err instanceof DOMException && err.name === "AbortError") return;
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+    })
+    .finally(() => {
+      if (!controller.signal.aborted) setLoading(false);
+    });
 
-  const [patient, setPatient] = useState<Patient | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  return () => controller.abort();
+}, [patientId]);
 
-  useEffect(() => {
-    if (!patientId) {
-      setError("Patient ID is missing.");
-      setLoading(false);
-      return;
+    if (loading) { 
+      <p>Loading patient information...</p>;
     }
-
-    const controller = new AbortController();
-
-    async function fetchPatient() {
-        setLoading(true);
-      setError("");
-      try {
-        const response = await fetch(`/api/patients/${patientId}`, {
-          credentials: "include",
-          headers: { Accept: "application/json" },
-          signal: controller.signal,
-        });
-
-        if (!response.ok) {
-          throw new Error(
-            response.status === 404
-              ? "Patient not found."
-              : "Could not load patient information."
-          );
-        }
-        
-        const result = await response.json();
-        setPatient(result.data ?? result);
-      } catch (err) {
-        if (err instanceof DOMException && err.name === "AbortError") return;
-        setError(err instanceof Error ? err.message : "Something went wrong.");
-      } finally {
-        if (!controller.signal.aborted) setLoading(false);
-      }
+    if (error) {
+      <p role="alert">{error}</p>;
     }
-
-    fetchPatient();
-    return () => controller.abort();
-  }, [patientId]);
-
-  if (loading) return <p>Loading patient information...</p>;
-  if (error) return <p role="alert">{error}</p>;
-  if (!patient) return <p>Patient not found.</p>;
+    if (!patient) {
+      <p>Patient not found.</p>;
+    }
 
   return (
     <main>
