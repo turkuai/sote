@@ -197,6 +197,37 @@ i18n.init({
 The `LanguageSwitcher` component (located in `resources/js/components/`) renders a dropdown that calls `i18n.changeLanguage(code)` and saves the choice to localStorage automatically.
 
 
+## API Testing (Bruno)
+
+This project includes a Bruno collection for testing the API.
+
+### Requirements
+
+- Bruno app on your Computer ( https://www.usebruno.com/ )
+- PHP
+- Composer
+- Configured Laravel environment
+
+### Getting started
+
+1. Start the Laravel development server
+
+2. Open Bruno.
+
+3. Select Open Collection.
+
+4. Navigate to the `tests/bruno` folder
+   in this repository.
+
+5. Select the `local` environment.
+
+6. You can now execute the API requests found in the collection.
+
+### Bruno extension (VSCode)
+
+You can also use Bruno straight from VSCode with the extension found in the VSCode extensions marketplace.
+It requires the app to be installed on the computer.
+
 ## API Endpoints
 
 ### **Users**
