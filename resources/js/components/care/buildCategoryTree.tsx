@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { TreeItem } from './TreeItem';
+import { TreeItem } from '../tree/TreeItem';
 
 export function buildCategoryTree(labels: string[], descriptionNode: ReactNode) {
   return labels.reduceRight((child, label) => {
