@@ -2,7 +2,7 @@ import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
 import { Crown, Eye, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ServerGrid as ServerGridBase } from 'tai-grid';
+import { FieldValidationError, ServerGrid as ServerGridBase } from 'tai-grid';
 import 'tai-grid/style.css';
 import GroupRegistrationForm from '../components/GroupRegistrationForm';
 import GroupUsersModal from '../components/GroupUsersModal';
@@ -336,16 +336,12 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                   labels={gridLabels}
                   transformEditPayload={(payload) => {
                     const name = String(payload.name || '').trim();
-                    if (!name) throw new Error(t('groups.errors.nameRequired'));
                     const access_key = String(payload.access_key || '').trim();
-                    if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
                     return { name, access_key };
                   }}
                   transformAddPayload={(payload) => {
                     const name = String(payload.name || '').trim();
-                    if (!name) throw new Error(t('groups.errors.nameRequired'));
                     const access_key = String(payload.access_key || '').trim();
-                    if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
                     return { name, access_key };
                   }}
                 />
@@ -414,16 +410,12 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                     labels={gridLabels}
                     transformEditPayload={(payload) => {
                       const name = String(payload.name || '').trim();
-                      if (!name) throw new Error(t('groups.errors.nameRequired'));
                       const access_key = String(payload.access_key || '').trim();
-                      if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
                       return { name, access_key };
                     }}
                     transformAddPayload={(payload) => {
                       const name = String(payload.name || '').trim();
-                      if (!name) throw new Error(t('groups.errors.nameRequired'));
                       const access_key = String(payload.access_key || '').trim();
-                      if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
                       return { name, access_key };
                     }}
                     onRowClick={handleGroupRowClick}
@@ -581,7 +573,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
   );
 }
 
-function GroupsForm({ data, setData }) {
+function GroupsForm({ data, setData, errors }) {
   const { t } = useTranslation();
   const [showKey, setShowKey] = useState(false);
   const getValue = (field) => (data && data[field]) || '';
@@ -600,6 +592,7 @@ function GroupsForm({ data, setData }) {
             onChange={handleChange('name')}
             placeholder={t('groups.form.groupNamePlaceholder')}
           />
+          <FieldValidationError errors={errors} field="name" />
         </div>
         <div>
           <label className="form-label">{t('groups.form.accessKey')}</label>
@@ -631,6 +624,7 @@ function GroupsForm({ data, setData }) {
               {showKey ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
+          <FieldValidationError errors={errors} field="access_key" />
         </div>
       </div>
     </div>

@@ -1,11 +1,9 @@
+import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ServerGrid as ServerGridBase } from 'tai-grid';
+import { FieldValidationError, ServerGrid as ServerGridBase } from 'tai-grid';
 import 'tai-grid/style.css';
-
-import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
-
 import { useNotification } from '../components/NotificationContext';
 import PatientGroupsModal from '../components/PatientGroupsModal';
 import { getApiBase } from '../config';
@@ -125,7 +123,7 @@ export default function PatientsTab({ currentUser, query }: PatientsTabProps) {
             />
           </div>
 
-          {/* 
+          {/*
               DIVIDER
            */}
           <div
@@ -162,7 +160,7 @@ export default function PatientsTab({ currentUser, query }: PatientsTabProps) {
 
             {selectedPatient && (
               <div>
-                {/* 
+                {/*
                     PATIENT HEADER
                 */}
                 <div
@@ -193,7 +191,7 @@ export default function PatientsTab({ currentUser, query }: PatientsTabProps) {
                   </div>
                 </div>
 
-                {/* 
+                {/*
                     GROUP HEADER
                */}
                 <div
@@ -248,7 +246,7 @@ export default function PatientsTab({ currentUser, query }: PatientsTabProps) {
         </div>
       </div>
 
-      {/* 
+      {/*
           ADD PATIENT TO GROUP MODAL
       */}
       {showGroupModal && selectedPatient && (
@@ -269,11 +267,18 @@ export default function PatientsTab({ currentUser, query }: PatientsTabProps) {
   );
 }
 
-/* 
+/*
    PATIENT FORM
  */
-
-function PatientsForm({ data, setData }: { data: any; setData: React.Dispatch<React.SetStateAction<any>> }) {
+function PatientsForm({
+  data,
+  setData,
+  errors,
+}: {
+  data: any;
+  setData: React.Dispatch<React.SetStateAction<any>>;
+  errors?: Record<string, string[]>;
+}) {
   const { t } = useTranslation();
 
   const getValue = (field: string) => data?.[field] ?? '';
@@ -292,24 +297,28 @@ function PatientsForm({ data, setData }: { data: any; setData: React.Dispatch<Re
           <label className="form-label">{t('table.form.firstName')}</label>
 
           <input type="text" className="form-input" value={getValue('first_name')} onChange={handleChange('first_name')} />
+          <FieldValidationError errors={errors} field="first_name" />
         </div>
 
         <div>
           <label className="form-label">{t('table.form.lastName')}</label>
 
           <input type="text" className="form-input" value={getValue('last_name')} onChange={handleChange('last_name')} />
+          <FieldValidationError errors={errors} field="last_name" />
         </div>
 
         <div>
           <label className="form-label">{t('table.form.socialId')}</label>
 
           <input type="text" className="form-input" value={getValue('social_id')} onChange={handleChange('social_id')} />
+          <FieldValidationError errors={errors} field="social_id" />
         </div>
 
         <div>
           <label className="form-label">{t('table.form.remarks')}</label>
 
           <input type="text" className="form-input" value={getValue('remarks')} onChange={handleChange('remarks')} />
+          <FieldValidationError errors={errors} field="remarks" />
         </div>
       </div>
     </div>
