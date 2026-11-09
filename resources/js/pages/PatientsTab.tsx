@@ -2,9 +2,8 @@ import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ServerGrid as ServerGridBase } from 'tai-grid';
+import { FieldValidationError, ServerGrid as ServerGridBase } from 'tai-grid';
 import 'tai-grid/style.css';
-import FieldValidationError from '../components/FieldValidationError';
 import { useNotification } from '../components/NotificationContext';
 import PatientGroupsModal from '../components/PatientGroupsModal';
 import { getApiBase } from '../config';
@@ -271,8 +270,15 @@ export default function PatientsTab({ currentUser, query }: PatientsTabProps) {
 /*
    PATIENT FORM
  */
-
-function PatientsForm({ data, setData }: { data: any; setData: React.Dispatch<React.SetStateAction<any>> }) {
+function PatientsForm({
+  data,
+  setData,
+  errors,
+}: {
+  data: any;
+  setData: React.Dispatch<React.SetStateAction<any>>;
+  errors?: Record<string, string[]>;
+}) {
   const { t } = useTranslation();
 
   const getValue = (field: string) => data?.[field] ?? '';
@@ -291,51 +297,28 @@ function PatientsForm({ data, setData }: { data: any; setData: React.Dispatch<Re
           <label className="form-label">{t('table.form.firstName')}</label>
 
           <input type="text" className="form-input" value={getValue('first_name')} onChange={handleChange('first_name')} />
+          <FieldValidationError errors={errors} field="first_name" />
         </div>
 
         <div>
           <label className="form-label">{t('table.form.lastName')}</label>
 
           <input type="text" className="form-input" value={getValue('last_name')} onChange={handleChange('last_name')} />
+          <FieldValidationError errors={errors} field="last_name" />
         </div>
 
         <div>
           <label className="form-label">{t('table.form.socialId')}</label>
 
           <input type="text" className="form-input" value={getValue('social_id')} onChange={handleChange('social_id')} />
+          <FieldValidationError errors={errors} field="social_id" />
         </div>
 
         <div>
           <label className="form-label">{t('table.form.remarks')}</label>
 
           <input type="text" className="form-input" value={getValue('remarks')} onChange={handleChange('remarks')} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function PatientForm({ data, setData, errors }) {
-  const value = (field) => String(data?.[field] ?? '');
-  const change = (field) => (event) => setData((previous) => ({ ...previous, [field]: event.target.value }));
-
-  return (
-    <div className="add-user-form">
-      <div className="add-user-form-grid">
-        <div>
-          <label className="form-label">First name</label>
-          <input className="form-input" type="text" value={value('first_name')} onChange={change('first_name')} />
-          <FieldValidationError errors={errors} field="first_name" />
-        </div>
-        <div>
-          <label className="form-label">Last name</label>
-          <input className="form-input" type="text" value={value('last_name')} onChange={change('last_name')} />
-          <FieldValidationError errors={errors} field="last_name" />
-        </div>
-        <div>
-          <label className="form-label">Social ID</label>
-          <input className="form-input" type="text" value={value('social_id')} onChange={change('social_id')} />
-          <FieldValidationError errors={errors} field="social_id" />
+          <FieldValidationError errors={errors} field="remarks" />
         </div>
       </div>
     </div>

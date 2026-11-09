@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useServerGridLabels } from '../hooks/useCurrentLanguage';
-import { ServerGrid } from 'tai-grid';
+import { FieldValidationError, ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
 import MobileSearchToggle from '../components/MobileSearchToggle';
-import FieldValidationError from '../components/FieldValidationError';
 import { useNotification } from '../components/NotificationContext';
 import { getApiBase } from '../config';
+import { useServerGridLabels } from '../hooks/useCurrentLanguage';
 import './Admin.css';
 
 const SEARCH_DEBOUNCE_MS = 300;

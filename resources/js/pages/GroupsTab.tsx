@@ -2,10 +2,9 @@ import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
 import { Crown, Eye, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ServerGrid as ServerGridBase } from 'tai-grid';
+import { FieldValidationError, ServerGrid as ServerGridBase } from 'tai-grid';
 import 'tai-grid/style.css';
 import GroupRegistrationForm from '../components/GroupRegistrationForm';
-import FieldValidationError from '../components/FieldValidationError';
 import GroupUsersModal from '../components/GroupUsersModal';
 import MobileSearchToggle from '../components/MobileSearchToggle';
 import { useNotification } from '../components/NotificationContext';
@@ -337,16 +336,12 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                   labels={gridLabels}
                   transformEditPayload={(payload) => {
                     const name = String(payload.name || '').trim();
-                    if (!name) throw new Error(t('groups.errors.nameRequired'));
                     const access_key = String(payload.access_key || '').trim();
-                    if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
                     return { name, access_key };
                   }}
                   transformAddPayload={(payload) => {
                     const name = String(payload.name || '').trim();
-                    if (!name) throw new Error(t('groups.errors.nameRequired'));
                     const access_key = String(payload.access_key || '').trim();
-                    if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
                     return { name, access_key };
                   }}
                 />
@@ -415,16 +410,12 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                     labels={gridLabels}
                     transformEditPayload={(payload) => {
                       const name = String(payload.name || '').trim();
-                      if (!name) throw new Error(t('groups.errors.nameRequired'));
                       const access_key = String(payload.access_key || '').trim();
-                      if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
                       return { name, access_key };
                     }}
                     transformAddPayload={(payload) => {
                       const name = String(payload.name || '').trim();
-                      if (!name) throw new Error(t('groups.errors.nameRequired'));
                       const access_key = String(payload.access_key || '').trim();
-                      if (!access_key) throw new Error(t('groups.errors.accessKeyRequired'));
                       return { name, access_key };
                     }}
                     onRowClick={handleGroupRowClick}
