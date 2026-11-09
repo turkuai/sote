@@ -1,11 +1,11 @@
 import { CareProblem } from '@/types/caretree';
-import { Plus } from 'lucide-react';
 import { useReducer, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ServerGridEditDialog } from 'tai-grid';
+import AddItemButton from '../AddItemButton';
 import CareProblemDialogForm from './CareProblemDialogForm';
 import { CareTree } from './CareTree';
-import { dummyCategories } from './careDialogComponents/dialogTest';
+import { dummyCategories } from './dialogTest';
 
 //types
 type CareTreeListProps = {
@@ -48,9 +48,7 @@ function CareTreeList({ careDataList }: CareTreeListProps) {
   return (
     <>
       <div className="flex justify-end">
-        <button type="button" className="server-grid-add-button" onClick={() => setIsCareProblemDialogOpen(true)}>
-          <Plus size={20} />
-        </button>
+        <AddItemButton label="open-care-dialog" onClick={() => setIsCareProblemDialogOpen(true)} />
       </div>
 
       <div className="flex flex-col gap-4 mt-3!">

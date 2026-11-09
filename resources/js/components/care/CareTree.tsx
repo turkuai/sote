@@ -3,10 +3,10 @@ import { Dot } from 'lucide-react';
 import { useReducer, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ServerGridEditDialog from '../../../../grid/src/ServerGridEditDialog';
-import AddItemButton from './AddItemButton';
-import DescriptionForm from './DescriptionForm';
-import Tree from './Tree';
-import { TreeItem } from './TreeItem';
+import AddItemButton from '../AddItemButton';
+import DescriptionForm from '../DescriptionForm';
+import Tree from '../tree/Tree';
+import { TreeItem } from '../tree/TreeItem';
 import { buildCategoryTree } from './buildCategoryTree';
 
 interface CareTreeProps {

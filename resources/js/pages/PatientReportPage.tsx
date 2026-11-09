@@ -1,6 +1,6 @@
 //import { CareTreeTest } from '@/components/treeComponents/CareTreeTest';
 
-import CareTreeList from '@/components/treeComponents/CareTreeList';
+import CareTreeList from '@/components/care/CareTreeList';
 import { CareProblem } from '@/types/caretree';
 
 /**

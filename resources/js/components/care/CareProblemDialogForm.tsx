@@ -1,6 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
-import ReviewEntries from './careDialogComponents/ReviewEntries';
-import SelectCategoryTree from './careDialogComponents/SelectCategoryTree';
+import ReviewEntries from './ReviewEntries';
+import SelectCategoryTree from './SelectCategoryTree';
 
 function CareProblemDialogForm({ categories, steps, activeStep, onBack, data, setData }) {
   return (
