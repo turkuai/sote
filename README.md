@@ -49,6 +49,37 @@ This will automatically:
 5. Run database migrations and seeders
 6. Install frontend dependencies
 
+## Running the app
+
+Run the following command in a terminal:
+
+```bash
+composer run dev
+```
+
+Open in browser: http://localhost:8000
+
+## Database issues
+
+If you get constraint errors or unexpected behavior after pulling new changes, your local database may be out of date. To reset it completely:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+> ⚠️ The seeding will add 100 users for testing purposes. This command may take a while or you might run into performance issues. ⚠️
+
+> ⚠️ This will **delete all existing data** and reseed the database from scratch.
+
+## Test users
+
+| Email             | Password            | Role    |
+| ----------------- | ------------------- | ------- |
+| admin@example.com | admin-limes-194     | Admin   |
+| jane@example.com  | jane-pineapples-194 | Manager |
+| bob@example.com   | bob-persimons-194   | Nurse   |
+
+
 ## Code Formatting
 
 This project uses **Prettier** for code formatting. VSCode will automatically format your code on save if you have the Prettier extension installed.
@@ -165,35 +196,37 @@ i18n.init({
 
 The `LanguageSwitcher` component (located in `resources/js/components/`) renders a dropdown that calls `i18n.changeLanguage(code)` and saves the choice to localStorage automatically.
 
-## Running the app
 
-Run the following command in a terminal:
+## API Testing (Bruno)
 
-```bash
-composer run dev
-```
+This project includes a Bruno collection for testing the API.
 
-Open in browser: http://localhost:8000
+### Requirements
 
-## Database issues
+- Bruno app on your Computer ( https://www.usebruno.com/ )
+- PHP
+- Composer
+- Configured Laravel environment
 
-If you get constraint errors or unexpected behavior after pulling new changes, your local database may be out of date. To reset it completely:
+### Getting started
 
-```bash
-php artisan migrate:fresh --seed
-```
+1. Start the Laravel development server
 
-> ⚠️ The seeding will add 100 users for testing purposes. This command may take a while or you might run into performance issues. ⚠️
+2. Open Bruno.
 
-> ⚠️ This will **delete all existing data** and reseed the database from scratch.
+3. Select Open Collection.
 
-## Test users
+4. Navigate to the `tests/bruno` folder
+   in this repository.
 
-| Email             | Password            | Role    |
-| ----------------- | ------------------- | ------- |
-| admin@example.com | admin-limes-194     | Admin   |
-| jane@example.com  | jane-pineapples-194 | Manager |
-| bob@example.com   | bob-persimons-194   | Nurse   |
+5. Select the `local` environment.
+
+6. You can now execute the API requests found in the collection.
+
+### Bruno extension (VSCode)
+
+You can also use Bruno straight from VSCode with the extension found in the VSCode extensions marketplace.
+It requires the app to be installed on the computer.
 
 ## API Endpoints
 
