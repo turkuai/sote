@@ -57,7 +57,7 @@ Run the following command in a terminal:
 composer run dev
 ```
 
-Open in browser: http://localhost:8000
+Open in browser: http://127.0.0.1:8000
 
 ## Database issues
 
@@ -235,7 +235,7 @@ GET    /api/patients/{id}      → Get specific patient
 ### **Example API Request:**
 
 ```bash
-curl http://localhost:8000/api/users
+curl http://127.0.0.1:8000/api/users
 ```
 
 ---
@@ -312,7 +312,7 @@ routes/
 
 ### **Via Browser**
 
-1. Visit `http://localhost:8000`
+1. Visit `http://127.0.0.1:8000`
 2. See users with role badges
 3. View groups and relationships
 
@@ -341,13 +341,13 @@ exit()
 
 ```bash
 # Get all users
-curl http://localhost:8000/api/users
+curl http://127.0.0.1:8000/api/users
 
 # Get available roles
-curl http://localhost:8000/api/roles
+curl http://127.0.0.1:8000/api/roles
 
 # Create new user
-curl -X POST http://localhost:8000/api/users \
+curl -X POST http://127.0.0.1:8000/api/users \
   -H "Content-Type: application/json" \
   -d '{
     "first_name": "David",
@@ -405,7 +405,7 @@ npm run dev
 
 ```bash
 # Via API
-curl -X POST http://localhost:8000/api/users \
+curl -X POST http://127.0.0.1:8000/api/users \
   -H "Content-Type: application/json" \
   -d '{
     "first_name": "John",
@@ -423,7 +423,7 @@ php artisan tinker
 
 ```bash
 # Via API
-curl -X PUT http://localhost:8000/api/users/1 \
+curl -X PUT http://127.0.0.1:8000/api/users/1 \
   -H "Content-Type: application/json" \
   -d '{"role_type": "manager"}'
 
@@ -463,7 +463,7 @@ Route::delete('/api/users/{id}', [UserController::class, 'destroy'])
 
 ## 🐛 Troubleshooting
 
-### **Issue: Blank page after visiting localhost:8000**
+### **Issue: Blank page after visiting 127.0.0.1:8000**
 
 - Check if both servers are running (Laravel on 8000, React dev server)
 - Check browser console for errors (F12)
@@ -495,7 +495,7 @@ Route::delete('/api/users/{id}', [UserController::class, 'destroy'])
 - [ ] Database migrated: `php artisan migrate:fresh --seed`
 - [ ] Laravel running: `php artisan serve`
 - [ ] Frontend running: `npm run dev`
-- [ ] Visiting http://localhost:8000 shows users
+- [ ] Visiting http://127.0.0.1:8000 shows users
 - [ ] Users have role badges (Red, Orange, Blue)
 - [ ] Can see groups and assignments
 
