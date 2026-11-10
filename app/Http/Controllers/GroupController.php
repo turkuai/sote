@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Libraries\ApiResponse;
 use App\Models\Group;
 use App\Models\User;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -287,4 +288,136 @@ class GroupController extends Controller {
 
     return ApiResponse::success(null, 'Successfully joined the group');
   }
+
+  /**
+ * Get patients registered in a specific group
+ */
+public function getRegisteredPatients(Request $request, $id){
+    $group = Group::find($id);
+
+    if (!$group) {
+        return ApiResponse::notFound('Group not found');
+    }
+
+    $query = Patient::whereHas('groups', function ($query) use ($id) {
+        $query->where('groups.id', $id);
+    });
+
+    // Search by first name or last name
+    if ($request->filled('search')) {
+        $search = strtolower($request->search);
+
+        $query->where(function ($query) use ($search) {
+            $query->whereRaw('LOWER(first_name) LIKE ?', ["%{$search}%"])
+                ->orWhereRaw('LOWER(last_name) LIKE ?', ["%{$search}%"])
+                ->orWhereRaw(
+                    'LOWER(CONCAT(first_name, " ", last_name)) LIKE ?',
+                    ["%{$search}%"]
+                );
+        });
+    }
+
+    $patients = $query->paginate(10);
+
+    return ApiResponse::paginated(
+        $patients,
+        'Registered patients retrieved successfully'
+    );
+}
+ /**
+ * Get patients not registered in a specific group
+ */
+public function getUnregisteredPatients(Request $request, $id){
+    $group = Group::find($id);
+
+    if (!$group) {
+        return ApiResponse::notFound('Group not found');
+    }
+
+    $query = Patient::whereDoesntHave('groups', function ($query) use ($id) {
+        $query->where('groups.id', $id);
+    });
+
+    // Search by first name or last name
+    if ($request->filled('search')) {
+        $search = strtolower($request->search);
+
+        $query->where(function ($query) use ($search) {
+            $query->whereRaw('LOWER(first_name) LIKE ?', ["%{$search}%"])
+                ->orWhereRaw('LOWER(last_name) LIKE ?', ["%{$search}%"])
+                ->orWhereRaw(
+                    'LOWER(CONCAT(first_name, " ", last_name)) LIKE ?',
+                    ["%{$search}%"]
+                );
+        });
+    }
+
+    $patients = $query->paginate(10);
+
+    return ApiResponse::paginated(
+        $patients,
+        'Unregistered patients retrieved successfully'
+    );
+}
+/**
+ * Add a patient to a group
+ */
+public function addPatientToGroup($groupId, $patientId){
+    $group = Group::find($groupId);
+
+    if (!$group) {
+        return ApiResponse::notFound('Group not found');
+    }
+
+    $patient = Patient::find($patientId);
+
+    if (!$patient) {
+        return ApiResponse::notFound('Patient not found');
+    }
+
+    if ($group->patients()->where('patient_id', $patientId)->exists()) {
+        return ApiResponse::error(
+            'Patient is already in this group',
+            400
+        );
+    }
+
+    $group->patients()->attach($patientId);
+
+    return ApiResponse::success(
+        ['message' => 'Patient added to group successfully'],
+        'Patient added to group',
+        201
+    );
+}
+
+
+/**
+ * Remove a patient from a group
+ */
+public function removePatientFromGroup($groupId, $patientId){
+    $group = Group::find($groupId);
+
+    if (!$group) {
+        return ApiResponse::notFound('Group not found');
+    }
+
+    $patient = Patient::find($patientId);
+
+    if (!$patient) {
+        return ApiResponse::notFound('Patient not found');
+    }
+
+    if (!$group->patients()->where('patient_id', $patientId)->exists()) {
+        return ApiResponse::notFound('Patient is not in this group');
+    }
+
+    $group->patients()->detach($patientId);
+
+    return ApiResponse::success(
+        null,
+        'Patient removed from group successfully'
+    );
+} 
+
 }
