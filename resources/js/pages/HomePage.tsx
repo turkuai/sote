@@ -3,7 +3,6 @@ import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import './Admin.css';
 
 import { useTranslation } from 'react-i18next';
-import { useUserManagement } from '../hooks/useUserManagement';
 import { TabConfig } from '../utils/tabConfig';
 import GroupsTab from './GroupsTab';
 import HomeTabs from './HomeTabs';
@@ -14,7 +13,6 @@ import UsersTab from './UsersTab';
 import WaitingListTab from './WaitingListTab';
 
 export default function HomePage() {
-
   const { currentUser, handleLogout, isMobile } = useOutletContext<{
     currentUser: any;
     handleLogout: () => void;
@@ -28,18 +26,11 @@ export default function HomePage() {
   const [userQuery, setUserQuery] = useState('');
   const [groupQuery, setGroupQuery] = useState('');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() =>
-    typeof window !== 'undefined'
-      ? localStorage.getItem('sidebar_collapsed') === 'true'
-      : false
+    typeof window !== 'undefined' ? localStorage.getItem('sidebar_collapsed') === 'true' : false,
   );
 
-  const { handlers: { handleDeleteUser } } = useUserManagement();
-
   // Default tab based on role
-  const defaultTab =
-    currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager'
-      ? 'users'
-      : 'settings';
+  const defaultTab = currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager' ? 'users' : 'settings';
 
   // URL controls active tab
   const activeTab = urlTab || defaultTab;
@@ -49,43 +40,26 @@ export default function HomePage() {
   };
 
   const tabs = TabConfig.getTabs(currentUser, isMobile);
-  
 
+  const isAdminOrManager = currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager';
+
+  const isNurse = currentUser?.role_type === 'nurse';
+
+  const content = (
+    <>
+      {isAdminOrManager && activeTab === 'users' && <UsersTab currentUser={currentUser} query={userQuery} onQueryChange={setUserQuery} />}
+      {(isAdminOrManager || isNurse) && activeTab === 'groups' && (
+        <GroupsTab currentUser={currentUser} query={groupQuery} onQueryChange={setGroupQuery} />
+      )}
+      {isAdminOrManager && activeTab === 'waiting-list' && <WaitingListTab currentUser={currentUser} />}
+      {isAdminOrManager && activeTab === 'patients' && <PatientsTab currentUser={currentUser} query="" />}
+      {activeTab === 'settings' && <SettingsTab currentUser={currentUser} onLogout={handleLogout} />}
+    </>
+  );
 
   return (
-    <div>
-
-      {/* Mobile Content */}
-      {isMobile && (
-        <>
-          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && activeTab === 'users' && (
-            <UsersTab currentUser={currentUser} query={userQuery} onQueryChange={setUserQuery} onDeleteUser={handleDeleteUser} />
-          )}
-
-          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && activeTab === 'groups' && (
-            <GroupsTab currentUser={currentUser} query={groupQuery} onQueryChange={setGroupQuery} />
-          )}
-
-          {currentUser?.role_type === 'nurse' && activeTab === 'groups' && (
-            <GroupsTab currentUser={currentUser} query={groupQuery} onQueryChange={setGroupQuery} />
-          )}
-
-          {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && activeTab === 'waiting-list' && (
-            <WaitingListTab currentUser={currentUser} />
-          )}
-
-          {activeTab === 'settings' && (
-            <div className="mobile-tab-content">
-              <div className="mobile-content-section">
-                <SettingsTab currentUser={currentUser} onLogout={handleLogout} />
-              </div>
-            </div>
-          )}
-        </>
-      )}
-
-      {/* Desktop: Sidebar + Content */}
-      <div className="admin-body hide-on-mobile">
+    <div className={isMobile ? 'mobile-tab-content' : 'admin-body'}>
+      {!isMobile && (
         <HomeTabs
           tabs={tabs}
           activeTab={activeTab}
@@ -101,48 +75,11 @@ export default function HomePage() {
             })
           }
         />
-
-        <div className="admin-content-area">
-          <div className="admin-content-card">
-            {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
-              <div style={{ display: activeTab === 'users' ? 'block' : 'none' }}>
-                <UsersTab currentUser={currentUser} query={userQuery} onQueryChange={setUserQuery} onDeleteUser={handleDeleteUser} />
-              </div>
-            )}
-
-            {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
-              <div style={{ display: activeTab === 'groups' ? 'block' : 'none' }}>
-                <GroupsTab currentUser={currentUser} query={groupQuery} onQueryChange={setGroupQuery} />
-              </div>
-            )}
-
-            {currentUser?.role_type === 'nurse' && (
-              <div style={{ display: activeTab === 'groups' ? 'block' : 'none' }}>
-                <GroupsTab currentUser={currentUser} query={groupQuery} onQueryChange={setGroupQuery} />
-              </div>
-            )}
-
-            {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
-              <div style={{ display: activeTab === 'waiting-list' ? 'block' : 'none' }}>
-                <WaitingListTab currentUser={currentUser} />
-              </div>
-            )}
-
-            {(currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager') && (
-              <div style={{ display: activeTab === 'patients' ? 'block' : 'none' }}>
-                <PatientsTab currentUser={currentUser} />
-              </div>
-            )}
-
-            <div style={{ display: activeTab === 'settings' ? 'block' : 'none' }}>
-              <SettingsTab currentUser={currentUser} onLogout={handleLogout} />
-            </div>
-          </div>
-        </div>
+      )}
+      <div className={isMobile ? 'mobile-content-section' : 'admin-content-area'}>
+        <div className={isMobile ? undefined : 'admin-content-card'}>{content}</div>
       </div>
-
-      {/* Mobile Bottom Tab Bar */}
-      {isMobile && <MobileNav tabs={tabs} activeTab={activeTab} onTabClick={handleTabClick} currentUser={currentUser} />}
+      <MobileNav tabs={tabs} activeTab={activeTab} onTabClick={handleTabClick} currentUser={currentUser} />
     </div>
   );
 }
