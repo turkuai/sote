@@ -292,8 +292,7 @@ class GroupController extends Controller {
   /**
  * Get patients registered in a specific group
  */
-public function getRegisteredPatients(Request $request, $id)
-{
+public function getRegisteredPatients(Request $request, $id){
     $group = Group::find($id);
 
     if (!$group) {
@@ -328,8 +327,7 @@ public function getRegisteredPatients(Request $request, $id)
  /**
  * Get patients not registered in a specific group
  */
-public function getUnregisteredPatients(Request $request, $id)
-{
+public function getUnregisteredPatients(Request $request, $id){
     $group = Group::find($id);
 
     if (!$group) {
@@ -364,8 +362,7 @@ public function getUnregisteredPatients(Request $request, $id)
 /**
  * Add a patient to a group
  */
-public function addPatientToGroup($groupId, $patientId)
-{
+public function addPatientToGroup($groupId, $patientId){
     $group = Group::find($groupId);
 
     if (!$group) {
@@ -398,8 +395,7 @@ public function addPatientToGroup($groupId, $patientId)
 /**
  * Remove a patient from a group
  */
-public function removePatientFromGroup($groupId, $patientId)
-{
+public function removePatientFromGroup($groupId, $patientId){
     $group = Group::find($groupId);
 
     if (!$group) {
