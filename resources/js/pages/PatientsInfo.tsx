@@ -14,12 +14,12 @@ export default function PatientInfo() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (!patientId) {
-      setError("Patient ID is missing.");
-      setLoading(false);
-      return;
-    }
+useEffect(() => {
+  if (!patientId) {
+    setError("Patient ID is missing.");
+    setLoading(false);
+    return;
+  }
 
     const controller = new AbortController();
 
@@ -69,3 +69,4 @@ export default function PatientInfo() {
     </main>
   );
 }
+
