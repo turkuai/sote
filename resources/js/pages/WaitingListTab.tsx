@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useServerGridLabels } from '../hooks/useCurrentLanguage';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
 import { useNotification } from '../components/NotificationContext';
 import { getApiBase } from '../config';
+import { useServerGridLabels } from '../hooks/useCurrentLanguage';
 
 export default function WaitingListTab({ currentUser }) {
   const { t } = useTranslation();
