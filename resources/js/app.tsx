@@ -62,7 +62,7 @@ function App() {
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route element={<ProtectedRoute />}>
         <Route element={<ProtectedLayout />}>
-          <Route path="/home" element={<HomePage />}>
+          <Route path="/home/*" element={<HomePage />}>
             <Route index element={<UsersTab />} />
             <Route path="patients" element={<PatientsTab />} />
             <Route path="groups" element={<GroupsTab />} />

@@ -1,3 +1,4 @@
+import { AuthorizedUserData } from '@/types';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOutletContext } from 'react-router-dom';
@@ -13,7 +14,7 @@ import './Admin.css';
 const SettingsTab = ({}) => {
   const { handleLogout: onLogout, currentUser } = useOutletContext<{
     handleLogout: () => void;
-    currentUser: { role_type?: String; id?: string; name?: string; username?: string } | null;
+    currentUser: AuthorizedUserData | null;
   }>();
 
   const { t } = useTranslation();

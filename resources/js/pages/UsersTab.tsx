@@ -1,3 +1,4 @@
+import { AuthorizedUserData } from '@/types';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOutletContext } from 'react-router-dom';
@@ -29,7 +30,7 @@ export default function UsersTab({ onDeleteUser }) {
     setUserQuery: onQueryChange,
     userQuery: query,
     currentUser,
-  } = useOutletContext<{ setUserQuery: (query: string) => void; userQuery: string; currentUser: { role_type?: String; id?: string } | null }>();
+  } = useOutletContext<{ setUserQuery: (query: string) => void; userQuery: string; currentUser: AuthorizedUserData | null }>();
 
   const [refreshKey, setRefreshKey] = useState(0);
   const [inputValue, setInputValue] = useState(query || '');

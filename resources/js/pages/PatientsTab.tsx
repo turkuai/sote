@@ -1,12 +1,11 @@
+import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
+import { AuthorizedUserData } from '@/types';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOutletContext } from 'react-router-dom';
 import { ServerGrid as ServerGridBase } from 'tai-grid';
 import 'tai-grid/style.css';
-
-import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
-
 import { useNotification } from '../components/NotificationContext';
 import PatientGroupsModal from '../components/PatientGroupsModal';
 import { getApiBase } from '../config';
@@ -34,7 +33,7 @@ type PatientsTabProps = {
 };
 
 export default function PatientsTab({ query }: PatientsTabProps) {
-  const { currentUser } = useOutletContext<{ currentUser: { role_type?: String; id?: string; name?: string; username?: string } }>();
+  const { currentUser } = useOutletContext<{ currentUser: AuthorizedUserData }>();
   const { t } = useTranslation();
   const { showNotification } = useNotification();
   const gridLabels = useServerGridLabels();
