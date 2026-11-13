@@ -7,13 +7,18 @@ import { NotificationProvider } from './components/NotificationContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import './i18n';
 import ProtectedLayout from './layouts/ProtectedLayout';
+import GroupsTab from './pages/GroupsTab';
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
 import PatientReportPage from './pages/PatientReportPage';
 import PatientsPage from './pages/PatientsPage';
+import PatientsTab from './pages/PatientsTab';
 import Register from './pages/Register';
+import SettingsTab from './pages/SettingsTab';
+import UsersTab from './pages/UsersTab';
 import VerifyEmail from './pages/VerifyEmail';
 import WaitingApproval from './pages/WaitingApproval';
+import WaitingListTab from './pages/WaitingListTab';
 
 function App() {
   const { isAuthenticated, loading, currentUser } = useAuth();
@@ -50,14 +55,22 @@ function App() {
           )
         }
       />
+
       <Route path="/login" element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} />
       <Route path="/register" element={isAuthenticated ? <Navigate to="/home" replace /> : <Register />} />
       <Route path="/waiting-approval" element={isAuthenticated && !currentUser?.role_type ? <WaitingApproval /> : <Navigate to="/" replace />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route element={<ProtectedRoute />}>
         <Route element={<ProtectedLayout />}>
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/home/:tab" element={<HomePage />} />
+          <Route path="/home/*" element={<HomePage />}>
+            <Route index element={<UsersTab />} />
+            <Route path="patients" element={<PatientsTab />} />
+            <Route path="groups" element={<GroupsTab />} />
+            <Route path="settings" element={<SettingsTab />} />
+            <Route path="users" element={<UsersTab />} />
+            <Route path="waiting-list" element={<WaitingListTab />} />
+          </Route>
+
           <Route path="/patients" element={<PatientsPage />} />
           <Route path="/patients/:patientId" element={<PatientReportPage />} />
         </Route>
