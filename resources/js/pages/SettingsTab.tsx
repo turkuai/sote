@@ -154,7 +154,7 @@ const SettingsTab = ({ currentUser, onLogout }) => {
   }
 
   return (
-    <div className="settings-container">
+    <div className="">
       <div className="settings-header">
         <h2>{t('settings.header.title')}</h2>
         <p>{t('settings.header.description')}</p>
