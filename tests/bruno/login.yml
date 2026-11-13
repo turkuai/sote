@@ -5,7 +5,7 @@ info:
 
 http:
   method: POST
-  url: "{{baseUrl}}/api/login?email=admin@example.com&password=admin-limes-194&remember=true"
+  url: '{{baseUrl}}/api/login?email=admin@example.com&password=admin-limes-194&remember=true'
   headers:
     - name: Accept
       value: application/json
@@ -17,7 +17,7 @@ http:
       value: admin-limes-194
       type: query
     - name: remember
-      value: "true"
+      value: 'true'
       type: query
   auth: inherit
 
