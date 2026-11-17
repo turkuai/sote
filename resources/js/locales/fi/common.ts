@@ -234,6 +234,7 @@ const fiCommon = {
     },
   },
   patients: {
+    managementTitle: 'Potilaiden hallinta',
     panel: {
       groups: 'Ryhmät',
       addToGroup: 'Lisää ryhmään',

@@ -268,7 +268,6 @@ export default function PatientsTab({ currentUser, query }: PatientsTabProps) {
     </>
   );
 }
-
 /* 
    PATIENT FORM
  */
