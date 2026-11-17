@@ -1,4 +1,5 @@
 import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
+import { AuthorizedUserData } from '@/types';
 import { Crown, Eye, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -81,7 +82,7 @@ export default function GroupsTab({}) {
   } = useOutletContext<{
     setGroupQuery: (query: string) => void;
     groupQuery: string;
-    currentUser: { role_type?: string } | null;
+    currentUser: AuthorizedUserData | null;
   }>();
   const { t } = useTranslation();
   const [refreshKey, setRefreshKey] = useState(0);

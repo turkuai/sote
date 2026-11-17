@@ -64,11 +64,11 @@ function App() {
         <Route element={<ProtectedLayout />}>
           <Route path="/home/*" element={<HomePage />}>
             <Route index element={<UsersTab />} />
-            <Route path="patients" element={<PatientsTab />} />
-            <Route path="groups" element={<GroupsTab />} />
-            <Route path="settings" element={<SettingsTab />} />
-            <Route path="users" element={<UsersTab />} />
-            <Route path="waiting-list" element={<WaitingListTab />} />
+            <Route path="/patients" element={<PatientsTab />} />
+            <Route path="/groups" element={<GroupsTab />} />
+            <Route path="/settings" element={<SettingsTab />} />
+            <Route path="/users" element={<UsersTab />} />
+            <Route path="/waiting-list" element={<WaitingListTab />} />
           </Route>
 
           <Route path="/patients" element={<PatientsPage />} />
