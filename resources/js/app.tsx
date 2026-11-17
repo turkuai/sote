@@ -14,7 +14,7 @@ import PatientsPage from './pages/PatientsPage';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail';
 import WaitingApproval from './pages/WaitingApproval';
-import PatientInfo from './pages/PatientsInfoTest';
+import PatientInfo from './pages/PatientsInfo';
 
 function App() {
   const { isAuthenticated, loading, currentUser } = useAuth();
