@@ -16,5 +16,8 @@
   "[xml]": {
     "editor.defaultFormatter": "redhat.vscode-xml"
   },
-  "intelephense.format.braces": "k&r"
+  "intelephense.format.braces": "k&r",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  }
 }
