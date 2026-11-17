@@ -1,7 +1,10 @@
 //import { CareTreeTest } from '@/components/treeComponents/CareTreeTest';
 
+import { loadPatientCare } from '@/api/care';
 import CareTreeList from '@/components/care/CareTreeList';
-import { CareProblem } from '@/types/caretree';
+import type { CareProblem } from '@/types/caretree';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 /**
  * Patient report page.
@@ -9,71 +12,48 @@ import { CareProblem } from '@/types/caretree';
  * The patient id can be read with useParams: const { patientId } = useParams();
  */
 export default function PatientReportPage() {
-  //dummy data
-  const data: CareProblem[] = [
-    {
-      category: [
-        'Erittäminen - ruuansulatukseen, virtsateiden toimintaan, verenvuotoon ja muuhun erittämiseen liittyvät osatekijät',
-        'Ulostamiseen liittyvä häiriö',
-        'Ummetus',
-      ],
+  const { patientId } = useParams();
+  const [result, setResult] = useState<{ patientId: string; data: CareProblem[] } | { patientId: string; error: string } | null>(null);
 
-      id: 12,
-      category_id: 3,
-      user: 'Hoitaja A',
-      patient_id: 99,
-      description: 'Vatsa ei ole toiminut kahteen päivään...',
-      creation_at: '06:20',
+  // Load care data for the patient selected in the URL.
+  useEffect(() => {
+    if (!patientId) return;
 
-      planItems: [
-        {
-          id: 1,
-          problem_id: 12,
-          description: 'Lorem ipsum dolor sit amet',
-          user_name: 'Hoitaja A',
-          created_at: '08:20',
-          type: 'goal',
-        },
-        {
-          id: 2,
-          problem_id: 12,
-          description: 'Lorem ipsum dolor sit amet',
-          user_name: 'Hoitaja A',
-          created_at: '08:20',
-          type: 'goal',
-        },
-        {
-          id: 3,
-          problem_id: 12,
-          description: 'Lorem ipsum dolor sit amet',
-          user_name: 'Hoitaja A',
-          created_at: '08:20',
-          type: 'activity',
-        },
-        {
-          id: 4,
-          problem_id: 12,
-          description: 'Fusce non tellus ac lectus',
-          user_name: 'Hoitaja B',
-          created_at: '05:34',
-          type: 'activity',
-        },
-        {
-          id: 5,
-          problem_id: 12,
-          description: 'Lorem ipsum dolor sit amet',
-          user_name: 'Hoitaja A',
-          created_at: '12:45',
-          type: 'review',
-        },
-      ],
-    },
-  ];
+    const controller = new AbortController();
+    setResult(null);
+
+    loadPatientCare(patientId, controller.signal)
+      .then((data) => {
+        if (!controller.signal.aborted) {
+          setResult({ patientId, data });
+        }
+      })
+      .catch((error: unknown) => {
+        if (!controller.signal.aborted) {
+          setResult({
+            patientId,
+            error: error instanceof Error ? error.message : 'Could not load patient care data.',
+          });
+        }
+      });
+
+    return () => controller.abort();
+  }, [patientId]);
+
+  const currentResult = result?.patientId === patientId ? result : null;
 
   return (
     <div className="admin-content-area">
       <div className="admin-content-card">
-        <CareTreeList careDataList={data} />
+        {!patientId ? (
+          <p role="alert">No patient was selected.</p>
+        ) : !currentResult ? (
+          <p role="status">Loading patient care data…</p>
+        ) : 'error' in currentResult ? (
+          <p role="alert">{currentResult.error}</p>
+        ) : (
+          <CareTreeList key={patientId} patientId={patientId} careDataList={currentResult.data} />
+        )}
       </div>
     </div>
   );
