@@ -269,7 +269,6 @@ export default function PatientsTab({ query }: PatientsTabProps) {
     </>
   );
 }
-
 /* 
    PATIENT FORM
  */
