@@ -49,6 +49,37 @@ This will automatically:
 5. Run database migrations and seeders
 6. Install frontend dependencies
 
+## Running the app
+
+Run the following command in a terminal:
+
+```bash
+composer run dev
+```
+
+Open in browser: http://127.0.0.1:8000
+
+## Database issues
+
+If you get constraint errors or unexpected behavior after pulling new changes, your local database may be out of date. To reset it completely:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+> ⚠️ The seeding will add 100 users for testing purposes. This command may take a while or you might run into performance issues. ⚠️
+
+> ⚠️ This will **delete all existing data** and reseed the database from scratch.
+
+## Test users
+
+| Email             | Password            | Role    |
+| ----------------- | ------------------- | ------- |
+| admin@example.com | admin-limes-194     | Admin   |
+| jane@example.com  | jane-pineapples-194 | Manager |
+| bob@example.com   | bob-persimons-194   | Nurse   |
+
+
 ## Code Formatting
 
 This project uses **Prettier** for code formatting. VSCode will automatically format your code on save if you have the Prettier extension installed.
@@ -165,35 +196,37 @@ i18n.init({
 
 The `LanguageSwitcher` component (located in `resources/js/components/`) renders a dropdown that calls `i18n.changeLanguage(code)` and saves the choice to localStorage automatically.
 
-## Running the app
 
-Run the following command in a terminal:
+## API Testing (Bruno)
 
-```bash
-composer run dev
-```
+This project includes a Bruno collection for testing the API.
 
-Open in browser: http://localhost:8000
+### Requirements
 
-## Database issues
+- Bruno app on your Computer ( https://www.usebruno.com/ )
+- PHP
+- Composer
+- Configured Laravel environment
 
-If you get constraint errors or unexpected behavior after pulling new changes, your local database may be out of date. To reset it completely:
+### Getting started
 
-```bash
-php artisan migrate:fresh --seed
-```
+1. Start the Laravel development server
 
-> ⚠️ The seeding will add 100 users for testing purposes. This command may take a while or you might run into performance issues. ⚠️
+2. Open Bruno.
 
-> ⚠️ This will **delete all existing data** and reseed the database from scratch.
+3. Select Open Collection.
 
-## Test users
+4. Navigate to the `tests/bruno` folder
+   in this repository.
 
-| Email             | Password            | Role    |
-| ----------------- | ------------------- | ------- |
-| admin@example.com | admin-limes-194     | Admin   |
-| jane@example.com  | jane-pineapples-194 | Manager |
-| bob@example.com   | bob-persimons-194   | Nurse   |
+5. Select the `local` environment.
+
+6. You can now execute the API requests found in the collection.
+
+### Bruno extension (VSCode)
+
+You can also use Bruno straight from VSCode with the extension found in the VSCode extensions marketplace.
+It requires the app to be installed on the computer.
 
 ## API Endpoints
 
@@ -233,7 +266,7 @@ GET    /api/patients/{id}      → Get specific patient
 ### **Example API Request:**
 
 ```bash
-curl http://localhost:8000/api/users
+curl http://127.0.0.1:8000/api/users
 ```
 
 ---
@@ -310,7 +343,7 @@ routes/
 
 ### **Via Browser**
 
-1. Visit `http://localhost:8000`
+1. Visit `http://127.0.0.1:8000`
 2. See users with role badges
 3. View groups and relationships
 
@@ -339,13 +372,13 @@ exit()
 
 ```bash
 # Get all users
-curl http://localhost:8000/api/users
+curl http://127.0.0.1:8000/api/users
 
 # Get available roles
-curl http://localhost:8000/api/roles
+curl http://127.0.0.1:8000/api/roles
 
 # Create new user
-curl -X POST http://localhost:8000/api/users \
+curl -X POST http://127.0.0.1:8000/api/users \
   -H "Content-Type: application/json" \
   -d '{
     "first_name": "David",
@@ -403,7 +436,7 @@ npm run dev
 
 ```bash
 # Via API
-curl -X POST http://localhost:8000/api/users \
+curl -X POST http://127.0.0.1:8000/api/users \
   -H "Content-Type: application/json" \
   -d '{
     "first_name": "John",
@@ -421,7 +454,7 @@ php artisan tinker
 
 ```bash
 # Via API
-curl -X PUT http://localhost:8000/api/users/1 \
+curl -X PUT http://127.0.0.1:8000/api/users/1 \
   -H "Content-Type: application/json" \
   -d '{"role_type": "manager"}'
 
@@ -461,7 +494,7 @@ Route::delete('/api/users/{id}', [UserController::class, 'destroy'])
 
 ## 🐛 Troubleshooting
 
-### **Issue: Blank page after visiting localhost:8000**
+### **Issue: Blank page after visiting 127.0.0.1:8000**
 
 - Check if both servers are running (Laravel on 8000, React dev server)
 - Check browser console for errors (F12)
@@ -493,7 +526,7 @@ Route::delete('/api/users/{id}', [UserController::class, 'destroy'])
 - [ ] Database migrated: `php artisan migrate:fresh --seed`
 - [ ] Laravel running: `php artisan serve`
 - [ ] Frontend running: `npm run dev`
-- [ ] Visiting http://localhost:8000 shows users
+- [ ] Visiting http://127.0.0.1:8000 shows users
 - [ ] Users have role badges (Red, Orange, Blue)
 - [ ] Can see groups and assignments
 

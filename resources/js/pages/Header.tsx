@@ -1,4 +1,4 @@
-import { ChevronDown, LogOut, Settings } from 'lucide-react';
+import { ChevronDown, LogOut, UserRound } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +13,7 @@ import './Admin.css';
  * @param {string} currentPage - Current page (dashboard or patients)
  * @param {boolean} isMobile - Whether the current view is mobile
  */
-const Header = ({ currentUser, onLogout, currentPage = 'dashboard', isMobile = false  }) => {
+const Header = ({ currentUser, onLogout, currentPage = 'dashboard', isMobile = false }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ const Header = ({ currentUser, onLogout, currentPage = 'dashboard', isMobile = f
   };
 
   const handleDashboardClick = () => {
-      navigate('/home', { replace: true });
+    navigate('/home', { replace: true });
   };
 
   return (
@@ -79,7 +79,7 @@ const Header = ({ currentUser, onLogout, currentPage = 'dashboard', isMobile = f
             {isDropdownOpen && (
               <div className="user-dropdown-menu">
                 <button className="dropdown-menu-item" onClick={handleSettingsClick}>
-                  <Settings size={16} />
+                  <UserRound size={16} />
                   {t('user.settings')}
                 </button>
                 <button className="dropdown-menu-item logout-item" onClick={handleLogoutClick}>
