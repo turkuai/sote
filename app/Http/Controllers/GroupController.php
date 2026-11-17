@@ -64,8 +64,8 @@ class GroupController extends Controller {
     });
 
     // Search by first_name, last_name, full name, or email
-    if ($request->has('search') && $request->search) {
-      $search = strtolower($request->search);
+    if ($request->has('q') && $request->q) {
+      $search = strtolower($request->q);
       $group->where(function ($query) use ($search) {
         $query->whereRaw('LOWER(first_name) LIKE ?', ["%{$search}%"])
           ->orWhereRaw('LOWER(last_name) LIKE ?', ["%{$search}%"])
