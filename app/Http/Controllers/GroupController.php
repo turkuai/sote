@@ -18,8 +18,8 @@ class GroupController extends Controller {
     $query = Group::withCount('users');
 
     // Search by name
-    if ($request->has('search') && $request->search) {
-      $search = strtolower($request->search);
+    if ($request->has('q') && $request->q) {
+      $search = strtolower($request->q);
       $query->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"]);
     }
 
@@ -248,7 +248,14 @@ class GroupController extends Controller {
    */
   public function myGroups(Request $request) {
     $user = $request->user();
-    $groups = $user->groups()->get()->map(function ($group) {
+    $groupsQuery = $user->groups();
+
+    if ($request->has('q') && $request->q) {
+      $search = strtolower($request->q);
+      $groupsQuery->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"]);
+    }
+
+    $groups = $groupsQuery->get()->map(function ($group) {
       return [
         'id' => $group->id,
         'name' => $group->name,
