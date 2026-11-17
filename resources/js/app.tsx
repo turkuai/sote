@@ -42,7 +42,7 @@ function App() {
   return (
     <Routes>
       <Route
-        path="/"
+        path=""
         element={
           isAuthenticated ? (
             !currentUser?.role_type ? (
@@ -56,23 +56,23 @@ function App() {
         }
       />
 
-      <Route path="/login" element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} />
-      <Route path="/register" element={isAuthenticated ? <Navigate to="/home" replace /> : <Register />} />
-      <Route path="/waiting-approval" element={isAuthenticated && !currentUser?.role_type ? <WaitingApproval /> : <Navigate to="/" replace />} />
-      <Route path="/verify-email" element={<VerifyEmail />} />
+      <Route path="login" element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} />
+      <Route path="register" element={isAuthenticated ? <Navigate to="/home" replace /> : <Register />} />
+      <Route path="waiting-approval" element={isAuthenticated && !currentUser?.role_type ? <WaitingApproval /> : <Navigate to="/" replace />} />
+      <Route path="verify-email" element={<VerifyEmail />} />
       <Route element={<ProtectedRoute />}>
         <Route element={<ProtectedLayout />}>
-          <Route path="/home/*" element={<HomePage />}>
+          <Route path="home" element={<HomePage />}>
             <Route index element={<UsersTab />} />
-            <Route path="/patients" element={<PatientsTab />} />
-            <Route path="/groups" element={<GroupsTab />} />
-            <Route path="/settings" element={<SettingsTab />} />
-            <Route path="/users" element={<UsersTab />} />
-            <Route path="/waiting-list" element={<WaitingListTab />} />
+            <Route path="patients" element={<PatientsTab />} />
+            <Route path="groups" element={<GroupsTab />} />
+            <Route path="settings" element={<SettingsTab />} />
+            <Route path="users" element={<UsersTab />} />
+            <Route path="waiting-list" element={<WaitingListTab />} />
           </Route>
 
-          <Route path="/patients" element={<PatientsPage />} />
-          <Route path="/patients/:patientId" element={<PatientReportPage />} />
+          <Route path="patients" element={<PatientsPage />} />
+          <Route path="patients/:patientId" element={<PatientReportPage />} />
         </Route>
       </Route>
 
