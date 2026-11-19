@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class PatientController extends Controller {
   // Get all the patients
-  public function index() {
+  public function index(Request $request) {
     /*
       * Match the number of items displayed per page in ServerGrid.
       * This value must stay synchronized with ServerGrid's pageSize. Otherwise,
@@ -24,7 +24,19 @@ class PatientController extends Controller {
     $pageSize = 10;
 
     try {
-      $patients = Patient::paginate($pageSize);
+      $query = Patient::query();
+
+      if ($request->has('q') && $request->q) {
+        $search = strtolower($request->q);
+        $query->where(function ($q) use ($search) {
+          $q->whereRaw('LOWER(first_name) LIKE ?', ["%{$search}%"])
+            ->orWhereRaw('LOWER(last_name) LIKE ?', ["%{$search}%"])
+            ->orWhereRaw('LOWER(social_id) LIKE ?', ["%{$search}%"])
+            ->orWhereRaw('LOWER(remarks) LIKE ?', ["%{$search}%"]);
+        });
+      }
+
+      $patients = $query->paginate($pageSize);
 
       return ApiResponse::paginated(
         $patients,
@@ -207,10 +219,22 @@ class PatientController extends Controller {
       }
 
       if ($user->role_type === 'nurse' || $user->role_type === 'manager') {
-        $patients = Patient::forUser(Auth::id())->paginate($pageSize);
+        $query = Patient::forUser(Auth::id());
       } else if ($user->role_type === 'admin') {
-        $patients = Patient::paginate($pageSize);
+        $query = Patient::query();
       }
+
+      if ($request->has('q') && $request->q) {
+        $search = strtolower($request->q);
+        $query->where(function ($q) use ($search) {
+          $q->whereRaw('LOWER(first_name) LIKE ?', ["%{$search}%"])
+            ->orWhereRaw('LOWER(last_name) LIKE ?', ["%{$search}%"])
+            ->orWhereRaw('LOWER(social_id) LIKE ?', ["%{$search}%"])
+            ->orWhereRaw('LOWER(remarks) LIKE ?', ["%{$search}%"]);
+        });
+      }
+
+      $patients = $query->paginate($pageSize);
 
       return ApiResponse::paginated($patients, 'User patients retrieved successfully');
     } catch (Exception $e) {

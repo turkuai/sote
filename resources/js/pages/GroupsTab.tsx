@@ -8,7 +8,6 @@ import { ServerGrid as ServerGridBase } from 'tai-grid';
 import 'tai-grid/style.css';
 import GroupRegistrationForm from '../components/GroupRegistrationForm';
 import GroupUsersModal from '../components/GroupUsersModal';
-import MobileSearchToggle from '../components/MobileSearchToggle';
 import { useNotification } from '../components/NotificationContext';
 import { getApiBase } from '../config';
 import './Admin.css';
@@ -62,8 +61,6 @@ function AccessKeyCell({ value }: { value: unknown }) {
   );
 }
 
-const SEARCH_DEBOUNCE_MS = 300;
-
 /**
  * GroupsTab component
  *
@@ -86,17 +83,14 @@ export default function GroupsTab({}) {
   }>();
   const { t } = useTranslation();
   const [refreshKey, setRefreshKey] = useState(0);
-  const [inputValue, setInputValue] = useState(query || '');
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [showGroupUsersModal, setShowGroupUsersModal] = useState(false);
   const [showEnrollModal, setShowEnrollModal] = useState(false);
   const [myGroupCount, setMyGroupCount] = useState<number | null>(null);
   const [panelGroup, setPanelGroup] = useState<Record<string, unknown> | null>(null);
   const [panelLoading, setPanelLoading] = useState(false);
-  const [panelSearch, setPanelSearch] = useState('');
   const [groupPath, setGroupPath] = useState('');
   const lastPanelClickedIndex = useRef<number | null>(null);
-  const debounceRef = useRef(null);
   const { showNotification } = useNotification();
 
   // Fetch count of nurse's groups to show empty state
@@ -108,33 +102,6 @@ export default function GroupsTab({}) {
       .catch(() => setMyGroupCount(0));
   }, [currentUser, refreshKey]);
 
-  // Debounce: only call onQueryChange 300ms after last keystroke
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setInputValue(value);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      debounceRef.current = null;
-      onQueryChange(value);
-    }, SEARCH_DEBOUNCE_MS);
-  };
-
-  const handleSearchChange2 = (e) => {
-    const value2 = e.target.value;
-    setPanelSearch(value2);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      debounceRef.current = null;
-      onQueryChange(value2);
-    }, SEARCH_DEBOUNCE_MS);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, []);
-
   const handleAddUsersClick = (group) => {
     setSelectedGroup(group);
     setShowGroupUsersModal(true);
@@ -145,7 +112,6 @@ export default function GroupsTab({}) {
   const handleGroupRowClick = (group: Record<string, unknown>) => {
     setPanelGroup(group);
     setGroupPath(`groups/${group.id}/registered-users`);
-    setPanelSearch('');
     lastPanelClickedIndex.current = null;
 
     setPanelLoading(true);
@@ -235,24 +201,6 @@ export default function GroupsTab({}) {
                   <>
                     <div className="tab-header" style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'white' }}>
                       <h2>{String(panelGroup.name)}</h2>
-                      <div className="user-search">
-                        <span className="search-icon">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
-                            <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
-                          </svg>
-                        </span>
-                        <input
-                          type="search"
-                          autoComplete="off"
-                          placeholder={t('groups.panel.searchMembers')}
-                          value={panelSearch}
-                          onChange={(e) => {
-                            setPanelSearch(e.target.value);
-                            lastPanelClickedIndex.current = null;
-                          }}
-                        />
-                      </div>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                       <button className="server-grid-add-button" title={t('groups.panel.addUser')} onClick={() => handleAddUsersClick(panelGroup)}>
@@ -311,7 +259,6 @@ export default function GroupsTab({}) {
                   {t('groups.autoEnroll')}
                 </button>
               </div>
-              <MobileSearchToggle value={inputValue} onChange={handleSearchChange} />
               <div style={{ height: '500px', width: '100%' }}>
                 <ServerGrid
                   key={refreshKey}
@@ -371,21 +318,6 @@ export default function GroupsTab({}) {
               <div style={{ flex: '0 0 50%', minWidth: 0, paddingRight: '1.5rem' }}>
                 <div className="tab-header">
                   <h2>{t('groups.managementTitle')}</h2>
-                  <div className="user-search">
-                    <span className="search-icon">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
-                        <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
-                      </svg>
-                    </span>
-                    <input
-                      type="search"
-                      autoComplete="off"
-                      placeholder={t('groups.searchPlaceholder')}
-                      value={inputValue}
-                      onChange={handleSearchChange}
-                    />
-                  </div>
                   <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
                     {t('groups.autoEnroll')}
                   </button>
@@ -452,21 +384,6 @@ export default function GroupsTab({}) {
                   <>
                     <div className="tab-header" style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'white' }}>
                       <h2>{String(panelGroup.name)}</h2>
-                      <div className="user-search">
-                        <span className="search-icon">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
-                            <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
-                          </svg>
-                        </span>
-                        <input
-                          type="search"
-                          autoComplete="off"
-                          placeholder={t('groups.panel.searchMembers')}
-                          value={panelSearch}
-                          onChange={handleSearchChange2}
-                        />
-                      </div>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                       <button className="server-grid-add-button" title={t('groups.panel.addUser')} onClick={() => handleAddUsersClick(panelGroup)}>
