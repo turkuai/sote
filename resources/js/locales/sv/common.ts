@@ -219,6 +219,7 @@ const svCommon = {
     },
   },
   patients: {
+    managementTitle: 'Patienthantering',
     panel: {
       groups: 'Grupper',
       addToGroup: 'Lägg till i grupp',
