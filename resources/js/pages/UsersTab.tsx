@@ -1,11 +1,13 @@
+import { AuthorizedUserData } from '@/types';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useServerGridLabels } from '../hooks/useCurrentLanguage';
+import { useOutletContext } from 'react-router-dom';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
 import MobileSearchToggle from '../components/MobileSearchToggle';
 import { useNotification } from '../components/NotificationContext';
 import { getApiBase } from '../config';
+import { useServerGridLabels } from '../hooks/useCurrentLanguage';
 import './Admin.css';
 
 const SEARCH_DEBOUNCE_MS = 300;
@@ -23,7 +25,13 @@ const SEARCH_DEBOUNCE_MS = 300;
  * - onQueryChange: Callback function for search query changes
  * - onDeleteUser: Callback function for deleting a user
  */
-export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUser }) {
+export default function UsersTab({ onDeleteUser }) {
+  const {
+    setUserQuery: onQueryChange,
+    userQuery: query,
+    currentUser,
+  } = useOutletContext<{ setUserQuery: (query: string) => void; userQuery: string; currentUser: AuthorizedUserData | null }>();
+
   const [refreshKey, setRefreshKey] = useState(0);
   const [inputValue, setInputValue] = useState(query || '');
   const debounceRef = useRef(null);
