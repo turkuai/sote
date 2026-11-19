@@ -469,7 +469,25 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                           activeRelationTab === 'users'
                             ? t('groups.panel.users', { defaultValue: 'users' })
                             : t('groups.panel.patients', { defaultValue: 'patients' }),
-                        onUserAdded: () => {
+                        getRecordId: (record) => record.id,
+
+                        getRecords: (response) => {
+                          if (Array.isArray(response?.data?.data)) return response.data.data;
+                          if (Array.isArray(response?.data?.users)) return response.data.users;
+                          if (Array.isArray(response?.data?.patients)) return response.data.patients;
+                          if (Array.isArray(response?.data)) return response.data;
+                          if (Array.isArray(response?.users)) return response.users;
+                          if (Array.isArray(response?.patients)) return response.patients;
+
+                          return [];
+                        },
+
+                        renderRecord: (record) => (
+                          <span className="record-name">
+                            {record.name || [record.first_name, record.last_name].filter(Boolean).join(' ') || `#${record.id}`}
+                          </span>
+                        ),
+                        onAdded: () => {
                           setPanelRefreshKey((prev) => prev + 1);
                           setRefreshKey((prev) => prev + 1);
                         },
