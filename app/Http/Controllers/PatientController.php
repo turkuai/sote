@@ -40,14 +40,14 @@ class PatientController extends Controller {
 
   // Get specific patient via id
   public function show($id) {
-   $patient = Patient::with('patient_groups:groups.id, groups.name')->find($id);
+    $patient = Patient::with('patient_groups:groups.id,groups.name')->find($id);
 
-  if (!$patient) {
-    return ApiResponse::notFound('Patient not found');
+    if (!$patient) {
+      return ApiResponse::notFound('Patient not found');
+    }
+
+    return ApiResponse::success($patient, 'Patient retrieved successfully');
   }
-
-  return ApiResponse::success($patient, 'Patient retrieved successfully');
-}
 
   // Update a patient
   public function update(Request $request, $id) {

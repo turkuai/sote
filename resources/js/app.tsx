@@ -11,6 +11,7 @@ import GroupsTab from './pages/GroupsTab';
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
 import PatientReportPage from './pages/PatientReportPage';
+import PatientsInfo from './pages/PatientsInfo';
 import PatientsPage from './pages/PatientsPage';
 import PatientsTab from './pages/PatientsTab';
 import Register from './pages/Register';
@@ -73,6 +74,7 @@ function App() {
 
           <Route path="patients" element={<PatientsPage />} />
           <Route path="patients/:patientId" element={<PatientReportPage />} />
+          <Route path="/patients/:patientId/Info" element={<PatientsInfo />} />
         </Route>
       </Route>
 
