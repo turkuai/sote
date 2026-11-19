@@ -411,10 +411,10 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                             style={{
                               padding: '0.7rem 1rem',
                               border: 'none',
-                              borderBottom: selected ? '2px solid #0891b2' : '2px solid transparent',
+                              borderBottom: selected ? '2px solid #ce1717' : '2px solid transparent',
                               marginBottom: '-1px',
                               background: 'transparent',
-                              color: selected ? '#0891b2' : '#6b7280',
+                              color: selected ? '#ce1717' : '#6b7280',
                               fontWeight: selected ? 600 : 500,
                               cursor: 'pointer',
                             }}
