@@ -1,5 +1,7 @@
+import { AuthorizedUserData } from '@/types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useOutletContext } from 'react-router-dom';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
 import { useNotification } from '../components/NotificationContext';
@@ -18,7 +20,13 @@ import './Admin.css';
  * - query: Search query string
  * - onDeleteUser: Callback function for deleting a user
  */
-export default function UsersTab({ currentUser, query, onDeleteUser }) {
+export default function UsersTab({ onDeleteUser }) {
+  const {
+    setUserQuery: onQueryChange,
+    userQuery: query,
+    currentUser,
+  } = useOutletContext<{ setUserQuery: (query: string) => void; userQuery: string; currentUser: AuthorizedUserData | null }>();
+
   const [refreshKey, setRefreshKey] = useState(0);
   const { showNotification } = useNotification();
   const { t } = useTranslation();

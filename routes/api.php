@@ -107,9 +107,8 @@ Route::middleware(['auth'])->group(function () {
   })->name('Test');
 });
 
-// Fallback route for SPA - catch all unmatched routes and redirect to home
 Route::fallback(function () {
-  return redirect('/');
+  return Inertia::render('welcome');
 });
 
 require __DIR__ . '/settings.php';
