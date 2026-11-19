@@ -1,7 +1,9 @@
 import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
+import { AuthorizedUserData } from '@/types';
 import { Crown, Eye, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useOutletContext } from 'react-router-dom';
 import { ServerGrid as ServerGridBase } from 'tai-grid';
 import 'tai-grid/style.css';
 import GroupRegistrationForm from '../components/GroupRegistrationForm';
@@ -72,7 +74,16 @@ const SEARCH_DEBOUNCE_MS = 300;
  * - query: Search query string (debounced value used for API)
  * - onQueryChange: Callback function for search query changes
  */
-export default function GroupsTab({ currentUser, query, onQueryChange }) {
+export default function GroupsTab({}) {
+  const {
+    setGroupQuery: onQueryChange,
+    groupQuery: query,
+    currentUser,
+  } = useOutletContext<{
+    setGroupQuery: (query: string) => void;
+    groupQuery: string;
+    currentUser: AuthorizedUserData | null;
+  }>();
   const { t } = useTranslation();
   const [refreshKey, setRefreshKey] = useState(0);
   const [inputValue, setInputValue] = useState(query || '');
