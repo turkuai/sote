@@ -12,7 +12,7 @@ use App\Models\CareProblemItems;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder {
-  
+
   /**
    * Seed the application's database.
    */
@@ -56,11 +56,14 @@ class DatabaseSeeder extends Seeder {
 
     // Create 100 additional test users
     for ($i = 1; $i <= 100; $i++) {
+      $firstName = fake()->firstName();
+      $lastName  = fake()->lastName();
+
       User::create([
-        'name' => "Test User $i",
-        'first_name' => "Test",
-        'last_name' => "User $i",
-        'email' => "testuser$i@example.com",
+        'name' => "$firstName $lastName",
+        'first_name' => $firstName,
+        'last_name' => $lastName,
+        'email' => strtolower("{$firstName}.{$lastName}@example.com"),
         'password' => Hash::make('testuser-lemons-194'),
         'role' => Role::getPermissions('nurse'),
         'role_type' => 'nurse',
@@ -68,13 +71,15 @@ class DatabaseSeeder extends Seeder {
       ]);
     }
 
+    // Create 100 test patients with random names
     $firstPatient = null;
-
-    // Create 100 test patients
     for ($i = 1; $i <= 100; $i++) {
+      $firstName = fake()->firstName();
+      $lastName  = fake()->lastName();
+
       $patient = Patient::create([
-        'first_name' => "Test",
-        'last_name' => "Patient $i",
+        'first_name' => $firstName,
+        'last_name' => $lastName,
         'social_id' => "$i",
         'arrival_date' => now(),
         'remarks' => "test",
