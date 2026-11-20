@@ -98,6 +98,7 @@ const svCommon = {
   grid: {
     loading: 'Laddar...',
     add: 'Lägg till',
+    searchPlaceholder: 'Söka...',
     success: {
       itemUpdated: 'Posten uppdaterades!',
     },

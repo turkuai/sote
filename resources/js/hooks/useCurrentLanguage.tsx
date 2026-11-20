@@ -36,6 +36,7 @@ export function useGridLabels(): GridLabels {
     next: t('grid.pagination.next'),
     page: t('grid.pagination.page'),
     of: t('grid.pagination.of'),
+    searchPlaceholder: t('grid.searchPlaceholder'),
   };
 }
 
