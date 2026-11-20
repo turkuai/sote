@@ -1,4 +1,5 @@
 import { useId } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface DescriptionFormProps {
   description: string;
@@ -8,9 +9,14 @@ interface DescriptionFormProps {
 export default function DescriptionForm({ description, onDescriptionChange }: DescriptionFormProps) {
   const inputId = useId();
 
+  const { t } = useTranslation();
+
   return (
     <div>
-      <label htmlFor={inputId}>Kuvaus</label>
+      {}
+      <label htmlFor={inputId}>{t('caretree.description')}</label>
+      {}
+
       <textarea
         id={inputId}
         value={description}

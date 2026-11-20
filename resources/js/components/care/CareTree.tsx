@@ -241,6 +241,12 @@ export function CareTree({ data: initialData }: CareTreeProps) {
           formComponent={<DescriptionForm description={description} onDescriptionChange={setDescription} />}
           onCancel={closeDialog}
           onSave={saveDescription}
+          labels={{
+            title: t('grid.dialog.add'),
+            cancel: t('grid.dialog.cancel'),
+            save: t('grid.dialog.save'),
+            close: t('grid.dialog.close'),
+          }}
         />
       )}
     </>
