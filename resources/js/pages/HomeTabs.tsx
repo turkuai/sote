@@ -15,7 +15,7 @@ export default function HomeTabs({ tabs, activeTab, onTabClick, getTabLabel, ren
         {!collapsed && <span className="sidebar-label">Collapse</span>}
       </button>
       {tabs.map((tab) => {
-        const isActive = activeTab === tab;
+        const isActive = activeTab === tab || (activeTab === '/home' && tab === 'users');
 
         return (
           <button

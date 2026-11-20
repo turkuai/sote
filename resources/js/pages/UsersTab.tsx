@@ -1,56 +1,35 @@
-import { useEffect, useRef, useState } from 'react';
+import { AuthorizedUserData } from '@/types';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useServerGridLabels } from '../hooks/useCurrentLanguage';
+import { useOutletContext } from 'react-router-dom';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
-import MobileSearchToggle from '../components/MobileSearchToggle';
 import { useNotification } from '../components/NotificationContext';
 import { getApiBase } from '../config';
+import { useServerGridLabels } from '../hooks/useCurrentLanguage';
 import './Admin.css';
-
-const SEARCH_DEBOUNCE_MS = 300;
 
 /**
  * UsersTab component
  *
  * Extracted from Admin.js - handles both mobile and desktop user management views
  * Uses CSS classes for responsive visibility instead of conditional rendering
- * Search is debounced: waits 300ms after last keystroke before triggering the API.
  *
  * Props:
  * - currentUser: Current logged in user object
- * - query: Search query string (debounced value used for API)
- * - onQueryChange: Callback function for search query changes
+ * - query: Search query string
  * - onDeleteUser: Callback function for deleting a user
  */
-export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUser }) {
+export default function UsersTab({ onDeleteUser }) {
+  const {
+    setUserQuery: onQueryChange,
+    userQuery: query,
+    currentUser,
+  } = useOutletContext<{ setUserQuery: (query: string) => void; userQuery: string; currentUser: AuthorizedUserData | null }>();
+
   const [refreshKey, setRefreshKey] = useState(0);
-  const [inputValue, setInputValue] = useState(query || '');
-  const debounceRef = useRef(null);
   const { showNotification } = useNotification();
   const { t } = useTranslation();
-
-  // Sync input from parent query (e.g. when debounced update lands or initial load)
-  useEffect(() => {
-    setInputValue(query || '');
-  }, [query]);
-
-  // Debounce: only call onQueryChange 300ms after last keystroke
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setInputValue(value);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      debounceRef.current = null;
-      onQueryChange(value);
-    }, SEARCH_DEBOUNCE_MS);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, []);
 
   // Custom renderer para combinar first_name y last_name
   const NameRenderer = ({ data }) => {
@@ -84,7 +63,6 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
       <div className="mobile-tab-content hide-on-desktop">
         <div className="mobile-content-section">
           <h2>{t('tabs.users')}</h2>
-          <MobileSearchToggle value={inputValue} onChange={handleSearchChange} />
           <div style={{ height: '500px', width: '100%' }}>
             <ServerGrid
               key={refreshKey}
@@ -176,15 +154,6 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
       <div className="hide-on-mobile">
         <div className="tab-header">
           <h2>{t('users.managementTitle')}</h2>
-          <div className="user-search">
-            <span className="search-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
-                <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            </span>
-            <input type="text" autoComplete="off" placeholder={t('users.searchPlaceholder')} value={inputValue} onChange={handleSearchChange} />
-          </div>
         </div>
         <ServerGrid
           key={refreshKey}
