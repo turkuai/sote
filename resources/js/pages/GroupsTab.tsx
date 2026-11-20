@@ -448,7 +448,7 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                           ? t('groups.panel.addUser', { defaultValue: 'Add user' })
                           : t('groups.panel.addPatient', { defaultValue: 'Add patient' })
                       }
-                      addModal={{
+                      dialogConfig={{
                         title:
                           activeRelationTab === 'users'
                             ? t('groups.panel.addUser', { defaultValue: 'Add user' })
