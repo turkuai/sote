@@ -90,10 +90,6 @@ export default function PatientsTab({ query }: PatientsTabProps) {
               paddingRight: '1.5rem',
             }}
           >
-            <div className="tab-header">
-              <h2>{t('patients.managementTitle')}</h2>
-            </div>
-
             <ServerGrid
               columns={[
                 {

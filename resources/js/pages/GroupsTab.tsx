@@ -370,7 +370,6 @@ export default function GroupsTab({}) {
               {/* Left: groups list */}
               <div style={{ flex: '0 0 50%', minWidth: 0, paddingRight: '1.5rem' }}>
                 <div className="tab-header">
-                  <h2>{t('groups.managementTitle')}</h2>
                   <div className="user-search">
                     <span className="search-icon">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
