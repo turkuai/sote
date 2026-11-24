@@ -1,7 +1,7 @@
 import { getApiBase } from '@/config';
 import type { CareCategory, CareProblem, PatientProblemItem } from '@/types/caretree';
 
-async function getCareData(path: string, signal?: AbortSignal): Promise<unknown> {
+async function getCareData(path: string, signal?: AbortSignal): Promise<ApiCareCategory[] | ApiCareProblem[]> {
   const base = getApiBase().replace(/\/+$/, '');
   const response = await fetch(`${base}/api/care/${path}`, {
     credentials: 'include',
@@ -96,7 +96,7 @@ export async function loadPatientCare(patientId: string, signal?: AbortSignal): 
   }));
 }
 
-async function postCareData(path: string, payload: object): Promise<unknown> {
+async function postCareData(path: string, payload: object): Promise<ApiCareItem | Omit<ApiCareProblem, 'items'>> {
   const base = getApiBase().replace(/\/+$/, '');
   const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 

@@ -6,7 +6,6 @@ import { ServerGridEditDialog } from 'tai-grid';
 import AddItemButton from '../AddItemButton';
 import CareProblemDialogForm from './CareProblemDialogForm';
 import { CareTree } from './CareTree';
-//import { dummyCategories } from './dialogTest';
 
 //types
 type CareTreeListProps = {
@@ -54,7 +53,9 @@ function CareTreeList({ patientId, careDataList }: CareTreeListProps) {
   });
 
   async function openCareProblemDialog() {
-    if (isLoadingCategories) return;
+    if (isLoadingCategories) {
+      return;
+    }
 
     setIsLoadingCategories(true);
     setCategoryError('');
@@ -104,14 +105,18 @@ function CareTreeList({ patientId, careDataList }: CareTreeListProps) {
             </>
           }
           onCancel={() => {
-            if (isSaving) return;
+            if (isSaving) {
+              return;
+            }
             setSaveError('');
             setNewData((previous) => ({ ...previous, category: [], description: '' }));
             setActiveStep(0);
             setIsCareProblemDialogOpen(false);
           }}
           onSave={async () => {
-            if (isSaving) return;
+            if (isSaving) {
+              return;
+            }
             setSaveError('');
 
             if (activeStep < 2) {

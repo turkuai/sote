@@ -17,7 +17,9 @@ export default function PatientReportPage() {
 
   // Load care data for the patient selected in the URL.
   useEffect(() => {
-    if (!patientId) return;
+    if (!patientId) {
+      return;
+    }
 
     const controller = new AbortController();
     setResult(null);

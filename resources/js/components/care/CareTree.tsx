@@ -69,7 +69,9 @@ export function CareTree({ data: initialData }: CareTreeProps) {
   async function saveDescription() {
     const text = description.trim();
 
-    if (!selectedType || !text || isSaving) return;
+    if (!selectedType || !text || isSaving) {
+      return;
+    }
     setIsSaving(true);
     setSaveError('');
 
@@ -242,7 +244,9 @@ export function CareTree({ data: initialData }: CareTreeProps) {
             </>
           }
           onCancel={() => {
-            if (!isSaving) closeDialog();
+            if (!isSaving) {
+              closeDialog();
+            }
           }}
           onSave={saveDescription}
         />
