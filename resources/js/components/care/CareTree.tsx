@@ -1,3 +1,4 @@
+import { saveCareProblemItem } from '@/api/care';
 import type { CareProblem } from '@/types/caretree';
 import { Dot } from 'lucide-react';
 import { useReducer, useState } from 'react';
@@ -37,6 +38,8 @@ export function CareTree({ data: initialData }: CareTreeProps) {
   const [selectedType, setSelectedType] = useState<CareProblem['planItems'][number]['type'] | null>(null);
 
   const [description, setDescription] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
   const labels = data.category.map((line) => line);
 
   const descriptionNode = (
@@ -60,31 +63,27 @@ export function CareTree({ data: initialData }: CareTreeProps) {
   function closeDialog() {
     setSelectedType(null);
     setDescription('');
+    setSaveError('');
   }
 
-  function saveDescription() {
+  async function saveDescription() {
     const text = description.trim();
 
-    if (!selectedType || !text) {
+    if (!selectedType || !text || isSaving) {
       return;
     }
+    setIsSaving(true);
+    setSaveError('');
 
-    dispatch({
-      type: 'addItem',
-      item: {
-        id: Math.max(0, ...data.planItems.map((item) => item.id)) + 1,
-        problem_id: data.id,
-        description: text,
-        user_name: 'Demo',
-        created_at: new Date().toLocaleTimeString('fi-FI', {
-          hour: '2-digit',
-          minute: '2-digit',
-        }),
-        type: selectedType,
-      },
-    });
-
-    closeDialog();
+    try {
+      const item = await saveCareProblemItem(data.id, text, selectedType);
+      dispatch({ type: 'addItem', item });
+      closeDialog();
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'Could not save the entry.');
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   return (
@@ -238,8 +237,17 @@ export function CareTree({ data: initialData }: CareTreeProps) {
 
       {selectedType !== null && (
         <ServerGridEditDialog
-          formComponent={<DescriptionForm description={description} onDescriptionChange={setDescription} />}
-          onCancel={closeDialog}
+          formComponent={
+            <>
+              <DescriptionForm description={description} onDescriptionChange={setDescription} />
+              {saveError && <p role="alert">{saveError}</p>}
+            </>
+          }
+          onCancel={() => {
+            if (!isSaving) {
+              closeDialog();
+            }
+          }}
           onSave={saveDescription}
         />
       )}
