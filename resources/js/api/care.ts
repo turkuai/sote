@@ -1,7 +1,7 @@
 import { getApiBase } from '@/config';
 import type { CareCategory, CareProblem, PatientProblemItem } from '@/types/caretree';
 
-async function getCareData(path: string, signal?: AbortSignal): Promise<ApiCareCategory[] | ApiCareProblem[]> {
+async function getCareData<T extends ApiCareCategory | ApiCareProblem>(path: string, signal?: AbortSignal): Promise<T[]> {
   const base = getApiBase().replace(/\/+$/, '');
   const response = await fetch(`${base}/api/care/${path}`, {
     credentials: 'include',
@@ -18,12 +18,12 @@ async function getCareData(path: string, signal?: AbortSignal): Promise<ApiCareC
   return result.data;
 }
 
-export function fetchPatientCareProblems(patientId: string, signal?: AbortSignal) {
-  return getCareData(encodeURIComponent(patientId), signal);
+export function fetchPatientCareProblems(patientId: string, signal?: AbortSignal): Promise<ApiCareProblem[]> {
+  return getCareData<ApiCareProblem>(encodeURIComponent(patientId), signal);
 }
 
-export function fetchCareCategories(signal?: AbortSignal) {
-  return getCareData('categories', signal);
+export function fetchCareCategories(signal?: AbortSignal): Promise<ApiCareCategory[]> {
+  return getCareData<ApiCareCategory>('categories', signal);
 }
 
 type ApiCareCategory = CareCategory & {
@@ -62,7 +62,7 @@ type ApiCareProblem = {
   items: ApiCareItem[];
 };
 
-function buildCategoryPaths(categories: ApiCareCategory[], parentPath: string[] = [], paths = new Map<number, string[]>()) {
+function buildCategoryPaths(categories: ApiCareCategory[], parentPath: string[] = [], paths = new Map<number, string[]>()): Map<number, string[]> {
   for (const category of categories) {
     const path = [...parentPath, category.name];
     paths.set(category.id, path);
@@ -96,7 +96,7 @@ export async function loadPatientCare(patientId: string, signal?: AbortSignal): 
   }));
 }
 
-async function postCareData(path: string, payload: object): Promise<ApiCareItem | Omit<ApiCareProblem, 'items'>> {
+async function postCareData<T extends ApiCareItem | Omit<ApiCareProblem, 'items'>>(path: string, payload: object): Promise<T> {
   const base = getApiBase().replace(/\/+$/, '');
   const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
@@ -121,21 +121,21 @@ async function postCareData(path: string, payload: object): Promise<ApiCareItem 
 }
 
 export async function saveCareProblemItem(problemId: number, description: string, type: PatientProblemItem['type']): Promise<PatientProblemItem> {
-  const item = (await postCareData('problem/item', {
+  const item = await postCareData<ApiCareItem>('problem/item', {
     problem_id: problemId,
     description,
     type,
-  })) as ApiCareItem;
+  });
 
   return { ...item, user_name: '' };
 }
 
 export async function saveCareProblem(patientId: number, categoryId: number, description: string, categoryPath: string[]): Promise<CareProblem> {
-  const problem = (await postCareData('problem', {
+  const problem = await postCareData<Omit<ApiCareProblem, 'items'>>('problem', {
     patient_id: patientId,
     category_id: categoryId,
     description,
-  })) as Omit<ApiCareProblem, 'items'>;
+  });
 
   return {
     id: problem.id,
