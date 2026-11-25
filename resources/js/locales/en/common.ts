@@ -40,7 +40,7 @@ const enCommon = {
 
   user: {
     welcome: 'Welcome',
-    settings: 'Settings',
+    settings: 'My Profile',
     logout: 'Logout',
     myDashboard: 'My Dashboard',
   },
@@ -49,7 +49,7 @@ const enCommon = {
     users: 'Users',
     groups: 'Groups',
     waitingList: 'Waiting List',
-    settings: 'Settings',
+    settings: 'My Profile',
     patients: 'Patients',
   },
 
@@ -256,8 +256,8 @@ const enCommon = {
 
   settings: {
     header: {
-      title: 'Settings',
-      description: 'Manage your account settings and set e-mail preferences.',
+      title: 'My Profile',
+      description: 'Manage your account profile and set e-mail preferences.',
     },
     tabs: {
       profile: 'Profile',
@@ -313,6 +313,24 @@ const enCommon = {
     goal: 'Care Goal',
     activity: 'Planned Activities',
     review: 'Care Review',
+  },
+  patientInfo: {
+  loading: 'Loading patient information...',
+  socialId: 'Social ID',
+  arrivalDate: 'Arrival date',
+  address: 'Address',
+  phone: 'Phone',
+  remarks: 'Remarks',
+  job: 'Job',
+  notProvided: 'Not provided',
+  noRemarks: 'No remarks',
+  na: 'No information given',
+  errors: {
+    idMissing: 'Patient ID is missing.',
+    notFound: 'Patient not found.',
+    loadFailed: 'Could not load patient information.',
+    generic: 'Something went wrong.',
+  },
   },
 };
 

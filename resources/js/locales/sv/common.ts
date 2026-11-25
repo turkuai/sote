@@ -40,7 +40,7 @@ const svCommon = {
 
   user: {
     welcome: 'Välkommen',
-    settings: 'Inställningar',
+    settings: 'Min profil',
     logout: 'Logga ut',
     myDashboard: 'Min kontrollpanel',
   },
@@ -49,7 +49,7 @@ const svCommon = {
     users: 'Användare',
     groups: 'Grupper',
     waitingList: 'Väntelista',
-    settings: 'Inställningar',
+    settings: 'Min profil',
     patients: 'Patienter',
   },
 
@@ -255,8 +255,8 @@ const svCommon = {
 
   settings: {
     header: {
-      title: 'Inställningar',
-      description: 'Hantera kontoinställningar.',
+      title: 'Min profil',
+      description: 'Hantera kontoprofil.',
     },
     tabs: {
       profile: 'Profil',
@@ -312,6 +312,24 @@ const svCommon = {
     activity: 'Planerade åtgärder',
     review: 'Vårdbedömning',
   },
+  patientInfo: {
+  loading: 'Laddar patientinformation...',
+  socialId: 'Personbeteckning',
+  arrivalDate: 'Ankomstdatum',
+  address: 'Adress',
+  phone: 'Telefon',
+  remarks: 'Anmärkningar',
+  job: 'Yrke',
+  notProvided: 'Ej angivet',
+  noRemarks: 'Inga anmärkningar',
+  na: 'ingen information lämnad',
+  errors: {
+    idMissing: 'Patient-ID saknas.',
+    notFound: 'Patienten hittades inte.',
+    loadFailed: 'Det gick inte att ladda patientinformationen.',
+    generic: 'Något gick fel.',
+  },
+},
 };
 
 export default svCommon;
