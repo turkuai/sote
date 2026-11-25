@@ -59,9 +59,29 @@ class CareController extends Controller {
         return ApiResponse::notFound('Patient not found');
       }
 
-      $problems = CareProblem::where('patient_id', $patient->id)
-        ->with(['items', 'author:id,first_name,last_name'])
-        ->get();
+      if (!$this->patientBelongsToUser($patient->id)) {
+        return ApiResponse::error('Forbidden: You can only access your own patients', 403);
+      }
+
+      $query = CareProblem::where('patient_id', $patient->id);
+
+      if (Auth::user()->role_type === 'nurse') {
+        // Nurses can only see items made by themselves or by admins and managers
+        $query->with(['items' => function ($q) {
+          $q->where(function ($q2) {
+            $q2->where('author_id', Auth::id())
+              ->orWhereIn('author_id', function ($q3) {
+                $q3->select('id')->from('users')->where('role_type', '!=', 'nurse');
+              });
+          });
+        }]);
+      } else {
+        $query->with(['items']);
+      }
+
+      $query->with(['author:id,first_name,last_name']);
+
+      $problems = $query->get();
 
       return ApiResponse::success($problems, 'Patient care problems retrieved successfully');
     } catch (Exception $e) {
@@ -86,6 +106,10 @@ class CareController extends Controller {
       }
 
       $validated = $validator->validated();
+
+      if (!$this->patientBelongsToUser($validated['patient_id'])) {
+        return ApiResponse::error('Forbidden: You can only add problems to your own patients', 403);
+      }
 
       $problem = CareProblem::create([
         'category_id' => $validated['category_id'],
@@ -121,6 +145,12 @@ class CareController extends Controller {
       }
 
       $validated = $validator->validated();
+
+      $problem = CareProblem::find($validated['problem_id']);
+
+      if (!$problem || !$this->patientBelongsToUser($problem->patient_id)) {
+        return ApiResponse::error('Forbidden: You can only add items to your own patients\' problems', 403);
+      }
 
       $typeMap = [
         0 => 'goal',
@@ -161,6 +191,10 @@ class CareController extends Controller {
         return ApiResponse::notFound('Care problem not found');
       }
 
+      if (!$this->patientBelongsToUser($problem->patient_id)) {
+        return ApiResponse::error('Forbidden: You can only update problems for your own patients', 403);
+      }
+
       $validator = Validator::make($request->all(), [
         'description' => 'required|string|max:1000',
       ]);
@@ -197,6 +231,12 @@ class CareController extends Controller {
         return ApiResponse::notFound('Care problem item not found');
       }
 
+      $problem = CareProblem::find($item->problem_id);
+
+      if (!$problem || !$this->patientBelongsToUser($problem->patient_id)) {
+        return ApiResponse::error('Forbidden: You can only edit items for your own patients\' problems', 403);
+      }
+
       if ($item->author_id !== Auth::id()) {
         return ApiResponse::error('Forbidden: You can only edit your own items', 403);
       }
@@ -229,5 +269,15 @@ class CareController extends Controller {
         500
       );
     }
+  }
+
+  // Check that the given patient is assigned to the authenticated user.
+  // Admins and managers can access everything; nurses are restricted to their own patients.
+  private function patientBelongsToUser($patientId) {
+    if (Auth::user()->role_type !== 'nurse') {
+      return true;
+    }
+
+    return Patient::forUser(Auth::id())->where('id', $patientId)->exists();
   }
 }

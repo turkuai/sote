@@ -40,7 +40,7 @@ const svCommon = {
 
   user: {
     welcome: 'Välkommen',
-    settings: 'Inställningar',
+    settings: 'Min profil',
     logout: 'Logga ut',
     myDashboard: 'Min kontrollpanel',
   },
@@ -49,7 +49,7 @@ const svCommon = {
     users: 'Användare',
     groups: 'Grupper',
     waitingList: 'Väntelista',
-    settings: 'Inställningar',
+    settings: 'Min profil',
     patients: 'Patienter',
   },
 
@@ -255,8 +255,8 @@ const svCommon = {
 
   settings: {
     header: {
-      title: 'Inställningar',
-      description: 'Hantera kontoinställningar.',
+      title: 'Min profil',
+      description: 'Hantera kontoprofil.',
     },
     tabs: {
       profile: 'Profil',

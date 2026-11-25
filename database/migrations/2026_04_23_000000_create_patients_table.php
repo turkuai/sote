@@ -18,6 +18,9 @@ return new class extends Migration {
       $table->text('remarks')->nullable();
       $table->timestamps();
       $table->softDeletes();
+      $table->string('address')->nullable();
+      $table->string('phone', 30)->nullable();
+      $table->string('job')->nullable();
     });
   }
 

@@ -40,7 +40,7 @@ const fiCommon = {
 
   user: {
     welcome: 'Tervetuloa',
-    settings: 'Asetukset',
+    settings: 'Minun Profiili',
     logout: 'Kirjaudu ulos',
     myDashboard: 'Oma hallintapaneeli',
   },
@@ -49,7 +49,7 @@ const fiCommon = {
     users: 'Käyttäjät',
     groups: 'Ryhmät',
     waitingList: 'Odotuslista',
-    settings: 'Asetukset',
+    settings: 'Minun Profiili',
     patients: 'Potilaat',
   },
 
@@ -254,8 +254,8 @@ const fiCommon = {
   },
   settings: {
     header: {
-      title: 'Asetukset',
-      description: 'Hallinnoi tilisi asetuksia ja sähköpostiasetuksia.',
+      title: 'Minun Profiili',
+      description: 'Hallinnoi tilisi profiili ja sähköpostiasetuksia.',
     },
     tabs: {
       profile: 'Profiili',
