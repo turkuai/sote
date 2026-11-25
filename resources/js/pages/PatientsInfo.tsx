@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchPatient, type Patient } from "../clientapi/fetchpatient";
-import { useTranslation } from "react-i18next";
 
 /**
  * Patient info page.
@@ -13,28 +12,27 @@ export default function PatientInfo() {
   const { patientId } = useParams<{ patientId: string }>();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
-  const [errorKey, setErrorKey] = useState<string | null>(null);
+  const [error, setError] = useState("");
 
-  const { t } = useTranslation();
 
-  useEffect(() => {
-    if (!patientId) {
-      setErrorKey("patientInfo.errors.idMissing");
-      setLoading(false);
-      return;
-    }
+useEffect(() => {
+  if (!patientId) {
+    setError("Patient ID is missing.");
+    setLoading(false);
+    return;
+  }
 
     const controller = new AbortController();
 
     async function load() {
       setLoading(true);
-      setErrorKey(null);
+      setError("");
       try {
         const data = await fetchPatient(patientId!, controller.signal);
         setPatient(data);
       } catch (err) {
         if (err instanceof DOMException && err.name === "AbortError") return;
-        setErrorKey("patientInfo.errors.loadFailed");
+        setError(err instanceof Error ? err.message : "Something went wrong.");
       } finally {
         if (!controller.signal.aborted) setLoading(false);
       }
@@ -45,13 +43,13 @@ export default function PatientInfo() {
   }, [patientId]);
 
   if (loading) {
-    return <p>{t("patientInfo.loading")}</p>;
+    return <p>Loading information...</p>;
   }
-  if (errorKey) {
-    return <p role="alert">{t(errorKey)}</p>;
+  if (error) {
+    return <p role="alert">{error}</p>;
   }
   if (!patient) {
-    return <p>{t("patientInfo.errors.notFound")}</p>;
+    return <p>Patient not found.</p>;
   }
 
   return (
@@ -61,14 +59,15 @@ export default function PatientInfo() {
           <h1>
             {patient.first_name} {patient.last_name}
           </h1>
-          <p><strong>{t("patientInfo.socialId")}:</strong> {patient.social_id}</p>
-          <p><strong>{t("patientInfo.arrivalDate")}:</strong> {patient.arrival_date || t("patientInfo.notProvided")}</p>
-          <p><strong>{t("patientInfo.address")}:</strong> {patient.address || t("patientInfo.notProvided")}</p>
-          <p><strong>{t("patientInfo.phone")}:</strong> {patient.phone || t("patientInfo.notProvided")}</p>
-          <p><strong>{t("patientInfo.job")}:</strong> {patient.job || t("patientInfo.notProvided")}</p>
-          <p><strong>{t("patientInfo.remarks")}:</strong> {patient.remarks || t("patientInfo.noRemarks")}</p>
+          <p><strong>Social ID:</strong> {patient.social_id}</p>
+          <p><strong>Arrival date:</strong> {patient.arrival_date || "Not provided"}</p>
+          <p><strong>Address:</strong> {patient.address || "Not provided"}</p>
+          <p><strong>Phone:</strong> {patient.phone || "Not provided"}</p>
+          <p><strong>Job:</strong> {patient.job || "Not provided"}</p>
+          <p><strong>Remarks:</strong> {patient.remarks || "No remarks"}</p>
         </div>
       </div>
     </main>
   );
 }
+
