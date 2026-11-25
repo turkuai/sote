@@ -1,37 +1,40 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchPatient, type Patient } from "../clientapi/fetchpatient";
+import { useTranslation } from "react-i18next";
 
 /**
  * Patient info page.
  * Route: /patients/:patientId/info (see resources/js/app.tsx).
  * Loads all info based on the patientId.
  */
+
 export default function PatientInfo() {
   const { patientId } = useParams<{ patientId: string }>();
-
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [errorKey, setErrorKey] = useState<string | null>(null);
 
-useEffect(() => {
-  if (!patientId) {
-    setError("Patient ID is missing.");
-    setLoading(false);
-    return;
-  }
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    if (!patientId) {
+      setErrorKey("patientInfo.errors.idMissing");
+      setLoading(false);
+      return;
+    }
 
     const controller = new AbortController();
 
     async function load() {
       setLoading(true);
-      setError("");
+      setErrorKey(null);
       try {
         const data = await fetchPatient(patientId!, controller.signal);
         setPatient(data);
       } catch (err) {
         if (err instanceof DOMException && err.name === "AbortError") return;
-        setError(err instanceof Error ? err.message : "Something went wrong.");
+        setErrorKey("patientInfo.errors.loadFailed");
       } finally {
         if (!controller.signal.aborted) setLoading(false);
       }
@@ -42,13 +45,13 @@ useEffect(() => {
   }, [patientId]);
 
   if (loading) {
-    return <p>Loading patient information...</p>;
+    return <p>{t("patientInfo.loading")}</p>;
   }
-  if (error) {
-    return <p role="alert">{error}</p>;
+  if (errorKey) {
+    return <p role="alert">{t(errorKey)}</p>;
   }
   if (!patient) {
-    return <p>Patient not found.</p>;
+    return <p>{t("patientInfo.errors.notFound")}</p>;
   }
 
   return (
@@ -58,15 +61,14 @@ useEffect(() => {
           <h1>
             {patient.first_name} {patient.last_name}
           </h1>
-          <p><strong>Social ID:</strong> {patient.social_id}</p>
-          <p><strong>Arrival date:</strong> {patient.arrival_date || "Not provided"}</p>
-          <p><strong>Address:</strong> {patient.address || "Not provided"}</p>
-          <p><strong>Phone:</strong> {patient.phone || "Not provided"}</p>
-          <p><strong>Job:</strong> {patient.job || "Not provided"}</p>
-          <p><strong>Remarks:</strong> {patient.remarks || "No remarks"}</p>
+          <p><strong>{t("patientInfo.socialId")}:</strong> {patient.social_id}</p>
+          <p><strong>{t("patientInfo.arrivalDate")}:</strong> {patient.arrival_date || t("patientInfo.notProvided")}</p>
+          <p><strong>{t("patientInfo.address")}:</strong> {patient.address || t("patientInfo.notProvided")}</p>
+          <p><strong>{t("patientInfo.phone")}:</strong> {patient.phone || t("patientInfo.notProvided")}</p>
+          <p><strong>{t("patientInfo.job")}:</strong> {patient.job || t("patientInfo.notProvided")}</p>
+          <p><strong>{t("patientInfo.remarks")}:</strong> {patient.remarks || t("patientInfo.noRemarks")}</p>
         </div>
       </div>
     </main>
   );
 }
-
