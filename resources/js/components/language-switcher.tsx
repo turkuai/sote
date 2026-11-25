@@ -10,6 +10,7 @@ const languageNames = {
   fi: 'Suomi',
   sv: 'Svenska',
   en: 'English',
+  ee: 'Eesti',
 } as const;
 
 type SupportedLanguage = keyof typeof languageNames;

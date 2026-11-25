@@ -25,7 +25,6 @@ type ErrorKey = 'missingId' | 'notFound' | 'loadFailed' | 'generic';
 export default function PatientInfo() {
   const { t } = useTranslation();
   const { patientId } = useParams<{ patientId: string }>();
-
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorKey, setErrorKey] = useState<ErrorKey | null>(null);

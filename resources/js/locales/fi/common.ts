@@ -4,6 +4,7 @@ const fiCommon = {
     finnish: 'Suomi',
     swedish: 'Ruotsi',
     english: 'Englanti',
+    estonia: 'Viro',
     loading: 'Ladataan...',
     navigation: 'Navigointi',
     close: 'Sulje',

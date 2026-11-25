@@ -4,6 +4,7 @@ const svCommon = {
     swedish: 'Svenska',
     finnish: 'Finska',
     english: 'Engelska',
+    estonia: 'Eesti',
     loading: 'Laddar...',
     navigation: 'Navigering',
     close: 'Stäng',
