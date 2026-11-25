@@ -68,9 +68,15 @@ export default function PatientInfo() {
     return () => controller.abort();
   }, [patientId]);
 
-  if (loading) return <p>{t('patientInfo.loading')}</p>;
-  if (errorKey) return <p role="alert">{t(`patientInfo.errors.${errorKey}`)}</p>;
-  if (!patient) return <p>{t('patientInfo.errors.notFound')}</p>;
+  if (loading) {
+    return <p>{t('patientInfo.loading')}</p>;
+  }
+  if (errorKey) {
+    return <p role="alert">{t(`patientInfo.errors.${errorKey}`)}</p>;
+  }
+  if (!patient) {
+    return <p>{t('patientInfo.errors.notFound')}</p>;
+  }
 
   const na = t('patientInfo.na');
 
