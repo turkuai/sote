@@ -1,12 +1,15 @@
+import { AuthorizedUserData } from '@/types';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useOutletContext } from 'react-router-dom';
 import { ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
 import { useNotification } from '../components/NotificationContext';
 import { getApiBase } from '../config';
 import { useServerGridLabels } from '../hooks/useCurrentLanguage';
 
-export default function WaitingListTab({ currentUser }) {
+export default function WaitingListTab({}) {
+  const { currentUser } = useOutletContext<{ currentUser: AuthorizedUserData }>();
   const { t } = useTranslation();
   const { showNotification } = useNotification();
   const [refreshCounter, setRefreshCounter] = useState(0);

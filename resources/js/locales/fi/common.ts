@@ -4,6 +4,7 @@ const fiCommon = {
     finnish: 'Suomi',
     swedish: 'Ruotsi',
     english: 'Englanti',
+    estonia: 'Viro',
     loading: 'Ladataan...',
     navigation: 'Navigointi',
     close: 'Sulje',
@@ -309,6 +310,24 @@ const fiCommon = {
     goal: 'Hoidon tavoite',
     activity: 'Suunnitellut toiminnot',
     review: 'Hoidon arviointi',
+  },
+    patientInfo: {
+  loading: 'Ladataan potilaan tietoja',
+  socialId: 'Henkilötunnus',
+  arrivalDate: 'Saapumispäivä',
+  address: 'Osoite',
+  phone: 'Puh',
+  remarks: 'Huomautuksia',
+  job: 'Työ',
+  notProvided: 'Ei annettu',
+  noRemarks: 'Ei huomautuksia',
+  na: 'Ei tietoa annettu',
+  errors: {
+    idMissing: 'potilas ID puuttuu.',
+    notFound: 'Potilasta ei löydy.',
+    loadFailed: 'Ei voitu ladata potilaan tietoja.',
+    generic: 'Jotain meni vikaan.',
+  },
   },
 };
 
