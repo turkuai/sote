@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 /**
  * Patient info page.
@@ -20,7 +20,7 @@ type Patient = {
   remarks?: string | null;
 };
 
-type ErrorKey = "missingId" | "notFound" | "loadFailed" | "generic";
+type ErrorKey = 'missingId' | 'notFound' | 'loadFailed' | 'generic';
 
 export default function PatientInfo() {
   const { t } = useTranslation();
@@ -32,7 +32,7 @@ export default function PatientInfo() {
 
   useEffect(() => {
     if (!patientId) {
-      setErrorKey("missingId");
+      setErrorKey('missingId');
       setLoading(false);
       return;
     }
@@ -44,21 +44,21 @@ export default function PatientInfo() {
       setErrorKey(null);
       try {
         const response = await fetch(`/api/patients/${patientId}`, {
-          credentials: "include",
-          headers: { Accept: "application/json" },
+          credentials: 'include',
+          headers: { Accept: 'application/json' },
           signal: controller.signal,
         });
 
         if (!response.ok) {
-          setErrorKey(response.status === 404 ? "notFound" : "loadFailed");
+          setErrorKey(response.status === 404 ? 'notFound' : 'loadFailed');
           return;
         }
 
         const result = await response.json();
         setPatient(result.data ?? result);
       } catch (err) {
-        if (err instanceof DOMException && err.name === "AbortError") return;
-        setErrorKey("generic");
+        if (err instanceof DOMException && err.name === 'AbortError') return;
+        setErrorKey('generic');
       } finally {
         if (!controller.signal.aborted) setLoading(false);
       }
@@ -68,11 +68,11 @@ export default function PatientInfo() {
     return () => controller.abort();
   }, [patientId]);
 
-  if (loading) return <p>{t("patientInfo.loading")}</p>;
+  if (loading) return <p>{t('patientInfo.loading')}</p>;
   if (errorKey) return <p role="alert">{t(`patientInfo.errors.${errorKey}`)}</p>;
-  if (!patient) return <p>{t("patientInfo.errors.notFound")}</p>;
+  if (!patient) return <p>{t('patientInfo.errors.notFound')}</p>;
 
-  const na = t("patientInfo.na");
+  const na = t('patientInfo.na');
 
   return (
     <main>
@@ -81,12 +81,24 @@ export default function PatientInfo() {
           <h1>
             {patient.first_name} {patient.last_name}
           </h1>
-          <p><strong>{t("patientInfo.socialId")}:</strong> {patient.social_id}</p>
-          <p><strong>{t("patientInfo.arrivalDate")}:</strong> {patient.arrival_date || na}</p>
-          <p><strong>{t("patientInfo.address")}:</strong> {patient.address || na}</p>
-          <p><strong>{t("patientInfo.phone")}:</strong> {patient.phone || na}</p>
-          <p><strong>{t("patientInfo.job")}:</strong> {patient.job || na}</p>
-          <p><strong>{t("patientInfo.remarks")}:</strong> {patient.remarks || t("patientInfo.noRemarks")}</p>
+          <p>
+            <strong>{t('patientInfo.socialId')}:</strong> {patient.social_id}
+          </p>
+          <p>
+            <strong>{t('patientInfo.arrivalDate')}:</strong> {patient.arrival_date || na}
+          </p>
+          <p>
+            <strong>{t('patientInfo.address')}:</strong> {patient.address || na}
+          </p>
+          <p>
+            <strong>{t('patientInfo.phone')}:</strong> {patient.phone || na}
+          </p>
+          <p>
+            <strong>{t('patientInfo.job')}:</strong> {patient.job || na}
+          </p>
+          <p>
+            <strong>{t('patientInfo.remarks')}:</strong> {patient.remarks || t('patientInfo.noRemarks')}
+          </p>
         </div>
       </div>
     </main>

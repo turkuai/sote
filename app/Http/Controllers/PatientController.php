@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class PatientController extends Controller {
   // Get all the patients
-  public function index() {
+  public function index(Request $request) {
     /*
       * Match the number of items displayed per page in ServerGrid.
       * This value must stay synchronized with ServerGrid's pageSize. Otherwise,
@@ -24,7 +24,19 @@ class PatientController extends Controller {
     $pageSize = 10;
 
     try {
-      $patients = Patient::paginate($pageSize);
+      $query = Patient::query();
+
+      if ($request->has('q') && $request->q) {
+        $search = strtolower($request->q);
+        $query->where(function ($q) use ($search) {
+          $q->whereRaw('LOWER(first_name) LIKE ?', ["%{$search}%"])
+            ->orWhereRaw('LOWER(last_name) LIKE ?', ["%{$search}%"])
+            ->orWhereRaw('LOWER(social_id) LIKE ?', ["%{$search}%"])
+            ->orWhereRaw('LOWER(remarks) LIKE ?', ["%{$search}%"]);
+        });
+      }
+
+      $patients = $query->paginate($pageSize);
 
       return ApiResponse::paginated(
         $patients,
@@ -40,20 +52,20 @@ class PatientController extends Controller {
 
   // Get specific patient via id
   public function show($id) {
-  $patient = Patient::with('patient_groups:groups.id,groups.name')->find($id);
+    $patient = Patient::with('patient_groups:groups.id,groups.name')->find($id);
 
-  if (! $patient) {
-    return ApiResponse::notFound('Patient not found');
+    if (!$patient) {
+      return ApiResponse::notFound('Patient not found');
+    }
+
+    return ApiResponse::success($patient, 'Patient retrieved successfully');
   }
-
-  return ApiResponse::success($patient, 'Patient retrieved successfully');
-}
 
   // Update a patient
   public function update(Request $request, $id) {
     $patient = Patient::find($id);
 
-    if (! $patient) {
+    if (!$patient) {
       return ApiResponse::notFound('Patient not found');
     }
 
@@ -199,7 +211,30 @@ class PatientController extends Controller {
        * ServerGrid sends ?page=N which paginate() picks up automatically.
        */
       $pageSize = 10;
-      $patients = Patient::forUser(Auth::id())->paginate($pageSize);
+
+      $user = Auth::user();
+
+      if (!$user) {
+        return ApiResponse::error('Unauthenticated', 401);
+      }
+
+      if ($user->role_type === 'nurse' || $user->role_type === 'manager') {
+        $query = Patient::forUser(Auth::id());
+      } else if ($user->role_type === 'admin') {
+        $query = Patient::query();
+      }
+
+      if ($request->has('q') && $request->q) {
+        $search = strtolower($request->q);
+        $query->where(function ($q) use ($search) {
+          $q->whereRaw('LOWER(first_name) LIKE ?', ["%{$search}%"])
+            ->orWhereRaw('LOWER(last_name) LIKE ?', ["%{$search}%"])
+            ->orWhereRaw('LOWER(social_id) LIKE ?', ["%{$search}%"])
+            ->orWhereRaw('LOWER(remarks) LIKE ?', ["%{$search}%"]);
+        });
+      }
+
+      $patients = $query->paginate($pageSize);
 
       return ApiResponse::paginated($patients, 'User patients retrieved successfully');
     } catch (Exception $e) {

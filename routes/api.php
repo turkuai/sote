@@ -73,7 +73,6 @@ Route::prefix('api')->group(function () {
     Route::post('/patients/{id}/groups', [PatientController::class, 'addToGroup'])->middleware('checkRole:admin,manager');
     Route::delete('/patients/{id}/groups/{groupId}', [PatientController::class, 'removeFromGroup'])
       ->middleware('checkRole:admin,manager');
-    Route::get('/patients/{id}/info', [PatientController::class, 'show']);
 
     // Care API
     Route::get('/care/categories', [CareController::class, 'fetchCareCategories']);
@@ -82,7 +81,6 @@ Route::prefix('api')->group(function () {
     Route::post('/care/problem/item', [CareController::class, 'addProblemItem']);
     Route::patch('/care/problem/{id}', [CareController::class, 'updateProblem'])->middleware('checkRole:admin,manager');
     Route::patch('/care/problem/item/{id}', [CareController::class, 'updateProblemItem']);
-    
   });
 });
 
@@ -109,9 +107,8 @@ Route::middleware(['auth'])->group(function () {
   })->name('Test');
 });
 
-// Fallback route for SPA - catch all unmatched routes and redirect to home
 Route::fallback(function () {
-  return redirect('/');
+  return Inertia::render('welcome');
 });
 
 require __DIR__ . '/settings.php';

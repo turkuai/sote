@@ -1,4 +1,4 @@
-import { Clock, Folder, Settings, Stethoscope, Users } from 'lucide-react';
+import { Clock, Folder, Stethoscope, UserRound, Users } from 'lucide-react';
 import React from 'react';
 
 // Tab icon map - maps tab names to their corresponding icon components
@@ -6,7 +6,7 @@ const TAB_ICON_MAP = {
   users: Users,
   groups: Folder,
   'waiting-list': Clock,
-  settings: Settings,
+  settings: UserRound,
   patients: Stethoscope,
 };
 
