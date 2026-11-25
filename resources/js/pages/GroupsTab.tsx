@@ -92,6 +92,14 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
   const { showNotification } = useNotification();
   const gridLabels = useServerGridLabels();
 
+  const NameRenderer = ({ data }) => {
+    return (
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+        {`${data?.first_name || ''} ${data?.last_name || ''}`.trim()}
+      </span>
+    );
+  };
+
   // Fetch nurse's group count
   useEffect(() => {
     if (currentUser?.role_type !== 'nurse') return;
@@ -442,6 +450,9 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                               { field: 'remarks', displayName: t('table.remarks') },
                             ]
                       }
+                      columnRenderers={{
+                        name: NameRenderer,
+                      }}
                       path={`groups/${panelGroup.id}/${activeRelationTab}-registered`}
                       addTitle={
                         activeRelationTab === 'users'
@@ -472,12 +483,24 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
                         getRecordId: (record) => record.id,
 
                         getRecords: (response) => {
-                          if (Array.isArray(response?.data?.data)) return response.data.data;
-                          if (Array.isArray(response?.data?.users)) return response.data.users;
-                          if (Array.isArray(response?.data?.patients)) return response.data.patients;
-                          if (Array.isArray(response?.data)) return response.data;
-                          if (Array.isArray(response?.users)) return response.users;
-                          if (Array.isArray(response?.patients)) return response.patients;
+                          if (Array.isArray(response?.data?.data)) {
+                            return response.data.data;
+                          }
+                          if (Array.isArray(response?.data?.users)) {
+                            return response.data.users;
+                          }
+                          if (Array.isArray(response?.data?.patients)) {
+                            return response.data.patients;
+                          }
+                          if (Array.isArray(response?.data)) {
+                            return response.data;
+                          }
+                          if (Array.isArray(response?.users)) {
+                            return response.users;
+                          }
+                          if (Array.isArray(response?.patients)) {
+                            return response.patients;
+                          }
 
                           return [];
                         },

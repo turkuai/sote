@@ -243,7 +243,7 @@ class GroupController extends Controller {
 
     return ApiResponse::success(null, 'User removed from group successfully');
   }
-
+  
   /**
    * Get groups the authenticated user belongs to
    */
