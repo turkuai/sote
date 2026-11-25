@@ -43,7 +43,6 @@ export default function HomePage() {
 
   return (
     <div>
-
       {/* Desktop: Sidebar + Content */}
       <div className="admin-body hide-on-mobile">
         <HomeTabs
