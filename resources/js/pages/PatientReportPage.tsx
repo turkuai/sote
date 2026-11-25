@@ -1,11 +1,10 @@
-import { CareTreeTest } from '@/components/Treecomponents/CareTreeTest';
-import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
-import HomeTabs from './HomeTabs';
+import CareTreeList from '@/components/care/CareTreeList';
+import { CareProblem } from '@/types/caretree';
 import { TabConfig } from '@/utils/tabConfig';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import CareTreeList from '@/components/care/CareTreeList';
-import { CareProblem } from '@/types/caretree';
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import HomeTabs from './HomeTabs';
 
 /**
  * Patient report page.
@@ -14,36 +13,29 @@ import { CareProblem } from '@/types/caretree';
  */
 
 export default function PatientReportPage() {
-
   const { currentUser, handleLogout, isMobile } = useOutletContext<{
     currentUser: any;
     handleLogout: () => void;
     isMobile: boolean;
   }>();
 
-const { t } = useTranslation();
-const navigate = useNavigate();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
 
+  const { patientId, tab: urlTab } = useParams<{ patientId: string; tab: string }>();
 
+  const tabs = ['care-tree', 'info']; // your two tab keys
+  const defaultTab = 'care-tree';
+  const activeTab = urlTab && tabs.includes(urlTab) ? urlTab : defaultTab;
 
-
-const { patientId, tab: urlTab } = useParams<{ patientId: string; tab: string }>();
-
-const tabs = ['care-tree', 'info']; // your two tab keys
-const defaultTab = 'care-tree';
-const activeTab = urlTab && tabs.includes(urlTab) ? urlTab : defaultTab;
-
-
-const [sidebarCollapsed, setSidebarCollapsed] = useState(() =>
-    typeof window !== 'undefined'
-      ? localStorage.getItem('sidebar_collapsed') === 'true'
-      : false
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() =>
+    typeof window !== 'undefined' ? localStorage.getItem('sidebar_collapsed') === 'true' : false,
   );
 
-const handleTabClick = (tab: string) => {
-  navigate(`/patients/${patientId}/${tab}`);
-};
-  
+  const handleTabClick = (tab: string) => {
+    navigate(`/patients/${patientId}/${tab}`);
+  };
+
   //dummy data
   const data: CareProblem[] = [
     {
@@ -107,26 +99,26 @@ const handleTabClick = (tab: string) => {
 
   return (
     <div className="admin-body hide-on-mobile">
-        <HomeTabs
-          tabs={tabs}
-          activeTab={activeTab}
-          onTabClick={handleTabClick}
-          getTabLabel={(tab) => TabConfig.getTabLabel(tab, t)}
-          renderTabIcon={TabConfig.renderTabIcon}
-          collapsed={sidebarCollapsed}
-          onToggleCollapse={() =>
-            setSidebarCollapsed((c) => {
-              const next = !c;
-              localStorage.setItem('sidebar_collapsed', String(next));
-              return next;
-            })
-          }
-        />
-    <div className="admin-content-area">
-      <div className="admin-content-card">
-        <CareTreeList careDataList={data} />
+      <HomeTabs
+        tabs={tabs}
+        activeTab={activeTab}
+        onTabClick={handleTabClick}
+        getTabLabel={(tab) => TabConfig.getTabLabel(tab, t)}
+        renderTabIcon={TabConfig.renderTabIcon}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={() =>
+          setSidebarCollapsed((c) => {
+            const next = !c;
+            localStorage.setItem('sidebar_collapsed', String(next));
+            return next;
+          })
+        }
+      />
+      <div className="admin-content-area">
+        <div className="admin-content-card">
+          <CareTreeList careDataList={data} />
+        </div>
       </div>
     </div>
-  </div>
   );
 }
