@@ -236,6 +236,7 @@ const enCommon = {
   },
 
   patients: {
+    managementTitle: 'Patient management',
     panel: {
       groups: 'Groups',
       addToGroup: 'Add to group',

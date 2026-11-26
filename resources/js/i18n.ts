@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 
-import eeCommon from './locales/ee/common';
+import etCommon from './locales/et/common';
 import enCommon from './locales/en/common';
 import fiCommon from './locales/fi/common';
 import svCommon from './locales/sv/common';
@@ -21,12 +21,12 @@ i18n
       en: {
         translation: enCommon,
       },
-      ee: {
-        translation: eeCommon,
+      et: {
+        translation: etCommon,
       },
     },
     fallbackLng: 'fi',
-    supportedLngs: ['fi', 'sv', 'en', 'ee'],
+    supportedLngs: ['fi', 'sv', 'en', 'et'],
     lng: 'fi',
     interpolation: {
       escapeValue: false,
