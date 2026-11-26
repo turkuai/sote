@@ -3,6 +3,7 @@ import { AuthorizedUserData } from '@/types';
 import { Crown, Eye, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useOutletContext } from 'react-router-dom';
 import { RelationGrid, ServerGrid as ServerGridBase } from 'tai-grid';
 import 'tai-grid/style.css';
 import GroupRegistrationForm from '../components/GroupRegistrationForm';
@@ -75,7 +76,13 @@ function AccessKeyCell({ value }: { value: unknown }) {
 
 const SEARCH_DEBOUNCE_MS = 300;
 
-export default function GroupsTab({ currentUser, query, onQueryChange }) {
+export default function GroupsTab({}) {
+  const {
+    setUserQuery: onQueryChange,
+    userQuery: query,
+    currentUser,
+  } = useOutletContext<{ setUserQuery: (query: string) => void; userQuery: string; currentUser: AuthorizedUserData | null }>();
+
   const { t } = useTranslation();
 
   const [refreshKey, setRefreshKey] = useState(0);
