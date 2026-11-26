@@ -309,6 +309,14 @@ const enCommon = {
   },
 
   caretree: {
+    add_problem: 'Add Care Problems',
+    add_item: 'Add: {{item}}',
+    select_category: 'Select Category',
+    enter_description: 'Enter a Description',
+    review_and_save: 'Review & Save',
+    selected_category: 'Selected category',
+    problem_description: 'Problem description',
+    description: 'Description',
     care_need: 'Care Need',
     goal: 'Care Goal',
     activity: 'Planned Activities',

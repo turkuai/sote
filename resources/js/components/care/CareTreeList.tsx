@@ -1,7 +1,11 @@
-import { CareProblem } from '@/types/caretree';
+import type { CareProblem } from '@/types/caretree';
 import { useReducer, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ServerGridEditDialog } from 'tai-grid';
+
+// CHANGES START HERE
+import ServerGridEditDialog from '../../../../grid/src/ServerGridEditDialog';
+// CHANGES END HERE
+
 import AddItemButton from '../AddItemButton';
 import CareProblemDialogForm from './CareProblemDialogForm';
 import { CareTree } from './CareTree';
@@ -15,6 +19,7 @@ type CareTreeListProps = {
 type State = {
   data: CareProblem[];
 };
+
 type Action = {
   data: CareProblem;
 };
@@ -26,11 +31,17 @@ function reducer(state: State, action: Action) {
 
 function CareTreeList({ careDataList }: CareTreeListProps) {
   const { t } = useTranslation();
-  const [state, dispatch] = useReducer(reducer, { data: careDataList });
+  const [state, dispatch] = useReducer(reducer, {
+    data: careDataList,
+  });
 
   //variables related to the dialog
   const [isCareProblemDialogOpen, setIsCareProblemDialogOpen] = useState(false);
-  const steps = ['Select Category', 'Enter a Description', 'Review & Save'];
+
+  // CHANGES START HERE
+  const steps = [t('caretree.select_category'), t('caretree.enter_description'), t('caretree.review_and_save')];
+  // CHANGES END HERE
+
   const [activeStep, setActiveStep] = useState<number>(0);
 
   //tracks nurses entry + nurse & patient info
@@ -48,7 +59,9 @@ function CareTreeList({ careDataList }: CareTreeListProps) {
   return (
     <>
       <div className="flex justify-end">
-        <AddItemButton label="open-care-dialog" onClick={() => setIsCareProblemDialogOpen(true)} />
+        {/* CHANGES START HERE */}
+        <AddItemButton label={t('caretree.add_problem')} onClick={() => setIsCareProblemDialogOpen(true)} />
+        {/* CHANGES END HERE */}
       </div>
 
       <div className="flex flex-col gap-4 mt-3!">
@@ -83,13 +96,24 @@ function CareTreeList({ careDataList }: CareTreeListProps) {
               setIsCareProblemDialogOpen(false);
 
               //resets selection
-              setNewData({ ...newData, category: [], description: '' });
+              setNewData({
+                ...newData,
+                category: [],
+                description: '',
+              });
               setActiveStep(0);
             } else {
               setActiveStep((prevV) => Math.min(2, prevV + 1));
             }
           }}
-          labels={{ title: 'Add Care Problems', save: activeStep === 2 ? 'Save' : 'Next' }}
+          labels={{
+            // CHANGES START HERE
+            title: t('caretree.add_problem'),
+            save: activeStep === 2 ? t('grid.dialog.save') : t('grid.pagination.next'),
+            cancel: t('grid.dialog.cancel'),
+            close: t('grid.dialog.close'),
+            // CHANGES END HERE
+          }}
         />
       )}
     </>
