@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { FormComponentProps } from 'tai-grid';
 import { FieldValidationError, ServerGrid } from 'tai-grid';
 import 'tai-grid/style.css';
 import MobileSearchToggle from '../components/MobileSearchToggle';
@@ -270,10 +271,10 @@ export default function UsersTab({ currentUser, query, onQueryChange, onDeleteUs
   );
 }
 
-function UsersForm({ data, setData, errors }) {
+function UsersForm({ data, setData, errors }: FormComponentProps) {
   const { t } = useTranslation();
   const isEditing = !!(data && data.id);
-  const getValue = (field) => (data && data[field]) || '';
+  const getValue = (field: string): string => String(data[field] ?? '');
   const handleChange = (field) => (e) => setData((prev) => ({ ...prev, [field]: e.target.value }));
 
   return (

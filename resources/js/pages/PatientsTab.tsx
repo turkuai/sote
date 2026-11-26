@@ -2,6 +2,7 @@ import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { FormComponentProps } from 'tai-grid';
 import { FieldValidationError, ServerGrid as ServerGridBase } from 'tai-grid';
 import 'tai-grid/style.css';
 import { useNotification } from '../components/NotificationContext';
@@ -270,18 +271,10 @@ export default function PatientsTab({ currentUser, query }: PatientsTabProps) {
 /*
    PATIENT FORM
  */
-function PatientsForm({
-  data,
-  setData,
-  errors,
-}: {
-  data: any;
-  setData: React.Dispatch<React.SetStateAction<any>>;
-  errors?: Record<string, string[]>;
-}) {
+function PatientsForm({ data, setData, errors }: FormComponentProps) {
   const { t } = useTranslation();
 
-  const getValue = (field: string) => data?.[field] ?? '';
+  const getValue = (field: string): string => String(data[field] ?? '');
 
   const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setData((prev: any) => ({

@@ -2,6 +2,7 @@ import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
 import { Crown, Eye, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { FormComponentProps } from 'tai-grid';
 import { FieldValidationError, ServerGrid as ServerGridBase } from 'tai-grid';
 import 'tai-grid/style.css';
 import GroupRegistrationForm from '../components/GroupRegistrationForm';
@@ -573,10 +574,10 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
   );
 }
 
-function GroupsForm({ data, setData, errors }) {
+function GroupsForm({ data, setData, errors }: FormComponentProps) {
   const { t } = useTranslation();
   const [showKey, setShowKey] = useState(false);
-  const getValue = (field) => (data && data[field]) || '';
+  const getValue = (field: string): string => String(data[field] ?? '');
   const handleChange = (field) => (e) => setData((prev) => ({ ...prev, [field]: e.target.value }));
 
   return (

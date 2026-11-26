@@ -1,6 +1,6 @@
 import { GridLabels } from 'grid/dist/Grid';
-import { DialogLabels } from 'grid/dist/ServerGridEditDialog';
 import { ServerGridLabels } from 'grid/dist/ServerGrid';
+import { DialogLabels } from 'grid/dist/ServerGridEditDialog';
 import { useTranslation } from 'react-i18next';
 
 export function useServerGridLabels(): ServerGridLabels {
@@ -29,6 +29,7 @@ export function useGridLabels(): GridLabels {
 
   return {
     actionsHeader: t('table.actions'),
+    searchPlaceholder: t('grid.searchPlaceholder', 'Search...'),
     edit: t('table.edit'),
     add: t('grid.add'),
     delete: t('table.delete'),
