@@ -98,6 +98,7 @@ const fiCommon = {
 
   grid: {
     loading: 'Ladataan...',
+    searchPlaceholder: 'Hae...',
     add: 'Lisää',
     success: {
       itemUpdated: 'Tieto päivitettiin onnistuneesti!',

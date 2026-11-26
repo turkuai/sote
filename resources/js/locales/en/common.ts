@@ -98,6 +98,7 @@ const enCommon = {
 
   grid: {
     loading: 'Loading...',
+    searchPlaceholder: 'Search...',
     add: 'Add',
     success: {
       itemUpdated: 'Item updated successfully!',
