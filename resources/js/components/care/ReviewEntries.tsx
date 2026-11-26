@@ -1,8 +1,12 @@
+import { useTranslation } from 'react-i18next';
+
 function ReviewEntries({ data }) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col gap-5">
       <section>
-        <h3 className="mb-2! text-sm font-semibold text-gray-500">Selected category</h3>
+        <h3 className="mb-2! text-sm font-semibold text-gray-500">{t('caretree.selected_category')}</h3>
 
         <div className="flex flex-wrap items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 p-3!">
           {data.category.map((c: string, i: number) => (
@@ -16,7 +20,7 @@ function ReviewEntries({ data }) {
       </section>
 
       <section>
-        <h3 className="mb-2! text-sm font-semibold text-gray-500">Problem description</h3>
+        <h3 className="mb-2! text-sm font-semibold text-gray-500">{t('caretree.problem_description')}</h3>
 
         <p className="min-h-24 rounded-lg border border-gray-200 bg-white p-3! text-sm leading-6 whitespace-pre-wrap break-words text-gray-800">
           {data.description}
