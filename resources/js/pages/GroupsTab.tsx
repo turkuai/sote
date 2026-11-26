@@ -1,4 +1,5 @@
 import { useServerGridLabels } from '@/hooks/useCurrentLanguage';
+import { AuthorizedUserData } from '@/types';
 import { Crown, Eye, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -268,24 +269,6 @@ export default function GroupsTab({ currentUser, query, onQueryChange }) {
               <div style={{ flex: '0 0 50%', minWidth: 0, paddingRight: '1.5rem' }}>
                 <div className="tab-header">
                   <h2>{t('groups.managementTitle')}</h2>
-
-                  <div className="user-search">
-                    <span className="search-icon">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <circle cx="11" cy="11" r="6" stroke="#6b7280" strokeWidth="2" />
-                        <line x1="15" y1="15" x2="20" y2="20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" />
-                      </svg>
-                    </span>
-
-                    <input
-                      type="search"
-                      autoComplete="off"
-                      placeholder={t('groups.searchPlaceholder')}
-                      value={inputValue}
-                      onChange={handleSearchChange}
-                    />
-                  </div>
-
                   <button className="add-btn" onClick={() => setShowEnrollModal(true)}>
                     {t('groups.autoEnroll')}
                   </button>

@@ -1,0 +1,29 @@
+info:
+  name: login
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/login?email=admin@example.com&password=admin-limes-194&remember=true"
+  headers:
+    - name: Accept
+      value: application/json
+  params:
+    - name: email
+      value: admin@example.com
+      type: query
+    - name: password
+      value: admin-limes-194
+      type: query
+    - name: remember
+      value: "true"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

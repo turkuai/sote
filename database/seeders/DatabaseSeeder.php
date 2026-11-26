@@ -78,6 +78,9 @@ class DatabaseSeeder extends Seeder {
         'social_id' => "$i",
         'arrival_date' => now(),
         'remarks' => "test",
+        'address' => "Eerikinkatu",
+        'phone' => '+358 12345678',
+        'job' => 'Cashier'
       ]);
 
       if ($firstPatient == null) {
