@@ -10,6 +10,7 @@ import ProtectedLayout from './layouts/ProtectedLayout';
 import GroupsTab from './pages/GroupsTab';
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
+import PatientDetailLayout from './pages/PatientDetailLayout ';
 import PatientReportPage from './pages/PatientReportPage';
 import PatientsInfo from './pages/PatientsInfo';
 import PatientsPage from './pages/PatientsPage';
@@ -73,8 +74,10 @@ function App() {
           </Route>
 
           <Route path="patients" element={<PatientsPage />} />
-          <Route path="patients/:patientId" element={<PatientReportPage />} />
-          <Route path="patients/:patientId/info" element={<PatientsInfo />} />
+          <Route element={<PatientDetailLayout />}>
+            <Route path="patients/:patientId" element={<PatientReportPage />} />
+            <Route path="patients/:patientId/info" element={<PatientsInfo />} />
+          </Route>
         </Route>
       </Route>
 

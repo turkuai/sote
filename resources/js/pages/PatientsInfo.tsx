@@ -24,7 +24,8 @@ type ErrorKey = 'missingId' | 'notFound' | 'loadFailed' | 'generic';
 
 export default function PatientInfo() {
   const { t } = useTranslation();
-  const { patientId } = useParams<{ patientId: string }>();
+
+  const { patientId } = useParams<{ patientId: string; tab: string }>();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorKey, setErrorKey] = useState<ErrorKey | null>(null);
@@ -80,32 +81,30 @@ export default function PatientInfo() {
   const na = t('patientInfo.na');
 
   return (
-    <main>
-      <div className="admin-content-area">
-        <div className="admin-content-card">
-          <h1>
-            {patient.first_name} {patient.last_name}
-          </h1>
-          <p>
-            <strong>{t('patientInfo.socialId')}:</strong> {patient.social_id}
-          </p>
-          <p>
-            <strong>{t('patientInfo.arrivalDate')}:</strong> {patient.arrival_date || na}
-          </p>
-          <p>
-            <strong>{t('patientInfo.address')}:</strong> {patient.address || na}
-          </p>
-          <p>
-            <strong>{t('patientInfo.phone')}:</strong> {patient.phone || na}
-          </p>
-          <p>
-            <strong>{t('patientInfo.job')}:</strong> {patient.job || na}
-          </p>
-          <p>
-            <strong>{t('patientInfo.remarks')}:</strong> {patient.remarks || t('patientInfo.noRemarks')}
-          </p>
-        </div>
+    <div className="admin-content-area">
+      <div className="admin-content-card">
+        <h1>
+          {patient.first_name} {patient.last_name}
+        </h1>
+        <p>
+          <strong>{t('patientInfo.socialId')}:</strong> {patient.social_id}
+        </p>
+        <p>
+          <strong>{t('patientInfo.arrivalDate')}:</strong> {patient.arrival_date || na}
+        </p>
+        <p>
+          <strong>{t('patientInfo.address')}:</strong> {patient.address || na}
+        </p>
+        <p>
+          <strong>{t('patientInfo.phone')}:</strong> {patient.phone || na}
+        </p>
+        <p>
+          <strong>{t('patientInfo.job')}:</strong> {patient.job || na}
+        </p>
+        <p>
+          <strong>{t('patientInfo.remarks')}:</strong> {patient.remarks || t('patientInfo.noRemarks')}
+        </p>
       </div>
-    </main>
+    </div>
   );
 }
