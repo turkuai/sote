@@ -1,4 +1,4 @@
-const eeCommon = {
+const etCommon = {
   common: {
     language: 'Keel',
     english: 'Inglise',
@@ -236,6 +236,7 @@ const eeCommon = {
   },
 
   patients: {
+    managementTitle: 'Patsiendihaldus',
     panel: {
       groups: 'Grupid',
       addToGroup: 'Lisa gruppi',
@@ -335,4 +336,4 @@ const eeCommon = {
   },
 };
 
-export default eeCommon;
+export default etCommon;
