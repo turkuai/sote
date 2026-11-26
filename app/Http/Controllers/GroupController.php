@@ -295,8 +295,7 @@ class GroupController extends Controller {
 
     return ApiResponse::success(null, 'Successfully joined the group');
   }
-
-  /**
+/**
  * Get patients registered in a specific group
  */
 public function getRegisteredPatients(Request $request, $id){
