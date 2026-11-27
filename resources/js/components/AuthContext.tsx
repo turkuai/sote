@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
         const response = await fetch('/api/user', {
           method: 'GET',
           credentials: 'include', // Include cookies
+          cache: 'no-store',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
