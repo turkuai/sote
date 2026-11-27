@@ -295,6 +295,7 @@ class GroupController extends Controller {
 
     return ApiResponse::success(null, 'Successfully joined the group');
   }
+
 /**
  * Get patients registered in a specific group
  */
@@ -330,6 +331,7 @@ public function getRegisteredPatients(Request $request, $id){
         'Registered patients retrieved successfully'
     );
 }
+
  /**
  * Get patients not registered in a specific group
  */
@@ -365,6 +367,7 @@ public function getUnregisteredPatients(Request $request, $id){
         'Unregistered patients retrieved successfully'
     );
 }
+
 /**
  * Add a patient to a group
  */
@@ -396,7 +399,6 @@ public function addPatientToGroup($groupId, $patientId){
         201
     );
 }
-
 
 /**
  * Remove a patient from a group
