@@ -56,4 +56,16 @@ class Patient extends Model {
         });
     });
   }
+
+  /**
+ * Get all groups associated with this patient.
+ */
+public function groups(){
+    return $this->belongsToMany(
+        Group::class,
+        'patient_groups',
+        'patient_id',
+        'group_id'
+    );
+}
 }

@@ -54,7 +54,7 @@ export default function PatientsTab({ query }: PatientsTabProps) {
     setGroupRefreshKey((value) => value + 1);
   };
 
-  const NameCell = ({ value }: { value: unknown }) => {
+  const NameCell = ({ data }) => {
     return (
       <span
         style={{
@@ -63,7 +63,7 @@ export default function PatientsTab({ query }: PatientsTabProps) {
           gap: '0.4rem',
         }}
       >
-        {value != null ? String(value) : ''}
+        {`${data?.first_name || ''} ${data?.last_name || ''}`.trim()}
       </span>
     );
   };
