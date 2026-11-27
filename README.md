@@ -79,7 +79,6 @@ php artisan migrate:fresh --seed
 | jane@example.com  | jane-pineapples-194 | Manager |
 | bob@example.com   | bob-persimons-194   | Nurse   |
 
-
 ## Code Formatting
 
 This project uses **Prettier** for code formatting. VSCode will automatically format your code on save if you have the Prettier extension installed.
@@ -195,7 +194,6 @@ i18n.init({
 ### Language Switcher
 
 The `LanguageSwitcher` component (located in `resources/js/components/`) renders a dropdown that calls `i18n.changeLanguage(code)` and saves the choice to localStorage automatically.
-
 
 ## API Testing (Bruno)
 

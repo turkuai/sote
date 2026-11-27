@@ -7,6 +7,7 @@ import 'tai-grid/style.css';
 import { useNotification } from '../components/NotificationContext';
 import { getApiBase } from '../config';
 import { useServerGridLabels } from '../hooks/useCurrentLanguage';
+
 export default function WaitingListTab({}) {
   const { currentUser } = useOutletContext<{ currentUser: AuthorizedUserData }>();
   const { t } = useTranslation();

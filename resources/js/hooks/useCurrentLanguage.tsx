@@ -1,6 +1,6 @@
 import { GridLabels } from 'grid/dist/Grid';
-import { DialogLabels } from 'grid/dist/ServerGridEditDialog';
 import { ServerGridLabels } from 'grid/dist/ServerGrid';
+import { DialogLabels } from 'grid/dist/ServerGridEditDialog';
 import { useTranslation } from 'react-i18next';
 
 export function useServerGridLabels(): ServerGridLabels {

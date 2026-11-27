@@ -22,17 +22,15 @@ export default function HomePage() {
   const [userQuery, setUserQuery] = useState('');
   const [groupQuery, setGroupQuery] = useState('');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() =>
-    typeof window !== 'undefined' 
-    ? localStorage.getItem('sidebar_collapsed') === 'true' 
-    : false,
+    typeof window !== 'undefined' ? localStorage.getItem('sidebar_collapsed') === 'true' : false,
   );
 
-  const { handlers: { handleDeleteUser } } = useUserManagement();
+  const {
+    handlers: { handleDeleteUser },
+  } = useUserManagement();
 
   // Default tab based on role
-  const defaultTab = currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager' 
-    ? 'users' 
-    : 'settings';
+  const defaultTab = currentUser?.role_type === 'admin' || currentUser?.role_type === 'manager' ? 'users' : 'settings';
 
   // URL controls active tab
   const activeTab = urlTab || defaultTab;
